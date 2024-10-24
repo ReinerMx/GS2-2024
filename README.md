@@ -1,7 +1,12 @@
 # Geosoftware II - TerraLink
 ---
-# Projektbeschreibung
-
+## Wichtige Links:
+- Repo: https://github.com/ReinerMx/GS2-2024
+- Pflichtenheft (Overleaf): https://www.overleaf.com/project/67121d8286e37093f88de455
+- Präsi:
+  
+---
+## Projektbeschreibung
 ## Webkatalog für ML-Modelle für EO-Daten
 
 Dieses Projekt, entwickelt im Rahmen des **Geosoftware II** Kurses (WiSe 2024/25), zielt darauf ab, einen webbasierten Katalog für die benutzerfreundliche Suche und den Abruf von Machine-Learning-Modellen zu erstellen, die speziell für **Earth Observation (EO) Datacubes** entwickelt wurden.
