@@ -34,3 +34,8 @@ WS 2024/2025
 - 29.01.25:              Abschlusspräsentation
 
 ---
+
+
+Sonstiges:
+Logo-Integration als Repo-Bild: ![Repository Logo](Dokumente/Logo-Ideen/TerraLink1.png)
+
