@@ -1,12 +1,8 @@
 name: Lint & Format
 
 on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 4 * * *'  # Läuft täglich um 04:00 Uhr (UTC)
 
 jobs:
   lint-and-format:
