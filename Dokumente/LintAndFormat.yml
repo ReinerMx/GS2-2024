@@ -1,0 +1,28 @@
+#name: Lint & Format
+
+# on:
+#   schedule:
+#    - cron: '0 4 * * *'  # Läuft täglich um 04:00 Uhr (UTC)
+
+#jobs:
+ # lint-and-format:
+  #  name: Lint & Format Code
+   # runs-on: ubuntu-latest
+#
+ #   steps:
+ #     - name: Checkout code
+  #      uses: actions/checkout@v3
+#
+ #     - name: Set up Node.js
+  #      uses: actions/setup-node@v3
+   #     with:
+    #      node-version: "16"
+#
+ #     - name: Install dependencies
+  #      run: npm install
+#
+ #     - name: Run Prettier to format code
+  #      run: npx prettier --check .
+#
+ #     - name: Run ESLint to lint code
+  #      run: npx eslint .
