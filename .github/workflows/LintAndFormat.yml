@@ -1,8 +1,8 @@
 name: Lint & Format
 
-on:
-  schedule:
-    - cron: '0 4 * * *'  # Läuft täglich um 04:00 Uhr (UTC)
+# on:
+#   schedule:
+ #    - cron: '0 4 * * *'  # Läuft täglich um 04:00 Uhr (UTC)
 
 jobs:
   lint-and-format:
