@@ -4,6 +4,7 @@
 - Repo: https://github.com/ReinerMx/GS2-2024
 - Pflichtenheft (Overleaf): https://www.overleaf.com/project/67121d8286e37093f88de455
 - Präsi: https://docs.google.com/presentation/d/1VwPwdpmAnKLgP32q3Nw64L7xUm2H4YQJQVxEfDnQM30/edit?usp=sharing
+- Ähnlicher Catalog: https://huggingface.co/
   
 ---
 ## Projektbeschreibung
