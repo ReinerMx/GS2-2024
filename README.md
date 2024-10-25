@@ -36,6 +36,5 @@ WS 2024/2025
 ---
 
 
-Sonstiges:
-Logo-Integration als Repo-Bild: ![Repository Logo](Dokumente/Logo-Ideen/TerraLink1.png)
+![Repository Logo](Dokumente/Logo-Ideen/TerraLink1.png)
 
