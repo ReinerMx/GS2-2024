@@ -1,5 +1,4 @@
 # Geosoftware II - TerraLink 
-![Repository Logo](Dokumente/Logo-Ideen/TerraLink1.png)
 ---
 ## Wichtige Links:
 - Repo: https://github.com/ReinerMx/GS2-2024
@@ -35,6 +34,7 @@ WS 2024/2025
 - 29.01.25:              Abschlusspräsentation
 
 ---
+![Repository Logo](Dokumente/Logo-Ideen/TerraLink1.png)
 
 
 
