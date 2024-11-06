@@ -22,32 +22,37 @@ app.use(morgan('dev')); // Logger für Anfragen im Entwicklungsmodus
 app.use(express.json()); // Parsing von JSON-Daten
 app.use(express.urlencoded({ extended: true })); // Parsing von URL-encoded Daten
 
-// Verbindung zur Datenbank herstellen
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+
+
 (async () => {
   try {
     await db.authenticate();
-    console.log('Datenbankverbindung erfolgreich.');
-    await db.sync(); // Synchronisiert die Datenbankmodelle
+    console.log('Database connection has been established successfully.');
+    await db.sync(); // Sync models with the database
   } catch (error) {
-    console.error('Fehler bei der Datenbankverbindung:', error);
-    process.exit(1); // Server nicht starten, falls DB-Verbindung fehlschlägt
+    console.error('Unable to connect to the database:', error);
+    process.exit(1); // Exit if database connection fails
   }
 })();
 
-// Routen
-app.use('/api/users', userRoutes); // Routen für Benutzeraktionen wie Registrierung und Login
-app.use('/api/models', modelRoutes); // Routen für Modelle, wie Upload und Abrufen von Metadaten
 
-// Root Endpoint für die Überprüfung des Serverstatus
+// Routes
+app.use('/api/users', userRoutes); // Route for user interactions like registration and login
+app.use('/api/models', modelRoutes); // Routes for models, like uploading and fetching metadata
+
+// Root endpoint for checking server status
 app.get('/', (req, res) => {
-  res.send('API ist online und funktionsfähig');
+  res.send('API is online and functional');
 });
 
-// Fehlerbehandlung Middleware (nach allen anderen Routen)
+// Error handling middleware (after all other routes)
 app.use(errorHandler);
 
-// Port und Serverstart
+// Port and server start
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server läuft auf Port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
