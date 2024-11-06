@@ -4,91 +4,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HuggingEarth - Model Catalog</title>
+    <meta name="description" content="HuggingEarth - Your go-to platform for discovering and sharing Earth Observation Models.">
+    <title>HuggingEarth - Home</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="index.html">
-            <img src="huggingearth.png" alt="HuggingEarth Logo" style="height: 40px; margin-right: 10px;"> HuggingEarth
+            <img src="images/huggingearth.png" alt="HuggingEarth Logo" style="height: 40px; margin-right: 10px;"> HuggingEarth
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <form class="form-inline mx-auto search-bar">
-                <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search for models" aria-label="Search">
-                <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
+                <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search for models" aria-label="Search for models">
+                <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="button" aria-label="Search">Search</button>
             </form>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="tutorials.html">Tutorials</a>
+                    <a class="nav-link" href="search.html" aria-label="Catalog">Catalog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="account.html">Account</a>
+                    <a class="nav-link" href="upload.html" aria-label="Upload Models">Upload</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="tutorials.html" aria-label="Tutorials">Tutorials</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="account.html" aria-label="Account">Account</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <aside class="col-md-3 sidebar">
-                <h4>Filters</h4>
-                <div class="filter-section">
-                    <h5>Tasks</h5>
-                    <ul class="list-unstyled">
-                        <li><input type="checkbox" id="classification" class="filter-checkbox"> <label for="classification">Classification</label></li>
-                        <li><input type="checkbox" id="regression" class="filter-checkbox"> <label for="regression">Regression</label></li>
-                        <li><input type="checkbox" id="detection" class="filter-checkbox"> <label for="detection">Object Detection</label></li>
-                    </ul>
-                </div>
-                <div class="filter-section">
-                    <h5>Data Types</h5>
-                    <ul class="list-unstyled">
-                        <li><input type="checkbox" id="sentinel2" class="filter-checkbox"> <label for="sentinel2">Sentinel-2</label></li>
-                        <li><input type="checkbox" id="landsat" class="filter-checkbox"> <label for="landsat">Landsat</label></li>
-                    </ul>
-                </div>
-                <div class="filter-section">
-                    <h5>Languages</h5>
-                    <ul class="list-unstyled">
-                        <li><input type="checkbox" id="python" class="filter-checkbox"> <label for="python">Python</label></li>
-                        <li><input type="checkbox" id="r" class="filter-checkbox"> <label for="r">R</label></li>
-                    </ul>
-                </div>
-            </aside>
-            
-            <!-- Main Content -->
-            <main class="col-md-9 main-content">
-                <h2>Search Results</h2>
-                <div id="resultsContainer">
-                    <div class="result-item">
-                        <h5>Example Model 1</h5>
-                        <p>Description of the model including supported data type and task.</p>
-                        <button class="btn btn-primary">View Details</button>
-                    </div>
-                    <div class="result-item">
-                        <h5>Example Model 2</h5>
-                        <p>Description of the model including supported data type and task.</p>
-                        <button class="btn btn-primary">View Details</button>
-                    </div>
-                    <!-- More result items -->
-                </div>
-            </main>
+    <!-- Main Content -->
+    <main class="main-section">
+        <h1>Welcome to HuggingEarth</h1>
+        <p class="lead">Your go-to platform for discovering and sharing Earth Observation Models.</p>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-3 feature text-center">
+                <img src="images/discover2.png" alt="Icon for Discover Models" class="img-fluid">
+                <h3>Discover Models</h3>
+                <p>Explore a diverse catalog of models for Earth Observation and data analysis.</p>
+                <a href="search.html" class="btn btn-primary" aria-label="Go to Catalog">Catalog</a>
+            </div>
+            <div class="col-md-3 feature text-center">
+                <img src="images/upload.png" alt="Icon for Upload Models" class="img-fluid">
+                <h3>Upload Models</h3>
+                <p>Share your models with the community and contribute to global Earth Observation efforts.</p>
+                <a href="upload.html" class="btn btn-primary" aria-label="Upload Models">Upload</a>
+            </div>
+            <div class="col-md-3 feature text-center">
+                <img src="images/learn.png" alt="Icon for Learn and Grow" class="img-fluid">
+                <h3>Learn and Grow</h3>
+                <p>Access tutorials and resources to advance your Earth Observation knowledge and skills.</p>
+                <a href="tutorials.html" class="btn btn-secondary" aria-label="Start Learning">Learn</a>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <footer class="text-center py-4">
-        <p>&copy; 2024 HuggingEarth. All rights reserved.</p>
+        <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="footer-logo mb-3">
+                <a href="index.html">
+                    <img src="images/huggingearth.png" alt="HuggingEarth Logo" style="height: 50px;">
+                </a>
+                <p class="mt-2">Exploring and Sharing Earth Observation Models</p>
+            </div>
+            <div class="footer-links mb-3">
+                <a href="index.html" aria-label="Home">Home</a> | 
+                <a href="search.html" aria-label="Models">Catalog</a> | 
+                <a href="upload.html" aria-label="Upload">Upload</a> | 
+                <a href="tutorials.html" aria-label="Tutorials">Tutorials</a> | 
+                <a href="account.html" aria-label="Account">Account</a> | 
+                <a href="impressum.html" aria-label="Legal Notice">Legal Notice</a>
+            </div>
+            <!-- GitHub Link with Inline Icon -->
+            <div class="footer-git mb-3">
+                <p class="mt-2">
+                    View this project on 
+                    <a href="https://github.com/ReinerMx/GS2-2024" target="_blank" aria-label="Visit our GitHub repository" class="github-link" style="text-decoration: none;">
+                        <img src="images/github_logo.png" alt="GitHub Logo" style="width: 50px; margin-right: 1px;">
+                    </a>– Contributions are welcome!
+                </p>
+            </div>
+            <p>&copy; 2024 HuggingEarth. All rights reserved.</p>
+        </div>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybUuslnIEsC0ehv5lG+ftj3j6ajwGooKo/ktl7t39e64p9g9K" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4/J2mjVv6VHEB0YxX0hE6kAs0YErZJ4xRr2jq8kDPR34WNS9E8uH/Upt0" crossorigin="anonymous"></script>
 </body>
 
 </html>

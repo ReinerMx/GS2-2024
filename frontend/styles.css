@@ -1,0 +1,124 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Navigation Bar */
+.navbar-brand img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.search-bar {
+    max-width: 400px;
+}
+
+/* Main Section with Background Image */
+.main-section {
+    text-align: center;
+    padding: 80px 20px;
+    background-image: url('images/earth6.jpg');
+    background-size: cover; /* Cover the entire section */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent repeating the image */
+    color: #ffffff; /* White text for better contrast */
+}
+
+.main-section h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Shadow for readability */
+}
+
+.main-section p.lead {
+    font-size: 1.25rem;
+    color: #f0f0f0;
+    margin-bottom: 50px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Lighter shadow for smaller text */
+}
+
+
+/* Feature Section */
+.feature {
+    margin: 0 15px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.3s; /* Smooth hover effect */
+}
+
+.feature:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.feature img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+.feature h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #007bff; /* Primary blue color */
+}
+
+.feature p {
+    font-size: 1rem;
+    color: #666; /* Light grey for readability */
+    margin-bottom: 20px;
+}
+
+.feature .btn {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 0.95rem;
+    border-radius: 20px;
+    padding: 8px 20px; /* Rounded buttons */
+}
+
+/* Button Styles */
+.btn {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
+}
+
+
+/* Footer */
+.footer {
+    background-color: #f8f9fa; /* Light grey background */
+    color: #6c757d;
+    padding: 30px 0;
+    border-top: 1px solid #e9ecef; /* Subtle top border */
+}
+
+.footer-logo img {
+    height: 50px;
+}
+
+.footer p {
+    margin: 0;
+}
+
+.footer-links a {
+    color: #6c757d;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: 500;
+}
+
+.footer-links a:hover {
+    color: #007bff;
+}
+
+.footer-social img {
+    width: 24px;
+    margin: 0 8px;
+}
