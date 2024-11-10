@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +9,10 @@
 </head>
 
 <body>
-       <!-- Navigation Bar -->
-       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="index.html">
-            <img src="images/huggingearth.png" alt="HuggingEarth Logo" style="height: 40px; margin-right: 10px;"> HuggingEarth
+            <img src="images/huggingearth.png" alt="HuggingEarth Logo" class="navbar-logo"> HuggingEarth
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -41,63 +40,61 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container">
-        <h1 class="mt-4">Legal Notice</h1>
-        <p>This page contains information required by law for legal notices in Germany.</p>
-
-        <section class="mt-4">
-            <h3>Responsible for Content</h3>
-            <p>
-                HuggingEarth<br>
-
-            </p>
+    <main class="container my-5">
+        <h1 class="text-center">Legal Notice</h1>
+        <hr class="mb-4">
+        <section>
+            <h3>Authors and Responsible Parties</h3>
+            <ul class="list-unstyled">
+                <li><strong>Lukas Ahlert</strong> <img src="images/email.png" alt="Email Icon" class="email-icon"> <a href="mailto:lukas.ahlert@gmail.com">lukas.ahlert@gmail.com</a></li>
+                <li><strong>Amelie Luschnig</strong> <img src="images/email.png" alt="Email Icon" class="email-icon"> <a href="mailto:amelie.luschnig@uni-muenster.de">amelie.luschnig@uni-muenster.de</a></li>
+                <li><strong>Maximilian Reiner</strong> <img src="images/email.png" alt="Email Icon" class="email-icon"> <a href="mailto:reinermaximilian24@gmail.com">reinermaximilian24@gmail.com</a></li>
+                <li><strong>Lara Sieksmeier</strong> <img src="images/email.png" alt="Email Icon" class="email-icon"> <a href="mailto:lsieksme@uni-muenster.de">lsieksme@uni-muenster.de</a></li>
+                <li><strong>Jakub Zahwe</strong> <img src="images/email.png" alt="Email Icon" class="email-icon"> <a href="mailto:jakub189alex@gmail.com">jakub189alex@gmail.com</a></li>
+            </ul>
         </section>
-
         <section class="mt-4">
-            <h3>Contact Information</h3>
-            <p>Email: <a href="mailto:info@huggingearth.com">info@huggingearth.com</a><br>
-            Phone: +49 123 456 7890</p>
+            <h3>Project Information</h3>
+            <p><strong>Geosoftware I, Summer Semester 2024</strong><br>
+            Institute for Geoinformatics<br>
+            University of Münster<br>
+            Heisenbergstraße 2<br>
+            48149 Münster, Germany</p>
         </section>
+    </main>
 
-        <section class="mt-4">
-            <h3>Disclaimer</h3>
-            <p>All content on this site is provided for informational purposes only and is not legally binding. While we strive to keep information accurate, we cannot guarantee it will remain up-to-date or complete at all times.</p>
-        </section>
-    </div>
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="footer-logo mb-3">
+                <a href="index.html">
+                    <img src="images/huggingearth.png" alt="HuggingEarth Logo" class="footer-logo-img">
+                </a>
+            </div>
+            <div class="footer-links mb-3">
+                <a href="index.html" aria-label="Home">Home</a> | 
+                <a href="search.html" aria-label="Models">Catalog</a> | 
+                <a href="upload.html" aria-label="Upload">Upload</a> | 
+                <a href="tutorials.html" aria-label="Tutorials">Tutorials</a> | 
+                <a href="account.html" aria-label="Account">Account</a> | 
+                <a href="impressum.html" aria-label="Legal Notice">Legal Notice</a>
+            </div>
+            <div class="footer-git mb-3">
+                <p class="mt-2">
+                    View this project on 
+                    <a href="https://github.com/ReinerMx/GS2-2024" target="_blank" aria-label="Visit our GitHub repository" class="github-link">
+                        <img src="images/github_logo.png" alt="GitHub Logo" class="github-icon">
+                    </a>– Contributions are welcome!
+                </p>
+            </div>
+            <p>&copy; 2024 HuggingEarth. All rights reserved.</p>
+        </div>
+    </footer>
 
-            <!-- Footer -->
-            <footer class="footer text-center">
-                <div class="container">
-                    <div class="footer-logo mb-3">
-                        <a href="index.html">
-                            <img src="images/huggingearth.png" alt="HuggingEarth Logo" style="height: 50px;">
-                        </a>
-                        <p class="mt-2">Exploring and Sharing Earth Observation Models</p>
-                    </div>
-                    <div class="footer-links mb-3">
-                        <a href="index.html" aria-label="Home">Home</a> | 
-                        <a href="search.html" aria-label="Models">Catalog</a> | 
-                        <a href="upload.html" aria-label="Upload">Upload</a> | 
-                        <a href="tutorials.html" aria-label="Tutorials">Tutorials</a> | 
-                        <a href="account.html" aria-label="Account">Account</a> | 
-                        <a href="impressum.html" aria-label="Legal Notice">Legal Notice</a>
-                    </div>
-                    <!-- GitHub Link with Inline Icon -->
-                    <div class="footer-git mb-3">
-                        <p class="mt-2">
-                            View this project on 
-                            <a href="https://github.com/ReinerMx/GS2-2024" target="_blank" aria-label="Visit our GitHub repository" class="github-link" style="text-decoration: none;">
-                                <img src="images/github_logo.png" alt="GitHub Logo" style="width: 50px; margin-right: 1px;">
-                            </a>– Contributions are welcome!
-                        </p>
-                    </div>
-                    <p>&copy; 2024 HuggingEarth. All rights reserved.</p>
-                </div>
-            </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- JavaScript Imports -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>       
 </body>
 
 </html>

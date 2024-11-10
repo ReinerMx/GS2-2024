@@ -118,7 +118,19 @@ body {
     color: #007bff;
 }
 
-.footer-social img {
-    width: 24px;
-    margin: 0 8px;
+/* GitHub icon */
+.github-link img {
+    width: 30px;
+    margin-right: 1px;
+}
+
+/* Image styles for email icon and logo */
+.email-icon {
+    width: 16px;
+    vertical-align: middle;
+}
+
+.navbar-logo {
+    height: 40px;
+    margin-right: 10px;
 }
