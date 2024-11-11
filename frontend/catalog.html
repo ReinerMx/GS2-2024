@@ -24,7 +24,7 @@
             </form>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="search.html" aria-label="Catalog">Catalog</a>
+                    <a class="nav-link" href="catalog.html" aria-label="Catalog">Catalog</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="upload.html" aria-label="Upload Models">Upload</a>
@@ -41,52 +41,50 @@
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <aside class="col-md-3 sidebar">
-                <h4>Filters</h4>
-                <div class="filter-section">
-                    <h5>Tasks</h5>
-                    <ul class="list-unstyled">
-                        <li><input type="checkbox" id="classification" class="filter-checkbox"> <label for="classification">Classification</label></li>
-                        <li><input type="checkbox" id="regression" class="filter-checkbox"> <label for="regression">Regression</label></li>
-                        <li><input type="checkbox" id="detection" class="filter-checkbox"> <label for="detection">Object Detection</label></li>
-                    </ul>
-                </div>
-                <div class="filter-section">
-                    <h5>Data Types</h5>
-                    <ul class="list-unstyled">
-                        <li><input type="checkbox" id="sentinel2" class="filter-checkbox"> <label for="sentinel2">Sentinel-2</label></li>
-                        <li><input type="checkbox" id="landsat" class="filter-checkbox"> <label for="landsat">Landsat</label></li>
-                    </ul>
-                </div>
-                <div class="filter-section">
-                    <h5>Languages</h5>
-                    <ul class="list-unstyled">
-                        <li><input type="checkbox" id="python" class="filter-checkbox"> <label for="python">Python</label></li>
-                        <li><input type="checkbox" id="r" class="filter-checkbox"> <label for="r">R</label></li>
-                    </ul>
-                </div>
-            </aside>
-            
-            <!-- Main Content -->
-            <main class="col-md-9 main-content">
-                <h2>Search Results</h2>
-                <div id="resultsContainer">
-                    <div class="result-item">
-                        <h5>Example Model 1</h5>
-                        <p>Description of the model including supported data type and task.</p>
-                        <button class="btn btn-primary">View Details</button>
-                    </div>
-                    <div class="result-item">
-                        <h5>Example Model 2</h5>
-                        <p>Description of the model including supported data type and task.</p>
-                        <button class="btn btn-primary">View Details</button>
-                    </div>
-                    <!-- More result items -->
-                </div>
-            </main>
+                <!-- Sidebar Filters -->
+        <aside class="col-md-3 sidebar">
+            <h4>Filters</h4>
+            <div class="filter-section">
+                <h5>Tasks</h5>
+                <ul class="list-unstyled">
+                    <li><input type="checkbox" id="task-classification" class="filter-checkbox" value="classification"> Classification</li>
+                    <li><input type="checkbox" id="task-regression" class="filter-checkbox" value="regression"> Regression</li>
+                    <li><input type="checkbox" id="task-detection" class="filter-checkbox" value="detection"> Object Detection</li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h5>Data Types</h5>
+                <ul class="list-unstyled">
+                    <li><input type="checkbox" id="data-sentinel2" class="filter-checkbox" value="Sentinel-2"> Sentinel-2</li>
+                    <li><input type="checkbox" id="data-landsat" class="filter-checkbox" value="Landsat"> Landsat</li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h5>Languages</h5>
+                <ul class="list-unstyled">
+                    <li><input type="checkbox" id="language-python" class="filter-checkbox" value="Python"> Python</li>
+                    <li><input type="checkbox" id="language-r" class="filter-checkbox" value="R"> R</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Header -->
+        <header class="text-center my-4">
+            <h1>Model Catalog</h1>
+            <p>Explore available Earth Observation Machine Learning models. Use the search below to find models that match your needs.</p>
+        </header>
+    
+        <!-- Search Bar -->
+        <div class="container text-center my-4">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search for models by name or description" aria-label="Search for models">
+            <button id="searchButton" class="btn btn-primary mt-2" onclick="performSearch()">Search</button>
         </div>
-    </div>
+    
+        <!-- Model Results -->
+        <div class="container" id="resultsContainer">
+            <!-- Initial model list or search results will be displayed here -->
+        </div>
+
 
     <!-- Footer -->
     <footer class="footer text-center">
@@ -98,7 +96,7 @@
             </div>
             <div class="footer-links mb-3">
                 <a href="index.html" aria-label="Home">Home</a> | 
-                <a href="search.html" aria-label="Models">Catalog</a> | 
+                <a href="catalog.html" aria-label="Models">Catalog</a> | 
                 <a href="upload.html" aria-label="Upload">Upload</a> | 
                 <a href="tutorials.html" aria-label="Tutorials">Tutorials</a> | 
                 <a href="account.html" aria-label="Account">Account</a> | 
@@ -119,6 +117,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scripts/catalog.js"></script>
 </body>
 
 </html>
