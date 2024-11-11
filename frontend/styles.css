@@ -41,7 +41,6 @@ body {
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Lighter shadow for smaller text */
 }
 
-
 /* Feature Section */
 .feature {
     margin: 0 15px;
@@ -93,6 +92,108 @@ body {
 }
 
 
+/* Sidebar styling */
+.filter-sidebar {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-sidebar h4 {
+    color: #007bff;
+}
+
+.filter-section h5 {
+    margin-top: 15px;
+    color: #333;
+}
+
+.filter-section label {
+    color: #555;
+    font-weight: 400;
+}
+
+/* Styling for the search input and button */
+#searchInput {
+    border-radius: 4px 0 0 4px;
+    transition: none; /* Remove hover or focus transition effect */
+    box-shadow: none; /* Prevent any "light up" effect */
+}
+
+#searchButton {
+    border-radius: 0 4px 4px 0;
+    color: #fff;
+    transition: none; /* Remove hover effect */
+}
+
+#searchButton.btn:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Model catalog styling */
+#resultsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Model card styling */
+.model-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.model-card:hover {
+    transform: scale(1.02);
+}
+
+.model-card h5 {
+    font-size: 1.25em;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.model-card p {
+    font-size: 0.95em;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.model-card .view-details-btn {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+    transition: background-color 0.2s ease;
+}
+
+.model-card .view-details-btn:hover {
+    background-color: #0056b3;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
+
+/* Main container styling */
+.container-fluid {
+    padding: 20px 40px;
+}
+
+
 /* Footer */
 .footer {
     background-color: #f8f9fa; /* Light grey background */
@@ -124,6 +225,7 @@ body {
 .github-link img {
     width: 30px;
     margin-right: 1px;
+    text-decoration: none;
 }
 
 /* Image styles for email icon and logo */
@@ -135,4 +237,125 @@ body {
 .navbar-logo {
     height: 40px;
     margin-right: 10px;
+}
+
+/* Main layout for larger screens */
+.container-fluid {
+    display: flex;
+    gap: 20px;
+    padding: 20px 40px;
+}
+
+/* Sidebar styling for filters */
+.filter-sidebar {
+    flex: 0 0 250px; /* Sidebar takes a fixed width */
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    height: fit-content;
+}
+
+.filter-sidebar h4 {
+    color: #007bff;
+    font-size: 1.5rem;
+}
+
+.filter-section h5 {
+    margin-top: 15px;
+    color: #333;
+}
+
+.filter-section label {
+    color: #555;
+    font-weight: 400;
+}
+
+/* Model catalog section */
+.catalog-content {
+    flex: 1; /* Takes remaining space beside the sidebar */
+}
+
+#resultsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Model card styling */
+.model-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.model-card:hover {
+    transform: scale(1.02);
+}
+
+.model-card h5 {
+    font-size: 1.25em;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.model-card p {
+    font-size: 0.95em;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.model-card .view-details-btn {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+    transition: background-color 0.2s ease;
+}
+
+.model-card .view-details-btn:hover {
+    background-color: #0056b3;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+    /* Stack sidebar on top for smaller screens */
+    .container-fluid {
+        display: block;
+        padding: 20px;
+    }
+
+    .filter-sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+        position: relative; /* No sticky positioning on small screens */
+    }
+
+    .catalog-content {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .filter-sidebar h4 {
+        font-size: 1.2rem;
+    }
+
+    .model-card {
+        max-width: 100%; /* Full width for cards on very small screens */
+    }
 }

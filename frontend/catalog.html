@@ -39,51 +39,57 @@
         </div>
     </nav>
 
-    <div class="container-fluid">
+   
+    <!-- Main Content with Sidebar -->
+    <div class="container-fluid mt-4">
         <div class="row">
-                <!-- Sidebar Filters -->
-        <aside class="col-md-3 sidebar">
-            <h4>Filters</h4>
-            <div class="filter-section">
-                <h5>Tasks</h5>
-                <ul class="list-unstyled">
-                    <li><input type="checkbox" id="task-classification" class="filter-checkbox" value="classification"> Classification</li>
-                    <li><input type="checkbox" id="task-regression" class="filter-checkbox" value="regression"> Regression</li>
-                    <li><input type="checkbox" id="task-detection" class="filter-checkbox" value="detection"> Object Detection</li>
-                </ul>
-            </div>
-            <div class="filter-section">
-                <h5>Data Types</h5>
-                <ul class="list-unstyled">
-                    <li><input type="checkbox" id="data-sentinel2" class="filter-checkbox" value="Sentinel-2"> Sentinel-2</li>
-                    <li><input type="checkbox" id="data-landsat" class="filter-checkbox" value="Landsat"> Landsat</li>
-                </ul>
-            </div>
-            <div class="filter-section">
-                <h5>Languages</h5>
-                <ul class="list-unstyled">
-                    <li><input type="checkbox" id="language-python" class="filter-checkbox" value="Python"> Python</li>
-                    <li><input type="checkbox" id="language-r" class="filter-checkbox" value="R"> R</li>
-                </ul>
-            </div>
-        </aside>
+            <!-- Sidebar for Filters -->
+            <aside class="col-md-3 filter-sidebar">
+                <h4>Filters</h4>
+                <hr>
+                <div class="filter-section">
+                    <h5>Tasks</h5>
+                    <div>
+                        <label><input type="checkbox" name="task" value="Classification"> Classification</label><br>
+                        <label><input type="checkbox" name="task" value="Regression"> Regression</label><br>
+                        <label><input type="checkbox" name="task" value="Object Detection"> Object Detection</label>
+                    </div>
+                </div>
+                <div class="filter-section mt-4">
+                    <h5>Data Types</h5>
+                    <div>
+                        <label><input type="checkbox" name="dataType" value="Sentinel-2"> Sentinel-2</label><br>
+                        <label><input type="checkbox" name="dataType" value="Landsat"> Landsat</label>
+                    </div>
+                </div>
+                <div class="filter-section mt-4">
+                    <h5>Languages</h5>
+                    <div>
+                        <label><input type="checkbox" name="language" value="Python"> Python</label><br>
+                        <label><input type="checkbox" name="language" value="R"> R</label>
+                    </div>
+                </div>
+            </aside>
 
-        <!-- Header -->
-        <header class="text-center my-4">
-            <h1>Model Catalog</h1>
-            <p>Explore available Earth Observation Machine Learning models. Use the search below to find models that match your needs.</p>
-        </header>
-    
-        <!-- Search Bar -->
-        <div class="container text-center my-4">
-            <input type="text" id="searchInput" class="form-control" placeholder="Search for models by name or description" aria-label="Search for models">
-            <button id="searchButton" class="btn btn-primary mt-2" onclick="performSearch()">Search</button>
+            <!-- Main Content Area -->
+            <main class="col-md-9">
+                <h2>Model Catalog</h2>
+                <p>Explore available Earth Observation Machine Learning models. Use the search below to find models that match your needs.</p>
+                
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search for models by name or description">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" id="searchButton" type="button">Search</button>
+                    </div>
+                </div>
+
+                <!-- Model Results -->
+                <div class="container" id="resultsContainer">
+                    <!-- Initial model list or search results will be displayed here -->
+                </div>
+            </main>
         </div>
-    
-        <!-- Model Results -->
-        <div class="container" id="resultsContainer">
-            <!-- Initial model list or search results will be displayed here -->
-        </div>
+    </div>
 
 
     <!-- Footer -->
