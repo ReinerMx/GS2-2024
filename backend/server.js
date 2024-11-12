@@ -6,8 +6,8 @@ const helmet = require('helmet'); // Security middleware that helps set secure H
 const dotenv = require('dotenv'); // Environment variable manager
 const db = require('./config/db'); // Database configuration
 const userRoutes = require('./routes/userRoutes'); // User-related routes
-const modelRoutes = require('./routes/modelRoutes'); // Model-related routes (e.g., uploading, fetching metadata)
 const errorHandler = require('./middleware/errorHandler'); // Middleware for handling errors
+const { authMiddleware } = require('./middleware/authMiddleware'); // Middleware for JWT authentication
 
 // Load environment variables from .env file
 dotenv.config();
@@ -75,8 +75,11 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 // Routes for user-related actions, such as registration and login
 app.use('/api/users', userRoutes);
 
-// Routes for model-related actions, such as uploading and retrieving model metadata
-app.use('/api/models', modelRoutes);
+// Protected route example
+// This route is only accessible if the user is authenticated
+app.get('/api/protected', authMiddleware, (req, res) => {
+  res.send('Zugriff auf geschützte Route gewährt');
+});
 
 // Root endpoint to verify if the server is up and running
 app.get('/', (req, res) => {
