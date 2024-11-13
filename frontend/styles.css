@@ -1,45 +1,95 @@
-/* Global Styles */
+/* ********** Global Styles ********** */
+
 body {
     font-family: Arial, sans-serif;
 }
 
-/* Navigation Bar */
-.navbar-brand img, .navbar-logo {
-    height: 40px;
-    margin-right: 10px;
+/* Container Styles */
+.container, .container-fluid {
+    max-width: 800px;
+    padding: 20px 40px;
+}
+
+/* Upload Page Layout */
+.upload-page {
+    margin: auto;
+}
+
+/* ********** Navbar Styles ********** */
+
+.navbar {
+    padding: 10px 20px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+/* Navbar Logo Styling */
+.navbar-brand img {
+    height: 40px; /* Fixed height for the logo */
+    max-height: 40px;
+    width: auto;
+    margin-right: 10px; /* Adds space between logo and text */
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+/* Centered Search Bar */
+.search-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
 }
 
 .search-bar {
     display: flex;
     align-items: center;
     max-width: 400px;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
 }
 
-#searchInput {
-    border-radius: 4px 0 0 4px;
-    box-shadow: none;
+.search-bar input[type="text"] {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    color: #333;
+    background-color: transparent;
+    padding-left: 8px;
 }
 
-#searchButton {
-    border-radius: 0 4px 4px 0;
-    color: #fff;
-    box-shadow: none;
-    transition: none;
+.search-bar input[type="text"]::placeholder {
+    color: #aaa;
 }
 
-#searchButton.btn:hover {
-    transform: none;
-    box-shadow: none;
+.search-bar::before {
+    content: "\1F50D";
+    font-size: 1.2rem;
+    color: #aaa;
+    margin-right: 8px;
 }
 
-/* Main Section with Background Image */
+/* Right-Aligned Navbar Links */
+.navbar-nav.ml-auto {
+    display: flex;
+    align-items: center;
+}
+
+/* ********** Main Section with Background Image ********** */
+
 .main-section {
     text-align: center;
     padding: 80px 20px;
-    background-image: url('images/earth6.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: url('images/earth6.jpg') center/cover no-repeat;
     color: #ffffff;
 }
 
@@ -56,7 +106,8 @@ body {
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
 
-/* Feature Section */
+/* ********** Feature Section ********** */
+
 .feature {
     margin: 0 15px;
     padding: 20px;
@@ -96,7 +147,8 @@ body {
     padding: 8px 20px;
 }
 
-/* Button Styles */
+/* ********** Button Styles ********** */
+
 .btn {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -106,7 +158,8 @@ body {
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
 }
 
-/* Sidebar Styling */
+/* ********** Sidebar Styling ********** */
+
 .filter-sidebar {
     flex: 0 0 250px;
     background-color: #f8f9fa;
@@ -133,7 +186,8 @@ body {
     font-weight: 400;
 }
 
-/* Model Catalog Styling */
+/* ********** Model Catalog Styling ********** */
+
 .catalog-content {
     flex: 1;
 }
@@ -144,7 +198,8 @@ body {
     gap: 20px;
 }
 
-/* Model Card Styling */
+/* ********** Model Card Styling ********** */
+
 .model-card {
     background-color: #ffffff;
     border: 1px solid #ddd;
@@ -185,47 +240,21 @@ body {
 
 .model-card .view-details-btn:hover {
     background-color: #0056b3;
-    color: #ffffff;
     text-decoration: none;
 }
 
-/* Upload Form Styling */
-.upload-form {
-    background-color: #f9f9f9;
+/* ********** Form Styling ********** */
+
+.upload-form, #missingFieldsForm {
+    background-color: #fdfdfd;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.upload-form label {
+.upload-form label, .form-group label {
     font-weight: bold;
-}
-
-.status-message {
-    margin-top: 15px;
-    color: #28a745;
-}
-
-/* Missing Fields Form Styling */
-#missingFieldsForm.hidden {
-    display: none;
-}
-
-#missingFieldsForm {
-    background-color: #fdfdfe;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-#missingFieldsForm h3 {
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
 }
 
 .form-group input {
@@ -236,7 +265,31 @@ body {
     border-radius: 4px;
 }
 
-/* Footer */
+#missingFieldsForm.hidden {
+    display: none;
+}
+
+#missingFieldsForm {
+    background-color: #fff8e1;
+    border: 1px solid #ffc107;
+    margin-top: 20px;
+}
+
+#missingFieldsForm h3 {
+    font-weight: bold;
+    color: #dc3545;
+    margin-bottom: 10px;
+}
+
+/* ********** Status Message ********** */
+
+.status-message {
+    margin-top: 15px;
+    color: #28a745;
+}
+
+/* ********** Footer ********** */
+
 .footer {
     background-color: #f8f9fa;
     color: #6c757d;
@@ -264,7 +317,18 @@ body {
     margin-left: 5px;
 }
 
-/* Responsive Design */
+.footer-git .github-link:focus {
+    outline: none;
+}
+
+.footer-git .github-link img {
+    width: 30px;
+    margin-right: 1px;
+    border: none;
+}
+
+/* ********** Responsive Design ********** */
+
 @media (max-width: 992px) {
     .container-fluid {
         display: block;
@@ -292,19 +356,8 @@ body {
     }
 }
 
-/* Container Styling */
-.container, .container-fluid {
-    max-width: 800px;
-    padding: 20px 40px;
-}
+/* ********** Sample JSON Section ********** */
 
-/* Main page layout */
-.upload-page {
-    max-width: 800px;
-    margin: auto;
-}
-
-/* Section for sample JSON */
 .sample-section {
     background-color: #f8f9fa;
     padding: 20px;
@@ -326,55 +379,9 @@ body {
     font-family: monospace;
 }
 
-/* Form styling */
-.upload-form {
-    background-color: #fdfdfd;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
-.upload-form .form-group label {
-    font-weight: bold;
-}
 
-.upload-form .form-text {
-    color: #6c757d;
-}
-
-/* Missing fields form styling */
-#missingFieldsForm.hidden {
-    display: none;
-}
-
-#missingFieldsForm {
-    background-color: #fff8e1;
-    padding: 20px;
-    border: 1px solid #ffc107;
-    border-radius: 5px;
-    margin-top: 20px;
-}
-
-#missingFieldsForm h3 {
-    font-weight: bold;
-    color: #dc3545;
-    margin-bottom: 10px;
-}
-
-.status-message {
-    margin-top: 15px;
-    color: #28a745;
-}
-
-/* Footer GitHub link styles */
-.footer-git .github-link:focus {
-    outline: none;
-}
-
-.footer-git .github-link img {
-    width: 30px;
-    margin-right: 1px;
-    text-decoration: none;
-    border: none;
+/* Specific styling for Impressum logos */
+.email-icon {
+    max-width: 20px; /* Sets a maximum width for the logos */
 }
