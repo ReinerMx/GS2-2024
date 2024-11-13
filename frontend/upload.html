@@ -40,40 +40,80 @@
         </div>
     </nav>
 
-
     <!-- Main Content -->
-    <main class="col-md-9 main-content">
-        <h2>Upload Model</h2>
-        <p>Use the form below to upload a new model to the HuggingEarth catalog.</p>
+    <main class="container mt-4 upload-page">
+        <h2 class="upload-title">Upload Your Model</h2>
+        <p>Upload a STAC-compliant JSON file with your model's metadata. We’ll extract all necessary fields automatically. <br> If any data is missing, we’ll guide you to fill in the required information.</p>
 
-        <form id="uploadForm" action="/api/models/upload" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="modelName">Model Name</label>
-                <input type="text" class="form-control" id="modelName" name="modelName" placeholder="Enter a unique name for your model" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Briefly describe what your model does" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="taskType">Task Type</label>
-                <input type="text" class="form-control" id="taskType" name="taskType" placeholder="Specify the task, e.g., classification or detection" required>
-            </div>
-            <div class="form-group">
-                <label for="dataType">Data Type</label>
-                <input type="text" class="form-control" id="dataType" name="dataType" placeholder="Type of data, e.g., EO imagery" required>
-            </div>
-            <div class="form-group">
-                <label for="language">Programming Language</label>
-                <input type="text" class="form-control" id="language" name="language" placeholder="Primary language used, e.g., Python" required>
-            </div>
-            <div class="form-group">
-                <label for="modelFile">Upload Model File</label>
-                <input type="file" class="form-control-file" id="modelFile" name="modelFile" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Upload Model</button>
-        </form>
-        
+        <!-- Sample JSON File Information -->
+        <section class="sample-section">
+            <h4>Sample JSON Structure</h4>
+            <p>Ensure your JSON file follows this structure:</p>
+            <pre class="sample-json">
+{
+    "type": "Feature",
+    "properties": {
+        "mlm:name": "Example Model Name",
+        "description": "Brief description of your model's purpose and usage.",
+        "mlm:tasks": ["classification", "object detection"],
+        "mlm:input": [{
+            "input": {
+                "data_type": "float32",
+                "shape": [-1, 3, 224, 224]
+            }
+        }]
+    },
+    "assets": {
+        "model": {
+            "href": "path/to/model.pt",
+            "type": "application/octet-stream",
+            "description": "PyTorch model file."
+        },
+        "source_code": {
+            "href": "https://github.com/user/repo",
+            "type": "text/x-python",
+            "description": "Link to the model's source code."
+        }
+    },
+    "links": [
+        {
+            "rel": "derived_from",
+            "href": "https://data.source.url",
+            "type": "application/json"
+        }
+    ],
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [[-10.0, 50.0], [10.0, 50.0], [10.0, -50.0], [-10.0, -50.0], [-10.0, 50.0]]
+        ]
+    }
+}
+            </pre>
+        </section>
+
+        <!-- Upload Form -->
+        <section class="upload-section">
+            <form id="uploadForm" enctype="multipart/form-data" class="upload-form">
+                <div class="form-group">
+                    <label for="modelFile">Choose Model File (STAC JSON format)</label>
+                    <input type="file" class="form-control-file" id="modelFile" name="modelFile" required>
+                </div>
+                <button type="submit" id="submitButton" class="btn btn-primary btn-lg btn-block">Upload Model</button>
+            </form>
+            <small class="form-text text-muted mt-2">Ensure the file adheres to the STAC metadata format. Invalid files will require additional manual data entry.</small>
+        </section>
+
+        <!-- Missing Fields Section (hidden by default) -->
+        <div id="missingFieldsForm" class="hidden">
+            <h3>Additional Required Data</h3>
+            <p>The uploaded file is missing some required metadata. Please fill in the missing information below.</p>
+            <form id="missingFieldsContainer" class="form-group"></form>
+            <button type="submit" class="btn btn-secondary" id="submitMissingDataButton">Submit Additional Data</button>
+        </div>
+
+        <!-- Status Message -->
+        <div id="statusMessage" class="status-message"></div>
     </main>
 
     <!-- Footer -->
@@ -97,13 +137,12 @@
                     View this project on 
                     <a href="https://github.com/ReinerMx/GS2-2024" target="_blank" aria-label="Visit our GitHub repository" class="github-link">
                         <img src="images/github_logo.png" alt="GitHub Logo" class="github-icon">
-                    </a>– Contributions are welcome!
+                    </a> – Contributions are welcome!
                 </p>
             </div>
             <p>&copy; 2024 HuggingEarth. All rights reserved.</p>
         </div>
     </footer>
-
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>

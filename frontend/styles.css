@@ -4,55 +4,70 @@ body {
 }
 
 /* Navigation Bar */
-.navbar-brand img {
+.navbar-brand img, .navbar-logo {
     height: 40px;
     margin-right: 10px;
 }
 
 .search-bar {
+    display: flex;
+    align-items: center;
     max-width: 400px;
 }
 
+#searchInput {
+    border-radius: 4px 0 0 4px;
+    box-shadow: none;
+}
 
+#searchButton {
+    border-radius: 0 4px 4px 0;
+    color: #fff;
+    box-shadow: none;
+    transition: none;
+}
+
+#searchButton.btn:hover {
+    transform: none;
+    box-shadow: none;
+}
 
 /* Main Section with Background Image */
 .main-section {
     text-align: center;
     padding: 80px 20px;
     background-image: url('images/earth6.jpg');
-    background-size: cover; /* Cover the entire section */
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Prevent repeating the image */
-    color: #ffffff; /* White text for better contrast */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #ffffff;
 }
 
 .main-section h1 {
     font-size: 2.8rem;
     font-weight: 700;
-    color: #ffffff;
     margin-bottom: 20px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Shadow for readability */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
 }
 
 .main-section p.lead {
     font-size: 1.25rem;
-    color: #f0f0f0;
     margin-bottom: 50px;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Lighter shadow for smaller text */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 /* Feature Section */
 .feature {
     margin: 0 15px;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    transition: transform 0.3s; /* Smooth hover effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
 }
 
 .feature:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
+    transform: translateY(-5px);
 }
 
 .feature img {
@@ -64,12 +79,12 @@ body {
 .feature h3 {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #007bff; /* Primary blue color */
+    color: #007bff;
 }
 
 .feature p {
     font-size: 1rem;
-    color: #666; /* Light grey for readability */
+    color: #666;
     margin-bottom: 20px;
 }
 
@@ -78,7 +93,7 @@ body {
     color: #fff;
     font-size: 0.95rem;
     border-radius: 20px;
-    padding: 8px 20px; /* Rounded buttons */
+    padding: 8px 20px;
 }
 
 /* Button Styles */
@@ -91,164 +106,9 @@ body {
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
 }
 
-
-/* Sidebar styling */
+/* Sidebar Styling */
 .filter-sidebar {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.filter-sidebar h4 {
-    color: #007bff;
-}
-
-.filter-section h5 {
-    margin-top: 15px;
-    color: #333;
-}
-
-.filter-section label {
-    color: #555;
-    font-weight: 400;
-}
-
-/* Styling for the search input and button */
-#searchInput {
-    border-radius: 4px 0 0 4px;
-    transition: none; /* Remove hover or focus transition effect */
-    box-shadow: none; /* Prevent any "light up" effect */
-}
-
-#searchButton {
-    border-radius: 0 4px 4px 0;
-    color: #fff;
-    transition: none; /* Remove hover effect */
-}
-
-#searchButton.btn:hover {
-    transform: none;
-    box-shadow: none;
-}
-
-/* Model catalog styling */
-#resultsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-/* Model card styling */
-.model-card {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    width: 100%;
-    max-width: 300px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-}
-
-.model-card:hover {
-    transform: scale(1.02);
-}
-
-.model-card h5 {
-    font-size: 1.25em;
-    color: #007bff;
-    margin-bottom: 10px;
-}
-
-.model-card p {
-    font-size: 0.95em;
-    color: #555;
-    margin-bottom: 10px;
-}
-
-.model-card .view-details-btn {
-    background-color: #007bff;
-    color: #ffffff;
-    font-weight: bold;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    text-align: center;
-    width: 100%;
-    display: inline-block;
-    transition: background-color 0.2s ease;
-}
-
-.model-card .view-details-btn:hover {
-    background-color: #0056b3;
-    color: #ffffff;
-    text-decoration: none;
-}
-
-
-
-/* Main container styling */
-.container-fluid {
-    padding: 20px 40px;
-}
-
-
-/* Footer */
-.footer {
-    background-color: #f8f9fa; /* Light grey background */
-    color: #6c757d;
-    padding: 30px 0;
-    border-top: 1px solid #e9ecef; /* Subtle top border */
-}
-
-.footer-logo img {
-    height: 50px;
-}
-
-.footer p {
-    margin: 0;
-}
-
-.footer-links a {
-    color: #6c757d;
-    text-decoration: none;
-    margin: 0 10px;
-    font-weight: 500;
-}
-
-.footer-links a:hover {
-    color: #007bff;
-}
-
-/* GitHub icon */
-.github-link img {
-    width: 30px;
-    margin-right: 1px;
-    text-decoration: none;
-}
-
-/* Image styles for email icon and logo */
-.email-icon {
-    width: 16px;
-    vertical-align: middle;
-}
-
-.navbar-logo {
-    height: 40px;
-    margin-right: 10px;
-}
-
-/* Main layout for larger screens */
-.container-fluid {
-    display: flex;
-    gap: 20px;
-    padding: 20px 40px;
-}
-
-/* Sidebar styling for filters */
-.filter-sidebar {
-    flex: 0 0 250px; /* Sidebar takes a fixed width */
+    flex: 0 0 250px;
     background-color: #f8f9fa;
     padding: 20px;
     border-radius: 8px;
@@ -273,9 +133,9 @@ body {
     font-weight: 400;
 }
 
-/* Model catalog section */
+/* Model Catalog Styling */
 .catalog-content {
-    flex: 1; /* Takes remaining space beside the sidebar */
+    flex: 1;
 }
 
 #resultsContainer {
@@ -284,13 +144,12 @@ body {
     gap: 20px;
 }
 
-/* Model card styling */
+/* Model Card Styling */
 .model-card {
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 20px;
-    width: 100%;
     max-width: 300px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
@@ -321,7 +180,6 @@ body {
     border-radius: 4px;
     text-align: center;
     width: 100%;
-    display: inline-block;
     transition: background-color 0.2s ease;
 }
 
@@ -331,9 +189,83 @@ body {
     text-decoration: none;
 }
 
-/* Responsive design */
+/* Upload Form Styling */
+.upload-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.upload-form label {
+    font-weight: bold;
+}
+
+.status-message {
+    margin-top: 15px;
+    color: #28a745;
+}
+
+/* Missing Fields Form Styling */
+#missingFieldsForm.hidden {
+    display: none;
+}
+
+#missingFieldsForm {
+    background-color: #fdfdfe;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#missingFieldsForm h3 {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Footer */
+.footer {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    padding: 30px 0;
+    border-top: 1px solid #e9ecef;
+}
+
+.footer-logo img, .footer-logo-img {
+    height: 40px;
+}
+
+.footer-links a {
+    color: #6c757d;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: 500;
+}
+
+.footer-links a:hover {
+    color: #007bff;
+}
+
+.footer-git .github-icon {
+    height: 30px;
+    margin-left: 5px;
+}
+
+/* Responsive Design */
 @media (max-width: 992px) {
-    /* Stack sidebar on top for smaller screens */
     .container-fluid {
         display: block;
         padding: 20px;
@@ -342,7 +274,7 @@ body {
     .filter-sidebar {
         width: 100%;
         margin-bottom: 20px;
-        position: relative; /* No sticky positioning on small screens */
+        position: relative;
     }
 
     .catalog-content {
@@ -356,6 +288,93 @@ body {
     }
 
     .model-card {
-        max-width: 100%; /* Full width for cards on very small screens */
+        max-width: 100%;
     }
+}
+
+/* Container Styling */
+.container, .container-fluid {
+    max-width: 800px;
+    padding: 20px 40px;
+}
+
+/* Main page layout */
+.upload-page {
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Section for sample JSON */
+.sample-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.sample-section h4 {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.sample-json {
+    background-color: #272822;
+    color: #f8f8f2;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-family: monospace;
+}
+
+/* Form styling */
+.upload-form {
+    background-color: #fdfdfd;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.upload-form .form-group label {
+    font-weight: bold;
+}
+
+.upload-form .form-text {
+    color: #6c757d;
+}
+
+/* Missing fields form styling */
+#missingFieldsForm.hidden {
+    display: none;
+}
+
+#missingFieldsForm {
+    background-color: #fff8e1;
+    padding: 20px;
+    border: 1px solid #ffc107;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+#missingFieldsForm h3 {
+    font-weight: bold;
+    color: #dc3545;
+    margin-bottom: 10px;
+}
+
+.status-message {
+    margin-top: 15px;
+    color: #28a745;
+}
+
+/* Footer GitHub link styles */
+.footer-git .github-link:focus {
+    outline: none;
+}
+
+.footer-git .github-link img {
+    width: 30px;
+    margin-right: 1px;
+    text-decoration: none;
+    border: none;
 }
