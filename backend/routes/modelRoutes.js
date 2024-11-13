@@ -8,6 +8,17 @@ const uploadMiddleware = require('../middleware/uploadMiddleware');
 // Initialize the router
 const router = express.Router();
 
+// GET all models
+router.get('/', async (req, res) => {
+    try {
+        const models = await Model.findAll(); // Fetch all models from the database
+        res.json(models); // Send the models as JSON
+    } catch (error) {
+        console.error('Error fetching models:', error);
+        res.status(500).json({ message: 'Error fetching models' });
+    }
+});
+
 /**
  * Extracts model details from the STAC data file and formats it for database storage.
  * This function validates that required fields are present in the STAC data.

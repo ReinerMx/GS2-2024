@@ -72,9 +72,8 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Define routes for the API
 
-const modelRoutes = require('./routes/modelRoutes'); // 
-app.use('/api/models', modelRoutes); // 
-
+const modelRoutes = require('./routes/modelRoutes');
+app.use('/api/models', modelRoutes);
 
 // Routes for user-related actions, such as registration and login
 app.use('/api/users', userRoutes);
