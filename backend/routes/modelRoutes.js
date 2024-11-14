@@ -107,4 +107,19 @@ router.post('/upload', uploadMiddleware.single('modelFile'), async (req, res) =>
     }
 });
 
+// Route to get details of a specific model by ID
+router.get('/:id', async (req, res) => {
+    const modelId = req.params.id;
+    try {
+        const model = await Model.findByPk(modelId); // Fetch model by primary key
+        if (!model) {
+            return res.status(404).json({ error: 'Model not found' });
+        }
+        res.json(model);
+    } catch (error) {
+        console.error('Error fetching model details:', error);
+        res.status(500).json({ error: 'Failed to fetch model details' });
+    }
+});
+
 module.exports = router;

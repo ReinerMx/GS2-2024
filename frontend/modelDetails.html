@@ -5,9 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    <title>Model Details</title>
+    <title>HuggingEarth - Model Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -40,13 +43,53 @@
         </div>
     </nav>
 
-
-    <div class="container">
+    <main class="container mt-4">
         <h2>Model Details</h2>
-        <div id="modelDetailsContainer"></div>
-    </div>
+        
+        <div id="modelDetailsContainer" class="info-section">
+            <!-- Model details will be loaded here -->
+        </div>
+        
+        <div id="map" class="map-section mt-4">
+            <h4>Spatial Coverage</h4>
+            <!-- Leaflet map will be rendered here -->
+        </div>
+    </main>
 
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="footer-logo mb-3">
+                <a href="index.html">
+                    <img src="images/huggingearth.png" alt="HuggingEarth Logo" class="footer-logo-img">
+                </a>
+            </div>
+            <div class="footer-links mb-3">
+                <a href="index.html" aria-label="Home">Home</a> | 
+                <a href="catalog.html" aria-label="Models">Catalog</a> | 
+                <a href="upload.html" aria-label="Upload">Upload</a> | 
+                <a href="tutorials.html" aria-label="Tutorials">Tutorials</a> | 
+                <a href="account.html" aria-label="Account">Account</a> | 
+                <a href="impressum.html" aria-label="Legal Notice">Legal Notice</a>
+            </div>
+            <div class="footer-git mb-3">
+                <p class="mt-2">
+                    View this project on 
+                    <a href="https://github.com/ReinerMx/GS2-2024" target="_blank" aria-label="Visit our GitHub repository" class="github-link">
+                        <img src="images/github_logo.png" alt="GitHub Logo" class="github-icon">
+                    </a>– Contributions are welcome!
+                </p>
+            </div>
+            <p>&copy; 2024 HuggingEarth. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="scripts/modelDetails.js"></script>
 </body>
+
 </html>
