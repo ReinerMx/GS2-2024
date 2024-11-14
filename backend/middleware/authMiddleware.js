@@ -12,8 +12,3 @@ exports.authMiddleware = (req, res, next) => {
     res.status(400).json({ message: 'Ungültiges Token' });
   }
 };
-
-exports.roleMiddleware = (role) => (req, res, next) => {
-  if (req.user.role !== role) return res.status(403).json({ message: 'Keine Berechtigung' });
-  next();
-};
