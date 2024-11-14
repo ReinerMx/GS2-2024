@@ -16,80 +16,57 @@ dotenv.config();
 const app = express();
 
 // Middleware configuration
-
-// Enable CORS to allow cross-origin requests from frontend
 app.use(cors());
-
-// Configure helmet to set HTTP headers for security, including a custom CSP to allow external scripts and styles
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ["'self'"], // Default policy: Only load resources from the same origin
+        defaultSrc: ["'self'"],
         scriptSrc: [
-          "'self'", // Allow scripts from the same origin
-          "https://code.jquery.com", // Allow jQuery scripts from its CDN
-          "https://cdn.jsdelivr.net", // Allow Popper.js from jsDelivr
-          "https://stackpath.bootstrapcdn.com", // Allow Bootstrap JavaScript from its CDN
+          "'self'",
+          "https://code.jquery.com",
+          "https://cdn.jsdelivr.net",
+          "https://stackpath.bootstrapcdn.com",
         ],
-        styleSrc: [
-          "'self'", // Allow styles from the same origin
-          "https://stackpath.bootstrapcdn.com", // Allow Bootstrap CSS from its CDN
-        ],
-        imgSrc: [
-          "'self'", // Allow images from the same origin
-          "data:", // Allow inline images (data URIs), often used for icons like SVGs
-        ],
+        styleSrc: ["'self'", "https://stackpath.bootstrapcdn.com"],
+        imgSrc: ["'self'", "data:"],
       },
     },
   })
-); // Helmet with custom CSP configuration
-
-// Morgan middleware to log HTTP requests in the console (useful for development and debugging)
+);
 app.use(morgan("dev"));
-
-// Middleware to parse incoming JSON requests
 app.use(express.json());
-
-// Middleware to parse URL-encoded data from HTML forms
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the 'frontend' directory, which contains the frontend HTML, CSS, and JavaScript files
+// Serve static files from the 'frontend' directory
 const path = require("path");
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 // Database connection and sync
 (async () => {
   try {
-    await db.authenticate(); // Test the database connection
+    await db.authenticate();
     console.log("Database connection has been established successfully.");
-    await db.sync(); // Sync models with the database, creating tables if they don't exist
+    await db.sync();
   } catch (error) {
     console.error("Unable to connect to the database:", error);
-    process.exit(1); // Stop the server if the database connection fails
+    process.exit(1);
   }
 })();
 
 // Define routes for the API
-
-const modelRoutes = require('./routes/modelRoutes');
-app.use('/api/models', modelRoutes);
-
-// Routes for user-related actions, such as registration and login
-app.use("/api/users", userRoutes);
-
-// Routes for model-related actions, such as uploading and retrieving model metadata
-app.use("/api/models", modelRoutes);
+app.use("/api/models", modelRoutes); // Model-related routes
+app.use("/api/users", userRoutes); // User-related routes
 
 // Root endpoint to verify if the server is up and running
 app.get("/", (req, res) => {
   res.send("API is online and functional");
 });
 
-// Error handling middleware to catch and handle any errors occurring during request processing
+// Error handling middleware to catch and handle any errors during request processing
 app.use(errorHandler);
 
-// Define the port from environment variables or default to 5001
+// Define the port from environment variables or default to 5555
 const PORT = process.env.PORT || 5555;
 
 // Start the server on the specified port and log a message
