@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to fetch and display all models initially
     const loadAllModels = async () => {
         try {
-            const response = await fetch('/api/models'); // Backend API to fetch all models
+            const response = await fetch('/api/models');
             const models = await response.json();
             displayModels(models);
         } catch (error) {
@@ -46,16 +46,33 @@ document.addEventListener('DOMContentLoaded', () => {
             modelDiv.innerHTML = `
                 <h4>${model.modelName}</h4>
                 <p>${model.description}</p>
-                <button class="btn btn-info" onclick="viewDetails('${model.id}')">View Details</button>
+                <button class="btn btn-info view-details-btn" data-id="${model.id}">View Details</button>
             `;
             resultsContainer.appendChild(modelDiv);
         });
+
+        // Attach event listeners to "View Details" buttons
+        attachViewDetailsListeners();
+    };
+
+    // Function to attach click listeners to "View Details" buttons
+    const attachViewDetailsListeners = () => {
+        document.querySelectorAll('.view-details-btn').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const modelId = event.target.getAttribute('data-id');
+                viewDetails(modelId);
+            });
+        });
+    };
+
+    // Function to navigate to the details page
+    const viewDetails = (modelId) => {
+        window.location.href = `modelDetails.html?id=${modelId}`;
     };
 
     // Load all models on page load
     loadAllModels();
-});
 
-function viewDetails(modelId) {
-    window.location.href = `modelDetails.html?id=${modelId}`;
-}
+    // Attach search functionality
+    searchInput.addEventListener('input', performSearch);
+});
