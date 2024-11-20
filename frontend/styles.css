@@ -77,6 +77,22 @@ body {
     background: url('images/earth6.jpg') center/cover no-repeat;
     color: #ffffff;
 }
+.tutorials-page .gif-style {
+    display: block; /* Zentriert das GIF, falls nötig */
+    max-width: 100%; /* Breite passt sich an den Container an */
+    max-height: 100%; /* Höhe bleibt innerhalb des Containers */
+    height: auto; /* Seitenverhältnis bleibt erhalten */
+    width: auto; /* Seitenverhältnis bleibt erhalten */
+    margin: 0 auto; /* Zentriert das GIF innerhalb des Containers */
+    object-fit: contain; /* Verhindert Verzerrung und hält das Seitenverhältnis */
+    border-radius: 8px; /* Optional: Gleiche Ecken wie beim Container */
+}
+
+
+/* Überschriebenes Hintergrundbild für die Tutorials-Seite */
+.tutorials-page .main-section {
+    background: url('images/earth5.jpg') center/cover no-repeat;
+}
 
 .main-section h1 {
     font-size: 2.8rem;
@@ -100,7 +116,11 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
+    overflow: hidden; /* Sicherstellen, dass Inhalte nicht über den Rand hinausgehen */
+    max-width: 100%; /* Sicherstellen, dass der Container nicht zu groß wird */
+    text-align: center; /* Zentriert die Inhalte */
 }
+
 
 .feature:hover {
     transform: translateY(-5px);
