@@ -1,7 +1,6 @@
 // Import required modules
 const express = require('express');
 const fs = require('fs');
-const path = require('path');
 const Model = require('../models/Model');
 const uploadMiddleware = require('../middleware/uploadMiddleware');
 
