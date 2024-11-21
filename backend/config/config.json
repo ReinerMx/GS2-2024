@@ -1,11 +1,10 @@
 {
     "development": {
-      "username": "postgres",
-      "password": "mysecretpassword",
-      "database": "postgres",
-      "host": "127.0.0.1",
-      "dialect": "postgres",
-      "port": 5432
+        "username": "postgres",
+        "password": "mysecretpassword",
+        "database": "postgres",
+        "host": "10.67.174.232",
+        "dialect": "postgres",
+        "port": 5432
     }
-  }
-  
+}
