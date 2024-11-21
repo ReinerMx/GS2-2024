@@ -1,14 +1,15 @@
 const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
+const config = require('./config.json');
 
-// Laden der Umgebungsvariablen
-dotenv.config({ path: './backend/config/.env' });
+const sequelize = new Sequelize(
+  config.development.database,
+  config.development.username,
+  config.development.password,
+  {
+    host: config.development.host,
+    port: config.development.port,
+    dialect: config.development.dialect,
+  }
+);
 
-const db = new Sequelize(process.env.SUPABASE_DB_NAME, process.env.SUPABASE_DB_USER, process.env.SUPABASE_DB_PASSWORD, {
-  host: process.env.SUPABASE_DB_HOST,
-  port: process.env.SUPABASE_DB_PORT || 5432,
-  dialect: 'postgres',
-  logging: false,
-});
-
-module.exports = db;
+module.exports = sequelize;
