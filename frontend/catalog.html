@@ -1,135 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
     <title>HuggingEarth - Model Catalog</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="index.html">
-            <img src="images/huggingearth.png" alt="HuggingEarth Logo"> HuggingEarth
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="search-container">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search models, users...">
-                </div>
-            </div>            
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="catalog.html" aria-label="Catalog">Catalog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="upload.html" aria-label="Upload Models">Upload</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tutorials.html" aria-label="Tutorials">Tutorials</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="account.html" aria-label="Account">Account</a>
-                </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="login.html" aria-label="Account">Login</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="register.html" aria-label="Account">Register</a>
-            </li>
-            </ul>
+      <a class="navbar-brand" href="index.html">
+        <img src="images/huggingearth.png" alt="HuggingEarth Logo" />
+        HuggingEarth
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="search-container">
+          <div class="search-bar">
+            <input type="text" placeholder="Search models, users..." />
+          </div>
         </div>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="catalog.html" aria-label="Catalog"
+              >Catalog</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="upload.html" aria-label="Upload Models"
+              >Upload</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="tutorials.html" aria-label="Tutorials"
+              >Tutorials</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="account.html" aria-label="Account"
+              >Account</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login.html" aria-label="Account">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="register.html" aria-label="Account"
+              >Register</a
+            >
+          </li>
+        </ul>
+      </div>
     </nav>
 
     <!-- Main Content with Sidebar -->
     <div class="container-fluid mt-4">
-        <div class="row">
-            <!-- Sidebar for Filters -->
-            <aside class="col-md-3 filter-sidebar">
-                <h4>Filters</h4>
-                <hr>
-                <div class="filter-section">
-                    <h5>Tasks</h5>
-                    <div>
-                        <label><input type="checkbox" name="task" value="Classification"> Classification</label><br>
-                        <label><input type="checkbox" name="task" value="Regression"> Regression</label><br>
-                        <label><input type="checkbox" name="task" value="Object Detection"> Object Detection</label>
-                    </div>
-                </div>
-                <div class="filter-section mt-4">
-                    <h5>Data Types</h5>
-                    <div>
-                        <label><input type="checkbox" name="dataType" value="Sentinel-2"> Sentinel-2</label><br>
-                        <label><input type="checkbox" name="dataType" value="Landsat"> Landsat</label>
-                    </div>
-                </div>
-                <div class="filter-section mt-4">
-                    <h5>Languages</h5>
-                    <div>
-                        <label><input type="checkbox" name="language" value="Python"> Python</label><br>
-                        <label><input type="checkbox" name="language" value="R"> R</label>
-                    </div>
-                </div>
-            </aside>
+      <div class="row">
+        <!-- Sidebar for Filters -->
+        <aside class="col-md-3 filter-sidebar">
+          <h4>Filters</h4>
+          <hr />
+          <div class="filter-section">
+            <h5>Tasks</h5>
+            <div>
+              <label
+                ><input type="checkbox" name="task" value="Classification" />
+                Classification</label
+              ><br />
+              <label
+                ><input type="checkbox" name="task" value="Regression" />
+                Regression</label
+              ><br />
+              <label
+                ><input type="checkbox" name="task" value="Object Detection" />
+                Object Detection</label
+              >
+            </div>
+          </div>
+          <div class="filter-section mt-4">
+            <h5>Data Types</h5>
+            <div>
+              <label
+                ><input type="checkbox" name="dataType" value="Sentinel-2" />
+                Sentinel-2</label
+              ><br />
+              <label
+                ><input type="checkbox" name="dataType" value="Landsat" />
+                Landsat</label
+              >
+            </div>
+          </div>
+          <div class="filter-section mt-4">
+            <h5>Languages</h5>
+            <div>
+              <label
+                ><input type="checkbox" name="language" value="Python" />
+                Python</label
+              ><br />
+              <label
+                ><input type="checkbox" name="language" value="R" /> R</label
+              >
+            </div>
+          </div>
+        </aside>
 
-            <!-- Main Content Area -->
-            <main class="col-md-9">
-                <h2>Model Catalog</h2>
-                <p>Explore available Earth Observation Machine Learning models. Use the search below to find models that match your needs.</p>
-                
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="searchInput" placeholder="Search for models by name or description">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" id="searchButton" type="button">Search</button>
-                    </div>
-                </div>
+        <!-- Main Content Area -->
+        <main class="col-md-9">
+          <h2>Model Catalog</h2>
+          <p>
+            Explore available Earth Observation Machine Learning models. Use the
+            search below to find models that match your needs.
+          </p>
 
-                <!-- Model Results -->
-                <div class="container" id="resultsContainer">
-                    <!-- Model list or search results will be displayed here -->
-                </div>
-            </main>
-        </div>
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="searchInput"
+              placeholder="Search for models by name or description"
+            />
+            <div class="input-group-append">
+              <button class="btn btn-primary" id="searchButton" type="button">
+                Search
+              </button>
+            </div>
+          </div>
+
+          <!-- Model Results -->
+          <div class="container" id="resultsContainer">
+            <!-- Model list or search results will be displayed here -->
+          </div>
+        </main>
+      </div>
     </div>
 
     <!-- Footer -->
     <footer class="footer text-center">
-        <div class="container">
-            <div class="footer-logo mb-3">
-                <a href="index.html">
-                    <img src="images/huggingearth.png" alt="HuggingEarth Logo" class="footer-logo-img">
-                </a>
-            </div>
-            <div class="footer-links mb-3">
-                <a href="index.html" aria-label="Home">Home</a> | 
-                <a href="catalog.html" aria-label="Models">Catalog</a> | 
-                <a href="upload.html" aria-label="Upload">Upload</a> | 
-                <a href="tutorials.html" aria-label="Tutorials">Tutorials</a> | 
-                <a href="account.html" aria-label="Account">Account</a> | 
-                <a href="impressum.html" aria-label="Legal Notice">Legal Notice</a>
-            </div>
-            <div class="footer-git mb-3">
-                <p class="mt-2">
-                    View this project on 
-                    <a href="https://github.com/ReinerMx/GS2-2024" target="_blank" aria-label="Visit our GitHub repository" class="github-link">
-                        <img src="images/github_logo.png" alt="GitHub Logo" class="github-icon">
-                    </a>– Contributions are welcome!
-                </p>
-            </div>
-            <p>&copy; 2024 HuggingEarth. All rights reserved.</p>
+      <div class="container">
+        <div class="footer-logo mb-3">
+          <a href="index.html">
+            <img
+              src="images/huggingearth.png"
+              alt="HuggingEarth Logo"
+              class="footer-logo-img"
+            />
+          </a>
         </div>
+        <div class="footer-links mb-3">
+          <a href="index.html" aria-label="Home">Home</a> |
+          <a href="catalog.html" aria-label="Models">Catalog</a> |
+          <a href="upload.html" aria-label="Upload">Upload</a> |
+          <a href="tutorials.html" aria-label="Tutorials">Tutorials</a> |
+          <a href="account.html" aria-label="Account">Account</a> |
+          <a href="impressum.html" aria-label="Legal Notice">Legal Notice</a>
+        </div>
+        <div class="footer-git mb-3">
+          <p class="mt-2">
+            View this project on
+            <a
+              href="https://github.com/ReinerMx/GS2-2024"
+              target="_blank"
+              aria-label="Visit our GitHub repository"
+              class="github-link"
+            >
+              <img
+                src="images/github_logo.png"
+                alt="GitHub Logo"
+                class="github-icon"
+              /> </a
+            >– Contributions are welcome!
+          </p>
+        </div>
+        <p>&copy; 2024 HuggingEarth. All rights reserved.</p>
+      </div>
     </footer>
 
     <!-- External Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="scripts/catalog.js"></script> 
-</body>
+    <script src="scripts/catalog.js"></script>
+    <script src="scripts/appearance.js"></script>
+  </body>
 </html>

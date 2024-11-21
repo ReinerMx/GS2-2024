@@ -29,24 +29,19 @@ app.use(
           "https://cdn.jsdelivr.net",
           "https://stackpath.bootstrapcdn.com",
           "https://cdnjs.cloudflare.com",
-          "https://unpkg.com"  // Added unpkg for Leaflet script
+          "https://unpkg.com", // Added unpkg for Leaflet script
         ],
         styleSrc: [
           "'self'",
           "https://stackpath.bootstrapcdn.com",
           "https://cdnjs.cloudflare.com",
-          "https://unpkg.com"  // Added unpkg for Leaflet CSS
+          "https://unpkg.com", // Added unpkg for Leaflet CSS
         ],
-        imgSrc: [
-          "'self'",
-          "data:",
-          "https://*.tile.openstreetmap.org",
-        ],
+        imgSrc: ["'self'", "data:", "https://*.tile.openstreetmap.org"],
       },
     },
   })
 );
-
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -84,7 +79,19 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5555;
 
 // Start the server on the specified port and log a message
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`http://localhost:${PORT}`);
+});
+
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(`Port ${PORT} is already in use. Trying another port...`);
+    setTimeout(() => {
+      server.close();
+      server.listen(0); // 0 means a random available port
+    }, 1000);
+  } else {
+    console.error("Server error:", error);
+  }
 });
