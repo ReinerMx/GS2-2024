@@ -1,7 +1,9 @@
 const { Sequelize } = require('sequelize');
+require('dotenv').config({ path: './.env' }); 
 
-const sequelize = new Sequelize('gs2_database', 'postgres', 'mysecretpassword', {
-  host: 'pgstac',
+// Use environment variables for database connection
+const sequelize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
+  host: process.env.POSTGRES_HOST,
   dialect: 'postgres',
 });
 
@@ -13,6 +15,5 @@ const sequelize = new Sequelize('gs2_database', 'postgres', 'mysecretpassword', 
     console.error('Unable to connect to the database:', error);
   }
 })();
-
 
 module.exports = sequelize;

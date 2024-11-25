@@ -1,23 +1,36 @@
+# Define the services for the application
 services:
+
+  # PostgreSQL database service for pgSTAC
   pgstac:
+    # Use the latest pgSTAC image from GitHub Container Registry
     image: ghcr.io/stac-utils/pgstac:latest
+    # Reference environment variables from the .env file
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_DB: gs2_database
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    # Map the PostgreSQL port from the container to the host
     ports:
       - "5432:5432"
+    # Persist the PostgreSQL data to a named volume
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  # Web server service for the application
   webserver:
+    # Build the web server using a Dockerfile in the current directory
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: . # Context for the Docker build
+      dockerfile: Dockerfile # Specify the Dockerfile to use
+    # Map the web server port from the container to the host
     ports:
       - "5555:5555"
+    # Ensure the database service starts before the web server
     depends_on:
       - pgstac
 
+# Define named volumes for persistent storage
 volumes:
   pgdata:
+    # Named volume to store PostgreSQL data
