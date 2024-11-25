@@ -1,41 +1,23 @@
-version: '3.8'
-
 services:
-  app:
-    build: .
-    container_name: gs2_app
-    ports:
-      - "5555:5555"
+  pgstac:
+    image: ghcr.io/stac-utils/pgstac:latest
     environment:
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=mysecretpassword
-      - DB_DATABASE=postgres
-      - DB_HOST=gs2_database  # Verwende den Container-Namen als Host
-      - DB_PORT=5432
-    depends_on:
-      - database
-    volumes:
-      - .:/app
-    networks:
-      - gs2_network
-
-  database:
-    image: postgis/postgis
-    container_name: gs2_database
-    environment:
-      - POSTGRES_PASSWORD=mysecretpassword
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: gs2_database
     ports:
       - "5432:5432"
     volumes:
-      - gs2_db_data:/var/lib/postgresql/data
-    networks:
-      - gs2_network
+      - pgdata:/var/lib/postgresql/data
+
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5555:5555"
+    depends_on:
+      - pgstac
 
 volumes:
-  gs2_db_data:
-
-networks:
-  gs2_network:
-    driver: bridge
+  pgdata:
