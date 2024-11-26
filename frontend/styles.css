@@ -555,7 +555,6 @@ footer.dark-mode {
 
 
 /*##############################   UI(Design)   ##############################*/
-/* From Uiverse.io by satyamchaudharydev */ 
 /* The switch - the box around the slider */
 .switch {
     display: block;
@@ -614,4 +613,67 @@ input:checked + .slider:before {
     background: #303136;
     /* change the value of second inset in box-shadow to change the angle and direction of the moon */
     box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
+}
+
+
+/* ########## Q&A Section ########## */
+.faq-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2d828e;
+}
+
+.faq-item {
+    margin-bottom: 15px;
+}
+
+.faq-question {
+    width: 100%;
+    padding: 15px;
+    background-color: #2d828e;
+    color: #fff;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    outline: none;
+}
+
+.faq-question:hover {
+    background-color: #2d828e;
+}
+
+.faq-answer {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #a5a5a5;
+    display: none;
+    font-size: 18px;
+    border-radius: 4px;
+}
+
+/* Responsiveness */
+@media (max-width: 600px) {
+    .faq-container {
+        padding: 15px;
+    }
+
+    .faq-question {
+        font-size: 14px;
+    }
+
+    .faq-answer {
+        font-size: 12px;
+    }
 }
