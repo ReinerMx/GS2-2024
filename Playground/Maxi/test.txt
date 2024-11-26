@@ -1,0 +1,21 @@
+An meinen "lieben" Rechner,
+
+Ich weiß nicht, ob du gerade versuchst, mir das Leben schwer zu machen, oder ob du dich einfach entschieden hast, 
+heute gegen mich zu arbeiten, aber das reicht jetzt! Postgres? Tot. Docker? In einer Existenzkrise. Und DBeaver? Versteckt sich irgendwo, obwohl es angeblich installiert sein soll. Glaubst du, ich habe den ganzen Tag Zeit, mich mit deinem Wahnsinn auseinanderzusetzen?
+
+Jedes Mal, wenn ich denke, ich hätte eine Lösung, kommst du mit irgendeinem neuen, kryptischen Fehler um die Ecke. 
+"ENOTFOUND"? Wie wäre es mit "ENOREASONTOSTAYCALM"? Oder dieser DBeaver-Hinweis: "bereits installiert". 
+Echt jetzt? Warum sehe ich dann nichts? Magischer Tarnmodus, oder wie?
+
+Und Docker, oh Docker... Du bist das Sahnehäubchen auf diesem Chaos. Super Idee mit den Containern, 
+aber erklär mir mal, warum ich Postgres in einem Container zum Laufen bringen soll, 
+wenn du nicht mal deine eigenen Prozesse geregelt bekommst!
+
+Rechner, hör zu: Ich. Habe. Genug. Ich bin nicht hier, um dein Dienstleister zu sein. Entweder du machst jetzt,
+ was ich dir sage, oder ich lasse dich eiskalt im Regen stehen und ersetze dich durch ein Stück Hardware, 
+ das nicht jede Anweisung in einen Krampf verwandelt!
+
+Also reiß dich zusammen! Docker hochfahren, Postgres starten, DBeaver öffnen – und keine Ausreden mehr!
+
+Wütend,
+Dein Entwickler, der langsam die Geduld verliert! 😡
