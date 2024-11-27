@@ -47,6 +47,9 @@ const Model = db.define('Model', {
     frameworkVersion: { type: DataTypes.STRING, allowNull: true },
     architecture: { type: DataTypes.STRING, allowNull: true },
     totalParameters: { type: DataTypes.INTEGER, allowNull: true },
+    // New fields
+    userDescription: { type: DataTypes.TEXT, allowNull: true }, // Optional field
+    cloudCoverage: { type: DataTypes.FLOAT, allowNull: false }, // Required field
 });
 
 module.exports = Model;

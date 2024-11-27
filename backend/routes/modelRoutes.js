@@ -2,12 +2,22 @@
 const express = require('express');
 const fs = require('fs');
 const Model = require('../models/Model');
-const uploadMiddleware = require('../middleware/uploadMiddleware');
+const upload = require('../middleware/uploadMiddleware');
 
 // Initialize the router
 const router = express.Router();
 
-// GET all models
+/**
+ * Route to get all models from the database.
+ * Fetches all models and returns them as JSON.
+ *
+ * @name GET /
+ * @function
+ * @async
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {JSON} - A list of all models or an error message.
+ */
 router.get('/', async (req, res) => {
     try {
         const models = await Model.findAll(); // Fetch all models from the database
@@ -20,17 +30,19 @@ router.get('/', async (req, res) => {
 
 /**
  * Extracts model details from the STAC data file and formats it for database storage.
- * This function validates that required fields are present in the STAC data.
+ * Validates that all required fields are present in the STAC data.
  *
- * @param {Object} stacData - The parsed JSON data from the uploaded file.
- * @returns {Object|Error} Formatted model details to store in the database or an error with missing fields.
+ * @param {Object} stacData - Parsed JSON data from the uploaded file.
+ * @param {Object} additionalFields - Additional user-provided fields.
+ * @param {string} [additionalFields.userDescription] - Optional user description.
+ * @param {number} [additionalFields.cloudCoverage] - Cloud coverage percentage.
+ * @returns {Object} - Formatted model details to store in the database.
+ * @throws {Error} - If required fields are missing.
  */
-const extractModelDetails = (stacData) => {
+const extractModelDetails = (stacData, additionalFields) => {
     const properties = stacData.properties || {};
     const assets = stacData.assets || {};
     const links = stacData.links || [];
-    
-    // Collect missing fields to notify the user
     const missingFields = [];
 
     const modelDetails = {
@@ -49,7 +61,7 @@ const extractModelDetails = (stacData) => {
         spatialCoverage: stacData.geometry || (missingFields.push('spatialCoverage'), null),
         temporalCoverage: {
             start: properties['start_datetime'] || (missingFields.push('temporalCoverage start'), null),
-            end: properties['end_datetime'] || (missingFields.push('temporalCoverage end'), null)
+            end: properties['end_datetime'] || (missingFields.push('temporalCoverage end'), null),
         },
         framework: properties['mlm:framework'] || (missingFields.push('framework'), null),
         frameworkVersion: properties['mlm:framework_version'] || (missingFields.push('frameworkVersion'), null),
@@ -59,62 +71,95 @@ const extractModelDetails = (stacData) => {
         sourceCodeLink: assets['source_code']?.href || (missingFields.push('sourceCodeLink'), null),
         otherLinks: links.filter(link => !['mlm:model', 'mlm:source_code'].includes(link.rel))
             .map(link => ({ rel: link.rel, href: link.href, type: link.type })),
+        // New fields
+        userDescription: additionalFields.userDescription || null, // Optional field
+        cloudCoverage: additionalFields.cloudCoverage !== undefined && additionalFields.cloudCoverage !== null
+            ? parseFloat(additionalFields.cloudCoverage)
+            : (missingFields.push('cloudCoverage'), null),
     };
 
-    // If there are missing fields, return an error
     if (missingFields.length > 0) {
         return {
             error: true,
             missingFields,
-            message: "The file is missing required STAC-compliant metadata fields."
+            message: "The file is missing required STAC-compliant metadata fields.",
         };
     }
 
     return modelDetails;
 };
 
-// Route to handle file upload and model data extraction
-router.post('/upload', uploadMiddleware.single('modelFile'), async (req, res) => {
+/**
+ * Route to handle file upload and model data extraction.
+ * Parses the uploaded file and extracts metadata for database storage.
+ *
+ * @name POST /upload
+ * @function
+ * @async
+ * @param {Object} req - Express request object containing the file and additional fields.
+ * @param {Object} res - Express response object.
+ * @returns {JSON} - The details of the uploaded model or an error message.
+ */
+router.post('/upload', upload.single('modelFile'), async (req, res) => {
+    console.log('Body:', req.body); // Debugging: Log additional fields
+    console.log('File:', req.file); // Debugging: Log uploaded file
+
+    const { userDescription, cloudCoverage } = req.body;
+
     try {
-        const filePath = req.file.path;
-        const stacData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        const filePath = req.file.path; // Path to the uploaded file
+        const stacData = JSON.parse(fs.readFileSync(filePath, 'utf8')); // Parse the JSON file
 
-        // Extract model details and check for missing fields
-        const modelDetailsOrError = extractModelDetails(stacData);
+        // Extract model details
+        const modelDetailsOrError = extractModelDetails(stacData, {
+            userDescription,
+            cloudCoverage: parseFloat(cloudCoverage),
+        });
 
+        // Check for missing fields
         if (modelDetailsOrError.error) {
-            // If required fields are missing, notify the user and include the missing fields in the response
+            console.error('Missing fields:', modelDetailsOrError.missingFields);
             return res.status(400).json({
                 message: modelDetailsOrError.message,
-                missingFields: modelDetailsOrError.missingFields
+                missingFields: modelDetailsOrError.missingFields,
             });
         }
 
-        // Log the model details for debugging
-        console.log("Model details to save:", modelDetailsOrError);
+        console.log('Extracted model details:', modelDetailsOrError); // Debugging
 
-        // Save the model details to the database
+        // Save the model to the database
         const newModel = await Model.create(modelDetailsOrError);
-
-        res.status(201).json({ message: 'Model uploaded successfully', details: newModel });
+        console.log('Model saved successfully:', newModel); // Debugging
+        return res.status(201).json({ message: 'Model uploaded successfully', details: newModel });
     } catch (error) {
-        console.error('Error uploading model:', error);
-        res.status(500).json({ message: 'Error uploading model' });
+        console.error('Error saving model to database:', error);
+        return res.status(500).json({ message: 'Error saving model to database' });
     } finally {
-        // Clean up the uploaded file
-        fs.unlinkSync(req.file.path);
+        if (req.file && req.file.path) {
+            fs.unlinkSync(req.file.path); // Remove the uploaded file
+        }
     }
 });
 
-// Route to get details of a specific model by ID
+/**
+ * Route to get details of a specific model by its ID.
+ * Fetches the model from the database and returns its details.
+ *
+ * @name GET /:id
+ * @function
+ * @async
+ * @param {Object} req - Express request object containing the model ID in params.
+ * @param {Object} res - Express response object.
+ * @returns {JSON} - Details of the model or an error message.
+ */
 router.get('/:id', async (req, res) => {
-    const modelId = req.params.id;
+    const modelId = req.params.id; // Get the model ID from the request parameters
     try {
         const model = await Model.findByPk(modelId); // Fetch model by primary key
         if (!model) {
             return res.status(404).json({ error: 'Model not found' });
         }
-        res.json(model);
+        res.json(model); // Send the model details as JSON
     } catch (error) {
         console.error('Error fetching model details:', error);
         res.status(500).json({ error: 'Failed to fetch model details' });
