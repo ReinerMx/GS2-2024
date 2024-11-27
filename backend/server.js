@@ -4,10 +4,11 @@ const cors = require("cors"); // Cross-Origin Resource Sharing middleware
 const morgan = require("morgan"); // HTTP request logger for debugging
 const helmet = require("helmet"); // Security middleware that helps set secure HTTP headers
 const dotenv = require("dotenv"); // Environment variable manager
-const db = require("./config/db"); // Database configuration
 const userRoutes = require("./routes/userRoutes"); // User-related routes
 const modelRoutes = require("./routes/modelRoutes"); // Model-related routes (e.g., uploading, fetching metadata)
 const errorHandler = require("./middleware/errorHandler"); // Middleware for handling errors
+const sequelize = require("./config/db"); // Adjust the path if necessary
+
 
 // Load environment variables from .env file
 dotenv.config();
@@ -54,14 +55,24 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 // Database connection and sync
 (async () => {
   try {
-    await db.authenticate();
+    await sequelize.authenticate();
     console.log("Database connection has been established successfully.");
-    await db.sync();
+
+    // Sync alle Modelle mit `force: true`, um die Tabellen zu überschreiben
+    await require("./models/Collection").sync({ force: true });
+    await require("./models/Item").sync({ force: true });
+    await require("./models/MlmModel").sync({ force: true });
+    await require("./models/Asset").sync({ force: true });
+
+    console.log("All models were synchronized successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);
     process.exit(1);
   }
 })();
+
+
+
 
 // Define routes for the API
 app.use("/api/models", modelRoutes); // Model-related routes

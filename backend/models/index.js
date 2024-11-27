@@ -1,43 +1,27 @@
-'use strict';
+const Collection = require('./Collection');
+const Item = require('./Item');
+const MlmModel = require('./MlmModel');
+const Asset = require('./Asset');
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
-const db = {};
+// Beziehungen definieren
+Collection.hasMany(Item, { foreignKey: 'collection_id', as: 'items' });
+Collection.hasMany(MlmModel, { foreignKey: 'collection_id', as: 'models' });
+Collection.hasMany(Asset, { foreignKey: 'collection_id', as: 'assets' });
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+Item.belongsTo(Collection, { foreignKey: 'collection_id', as: 'collection' });
+Item.hasMany(Asset, { foreignKey: 'item_id', as: 'assets' });
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (
-      file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
-    );
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
+MlmModel.belongsTo(Collection, { foreignKey: 'collection_id', as: 'collection' });
+MlmModel.hasMany(Asset, { foreignKey: 'model_id', as: 'assets' });
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
+Asset.belongsTo(Item, { foreignKey: 'item_id', as: 'item' });
+Asset.belongsTo(MlmModel, { foreignKey: 'model_id', as: 'mlm_model' });
+Asset.belongsTo(Collection, { foreignKey: 'collection_id', as: 'collection' });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-module.exports = db;
+// Exportieren der Modelle
+module.exports = {
+    Collection,
+    Item,
+    MlmModel,
+    Asset,
+};
