@@ -33,9 +33,15 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="search-container">
           <div class="search-bar">
-            <input type="text" placeholder="Search models, users..." />
+            <input
+              type="text"
+              placeholder="Search models, users..."
+              id="search-input"
+            />
+            <ul id="autocomplete-list" class="autocomplete"></ul>
           </div>
         </div>
+
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="catalog.html" aria-label="Catalog"

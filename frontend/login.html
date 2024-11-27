@@ -1,133 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <!-- Navigation Bar -->
-   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="index.html">
-      <img src="images/huggingearth.png" alt="HuggingEarth Logo" />
-      HuggingEarth
-    </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <div class="search-container">
-        <div class="search-bar">
-          <input type="text" placeholder="Search models, users..." />
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="index.html">
+        <img src="images/huggingearth.png" alt="HuggingEarth Logo" />
+        HuggingEarth
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="search-container">
+          <div class="search-bar">
+            <input
+              id="search-bar"
+              type="text"
+              placeholder="Search models, users..."
+              onkeypress="handleSearch(event)"
+            />
+            <ul id="autocomplete-list" class="autocomplete"></ul>
+          </div>
         </div>
-      </div>
 
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="catalog.html" aria-label="Catalog"
-            >Catalog</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="upload.html" aria-label="Upload Models"
-            >Upload</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="tutorials.html" aria-label="Tutorials"
-            >Tutorials</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="account.html" aria-label="Account"
-            >Account</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="login.html" aria-label="Account">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="register.html" aria-label="Account"
-            >Register</a
-          >
-        </li>
-        <label class="switch">
-          <input type="checkbox" id="appearanceToggle" />
-          <span class="slider"></span>
-        </label>
-      </ul>
-    </div>
-  </nav>
-  <!-- Main -->
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="catalog.html" aria-label="Catalog"
+              >Catalog</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="upload.html" aria-label="Upload Models"
+              >Upload</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="tutorials.html" aria-label="Tutorials"
+              >Tutorials</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="account.html" aria-label="Account"
+              >Account</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login.html" aria-label="Account">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="register.html" aria-label="Account"
+              >Register</a
+            >
+          </li>
+          <label class="switch">
+            <input type="checkbox" id="appearanceToggle" />
+            <span class="slider"></span>
+          </label>
+        </ul>
+      </div>
+    </nav>
+    <!-- Main -->
     <div class="container my-5">
-        <h1 class="text-center">Login</h1>
-        <form id="loginForm" class="mt-4">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Login</button>
-        </form>
-        <p class="text-center mt-3">Don't have an account? <a href="register.html">Register here</a></p>
-    </div>
-     <!-- Footer -->
-  <footer class="footer text-center">
-    <div class="container">
-      <div class="footer-logo mb-3">
-        <a href="index.html">
-          <img
-            src="images/huggingearth.png"
-            alt="HuggingEarth Logo"
-            class="footer-logo-img"
+      <h1 class="text-center">Login</h1>
+      <form id="loginForm" class="mt-4">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Enter your email"
+            required
           />
-        </a>
-      </div>
-      <div class="footer-links mb-3">
-        <a href="index.html" aria-label="Home">Home</a> |
-        <a href="catalog.html" aria-label="Models">Catalog</a> |
-        <a href="upload.html" aria-label="Upload">Upload</a> |
-        <a href="tutorials.html" aria-label="Tutorials">Tutorials</a> |
-        <a href="account.html" aria-label="Account">Account</a> |
-        <a href="impressum.html" aria-label="Legal Notice">Legal Notice</a>
-      </div>
-      <div class="footer-git mb-3">
-        <p class="mt-2">
-          View this project on
-          <a
-            href="https://github.com/ReinerMx/GS2-2024"
-            target="_blank"
-            aria-label="Visit our GitHub repository"
-            class="github-link"
-          >
-            <img
-              src="images/github_logo.png"
-              alt="GitHub Logo"
-              class="github-icon"
-            /> </a
-          >– Contributions are welcome!
-        </p>
-      </div>
-      <p>&copy; 2024 HuggingEarth. All rights reserved.</p>
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+      </form>
+      <p class="text-center mt-3">
+        Don't have an account? <a href="register.html">Register here</a>
+      </p>
     </div>
-  </footer>
+    <!-- Footer -->
+    <footer class="footer text-center">
+      <div class="container">
+        <div class="footer-logo mb-3">
+          <a href="index.html">
+            <img
+              src="images/huggingearth.png"
+              alt="HuggingEarth Logo"
+              class="footer-logo-img"
+            />
+          </a>
+        </div>
+        <div class="footer-links mb-3">
+          <a href="index.html" aria-label="Home">Home</a> |
+          <a href="catalog.html" aria-label="Models">Catalog</a> |
+          <a href="upload.html" aria-label="Upload">Upload</a> |
+          <a href="tutorials.html" aria-label="Tutorials">Tutorials</a> |
+          <a href="account.html" aria-label="Account">Account</a> |
+          <a href="impressum.html" aria-label="Legal Notice">Legal Notice</a>
+        </div>
+        <div class="footer-git mb-3">
+          <p class="mt-2">
+            View this project on
+            <a
+              href="https://github.com/ReinerMx/GS2-2024"
+              target="_blank"
+              aria-label="Visit our GitHub repository"
+              class="github-link"
+            >
+              <img
+                src="images/github_logo.png"
+                alt="GitHub Logo"
+                class="github-icon"
+              /> </a
+            >– Contributions are welcome!
+          </p>
+        </div>
+        <p>&copy; 2024 HuggingEarth. All rights reserved.</p>
+      </div>
+    </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="scripts/login.js" ></script>
+    <script src="scripts/login.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="scripts/appearance.js"></script>
-</body>
+  </body>
 </html>

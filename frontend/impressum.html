@@ -33,7 +33,13 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="search-container">
           <div class="search-bar">
-            <input type="text" placeholder="Search models, users..." />
+            <input
+              id="search-bar"
+              type="text"
+              placeholder="Search models, users..."
+              onkeypress="handleSearch(event)"
+            />
+            <ul id="autocomplete-list" class="autocomplete"></ul>
           </div>
         </div>
         <ul class="navbar-nav ml-auto">
@@ -58,15 +64,17 @@
             >
           </li>
           <li class="nav-item">
-                  <a class="nav-link" href="login.html" aria-label="Account">Login</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="register.html" aria-label="Account">Register</a>
-            </li>
-            <label class="switch">
-              <input type="checkbox" id="appearanceToggle" />
-              <span class="slider"></span>
-            </label>
+            <a class="nav-link" href="login.html" aria-label="Account">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="register.html" aria-label="Account"
+              >Register</a
+            >
+          </li>
+          <label class="switch">
+            <input type="checkbox" id="appearanceToggle" />
+            <span class="slider"></span>
+          </label>
         </ul>
       </div>
     </nav>
@@ -81,7 +89,9 @@
           <li>
             <strong>Lukas Ahlert</strong>
             <img src="images/email.png" alt="Email Icon" class="email-icon" />
-            <a href="mailto:lukas.ahlert@gmail.com">lukas.ahlert@uni-muenster.de</a>
+            <a href="mailto:lukas.ahlert@gmail.com"
+              >lukas.ahlert@uni-muenster.de</a
+            >
           </li>
           <li>
             <strong>Amelie Luschnig</strong>

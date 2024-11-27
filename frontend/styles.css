@@ -69,6 +69,57 @@ body {
     align-items: center;
 }
 
+/* Search Bar in Navbar EXTENSION */
+/* Autocomplete Styles für Dark Mode */
+.autocomplete {
+    display: none; /* Startet als unsichtbar */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9; /* Standard-Hintergrundfarbe für hellen Modus */
+    color: #333; /* Standard-Textfarbe für hellen Modus */
+}
+
+/* Dark Mode Anpassungen für Autocomplete */
+body.dark-mode .autocomplete {
+    background-color: #333; /* Dunklerer Hintergrund im Dark Mode */
+    color: #f9f9f9; /* Helle Textfarbe im Dark Mode */
+    border-color: #555; /* Etwas dunklerer Rand */
+}
+
+body.dark-mode .autocomplete li:hover {
+    background: #2d828e; /* Anpassung der Hover-Farbe für Dark Mode */
+    color: white;
+}
+
+/* Sichtbarkeit der Autocomplete-Liste beim Tippen oder Fokussieren */
+#search-bar:focus + .autocomplete,
+#search-bar:not(:placeholder-shown) + .autocomplete {
+    display: block; /* Wird sichtbar, wenn das Suchfeld fokussiert ist oder Text eingegeben wurde */
+}
+
+.autocomplete li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Hover-Effekt für Listenelemente */
+.autocomplete li:hover {
+    background: #256e77;
+    color: white;
+}
+
+
 /* ********** Main Section Styles ********** */
 /* Styles for the main section with background image */
 .main-section {
@@ -628,21 +679,45 @@ input:checked + .slider:before {
 
 
 /* ########## Q&A Section ########## */
+/* Standardheller Modus */
 .faq-container {
     max-width: 800px;
     margin: 50px auto;
     padding: 20px;
-    background: #fff;
+    background: transparent; /* Transparent im hellen Modus */
     box-shadow: 0 4px 8px rgba(98, 98, 98, 0.1);
     border-radius: 8px;
+    color: #000; /* Standard-Schriftfarbe für den hellen Modus */
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #2d828e;
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    .faq-container {
+        background: transparent; /* Transparent im Dark Mode */
+        color: #d1e1e8; /* Helle Schriftfarbe im Dark Mode */
+    }
+
+    .faq-container h1 {
+        color: #2d828e; /* New color for h1 text in dark mode */
+    }
+
+    .faq-question {
+        background-color: #2d828e; /* Beibehalten der Hintergrundfarbe */
+        color: #fff; /* Helle Schriftfarbe für die Fragen im Dark Mode */
+    }
+
+    .faq-answer {
+        background-color: #555; /* Hellerer Hintergrund für Antworten im Dark Mode */
+    }
+
+    /* Optional: Setze auch die Box-Schattenfarbe auf etwas dunkler */
+    .faq-container {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 }
 
+/* Allgemeine FAQ-Elemente */
 .faq-item {
     margin-bottom: 15px;
     border-radius: 4px;
@@ -657,8 +732,8 @@ h1 {
 .faq-question {
     width: 100%;
     padding: 15px;
-    background-color: #2d828e;
-    color: #fff;
+    background-color: #2d828e; /* Standard-Hintergrundfarbe für die Fragen */
+    color: #fff; /* Helle Schriftfarbe für Fragen */
     border: none;
     text-align: left;
     font-size: 16px;
@@ -696,7 +771,6 @@ h1 {
     box-shadow: 0 0 4px #256e77; /* Alternativer Fokus-Stil mit Farbe */
     background-color: #256e77; /* Angleichung an Hover- oder Klickfarbe */
 }
-
 
 /* Responsiveness */
 @media (max-width: 600px) {
