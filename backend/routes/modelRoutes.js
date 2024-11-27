@@ -75,7 +75,7 @@ const extractModelDetails = (stacData, additionalFields) => {
         userDescription: additionalFields.userDescription || null, // Optional field
         cloudCoverage: additionalFields.cloudCoverage !== undefined && additionalFields.cloudCoverage !== null
             ? parseFloat(additionalFields.cloudCoverage)
-            : (missingFields.push('cloudCoverage'), null),
+            : (missingFields.push('cloudCoverage')),
     };
 
     if (missingFields.length > 0) {
