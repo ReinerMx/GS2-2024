@@ -53,6 +53,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <h3>${model.modelName || 'Model Name'}</h3>
                             <p>${model.description || 'No description available'}</p>
                         </div>
+
+                        <!-- New fields -->
+                        <p><strong>User Description:</strong> ${model.userDescription || 'No additional description provided'}</p>
                         
                         <!-- Overview Section for Basic Model Attributes -->
                         <div class="model-section">
@@ -63,6 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <p><strong>Number of Bands:</strong> ${model.numberOfBands || 'N/A'}</p>
                             <p><strong>File Format:</strong> ${model.fileFormat || 'N/A'}</p>
                             ${temporalCoverageHTML}
+                            <p><strong>Cloud Coverage:</strong> ${model.cloudCoverage}%</p>
                         </div>
                         
                         <!-- Technical Details Section with Framework and Architecture -->

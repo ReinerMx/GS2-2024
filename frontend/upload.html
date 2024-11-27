@@ -131,6 +131,34 @@
         >
       </section>
 
+      <!-- Additional Fields for User Input -->
+      <div class="form-group">
+        <label for="userDescription">Add Your Description (Optional)</label>
+        <textarea
+          id="userDescription"
+          name="userDescription"
+          class="form-control"
+          rows="3"
+          placeholder="Add any additional information about your model..."
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="cloudCoverage">Cloud Coverage (%)</label>
+        <input
+          type="number"
+          id="cloudCoverage"
+          name="cloudCoverage"
+          class="form-control"
+          min="0"
+          max="100"
+          step="1"
+          placeholder="Enter cloud coverage percentage (0-100)"
+          required
+        />
+      </div>
+
+
       <!-- Upload Form -->
       <section class="upload-section">
         <form id="uploadForm" enctype="multipart/form-data" class="upload-form">
