@@ -32,6 +32,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // initialising Leaflet-Map 
+    const map = L.map('map').setView([51.505, -0.09], 5); // Zentrum und Zoom-Level setzen
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+    }).addTo(map);
+
+    // adding Leaflet.Draw-Tool 
+    const drawControl = new L.Control.Draw({
+        draw: {
+            polygon: true,
+            rectangle: true,
+            polyline: false,
+            circle: false,
+            marker: false,
+            circlemarker: false,
+        },
+    });
+    map.addControl(drawControl);
+
+    // safing geometry after drawing
+    map.on(L.Draw.Event.CREATED, (event) => {
+        const layer = event.layer;
+        map.addLayer(layer); // Füge die gezeichnete Form zur Karte hinzu
+        console.log('GeoJSON:', layer.toGeoJSON());
+    });
+
+    // Event-Listener for the Geo-Filter-Button
+    document.getElementById('applyGeoFilter').addEventListener('click', async () => {
+        if (!drawnGeometry) {
+            alert('Please draw a geographic region first!');
+            return;
+        }
+
+        const geoJSON = drawnGeometry.toGeoJSON(); // Konvertiere zu GeoJSON
+        console.log('Geographic Filter GeoJSON:', geoJSON);
+
+        try {
+            const response = await fetch('/api/models', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ geoFilter: geoJSON.geometry }),
+            });
+            const models = await response.json();
+            displayModels(models); // Gefilterte Modelle anzeigen
+        } catch (error) {
+            console.error('Error applying geographic filter:', error);
+        }
+    });
+    
+
     // Function to display models
     const displayModels = (models) => {
         resultsContainer.innerHTML = ''; // Clear previous content
