@@ -11,7 +11,7 @@ const Item = sequelize.define('Item', {
   type: {
     type: DataTypes.STRING(255),
     allowNull: false,
-    validate: { isIn: [['Feature']] },
+    validate: { isIn: [['Feature', 'FeatureCollection']] },
   },
   stac_version: {
     type: DataTypes.STRING(50),
@@ -22,10 +22,12 @@ const Item = sequelize.define('Item', {
     allowNull: true,
   },
   item_id: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
-  },
+    validate: {
+        notNull: { msg: 'Item ID cannot be null' },
+    }
+  }, 
   geometry: {
     type: DataTypes.JSONB,
     allowNull: true,

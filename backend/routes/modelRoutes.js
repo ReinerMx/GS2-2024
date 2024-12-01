@@ -68,14 +68,22 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
 
         const modelDetails = {
             name: properties['mlm:name'] || (missingFields.push('name'), null),
-            description: properties['description'] || (missingFields.push('description'), null),
-            tasks: Array.isArray(properties['mlm:tasks']) ? properties['mlm:tasks'] : (missingFields.push('tasks'), null),
             framework: properties['mlm:framework'] || (missingFields.push('framework'), null),
+            framework_version: properties['mlm:framework_version'] || null,
+            memory_size: properties['mlm:memory_size'] || null,
+            total_parameters: properties['mlm:total_parameters'] || null,
+            description: properties['description'] || (missingFields.push('description'), null),
+            pretrained: properties['mlm:pretrained'] || null,
+            pretrained_source: properties['mlm:pretrained_source'] || null,
+            batch_size_suggestion: properties['mlm:batch_size_suggestion'] || null,
+            accelerator: properties['mlm:accelerator'] || null,
+            accelerator_summary: properties['mlm:accelerator_summary'] || null,
+            tasks: Array.isArray(properties['mlm:tasks']) ? properties['mlm:tasks'] : (missingFields.push('tasks'), null),
             architecture: properties['mlm:architecture'] || (missingFields.push('architecture'), null),
             model_input: properties['mlm:input'] || (missingFields.push('model_input'), null),
             model_output: properties['mlm:output'] || (missingFields.push('model_output'), null),
             userDescription: userDescription || null,
-            cloudCoverage: cloudCoverage !== undefined ? parseFloat(cloudCoverage) : null,
+            
         };
 
         // If required fields are missing, return an error
