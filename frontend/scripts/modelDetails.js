@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <p><strong>Number of Bands:</strong> ${model.numberOfBands || 'N/A'}</p>
                             <p><strong>File Format:</strong> ${model.fileFormat || 'N/A'}</p>
                             ${temporalCoverageHTML}
-                            <p><strong>Cloud Coverage:</strong> ${model.cloudCoverage}%</p>
                         </div>
                         
                         <!-- Technical Details Section with Framework and Architecture -->

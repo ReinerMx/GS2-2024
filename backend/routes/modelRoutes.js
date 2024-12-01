@@ -15,7 +15,7 @@ const router = express.Router();
  * Route to handle file upload and model data extraction.
  */
 router.post('/upload', upload.single('modelFile'), async (req, res) => {
-    const { userDescription, cloudCoverage } = req.body;
+    const { userDescription} = req.body;
 
     try {
         // Parse the uploaded JSON file
