@@ -73,6 +73,8 @@ const MlmModel = sequelize.define('MlmModel', {
     type: DataTypes.JSONB,
     allowNull: false,
   },
+  start_datetime: DataTypes.DATE, 
+  end_datetime: DataTypes.DATE, 
   hyperparameters: {
     type: DataTypes.JSONB,
     allowNull: true,

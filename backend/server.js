@@ -59,10 +59,10 @@ app.use(express.static(path.join(__dirname, "../frontend")));
     console.log("Database connection has been established successfully.");
 
     // Sync alle Modelle mit `force: true`, um die Tabellen zu überschreiben
-    await require("./models/Collection").sync();
-    await require("./models/Item").sync();
-    await require("./models/MlmModel").sync();
-    await require("./models/Asset").sync();
+    await require("./models/Collection").sync({force: true});
+    await require("./models/Item").sync({force: true});
+    await require("./models/MlmModel").sync({force: true});
+    await require("./models/Asset").sync({force: true});
 
     console.log("All models were synchronized successfully.");
   } catch (error) {

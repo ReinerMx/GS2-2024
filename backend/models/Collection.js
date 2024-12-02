@@ -47,10 +47,6 @@ const Collection = sequelize.define('Collection', {
         type: DataTypes.JSONB,
         allowNull: true,
     },
-    extent: {
-        type: DataTypes.JSONB,
-        allowNull: false,
-    },
     summaries: {
         type: DataTypes.JSONB,
         allowNull: true,
