@@ -67,7 +67,7 @@ const Asset = sequelize.define('Asset', {
     onDelete: 'SET NULL',
   },
 }, {
-  tableName: 'assets',
+  tableName: 'asset',
   timestamps: false,
 });
 

@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('/api/models');
             const models = await response.json();
+            console.log('Fetched models:', models);
             displayModels(models);
         } catch (error) {
             console.error('Error loading models:', error);
@@ -39,31 +40,38 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsContainer.innerHTML = '<p>No models found.</p>';
             return;
         }
-        
-        models.forEach(model => {
+    
+        models.forEach((model) => {
             const modelDiv = document.createElement('div');
             modelDiv.classList.add('model-item', 'mb-4');
+    
+            // Zugriff auf die tatsächlichen Felder der API-Response
             modelDiv.innerHTML = `
-                <h4>${model.modelName}</h4>
-                <p>${model.description}</p>
+                <h4>${model.name || 'No Name Provided'}</h4>
+                <p><strong>Tasks:</strong> ${model.tasks ? model.tasks.join(', ') : 'No Tasks Defined'}</p>
+                <p><strong>Description:</strong> ${model.description || 'No Description Available'}</p>
                 <button class="btn btn-info view-details-btn" data-id="${model.id}">View Details</button>
             `;
+    
             resultsContainer.appendChild(modelDiv);
         });
-
+    
         // Attach event listeners to "View Details" buttons
         attachViewDetailsListeners();
     };
+    
+    
 
     // Function to attach click listeners to "View Details" buttons
     const attachViewDetailsListeners = () => {
-        document.querySelectorAll('.view-details-btn').forEach(button => {
+        document.querySelectorAll('.view-details-btn').forEach((button) => {
             button.addEventListener('click', (event) => {
                 const modelId = event.target.getAttribute('data-id');
-                viewDetails(modelId);
+                window.location.href = `modelDetails.html?id=${modelId}`;
             });
         });
     };
+    
 
     // Function to navigate to the details page
     const viewDetails = (modelId) => {

@@ -68,7 +68,7 @@ const Collection = sequelize.define('Collection', {
         allowNull: true,
     },
 }, {
-    tableName: 'collections',
+    tableName: 'collection',
     timestamps: false, // Keine Timestamps verwenden
 });
 

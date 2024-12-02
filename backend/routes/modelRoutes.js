@@ -1,15 +1,103 @@
 // Import required modules
 const express = require('express');
 const fs = require('fs');
-const sequelize = require('../config/db'); // Korrekte Importierung der Sequelize-Instanz
-const Model = require('../models/MlmModel'); // Alias für mlm_models
+const sequelize = require('../config/db'); 
+const Model = require('../models/MlmModel'); 
 const Collection = require('../models/Collection');
 const Item = require('../models/Item');
 const Asset = require('../models/Asset');
 const upload = require('../middleware/uploadMiddleware');
+const { MlmModel, Asset, Item, Collection } = require('../models');
 
 // Initialize the router
 const router = express.Router();
+
+/**
+ * Route to get details of a specific model by its ID.
+ * Fetches the model from the database and returns its details.
+ *
+ * @name GET /:id
+ * @function
+ * @async
+ * @param {Object} req - Express request object containing the model ID in params.
+ * @param {Object} res - Express response object.
+ * @returns {JSON} - Details of the model or an error message.
+ */
+router.get('/:id', async (req, res) => {
+    const modelId = req.params.id;
+    console.log(`Received request for model ID: ${modelId}`); // Log die Anfrage
+
+    try {
+        const model = await Model.findOne({ where: { id: modelId } });
+        console.log('Queried model:', model); // Log das Ergebnis der Query
+        if (!model) {
+            console.log('Model not found in database'); // Log, wenn kein Modell gefunden wurde
+            return res.status(404).json({ error: 'Model not found' });
+        }
+        res.json(model);
+    } catch (error) {
+        console.error('Error fetching model:', error); // Log den Fehler
+        res.status(500).json({ error: 'Failed to fetch model details' });
+    }
+});
+
+
+
+/**
+ * Route to get all models from the database.
+ * Fetches all models and returns them as JSON.
+ *
+ * @name GET /
+ * @function
+ * @async
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {JSON} - A list of all models or an error message.
+ */
+router.get('/', async (req, res) => {
+    try {
+        const models = await Collection.findAll({
+            include: [
+                {
+                    model: MlmModel,
+                    as: 'model',
+                    attributes: ['name', 'tasks', 'architecture', 'description'],
+                    include: [
+                        {
+                            model: Asset,
+                            as: 'asset',
+                            attributes: ['description', 'type', 'href']
+                        }
+                    ]
+                },
+                {
+                    model: Item,
+                    as: 'item',
+                    attributes: ['item_id', 'properties']
+                }
+            ]
+        });
+
+        res.json(models); // Sende die Ergebnisse als JSON
+    } catch (error) {
+        console.error('Error fetching models:', error);
+        res.status(500).json({ error: 'Error fetching models' });
+    }
+});
+
+
+
+// Route to fetch all models
+router.get('/', async (req, res) => {
+    try {
+        const models = await Model.findAll(); 
+        res.status(200).json(models);
+    } catch (error) {
+        console.error('Error fetching models:', error);
+        res.status(500).json({ message: 'Error fetching models' });
+    }
+});
+
 
 /**
  * Route to handle file upload and model data extraction.
@@ -161,5 +249,6 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
         }
     }
 });
+
 
 module.exports = router;

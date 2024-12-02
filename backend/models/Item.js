@@ -57,7 +57,7 @@ const Item = sequelize.define('Item', {
     allowNull: true,
   },
 }, {
-  tableName: 'items',
+  tableName: 'item',
   timestamps: false,
 });
 

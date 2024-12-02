@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require("../config/db");
+const Collection = require('./Collection');
 
 const MlmModel = sequelize.define('MlmModel', {
   id: {
@@ -79,14 +80,14 @@ const MlmModel = sequelize.define('MlmModel', {
   collection_id: {
     type: DataTypes.STRING,
     references: {
-      model: 'collections',
+      model: Collection,
       key: 'collection_id',
     },
     allowNull: true,
     onDelete: 'SET NULL',
   },
 }, {
-  tableName: 'mlm_models',
+  tableName: 'mlm_model',
   timestamps: false,
 });
 
