@@ -783,5 +783,47 @@ input:checked + .slider:before {
         font-size: 12px;
     }
 }
+/* Benutzer-Symbol Styling */
+.navbar .nav-item.dropdown img {
+    cursor: pointer;
+    border-radius: 50%; /* Rundes Symbol */
+    transition: transform 0.3s ease;
+    width: 24px; /* Größe des Symbols */
+    height: 24px;
+}
 
+.navbar .nav-item.dropdown img:hover {
+    transform: scale(1.1); /* Symbol leicht vergrößern bei Hover */
+}
 
+/* Dropdown-Menü Styling */
+.dropdown-menu {
+    min-width: 150px; /* Breite des Dropdown-Menüs */
+    text-align: left; /* Text linksbündig */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Schatteneffekt */
+    border-radius: 5px; /* Abgerundete Ecken */
+    background-color: #ffffff; /* Hintergrundfarbe */
+    color: #333; /* Textfarbe */
+    padding: 5px 0;
+    z-index: 1000;
+}
+
+/* Links im Dropdown-Menü */
+.dropdown-menu a {
+    padding: 10px 15px;
+    display: block;
+    text-decoration: none; /* Keine Unterstreichung */
+    color: #333; /* Textfarbe */
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f0f0; /* Hintergrundfarbe bei Hover */
+}
+
+/* Anpassungen für mobile Bildschirme */
+@media (max-width: 576px) {
+    .dropdown-menu {
+        min-width: 100px; /* Schmaleres Menü auf kleineren Bildschirmen */
+    }
+}
