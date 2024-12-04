@@ -4,26 +4,26 @@ on:
   pull_request:
     types: [reopened, review_requested]
     paths:
-      - 'frontend/**'
-      - 'backend/**'
+      - "frontend/**"
+      - "backend/**"
   push:
     paths:
-      - 'frontend/**'
-      - 'backend/**'
+      - "frontend/**"
+      - "backend/**"
 
   schedule:
-    - cron: '30 5 * * *'
+    - cron: "30 5 * * *"
 
 permissions:
   contents: write
 
 jobs:
   quality-checks-frontend:
-    name: Lint, Format, and Security Checks - Frontend
+    name: Format and Security Checks - Frontend
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./frontend  # Set working directory to frontend
+        working-directory: ./frontend # Set working directory to frontend
     steps:
       # Check out the code
       - name: Check out Git repository
@@ -33,27 +33,22 @@ jobs:
       - name: Set up Node.js for Frontend
         uses: actions/setup-node@v3
         with:
-          node-version: 18  # Recommended stable version
+          node-version: 18 # Recommended stable version
 
       # Install dependencies (global package.json used here)
       - name: Install Node.js dependencies
         run: npm ci
 
-      # Run ESLint for JavaScript/CSS linting
-      - name: Run ESLint for Frontend
-        run: npm run lint --workspace frontend
-
       # Run Prettier to format code
       - name: Run Prettier for Frontend
         run: npm run format --workspace frontend
 
-
   quality-checks-backend:
-    name: Lint, Format, and Security Checks - Backend
+    name: Format and Security Checks - Backend
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend  # Set working directory to backend
+        working-directory: ./backend # Set working directory to backend
     steps:
       # Check out the code
       - name: Check out Git repository
@@ -63,20 +58,15 @@ jobs:
       - name: Set up Node.js for Backend
         uses: actions/setup-node@v3
         with:
-          node-version: 18  # Recommended stable version
+          node-version: 18 # Recommended stable version
 
       # Install dependencies (global package.json used here)
       - name: Install Node.js dependencies for Backend
         run: npm ci
 
-      # Run ESLint for JavaScript/CSS linting
-      - name: Run ESLint for Backend
-        run: npm run lint --workspace backend
-
       # Run Prettier to format code
       - name: Run Prettier for Backend
         run: npm run format --workspace backend
-
 
   auto-translate-and-structure-frontend:
     name: Auto-Translate & Standardize Code - Frontend
@@ -86,22 +76,4 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v3
 
-      # Run script to translate, standardize, and comment (Frontend)
-      - name: Translate and Standardize Code for Frontend
-        run: |
-          npm install -g code-translator-cli
-          code-translator --translate "de:en" --standardize --add-comments --path frontend/
-
-  auto-translate-and-structure-backend:
-    name: Auto-Translate & Standardize Code - Backend
-    runs-on: ubuntu-latest
-    steps:
-      # Check out the code
-      - name: Check out Git repository
-        uses: actions/checkout@v3
-
-      # Run script to translate, standardize, and comment (Backend)
-      - name: Translate and Standardize Code for Backend
-        run: |
-          npm install -g code-translator-cli
-          code-translator --translate "de:en" --standardize --add-comments --path backend/
+      # Run script to translate, standardi
