@@ -883,3 +883,15 @@ input:checked + .slider:before {
         min-width: 100px; /* Schmaleres Menü auf kleineren Bildschirmen */
     }
 }
+/* user-icon */
+.user-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    border-radius: 50%; /* Rundes Symbol */
+    transition: transform 0.3s ease;
+  }
+  
+  .user-icon:hover {
+    transform: scale(1.1); /* Leicht vergrößern bei Hover */
+  }
