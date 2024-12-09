@@ -5,6 +5,18 @@ const Item = require('./Item');
 const MlmModel = require('./MlmModel');
 const Asset = require('./Asset');
 
+
+(async () => {
+  try {
+    console.log('Testing database connection...');
+    await sequelize.authenticate(); // Tests the connection to the database
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+})();
+
+
 // Define relationships between models
 Collection.hasMany(Item, { foreignKey: 'collection_id', as: 'items', onDelete: 'CASCADE' });
 Item.belongsTo(Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
@@ -41,3 +53,4 @@ module.exports = {
   MlmModel,
   Asset,
 };
+
