@@ -85,6 +85,7 @@ const Collection = sequelize.define('Collection', {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        primaryKey: true,
     },
     /**
      * A short descriptive one-line title for the Collection.

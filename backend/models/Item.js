@@ -1,7 +1,10 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require("../config/db");
+const sequelize = require('../config/db');
 const Collection = require('./Collection');
-const Asset = require("./Asset");
+
+
+console.log('Sequelize instance:', sequelize);
+console.log('Available sequelize methods:', Object.keys(sequelize));
 
 /**
  * Represents a STAC (SpatioTemporal Asset Catalog) Item.
@@ -293,23 +296,7 @@ collection: {
     key: 'collection_id', // The primary key of the Collection
   },
   allowNull: true, // Allows null when no collection reference is needed
-  validate: {
-    async mustHaveCollectionLink(value) {
-      if (value) {
-        // Fetch associated links for this Item
-        const links = this.getDataValue('links');
-        const hasCollectionLink = links.some(link => link.rel === 'collection');
-
-        if (!hasCollectionLink) {
-          throw new Error(
-            "The 'collection' field is set, but no link with a 'collection' relation type is present."
-          );
-        }
-      }
     },
-  },
-},
-
 }, {
   tableName: 'item',
   timestamps: false,
@@ -325,5 +312,10 @@ Item.addHook('beforeValidate', (item) => {
     throw new Error("'bbox' is required when 'geometry' is not null.");
   }
 });
+
+
+console.log('Sequelize instance:', sequelize);
+console.log('Available sequelize methods:', Object.keys(sequelize));
+
 
 module.exports = Item;

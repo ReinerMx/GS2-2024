@@ -65,17 +65,6 @@ const MlmModel = sequelize.define('MlmModel', {
   mlm_architecture: {
   type: DataTypes.STRING,
   allowNull: false, 
-  validate: {
-      isValidArchitecture(value) {
-          const knownArchitectures = [
-              'ResNet', 'VGG', 'GAN', 'Vision Transformer', 'unknown', 'custom'
-          ];
-          if (!knownArchitectures.includes(value) && value !== 'custom' && value !== 'unknown') {
-              throw new Error(
-                  `Invalid architecture name. Use a common name like ResNet, VGG, or custom if not predefined.`
-              );
-          }
-      },
   },
   /**
    * REQUIRED Specifies the Machine Learning tasks for which the model can be used for. 
@@ -127,6 +116,7 @@ const MlmModel = sequelize.define('MlmModel', {
       isCommonFramework(value) {
           const commonFrameworks = [
               'PyTorch',
+              'pytorch',
               'TensorFlow',
               'scikit-learn',
               'Hugging Face',
@@ -294,89 +284,106 @@ const MlmModel = sequelize.define('MlmModel', {
     type: DataTypes.JSONB,
     allowNull: false,
     validate: {
-        isValidInput(value) {
-            if (!value || typeof value !== 'object') {
-                throw new Error("'mlm_input' must be a valid JSON object.");
+      isValidInput(value) {
+        // Ensure the input is always an array
+        if (!Array.isArray(value)) {
+            throw new Error("'mlm_input' must be an array.");
+        }
+    
+        // Check that the array is not empty
+        if (value.length === 0) {
+            throw new Error("'mlm_input' array must contain at least one entry.");
+        }
+    
+        // Iterate through each object in the array
+        value.forEach((inputObj, index) => {
+            // Validate 'name'
+            if (!inputObj.name || typeof inputObj.name !== 'string' || inputObj.name.trim() === '') {
+                throw new Error(`'mlm_input[${index}].name' is required and must be a non-empty string.`);
             }
-
-            // Validate required 'name'
-            if (!value.name || typeof value.name !== 'string' || value.name.trim() === '') {
-                throw new Error("'mlm_input.name' is required and must be a non-empty string.");
-            }
-
+    
             // Validate 'bands'
-            if (!value.bands || !Array.isArray(value.bands)) {
-                throw new Error("'mlm_input.bands' is required and must be an array.");
+            if (!inputObj.bands || !Array.isArray(inputObj.bands)) {
+                throw new Error(`'mlm_input[${index}].bands' is required and must be an array.`);
             }
-            value.bands.forEach(band => {
+            inputObj.bands.forEach((band, bandIndex) => {
                 if (typeof band === 'object') {
                     if (!band.name || typeof band.name !== 'string') {
-                        throw new Error("Each 'band' object must have a 'name' field of type string.");
+                        throw new Error(`'mlm_input[${index}].bands[${bandIndex}].name' must be a non-empty string.`);
                     }
                     if (band.format && typeof band.format !== 'string') {
-                        throw new Error("'band.format', if provided, must be a string.");
+                        throw new Error(`'mlm_input[${index}].bands[${bandIndex}].format', if provided, must be a string.`);
                     }
                     if (band.expression && typeof band.expression !== 'string') {
-                        throw new Error("'band.expression', if provided, must be a string.");
+                        throw new Error(`'mlm_input[${index}].bands[${bandIndex}].expression', if provided, must be a string.`);
                     }
                 } else if (typeof band !== 'string') {
-                    throw new Error("Each 'band' must be a string or a valid 'band' object.");
+                    throw new Error(`'mlm_input[${index}].bands[${bandIndex}]' must be a string or a valid band object.`);
                 }
             });
-
-            // Validate 'input' structure
-            if (!value.input || typeof value.input !== 'object') {
-                throw new Error("'mlm_input.input' is required and must be a valid object.");
+    
+            // Validate 'input'
+            if (!inputObj.input || typeof inputObj.input !== 'object') {
+                throw new Error(`'mlm_input[${index}].input' is required and must be a valid object.`);
             }
-            if (!Array.isArray(value.input.shape) || value.input.shape.some(dim => dim <= 0 && dim !== -1)) {
-                throw new Error("'mlm_input.input.shape' must be an array of positive integers or -1.");
+            if (!Array.isArray(inputObj.input.shape) || inputObj.input.shape.some(dim => dim <= 0 && dim !== -1)) {
+                throw new Error(`'mlm_input[${index}].input.shape' must be an array of positive integers or -1.`);
             }
-            if (!Array.isArray(value.input.dim_order) || value.input.dim_order.length !== value.input.shape.length) {
-                throw new Error("'mlm_input.input.dim_order' must match the length of 'mlm_input.input.shape'.");
+            if (!Array.isArray(inputObj.input.dim_order) || inputObj.input.dim_order.length !== inputObj.input.shape.length) {
+                throw new Error(`'mlm_input[${index}].input.dim_order' must match the length of 'mlm_input[${index}].input.shape'.`);
             }
             const validDimensions = ['batch', 'channel', 'time', 'height', 'width', 'depth', 'token', 'class', 'score', 'confidence'];
-            value.input.dim_order.forEach(dim => {
+            inputObj.input.dim_order.forEach((dim, dimIndex) => {
                 if (!validDimensions.includes(dim)) {
-                    throw new Error(`Invalid dimension '${dim}' in 'mlm_input.input.dim_order'.`);
+                    throw new Error(`Invalid dimension '${dim}' in 'mlm_input[${index}].input.dim_order[${dimIndex}]'.`);
                 }
             });
-            if (!value.input.data_type || typeof value.input.data_type !== 'string') {
-                throw new Error("'mlm_input.input.data_type' is required and must be a string.");
+            if (!inputObj.input.data_type || typeof inputObj.input.data_type !== 'string') {
+                throw new Error(`'mlm_input[${index}].input.data_type' is required and must be a string.`);
             }
-
+    
             // Validate optional 'value_scaling'
-            if (value.value_scaling !== null) {
-                if (!Array.isArray(value.value_scaling)) {
-                    throw new Error("'mlm_input.value_scaling' must be an array or null.");
-                }
-                value.value_scaling.forEach(scale => {
-                    if (!scale.type || !['min-max', 'z-score', 'clip', 'clip-min', 'clip-max', 'offset', 'scale', 'processing'].includes(scale.type)) {
-                        throw new Error(`Invalid 'type' in 'mlm_input.value_scaling': ${scale.type}`);
-                    }
-                });
-            }
-
+            if (inputObj.value_scaling !== null && inputObj.value_scaling !== undefined) {
+              if (!Array.isArray(inputObj.value_scaling)) {
+                  throw new Error(`'mlm_input[${index}].value_scaling' must be an array or null.`);
+              }
+              inputObj.value_scaling.forEach((scale, scaleIndex) => {
+                  if (!scale.type || typeof scale.type !== 'string') {
+                      throw new Error(`'mlm_input[${index}].value_scaling[${scaleIndex}].type' must be a non-empty string.`);
+                  }
+                  const validScalingTypes = ['min-max', 'z-score', 'clip', 'clip-min', 'clip-max', 'offset', 'scale', 'processing'];
+                  if (!validScalingTypes.includes(scale.type)) {
+                      throw new Error(`Invalid 'type' in 'mlm_input[${index}].value_scaling[${scaleIndex}]: ${scale.type}. Must be one of: ${validScalingTypes.join(', ')}`);
+                  }
+                  if (scale.params && typeof scale.params !== 'object') {
+                      throw new Error(`'mlm_input[${index}].value_scaling[${scaleIndex}].params', if provided, must be a valid JSON object.`);
+                  }
+              });
+          }          
+    
             // Validate optional 'resize_type'
             const validResizeTypes = [
-                'crop', 'pad', 'interpolation-nearest', 'interpolation-linear',
-                'interpolation-cubic', 'interpolation-area', 'interpolation-lanczos4',
-                'interpolation-max', 'wrap-fill-outliers', 'wrap-inverse-map'
+              'crop', 'pad', 'interpolation-nearest', 'interpolation-linear',
+              'interpolation-cubic', 'interpolation-area', 'interpolation-lanczos4',
+              'interpolation-max', 'wrap-fill-outliers', 'wrap-inverse-map'
             ];
-            if (value.resize_type !== null && !validResizeTypes.includes(value.resize_type)) {
-                throw new Error(`'mlm_input.resize_type' must be one of ${validResizeTypes.join(', ')} or null.`);
+            if (inputObj.resize_type !== null && inputObj.resize_type !== undefined && !validResizeTypes.includes(inputObj.resize_type)) {
+              throw new Error(`'mlm_input[${index}].resize_type' must be one of ${validResizeTypes.join(', ')} or null.`);
             }
 
             // Validate optional 'pre_processing_function'
-            if (value.pre_processing_function !== null) {
-                if (typeof value.pre_processing_function !== 'object' ||
-                    !value.pre_processing_function.format ||
-                    !value.pre_processing_function.expression) {
-                    throw new Error("'mlm_input.pre_processing_function' must include 'format' and 'expression'.");
-                }
+            if (inputObj.pre_processing_function !== null && inputObj.pre_processing_function !== undefined) {
+              if (typeof inputObj.pre_processing_function !== 'object' ||
+                  !inputObj.pre_processing_function.format ||
+                  !inputObj.pre_processing_function.expression) {
+                  throw new Error(`'mlm_input[${index}].pre_processing_function' must include 'format' and 'expression'.`);
+              }
             }
+          });
         },
+      },
     },
-  },
+
   /**
    * REQUIRED Describes each model output and how to interpret it.
    */
@@ -384,92 +391,91 @@ const MlmModel = sequelize.define('MlmModel', {
     type: DataTypes.JSONB,
     allowNull: false,
     validate: {
-    isValidOutput(value) {
-      if (!value || typeof value !== 'object') {
-        throw new Error("'mlm_output' must be a valid JSON object.");
-      }
+        isValidOutput(value) {
+            // Ensure the output is always an array
+            if (!Array.isArray(value)) {
+                throw new Error("'mlm_output' must be an array.");
+            }
 
-      // Validate individual fields inside mlm_output
-      if (!value.output_name || typeof value.output_name !== 'string' || value.output_name.trim() === '') {
-        throw new Error("'mlm_output.output_name' is required and must be a non-empty string.");
-      }
+            // Check that the array is not empty
+            if (value.length === 0) {
+                throw new Error("'mlm_output' array must contain at least one entry.");
+            }
 
-      if (!value.output_tasks || !Array.isArray(value.output_tasks)) {
-        throw new Error("'mlm_output.output_tasks' must be an array.");
-      }
+            // Iterate through each object in the array
+            value.forEach((outputObj, index) => {
+                // Validate 'name'
+                if (!outputObj.name || typeof outputObj.name !== 'string' || outputObj.name.trim() === '') {
+                    throw new Error(`'mlm_output[${index}].name' is required and must be a non-empty string.`);
+                }
 
-      const validTasks = [
-        'regression', 'classification', 'scene-classification', 'detection',
-        'object-detection', 'segmentation', 'semantic-segmentation', 'instance-segmentation',
-        'panoptic-segmentation', 'similarity-search', 'generative', 'image-captioning',
-        'super-resolution',
-      ];
+                // Validate 'tasks'
+                if (!outputObj.tasks || !Array.isArray(outputObj.tasks)) {
+                    throw new Error(`'mlm_output[${index}].tasks' must be an array.`);
+                }
+                const validTasks = [
+                    'regression', 'classification', 'scene-classification', 'detection',
+                    'object-detection', 'segmentation', 'semantic-segmentation', 'instance-segmentation',
+                    'panoptic-segmentation', 'similarity-search', 'generative', 'image-captioning',
+                    'super-resolution',
+                ];
+                outputObj.tasks.forEach((task, taskIndex) => {
+                    if (!validTasks.includes(task)) {
+                        throw new Error(`Invalid task '${task}' in 'mlm_output[${index}].tasks[${taskIndex}]'. Use one of the predefined tasks.`);
+                    }
+                });
 
-      value.output_tasks.forEach(task => {
-        if (!validTasks.includes(task)) {
-          throw new Error(`Invalid task: '${task}'. Use one of the predefined tasks.`);
-        }
-      });
+                // Validate 'result'
+                if (!outputObj.result || typeof outputObj.result !== 'object') {
+                    throw new Error(`'mlm_output[${index}].result' must be a valid object.`);
+                }
+                if (!Array.isArray(outputObj.result.shape) || outputObj.result.shape.length === 0) {
+                    throw new Error(`'mlm_output[${index}].result.shape' must be a non-empty array.`);
+                }
+                if (!Array.isArray(outputObj.result.dim_order) || outputObj.result.dim_order.length !== outputObj.result.shape.length) {
+                    throw new Error(`'mlm_output[${index}].result.dim_order' must match the length of 'mlm_output[${index}].result.shape'.`);
+                }
+                const validDimensions = ['batch', 'channel', 'time', 'height', 'width', 'depth', 'token', 'class', 'score', 'confidence'];
+                outputObj.result.dim_order.forEach((dim, dimIndex) => {
+                    if (!validDimensions.includes(dim)) {
+                        throw new Error(`Invalid dimension '${dim}' in 'mlm_output[${index}].result.dim_order[${dimIndex}]'.`);
+                    }
+                });
+                if (!outputObj.result.data_type || typeof outputObj.result.data_type !== 'string') {
+                    throw new Error(`'mlm_output[${index}].result.data_type' is required and must be a string.`);
+                }
 
-      if (!value.output_result_structure || typeof value.output_result_structure !== 'object') {
-        throw new Error("'mlm_output.output_result_structure' must be a valid object.");
-      }
+                // Validate optional 'classification:classes'
+                if (outputObj['classification:classes'] !== null && !Array.isArray(outputObj['classification:classes'])) {
+                    throw new Error(`'mlm_output[${index}]["classification:classes"]' must be an array or null.`);
+                }
+                if (Array.isArray(outputObj['classification:classes'])) {
+                    outputObj['classification:classes'].forEach((classObj, classIndex) => {
+                        if (typeof classObj.value !== 'number' || !classObj.name || typeof classObj.name !== 'string') {
+                            throw new Error(`Each class object in 'mlm_output[${index}]["classification:classes"][${classIndex}]' must have a 'value' (number) and a 'name' (string).`);
+                        }
+                        if (classObj.description && typeof classObj.description !== 'string') {
+                            throw new Error(`'mlm_output[${index}]["classification:classes"][${classIndex}].description', if provided, must be a string.`);
+                        }
+                    });
+                }
 
-      if (!Array.isArray(value.output_result_structure.shape) || value.output_result_structure.shape.length === 0) {
-        throw new Error("'mlm_output.output_result_structure.shape' must be a non-empty array.");
-      }
-
-      if (!Array.isArray(value.output_result_structure.dim_order) || value.output_result_structure.dim_order.length !== value.output_result_structure.shape.length) {
-        throw new Error("'mlm_output.output_result_structure.dim_order' must match the length of 'shape'.");
-      }
-
-      if (!value.output_result_structure.data_type || typeof value.output_result_structure.data_type !== 'string') {
-        throw new Error("'mlm_output.output_result_structure.data_type' is required and must be a string.");
-      }
-
-      if (value.output_classes !== null && !Array.isArray(value.output_classes)) {
-        throw new Error("'mlm_output.output_classes' must be an array or null.");
-      }
-
-      if (Array.isArray(value.output_classes)) {
-        value.output_classes.forEach(classObj => {
-          if (!classObj.value || typeof classObj.value !== 'number' || !classObj.name || typeof classObj.name !== 'string') {
-            throw new Error("Each class object in 'mlm_output.output_classes' must have a 'value' (number) and a 'name' (string).");
+                // Validate optional 'post_processing_function'
+                if (outputObj.post_processing_function !== null) {
+                    if (typeof outputObj.post_processing_function !== 'object' ||
+                        !outputObj.post_processing_function.format ||
+                        !outputObj.post_processing_function.expression) {
+                        throw new Error(`'mlm_output[${index}].post_processing_function' must include 'format' and 'expression' fields.`);
+                    }
+                }
+              });
+            },
           }
-        });
-      }
-
-      if (value.output_post_processing_function !== null) {
-        if (typeof value.output_post_processing_function !== 'object' ||
-            !value.output_post_processing_function.format ||
-            !value.output_post_processing_function.expression) {
-          throw new Error("'mlm_output.output_post_processing_function' must be an object with 'format' and 'expression' fields.");
         }
-      }
-    },
-  },
-},
-
-  },
-  /**
-   * Additional hyperparameters relevant for the model.
-   */
-  hyperparameters: {
-    type: DataTypes.JSONB,
-    allowNull: true,
-  },
-  collection_id: {
-    type: DataTypes.STRING,
-    references: {
-      model: Collection,
-      key: 'collection_id',
-    },
-    allowNull: true,
-    onDelete: 'SET NULL',
-  },
-}, {
-  tableName: 'mlm_model',
-  timestamps: false,
-});
+        },{
+          tableName: 'mlm_model',
+          timestamps: false,
+      });
+      
 
 module.exports = MlmModel;

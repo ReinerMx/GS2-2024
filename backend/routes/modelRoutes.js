@@ -91,46 +91,28 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
 
     try {
         const stacData = JSON.parse(fs.readFileSync(req.file.path, 'utf8'));
-        const isCollection = stacData.type === 'FeatureCollection';
+        const isCollection = stacData.type === 'Collection';
+        const properties = stacData.properties;
+        const assets = stacData.assets;
 
-        // Validate STAC Collection or Item
-        if (isCollection) {
-            const { extent } = stacData;
-            if (
-                !extent ||
-                !extent.spatial ||
-                !extent.temporal ||
-                !Array.isArray(extent.spatial.bbox) ||
-                extent.spatial.bbox.length === 0 ||
-                !Array.isArray(extent.temporal.interval) ||
-                extent.temporal.interval.length === 0
-            ) {
-                return res.status(400).json({ error: 'Invalid or missing extent field for collection.' });
-            }
-        }
-
-        const properties = stacData.properties || {};
-        const assets = stacData.assets || {};
-
+        // Model Details for MlmModel table
         const modelDetails = {
-            name: properties['mlm:name'],
-            framework: properties['mlm:framework'],
-            framework_version: properties['mlm:framework_version'],
-            memory_size: properties['mlm:memory_size'],
-            total_parameters: properties['mlm:total_parameters'],
-            description: properties['description'],
-            pretrained: properties['mlm:pretrained'] || null,
-            pretrained_source: properties['mlm:pretrained_source'] || null,
-            batch_size_suggestion: properties['mlm:batch_size_suggestion'] || null,
-            accelerator: properties['mlm:accelerator'] || null,
-            accelerator_summary: properties['mlm:accelerator_summary'] || null,
-            tasks: Array.isArray(properties['mlm:tasks']) ? properties['mlm:tasks'] : null,
-            architecture: properties['mlm:architecture'],
-            model_input: properties['mlm:input'],
-            model_output: properties['mlm:output'],
-            start_datetime: properties['start_datetime'],
-            end_datetime: properties['end_datetime'],
-            userDescription: userDescription || null,
+            mlm_name: properties['mlm:name'],
+            mlm_architecture: properties['mlm:architecture'],
+            mlm_tasks: properties['mlm:tasks'] || [],
+            mlm_framework: properties['mlm:framework'] || null,
+            mlm_framework_version: properties['mlm:framework_version'] || null,
+            mlm_memory_size: properties['mlm:memory_size'] || null,
+            mlm_total_parameters: properties['mlm:total_parameters'] || null,
+            mlm_pretrained: properties['mlm:pretrained'] || null,
+            mlm_pretrained_source: properties['mlm:pretrained_source'] || null,
+            mlm_batch_size_suggestion: properties['mlm:batch_size_suggestion'] || null,
+            mlm_accelerator: properties['mlm:accelerator'] || null,
+            mlm_accelerator_summary: properties['mlm:accelerator_summary'] || null,
+            mlm_accelerator_count: properties['mlm:accelerator_count'] || null,
+            mlm_input: properties['mlm:input'],
+            mlm_output: properties['mlm:output'],
+            mlm_hyperparameters: properties['mlm:hyperparameters'],
         };
 
         // Save collection, item, model, and assets atomically
@@ -141,9 +123,20 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
                       {
                           type: stacData.type,
                           stac_version: stacData.stac_version,
-                          title: stacData.title || 'Default Title',
+                          stac_extensions: stacData.stac_extensions,
+                          collection_id: stacData.id,
+                          title: stacData.title || null,
                           description: stacData.description || 'No description',
+                          keywords: stacData.keywords || null,
+                          license: stacData.license,
+                          providers: stacData.providers,
                           extent: stacData.extent,
+                          summaries: stacData.summaries || null,
+                          links: stacData.links,
+                          item_assets: stacData.item_assets || null,
+                          assets: stacData.assets || null,
+                          user_id: user_id || null,
+                          userDescription: userDescription || null,
                       },
                       { transaction }
                   )

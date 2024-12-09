@@ -63,27 +63,6 @@ app.use(express.urlencoded({ extended: true }));
 const path = require("path");
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-/**
- * Asynchronous function to connect to the database and synchronize models.
- * Models are synchronized in the order of their dependencies.
- */
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("Database connection established successfully.");
-
-    // Sync models with their dependencies in the correct order
-    await User.sync({ force: true });       // User table with no dependencies
-    await Collection.sync({ force: true }); // Collection depends on User
-    await Item.sync({ force: true });       // Item depends on Collection
-    await MlmModel.sync({ force: true });   // MlmModel depends on Collection
-    await Asset.sync({ force: true });      // Asset depends on Item/MlmModel
-
-    console.log("All tables synchronized successfully.");
-  } catch (error) {
-    console.error("Error during database synchronization:", error);
-  }
-})();
 
 /**
  * Define API routes.
