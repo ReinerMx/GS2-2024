@@ -36,7 +36,7 @@ const Item = sequelize.define('Item', {
    * 	REQUIRED. Type of the GeoJSON Object. MUST be set to Feature
    */
   type: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.STRING,
     allowNull: false,
     validate: { isIn: [['Feature']] },
   },
@@ -289,7 +289,7 @@ const Item = sequelize.define('Item', {
  * The id of the STAC Collection this Item references. 
  * This field is required if a link with a "collection" relation type is present; otherwise, it must be null.
  */
-collection: {
+collection_id: {
   type: DataTypes.STRING,
   references: {
     model: Collection, // The related Collection model

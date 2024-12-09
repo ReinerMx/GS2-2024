@@ -5,52 +5,45 @@ const Item = require('./Item');
 const MlmModel = require('./MlmModel');
 const Asset = require('./Asset');
 
+// Export models without relationships
+const models = { User, Collection, Item, MlmModel, Asset };
 
+// Function to define relationships
+const defineRelationships = () => {
+  // Define relationships between models
+  models.Collection.hasMany(models.Item, { foreignKey: 'collection_id', as: 'items', onDelete: 'CASCADE' });
+  models.Item.belongsTo(models.Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
+
+  models.Collection.hasMany(models.MlmModel, { foreignKey: 'collection_id', as: 'models', onDelete: 'CASCADE' });
+  models.MlmModel.belongsTo(models.Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
+
+  models.Collection.hasMany(models.Asset, { foreignKey: 'collection_id', as: 'assets', onDelete: 'CASCADE' });
+  models.Asset.belongsTo(models.Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
+
+  models.Item.hasMany(models.Asset, { foreignKey: 'item_id', as: 'relatedAssets', onDelete: 'CASCADE' });
+  models.Asset.belongsTo(models.Item, { foreignKey: 'item_id', as: 'parentItem' });
+
+  models.MlmModel.hasMany(models.Asset, { foreignKey: 'model_id', as: 'associatedAssets', onDelete: 'CASCADE' });
+  models.Asset.belongsTo(models.MlmModel, { foreignKey: 'model_id', as: 'parentModel' });
+
+  models.Collection.belongsTo(models.User, { foreignKey: 'user_id', as: 'owner', onDelete: 'SET NULL' });
+};
+
+// Synchronize database and define relationships
 (async () => {
   try {
     console.log('Testing database connection...');
-    await sequelize.authenticate(); // Tests the connection to the database
+    await sequelize.authenticate();
     console.log('Connection has been established successfully.');
+
+    defineRelationships(); // Define relationships after models are loaded
+
+    console.log('Synchronizing models...');
+    await sequelize.sync({ force: true });
+    console.log('All models synchronized successfully.');
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('Error during database initialization:', error);
   }
 })();
 
-
-// Define relationships between models
-Collection.hasMany(Item, { foreignKey: 'collection_id', as: 'items', onDelete: 'CASCADE' });
-Item.belongsTo(Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
-
-Collection.hasMany(MlmModel, { foreignKey: 'collection_id', as: 'models', onDelete: 'CASCADE' });
-MlmModel.belongsTo(Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
-
-Collection.hasMany(Asset, { foreignKey: 'collection_id', as: 'assets', onDelete: 'CASCADE' });
-Asset.belongsTo(Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
-
-Item.hasMany(Asset, { foreignKey: 'item_id', as: 'relatedAssets', onDelete: 'CASCADE' });
-Asset.belongsTo(Item, { foreignKey: 'item_id', as: 'parentItem' });
-
-MlmModel.hasMany(Asset, { foreignKey: 'model_id', as: 'associatedAssets', onDelete: 'CASCADE' });
-Asset.belongsTo(MlmModel, { foreignKey: 'model_id', as: 'parentModel' });
-
-Collection.belongsTo(User, { foreignKey: 'user_id', as: 'owner', onDelete: 'SET NULL' });
-
-// Synchronize the database
-(async () => {
-  try {
-    await sequelize.sync({ alter: true }); // Use { force: true } only for development
-    console.log("All models were synchronized successfully.");
-  } catch (error) {
-    console.error("Error synchronizing models:", error);
-  }
-})();
-
-module.exports = {
-  sequelize,
-  User,
-  Collection,
-  Item,
-  MlmModel,
-  Asset,
-};
-
+module.exports = { sequelize, ...models };
