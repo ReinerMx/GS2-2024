@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require("../config/db");
-const Collection = require('./Collection');
+const Item = require('./Item');
 
 /**
  * Represents a Machine Learning Model (MlmModel) in the database, with metadata describing its structure, tasks, framework, 
@@ -28,7 +28,6 @@ const Collection = require('./Collection');
  * @property {Object|null} [hyperparameters] - A JSON object containing additional hyperparameters relevant to the model's training or inference.
  * @property {string|null} [collection_id] - References the `collection_id` from the `Collection` model, linking this model to a specific collection.
  * 
- * @see Collection
  * @see https://github.com/stac-extensions/mlm?tab=readme-ov-file#data-type-enum
  */
 const MlmModel = sequelize.define('MlmModel', {
@@ -432,9 +431,9 @@ const MlmModel = sequelize.define('MlmModel', {
                 if (!Array.isArray(outputObj.result.shape) || outputObj.result.shape.length === 0) {
                     throw new Error(`'mlm_output[${index}].result.shape' must be a non-empty array.`);
                 }
-                if (!Array.isArray(outputObj.result.dim_order) || outputObj.result.dim_order.length !== outputObj.result.shape.length) {
+               /* if (!Array.isArray(outputObj.result.dim_order) || outputObj.result.dim_order.length !== outputObj.result.shape.length) {
                     throw new Error(`'mlm_output[${index}].result.dim_order' must match the length of 'mlm_output[${index}].result.shape'.`);
-                }
+                }*/
                 const validDimensions = ['batch', 'channel', 'time', 'height', 'width', 'depth', 'token', 'class', 'score', 'confidence'];
                 outputObj.result.dim_order.forEach((dim, dimIndex) => {
                     if (!validDimensions.includes(dim)) {
@@ -471,6 +470,15 @@ const MlmModel = sequelize.define('MlmModel', {
               });
             },
           }
+        },
+
+        item_id: {
+          type: DataTypes.STRING,
+          references: {
+            model: Item,
+            key: 'id',
+          },
+          onDelete: 'CASCADE',
         }
         },{
           tableName: 'mlm_model',

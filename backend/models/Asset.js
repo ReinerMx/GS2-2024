@@ -1,8 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require("../config/db");
 const Item = require('./Item');
-const MlmModel = require('./MlmModel');
-const Collection = require('./Collection');
+
 
 /**
  * @module Asset
@@ -10,26 +9,6 @@ const Collection = require('./Collection');
  * The `Asset` model represents data or resources associated with STAC Items, Models, or Collections. 
  * An Asset is a key component of the STAC specification, providing metadata and access information 
  * for downloadable or streamable data.
- * 
- * Key Features:
- * - Stores URIs to resources (e.g., geospatial data files, model files) that can be accessed or downloaded.
- * - Includes metadata fields such as title, description, media type, and roles for context and usability.
- * - Validates compliance with common media types and ensures required fields like `href` are correctly formatted.
- * 
- * Relationships:
- * - Each `Asset` belongs to one of the following:
- *   - An `Item`, which represents individual geospatial data assets.
- *   - An `MlmModel`, which may reference machine learning models as assets.
- *   - A `Collection`, which groups assets that apply to the entire collection.
- * - These relationships are established via foreign keys.
- * 
- * Example Use Cases:
- * - Representing geospatial files (e.g., GeoTIFFs) for remote sensing data.
- * - Managing resources like model files or metadata related to a machine learning model.
- * - Providing supplementary data or visualization resources for STAC Collections.
- * 
- * Reference:
- * - STAC Specification: https://stacspec.org
  * 
  * @typedef {Object} Asset
  * @property {integer} id - Primary key for the Asset, auto-incremented.
@@ -42,12 +21,6 @@ const Collection = require('./Collection');
  * @property {integer} [model_id] - Foreign key reference to the `MlmModel` model.
  * @property {string} [collection_id] - Foreign key reference to the `Collection` model.
  * 
- * Relationships:
- * - `Asset` belongs to an `Item`, an `MlmModel`, or a `Collection`.
- * 
- * @see Item
- * @see MlmModel
- * @see Collection
  * @see https://github.com/radiantearth/stac-spec/blob/master/commons/assets.md
  */
 const Asset = sequelize.define('Asset', {
@@ -151,25 +124,25 @@ const Asset = sequelize.define('Asset', {
   /**
    * 
    */
-  model_id: {
+  /*model_id: {
     type: DataTypes.INTEGER,
     references: {
       model: MlmModel,
       key: 'id',
     },
     onDelete: 'SET NULL',
-  },
+  },*/
   /**
    * 
    */
-  collection_id: {
+  /*collection_id: {
     type: DataTypes.STRING,
     references: {
       model: Collection,
       key: 'collection_id',
     },
     onDelete: 'SET NULL',
-  },
+  },*/
 }, {
   tableName: 'asset',
   timestamps: false,

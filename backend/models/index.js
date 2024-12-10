@@ -10,25 +10,19 @@ const models = { User, Collection, Item, MlmModel, Asset };
 
 // Function to define relationships
 const defineRelationships = () => {
-  // Define relationships between models
-  models.Collection.hasMany(models.Item, { foreignKey: 'collection_id', as: 'items', onDelete: 'CASCADE' });
-  models.Item.belongsTo(models.Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
-
-  models.Collection.hasMany(models.MlmModel, { foreignKey: 'collection_id', as: 'models', onDelete: 'CASCADE' });
-  models.MlmModel.belongsTo(models.Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
-
-  models.Collection.hasMany(models.Asset, { foreignKey: 'collection_id', as: 'assets', onDelete: 'CASCADE' });
-  models.Asset.belongsTo(models.Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
-
-  models.Item.hasMany(models.Asset, { foreignKey: 'item_id', as: 'relatedAssets', onDelete: 'CASCADE' });
-  models.Asset.belongsTo(models.Item, { foreignKey: 'item_id', as: 'parentItem' });
-
-  models.MlmModel.hasMany(models.Asset, { foreignKey: 'model_id', as: 'associatedAssets', onDelete: 'CASCADE' });
-  models.Asset.belongsTo(models.MlmModel, { foreignKey: 'model_id', as: 'parentModel' });
-
-  models.Collection.belongsTo(models.User, { foreignKey: 'user_id', as: 'owner', onDelete: 'SET NULL' });
-};
-
+    // Collection -> Items (1:n)
+    models.Collection.hasMany(models.Item, { foreignKey: 'collection_id', as: 'items', onDelete: 'CASCADE' });
+    models.Item.belongsTo(models.Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
+  
+    // Items -> Assets (1:n)
+    models.Item.hasMany(models.Asset, { foreignKey: 'item_id', as: 'assets', onDelete: 'CASCADE' });
+    models.Asset.belongsTo(models.Item, { foreignKey: 'item_id', as: 'parentItem' });
+  
+    // Items -> MLM (1:n)
+    models.Item.hasMany(models.MlmModel, { foreignKey: 'item_id', as: 'mlmModels', onDelete: 'CASCADE' });
+    models.MlmModel.belongsTo(models.Item, { foreignKey: 'item_id', as: 'parentItem' });
+  };
+  
 // Synchronize database and define relationships
 (async () => {
   try {

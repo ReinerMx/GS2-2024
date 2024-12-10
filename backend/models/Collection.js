@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require("../config/db");
-const Asset = require('./Asset');
-const User = require('./User');
+const User = require('./User'); // Import the User model
 
 /**
  * @module Collection
@@ -12,26 +11,6 @@ const User = require('./User');
  * about the collection, such as spatial and temporal extents, licensing, 
  * providers, and related links. It also defines relationships to associated 
  * assets stored in the `Asset` model.
- * 
- * Key Features:
- * - Supports hierarchical data organization and discovery in geospatial systems.
- * - Enforces STAC specification requirements, including validation for fields like 
- *   license, extent, and providers.
- * - Establishes a one-to-many relationship with the `Asset` model, enabling collections 
- *   to manage multiple related assets.
- * 
- * Relationships:
- * - `Collection` has a one-to-many relationship with the `Asset` model, allowing 
- *   each collection to have multiple assets.
- * - Each `Asset` references its parent `Collection` through a foreign key.
- * 
- * Example Use Cases:
- * - Managing geospatial datasets for remote sensing, environmental monitoring, 
- *   or urban planning.
- * - Organizing data for easy querying and access via APIs.
- * 
- * Reference:
- * - STAC Specification: https://stacspec.org
  * 
  * @typedef {Object} Collection
  * @property {string} type - REQUIRED. Must be set to "Collection" to validate as a STAC Collection.
@@ -50,7 +29,6 @@ const User = require('./User');
  * @property {Asset[]} assets - Related assets, linked via the `Asset` model.
  * @property {number|null} [user_id] - Optional. References the user ID of the creator or owner of the Collection.
  * 
- * @see Asset
  * @see https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#item-asset-definition-object
  */
 const Collection = sequelize.define('Collection', {

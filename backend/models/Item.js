@@ -59,8 +59,8 @@ const Item = sequelize.define('Item', {
    */
   item_id: {
     type: DataTypes.STRING,
+    primaryKey: true,
     allowNull: false,
-    unique: true,
     validate: {
         notNull: { msg: 'Item ID cannot be null' },
     }
@@ -292,11 +292,11 @@ const Item = sequelize.define('Item', {
 collection_id: {
   type: DataTypes.STRING,
   references: {
-    model: Collection, // The related Collection model
-    key: 'collection_id', // The primary key of the Collection
+    model: Collection,
+    key: 'collection_id',
   },
-  allowNull: true, // Allows null when no collection reference is needed
-    },
+  onDelete: 'CASCADE',
+},
 }, {
   tableName: 'item',
   timestamps: false,
