@@ -171,37 +171,56 @@ const Item = sequelize.define('Item', {
         if (!value || typeof value !== 'object') {
           throw new Error("'properties' must be a non-empty JSON object.");
         }
-
-        // Validate 'datetime'
+  
+        // Prüfen, ob 'datetime' vorhanden ist, sonst setzen
         if (!value.hasOwnProperty('datetime')) {
-          throw new Error("'properties' must include the 'datetime' field.");
+          console.warn("'properties' is missing 'datetime'. Setting it to null.");
+          value.datetime = null;
         }
-
+  
         const datetime = value.datetime;
-
-        // Check if 'datetime' is null or a valid RFC 3339 timestamp
+  
+        // Prüfen, ob 'datetime' null oder ein gültiges RFC 3339-Format ist
+        const rfc3339Regex = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?Z$/;
         const isValidTimestamp = (ts) =>
-          ts === null || /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$/.test(ts);
-
+          ts === null || rfc3339Regex.test(ts);
+  
         if (!isValidTimestamp(datetime)) {
-          throw new Error("'properties.datetime' must be null or a valid RFC 3339 timestamp.");
+          console.warn(`'properties.datetime' is invalid. Setting it to null. Received: ${datetime}`);
+          value.datetime = null;
         }
-
-        // If 'datetime' is null, ensure 'start_datetime' and 'end_datetime' exist and are valid
+  
+        // Falls 'datetime' null ist, sicherstellen, dass 'start_datetime' und 'end_datetime' korrekt sind
         if (datetime === null) {
           if (!value.start_datetime || !value.end_datetime) {
-            throw new Error(
-              "'properties.start_datetime' and 'properties.end_datetime' are required when 'datetime' is null."
+            console.warn(
+              "'properties.start_datetime' or 'properties.end_datetime' is missing. Setting them to null."
             );
+            value.start_datetime = null;
+            value.end_datetime = null;
           }
-
-          if (!isValidTimestamp(value.start_datetime) || !isValidTimestamp(value.end_datetime)) {
-            throw new Error(
-              "'properties.start_datetime' and 'properties.end_datetime' must be valid RFC 3339 timestamps."
+  
+          // Prüfen und korrigieren von 'start_datetime' und 'end_datetime'
+          if (!isValidTimestamp(value.start_datetime)) {
+            console.warn(
+              `'properties.start_datetime' is invalid. Setting it to null. Received: ${value.start_datetime}`
             );
+            value.start_datetime = null;
           }
-
-          if (new Date(value.start_datetime) > new Date(value.end_datetime)) {
+  
+          if (!isValidTimestamp(value.end_datetime)) {
+            console.warn(
+              `'properties.end_datetime' is invalid. Setting it to null. Received: ${value.end_datetime}`
+            );
+            value.end_datetime = null;
+          }
+  
+          // Validierung der Reihenfolge
+          if (
+            value.start_datetime &&
+            value.end_datetime &&
+            new Date(value.start_datetime) > new Date(value.end_datetime)
+          ) {
             throw new Error(
               "'properties.start_datetime' must be less than or equal to 'properties.end_datetime'."
             );
@@ -210,6 +229,7 @@ const Item = sequelize.define('Item', {
       },
     },
   },
+  
   /**
    * REQUIRED. List of link objects to resources and related URLs.
    */

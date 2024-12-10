@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require("../config/db");
-const Item = require('./Item');
 
 /**
  * Represents a Machine Learning Model (MlmModel) in the database, with metadata describing its structure, tasks, framework, 
@@ -154,12 +153,12 @@ const MlmModel = sequelize.define('MlmModel', {
     type: DataTypes.INTEGER,
     allowNull: true,
     validate: {
-      isPositive(value) {
-          if (value <= 0) {
-              throw new Error("'mlm:memory_size' must be a positive integer representing bytes.");
-          }
+      isPositiveOrNull(value) {
+        if (value !== null && value <= 0) {
+          throw new Error("'mlm:memory_size' must be a positive integer or null.");
+        }
       },
-  },
+    },
   },
   /**
    * Total number of model parameters, including trainable and non-trainable parameters.
@@ -206,14 +205,12 @@ const MlmModel = sequelize.define('MlmModel', {
     type: DataTypes.INTEGER,
     allowNull: true,
     validate: {
-      isPositiveInteger(value) {
-          if (!Number.isInteger(value) || value <= 0) {
-              throw new Error(
-                  "'mlm:batch_size_suggestion' must be a positive integer greater than zero."
-              );
-          }
+      isPositiveOrNull(value) {
+        if (value !== null && (!Number.isInteger(value) || value <= 0)) {
+          throw new Error("'mlm:batch_size_suggestion' must be a positive integer or null.");
+        }
       },
-  },
+    },
   },
   /**
    * The intended computational hardware that runs inference. 
@@ -460,12 +457,12 @@ const MlmModel = sequelize.define('MlmModel', {
                 }
 
                 // Validate optional 'post_processing_function'
-                if (outputObj.post_processing_function !== null) {
-                    if (typeof outputObj.post_processing_function !== 'object' ||
-                        !outputObj.post_processing_function.format ||
-                        !outputObj.post_processing_function.expression) {
-                        throw new Error(`'mlm_output[${index}].post_processing_function' must include 'format' and 'expression' fields.`);
-                    }
+                if (outputObj.post_processing_function) {
+                  if (typeof outputObj.post_processing_function !== 'object' ||
+                      !outputObj.post_processing_function.format ||
+                      !outputObj.post_processing_function.expression) {
+                    throw new Error(`'mlm_output[${index}].post_processing_function' must include 'format' and 'expression' if provided.`);
+                  }
                 }
               });
             },
