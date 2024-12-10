@@ -3,8 +3,6 @@ const express = require('express');
 const fs = require('fs');
 const sequelize = require('../config/db');
 const { MlmModel, Asset, Collection, Item } = require('../models');
-const sequelize = require('../config/db');
-const { MlmModel, Asset, Collection, Item } = require('../models');
 const upload = require('../middleware/uploadMiddleware');
 
 // Initialize the router
@@ -46,74 +44,11 @@ router.get('/:id', async (req, res) => {
 });
 
 /**
- * Route to get details of a specific model by its ID.
- * Fetches the model from the database and returns its details with associated assets and collection information.
- */
-router.get('/:id', async (req, res) => {
-    const modelId = req.params.id;
-
-    try {
-        const model = await MlmModel.findOne({
-            where: { id: modelId },
-            include: [
-                {
-                    model: Asset,
-                    as: 'asset',
-                    attributes: ['description', 'type', 'href'],
-                },
-                {
-                    model: Collection,
-                    as: 'collection',
-                    attributes: ['title', 'description'],
-                },
-            ],
-        });
-
-        if (!model) {
-            return res.status(404).json({ error: 'Model not found' });
-        }
-
-        res.json(model);
-    } catch (error) {
-        console.error('Error fetching model details:', error);
-        res.status(500).json({ error: 'Failed to fetch model details' });
-    }
-});
-
-/**
  * Route to get all models from the database.
- * Includes related collections, items, and assets for a complete STAC-compliant response.
  * Includes related collections, items, and assets for a complete STAC-compliant response.
  */
 router.get('/', async (req, res) => {
     try {
-        const models = await Collection.findAll({
-            include: [
-                {
-                    model: MlmModel,
-                    as: 'model',
-                    attributes: ['name', 'tasks', 'architecture', 'description'],
-                    include: [
-                        {
-                            model: Asset,
-                            as: 'asset',
-                            attributes: ['description', 'type', 'href'],
-                        },
-                    ],
-                },
-                {
-                    model: Item,
-                    as: 'item',
-                    attributes: ['item_id', 'properties'],
-                },
-            ],
-        });
-
-        if (!models || models.length === 0) {
-            return res.status(404).json({ error: 'No models found' });
-        }
-
-        res.json(models);
         const models = await Collection.findAll({
             include: [
                 {
@@ -146,13 +81,9 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Error fetching models' });
     }
 });
-        res.status(500).json({ error: 'Error fetching models' });
-    }
-});
 
 /**
  * Route to handle file upload and model data extraction.
- * Parses uploaded STAC JSON and saves related collections, items, assets, and models.
  * Parses uploaded STAC JSON and saves related collections, items, assets, and models.
  */
 router.post('/upload', upload.single('modelFile'), async (req, res) => {
@@ -257,10 +188,8 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
     } catch (error) {
         console.error('Error saving model to database:', error);
         res.status(500).json({ error: 'Error saving model to database' });
-        res.status(500).json({ error: 'Error saving model to database' });
     } finally {
         if (req.file && req.file.path) {
-            fs.unlinkSync(req.file.path);
             fs.unlinkSync(req.file.path);
         }
     }
