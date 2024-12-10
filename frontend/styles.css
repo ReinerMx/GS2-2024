@@ -9,6 +9,12 @@ body {
     margin: auto;
 }
 
+/* Neue Klasse für das innere Div */
+.list-container {
+    margin-left: 20px; /* Schiebt das Div mit der Liste nach innen */
+    margin-right: 20px; /* Optional: Abstand auf der rechten Seite */
+  }
+  
 /* ********** Navbar Styles ********** */
 /* Styles for the main navigation bar */
 .navbar {
@@ -210,6 +216,15 @@ body.dark-mode .autocomplete li:hover {
     padding: 8px 20px;
 }
 
+.custom-paragraph {
+    font-family: Arial, sans-serif;  /* Beispiel-Schriftart */
+    font-size: 16px;  /* Beispiel-Schriftgröße */
+    line-height: 1.5;  /* Zeilenhöhe für bessere Lesbarkeit */
+    color: #666;  /* Textfarbe */
+    margin: 0 0 1em 0;  /* Abstand nach unten */
+    padding: 0;  /* Kein Innenabstand */
+  }
+  
 /* ********** Button Styles ********** */
 /* General button styling */
 .btn {
@@ -868,3 +883,15 @@ input:checked + .slider:before {
         min-width: 100px; /* Schmaleres Menü auf kleineren Bildschirmen */
     }
 }
+/* user-icon */
+.user-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    border-radius: 50%; /* Rundes Symbol */
+    transition: transform 0.3s ease;
+  }
+  
+  .user-icon:hover {
+    transform: scale(1.1); /* Leicht vergrößern bei Hover */
+  }

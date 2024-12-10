@@ -1,43 +1,43 @@
-'use strict';
+const sequelize = require('../config/db');
+const User = require('./User');
+const Collection = require('./Collection');
+const Item = require('./Item');
+const MlmModel = require('./MlmModel');
+const Asset = require('./Asset');
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
-const db = {};
+// Export models without relationships
+const models = { User, Collection, Item, MlmModel, Asset };
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+// Function to define relationships
+const defineRelationships = () => {
+    // Collection -> Items (1:n)
+    models.Collection.hasMany(models.Item, { foreignKey: 'collection_id', as: 'items', onDelete: 'CASCADE' });
+    models.Item.belongsTo(models.Collection, { foreignKey: 'collection_id', as: 'parentCollection' });
+  
+    // Items -> Assets (1:n)
+    models.Item.hasMany(models.Asset, { foreignKey: 'item_id', as: 'assets', onDelete: 'CASCADE' });
+    models.Asset.belongsTo(models.Item, { foreignKey: 'item_id', as: 'parentItem' });
+  
+    // Items -> MLM (1:n)
+    models.Item.hasMany(models.MlmModel, { foreignKey: 'item_id', as: 'mlmModels', onDelete: 'CASCADE' });
+    models.MlmModel.belongsTo(models.Item, { foreignKey: 'item_id', as: 'parentItem' });
+  };
+  
+// Synchronize database and define relationships
+(async () => {
+  try {
+    console.log('Testing database connection...');
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (
-      file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
-    );
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
+    defineRelationships(); // Define relationships after models are loaded
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+    console.log('Synchronizing models...');
+    await sequelize.sync({ force: true });
+    console.log('All models synchronized successfully.');
+  } catch (error) {
+    console.error('Error during database initialization:', error);
   }
-});
+})();
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-module.exports = db;
+module.exports = { sequelize, ...models };

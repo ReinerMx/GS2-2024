@@ -1,19 +1,16 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config({ path: './.env' }); 
+require('dotenv').config();
 
-// Use environment variables for database connection
-const sequelize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
-  host: process.env.POSTGRES_HOST,
-  dialect: 'postgres',
-});
-
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Connection to the database has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
+const sequelize = new Sequelize(
+  process.env.POSTGRES_DB,
+  process.env.POSTGRES_USER,
+  process.env.POSTGRES_PASSWORD,
+  {
+    host: process.env.POSTGRES_HOST || 'localhost',
+    port: process.env.POSTGRES_PORT || 5432,
+    dialect: 'postgres',
+    logging: console.log,
   }
-})();
+);
 
 module.exports = sequelize;
