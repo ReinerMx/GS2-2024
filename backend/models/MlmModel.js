@@ -475,8 +475,8 @@ const MlmModel = sequelize.define('MlmModel', {
         item_id: {
           type: DataTypes.STRING,
           references: {
-            model: Item,
-            key: 'id',
+            model: 'item',
+            key: 'item_id',
           },
           onDelete: 'CASCADE',
         }
