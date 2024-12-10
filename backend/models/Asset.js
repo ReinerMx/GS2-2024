@@ -38,10 +38,13 @@ const Asset = sequelize.define('Asset', {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      isUrl: true, // Ensures it's a valid URI
-      isNotEmpty(value) {
-        if (value.trim() === '') {
-          throw new Error("'href' must be a non-empty URI.");
+      isCustomUrl(value) {
+        // Allow s3:// and standard HTTP(S) URLs
+        const regex = /^(s3:\/\/|https?:\/\/).+/;
+        if (!regex.test(value)) {
+          throw new Error(
+            "'href' must be a valid URL starting with 'http://', 'https://', or 's3://'."
+          );
         }
       },
     },
