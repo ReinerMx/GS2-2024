@@ -31,17 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     uploadForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        // Validate cloud coverage input
-        const cloudCoverage = document.getElementById('cloudCoverage').value.trim();
-        if (isNaN(cloudCoverage) || cloudCoverage < 0 || cloudCoverage > 100) {
-            alert('Please provide a valid Cloud Coverage percentage between 0 and 100.');
-            return;
-        }
-
         // Create FormData object and append additional fields
         const formData = new FormData(uploadForm);
         formData.append('userDescription', document.getElementById('userDescription').value.trim());
-        formData.append('cloudCoverage', cloudCoverage);
 
         // Validate file input
         if (!fileInput.files.length) {
