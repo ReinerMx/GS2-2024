@@ -96,26 +96,6 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
         const properties = stacData.properties;
         const assets = stacData.assets;
 
-        // Model Details for MlmModel table
-        const modelDetails = {
-            mlm_name: properties['mlm:name'],
-            mlm_architecture: properties['mlm:architecture'],
-            mlm_tasks: properties['mlm:tasks'] || [],
-            mlm_framework: properties['mlm:framework'] || null,
-            mlm_framework_version: properties['mlm:framework_version'] || null,
-            mlm_memory_size: properties['mlm:memory_size'] || null,
-            mlm_total_parameters: properties['mlm:total_parameters'] || null,
-            mlm_pretrained: properties['mlm:pretrained'] || null,
-            mlm_pretrained_source: properties['mlm:pretrained_source'] || null,
-            mlm_batch_size_suggestion: properties['mlm:batch_size_suggestion'] || null,
-            mlm_accelerator: properties['mlm:accelerator'] || null,
-            mlm_accelerator_summary: properties['mlm:accelerator_summary'] || null,
-            mlm_accelerator_count: properties['mlm:accelerator_count'] || null,
-            mlm_input: properties['mlm:input'],
-            mlm_output: properties['mlm:output'],
-            mlm_hyperparameters: properties['mlm:hyperparameters'],
-        };
-
         // Start a transaction to ensure atomic operations
         let savedModel;
         await sequelize.transaction(async (transaction) => {
@@ -142,22 +122,14 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
                   )
                 : null;
 
-            // Save the MlmModel
-            savedModel = await MlmModel.create(
-                {
-                    ...modelDetails,
-                    collection_id: collection ? collection.collection_id : null,
-                },
-                { transaction }
-            );
-
             // Save Items (NEW LOGIC)
+            let savedItem = null;
             if (!isCollection && stacData.type === 'Feature') {
                 const itemDetails = {
-                    item_id: stacData.id,
                     type: stacData.type,
                     stac_version: stacData.stac_version,
                     stac_extensions: stacData.stac_extensions || null,
+                    item_id: stacData.id,
                     geometry: stacData.geometry || null,
                     bbox: stacData.bbox || null,
                     properties: stacData.properties,
@@ -165,8 +137,36 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
                     collection_id: collection ? collection.collection_id : null,
                 };
 
-                await Item.create(itemDetails, { transaction });
+                savedItem = await Item.create(itemDetails, { transaction });
+                console.log('Saved Item:', savedItem);
             }
+
+            // Save the MlmModel
+            savedModel = await MlmModel.create(
+                {
+                    mlm_name: properties['mlm:name'],
+                    mlm_architecture: properties['mlm:architecture'],
+                    mlm_tasks: properties['mlm:tasks'] || [],
+                    mlm_framework: properties['mlm:framework'] || null,
+                    mlm_framework_version: properties['mlm:framework_version'] || null,
+                    mlm_memory_size: properties['mlm:memory_size'] || null,
+                    mlm_total_parameters: properties['mlm:total_parameters'] || null,
+                    mlm_pretrained: properties['mlm:pretrained'] || null,
+                    mlm_pretrained_source: properties['mlm:pretrained_source'] || null,
+                    mlm_batch_size_suggestion: properties['mlm:batch_size_suggestion'] || null,
+                    mlm_accelerator: properties['mlm:accelerator'] || null,
+                    mlm_accelerator_summary: properties['mlm:accelerator_summary'] || null,
+                    mlm_accelerator_count: properties['mlm:accelerator_count'] || null,
+                    mlm_input: properties['mlm:input'],
+                    mlm_output: properties['mlm:output'],
+                    mlm_hyperparameters: properties['mlm:hyperparameters'],
+                    item_id: savedItem ? savedItem.item_id : null,
+                    collection_id: collection ? collection.collection_id : null,
+                },
+                { transaction }
+            );
+
+            console.log('Saved Model:', savedModel);
 
             // Save Assets
             for (const [key, asset] of Object.entries(assets)) {
@@ -178,6 +178,7 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
                         description: asset.description,
                         model_id: savedModel.id,
                         collection_id: collection ? collection.collection_id : null,
+                        item_id: savedItem ? savedItem.item_id : null,
                     },
                     { transaction }
                 );
@@ -194,6 +195,5 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
         }
     }
 });
-
 
 module.exports = router;

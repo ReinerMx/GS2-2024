@@ -329,11 +329,13 @@ const MlmModel = sequelize.define('MlmModel', {
                 throw new Error(`'mlm_input[${index}].input.dim_order' must match the length of 'mlm_input[${index}].input.shape'.`);
             }
             const validDimensions = ['batch', 'channel', 'time', 'height', 'width', 'depth', 'token', 'class', 'score', 'confidence'];
+
             inputObj.input.dim_order.forEach((dim, dimIndex) => {
                 if (!validDimensions.includes(dim)) {
-                    throw new Error(`Invalid dimension '${dim}' in 'mlm_input[${index}].input.dim_order[${dimIndex}]'.`);
+                    console.warn(`Warning:  Dimension '${dim}' in 'mlm_input[${index}].input.dim_order[${dimIndex}]' is not common.`);
                 }
             });
+            
             if (!inputObj.input.data_type || typeof inputObj.input.data_type !== 'string') {
                 throw new Error(`'mlm_input[${index}].input.data_type' is required and must be a string.`);
             }
@@ -434,7 +436,7 @@ const MlmModel = sequelize.define('MlmModel', {
                 const validDimensions = ['batch', 'channel', 'time', 'height', 'width', 'depth', 'token', 'class', 'score', 'confidence'];
                 outputObj.result.dim_order.forEach((dim, dimIndex) => {
                     if (!validDimensions.includes(dim)) {
-                        throw new Error(`Invalid dimension '${dim}' in 'mlm_output[${index}].result.dim_order[${dimIndex}]'.`);
+                        console.warn(`Warning:  Dimension '${dim}' in 'mlm_input[${index}].input.dim_order[${dimIndex}]' is not common.`);
                     }
                 });
                 if (!outputObj.result.data_type || typeof outputObj.result.data_type !== 'string') {
