@@ -94,7 +94,7 @@ const Collection = sequelize.define('Collection', {
     license: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        validate: {
+        /*validate: {
             isValidSPDX(value) {
                 // list of valid licenses
                 const validSPDXLicenses = [
@@ -115,7 +115,7 @@ const Collection = sequelize.define('Collection', {
                     );
                 }
             }
-        }
+        }*/
     },
     /**
      * 	A list of providers, which may include all organizations capturing or processing the data or the hosting provider.
@@ -147,7 +147,7 @@ const Collection = sequelize.define('Collection', {
                                 throw new Error("'providers.roles' must be an array.");
                             }
     
-                            const validRoles = ['licensor', 'producer', 'processor', 'host'];
+                            /*const validRoles = ['licensor', 'producer', 'processor', 'host'];
                             provider.roles.forEach(role => {
                                 if (!validRoles.includes(role)) {
                                     throw new Error(`Invalid role '${role}' in 'providers.roles'. Valid roles are: ${validRoles.join(', ')}`);
@@ -160,7 +160,7 @@ const Collection = sequelize.define('Collection', {
                             }
                             if (provider.roles.includes('host') && provider.roles[provider.roles.length - 1] !== 'host') {
                                 throw new Error("'host' role must be the last element in 'providers.roles'.");
-                            }
+                            }*/
                         }
     
                         // URL is optional but must be a valid URL if provided
