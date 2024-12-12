@@ -50,7 +50,8 @@ app.use(
           "https://cdnjs.cloudflare.com",
           "https://unpkg.com", // Added unpkg for Leaflet CSS
         ],
-        imgSrc: ["'self'", "data:", "https://*.tile.openstreetmap.org"],
+        imgSrc: ["'self'", "data:", "https://*.tile.openstreetmap.org", "https://cdnjs.cloudflare.com"],
+
       },
     },
   })
