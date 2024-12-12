@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submitButton.innerText = 'Uploading...';
 
             // Send the POST request
-            const response = await fetch('/api/models/upload', {
+            const response = await fetch('/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submitMissingDataButton.innerText = 'Submitting...';
 
             // Resubmit form data
-            const response = await fetch('/api/models/upload', {
+            const response = await fetch('/upload', {
                 method: 'POST',
                 body: formData,
             });

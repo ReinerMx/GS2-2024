@@ -8,79 +8,135 @@ const upload = require('../middleware/uploadMiddleware');
 // Initialize the router
 const router = express.Router();
 
-/**
- * Route to get details of a specific model by its ID.
- * Fetches the model from the database and returns its details with associated assets and collection information.
- */
-router.get('/:id', async (req, res) => {
-    const modelId = req.params.id;
+// Get the root endpoint
+router.get('/', (req, res) => {
+    res.json({ message: "Welcome to the STAC API" });
+});
 
+// Conformance endpoint
+router.get('/conformance', (req, res) => {
+    res.json({ conformsTo: [
+        "https://api.stacspec.org/v1.0.0/core",
+        "https://api.stacspec.org/v1.0.0/item-search",
+    ] });
+});
+
+// List all collections
+router.get('/collections', async (req, res) => {
     try {
-        const model = await MlmModel.findOne({
-            where: { id: modelId },
-            include: [
-                {
-                    model: Asset,
-                    as: 'asset',
-                    attributes: ['description', 'type', 'href'],
-                },
-                {
-                    model: Collection,
-                    as: 'collection',
-                    attributes: ['title', 'description'],
-                },
-            ],
-        });
-
-        if (!model) {
-            return res.status(404).json({ error: 'Model not found' });
-        }
-
-        res.json(model);
+        const collections = await Collection.findAll();
+        res.json({ collections });
     } catch (error) {
-        console.error('Error fetching model details:', error);
-        res.status(500).json({ error: 'Failed to fetch model details' });
+        console.error('Error fetching collections:', error);
+        res.status(500).json({ error: 'Error fetching collections' });
     }
 });
 
-/**
- * Route to get all models from the database.
- * Includes related collections, items, and assets for a complete STAC-compliant response.
- */
-router.get('/', async (req, res) => {
+// Get a specific collection by ID
+router.get('/collections/:collection_id', async (req, res) => {
+    const { collection_id } = req.params;
     try {
-        const models = await Collection.findAll({
-            include: [
-                {
-                    model: MlmModel,
-                    as: 'model',
-                    attributes: ['name', 'tasks', 'architecture', 'description'],
-                    include: [
-                        {
-                            model: Asset,
-                            as: 'asset',
-                            attributes: ['description', 'type', 'href'],
-                        },
-                    ],
-                },
-                {
-                    model: Item,
-                    as: 'item',
-                    attributes: ['item_id', 'properties'],
-                },
-            ],
-        });
+        const collection = await Collection.findOne({ where: { collection_id } });
 
-        if (!models || models.length === 0) {
-            return res.status(404).json({ error: 'No models found' });
+        if (!collection) {
+            return res.status(404).json({ error: 'Collection not found' });
         }
 
-        res.json(models);
+        res.json(collection);
     } catch (error) {
-        console.error('Error fetching models:', error);
-        res.status(500).json({ error: 'Error fetching models' });
+        console.error('Error fetching collection:', error);
+        res.status(500).json({ error: 'Error fetching collection' });
     }
 });
+
+// List all items in a specific collection
+router.get('/collections/:collection_id/items', async (req, res) => {
+    const { collection_id } = req.params;
+    try {
+        const items = await Item.findAll({ where: { collection_id } });
+
+        if (!items || items.length === 0) {
+            return res.status(404).json({ error: 'No items found in this collection' });
+        }
+
+        res.json({ items });
+    } catch (error) {
+        console.error('Error fetching items:', error);
+        res.status(500).json({ error: 'Error fetching items' });
+    }
+});
+
+// Get a specific item by ID in a collection
+router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
+    const { collection_id, item_id } = req.params;
+    try {
+        const item = await Item.findOne({ where: { collection_id, item_id } });
+
+        if (!item) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        res.json(item);
+    } catch (error) {
+        console.error('Error fetching item:', error);
+        res.status(500).json({ error: 'Error fetching item' });
+    }
+});
+
+// Search endpoint (GET)
+router.get('/search', async (req, res) => {
+    const { bbox, datetime, collection_id } = req.query;
+
+    try {
+        const where = {};
+
+        if (collection_id) {
+            where.collection_id = collection_id;
+        }
+
+        if (bbox) {
+            where.bbox = bbox.split(',').map(Number);
+        }
+
+        if (datetime) {
+            where['properties.datetime'] = datetime;
+        }
+
+        const items = await Item.findAll({ where });
+        res.json({ items });
+    } catch (error) {
+        console.error('Error searching items:', error);
+        res.status(500).json({ error: 'Error searching items' });
+    }
+});
+
+// Search endpoint (POST)
+router.post('/search', async (req, res) => {
+    const { bbox, datetime, collection_id } = req.body;
+
+    try {
+        const where = {};
+
+        if (collection_id) {
+            where.collection_id = collection_id;
+        }
+
+        if (bbox) {
+            where.bbox = bbox;
+        }
+
+        if (datetime) {
+            where['properties.datetime'] = datetime;
+        }
+
+        const items = await Item.findAll({ where });
+        res.json({ items });
+    } catch (error) {
+        console.error('Error searching items:', error);
+        res.status(500).json({ error: 'Error searching items' });
+    }
+});
+
 
 /**
  * Route to handle file upload and model data extraction.

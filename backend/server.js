@@ -7,9 +7,6 @@ const dotenv = require("dotenv"); // Environment variable manager
 const userRoutes = require("./routes/userRoutes"); // User-related routes
 const modelRoutes = require("./routes/modelRoutes"); // Model-related routes (e.g., uploading, fetching metadata)
 const errorHandler = require("./middleware/errorHandler"); // Middleware for handling errors
-const sequelize = require("./config/db"); // Sequelize instance for database connection
-
-const { User, Collection, Item, MlmModel, Asset } = require('./models'); // Models
 
 // Load environment variables from .env file
 dotenv.config();
@@ -68,9 +65,9 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 /**
  * Define API routes.
  * - User routes: /api/users
- * - Model routes: /api/models
+ * - Model routes: /
  */
-app.use("/api/models", modelRoutes);
+app.use("/", modelRoutes);
 app.use("/api/users", userRoutes);
 
 /**
