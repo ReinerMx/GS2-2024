@@ -70,13 +70,34 @@ router.get('/collections/:collection_id/items', async (req, res) => {
 router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
     const { collection_id, item_id } = req.params;
     try {
-        const item = await Item.findOne({ where: { collection_id, item_id } });
+        // Fetch the item along with related mlm_model and assets
+        const item = await Item.findOne({
+            where: { collection_id, item_id },
+            include: [
+                {
+                    model: MlmModel,
+                    as: 'mlmModels', 
+                },
+                {
+                    model: Asset,
+                    as: 'assets', 
+                },
+            ],
+        });
 
+        // If no item is found, return a 404 error
         if (!item) {
             return res.status(404).json({ error: 'Item not found' });
         }
 
-        res.json(item);
+        // Format the response to include mlm_model and assets
+        const response = {
+            ...item.dataValues, // Include the item data
+            mlm_model: item.mlm_model, // Include the related mlm_model
+            assets: item.assets, // Include the related assets
+        };
+
+        res.json(response); // Send the formatted response
     } catch (error) {
         console.error('Error fetching item:', error);
         res.status(500).json({ error: 'Error fetching item' });
