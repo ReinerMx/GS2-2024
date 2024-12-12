@@ -598,6 +598,17 @@ body.dark-mode .autocomplete li:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
 }
 
+/* Styles for the map container */
+.map-container {
+    height: 400px;
+    border: 1px solid #ccc;
+  }
+  
+/* Styles for the apply filter button */
+  .apply-filter-btn {
+    margin-top: 15px;
+  }
+
 /* Button styles for actions or external links */
 .action-btn {
     background-color: #0073e6;
@@ -891,6 +902,7 @@ input:checked + .slider:before {
     border-radius: 50%; /* Rundes Symbol */
     transition: transform 0.3s ease;
   }
+  
   
   .user-icon:hover {
     transform: scale(1.1); /* Leicht vergrößern bei Hover */
