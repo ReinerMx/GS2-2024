@@ -2,6 +2,58 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsContainer = document.getElementById('resultsContainer');
     const searchInput = document.getElementById('searchInput');
 
+    // Initialize Leaflet map
+    const map = L.map('map').setView([51.505, -0.09], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+    }).addTo(map);
+
+    // Add Leaflet Draw tool
+    const drawControl = new L.Control.Draw({
+        draw: {
+            polygon: true,
+            rectangle: true,
+            polyline: false,
+            circle: false,
+            marker: false,
+            circlemarker: false,
+        },
+    });
+    map.addControl(drawControl);
+
+    let drawnGeometry = null;
+
+    // Save geometry after drawing
+    map.on(L.Draw.Event.CREATED, (event) => {
+        const layer = event.layer;
+        map.addLayer(layer); // Add the drawn shape to the map
+        drawnGeometry = layer;
+        console.log('GeoJSON:', layer.toGeoJSON());
+    });
+
+    // Event listener for applying geographic filter
+    document.getElementById('applyGeoFilter').addEventListener('click', async () => {
+        if (!drawnGeometry) {
+            alert('Please draw a geographic region first!');
+            return;
+        }
+
+        const geoJSON = drawnGeometry.toGeoJSON();
+        console.log('Geographic Filter GeoJSON:', geoJSON);
+
+        try {
+            const response = await fetch('/api/models', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ geoFilter: geoJSON.geometry }),
+            });
+            const models = await response.json();
+            displayModels(models);
+        } catch (error) {
+            console.error('Error applying geographic filter:', error);
+        }
+    });
+
     // Debugging initialization
     console.log('Document loaded. Initializing collections and event listeners.');
 
@@ -136,4 +188,24 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Performing search is not yet implemented.');
         }
     });
+
+    // Function to display models for geographic filter
+    const displayModels = (models) => {
+        resultsContainer.innerHTML = ''; // Clear previous content
+
+        if (models.length === 0) {
+            resultsContainer.innerHTML = '<p>No models found.</p>';
+            return;
+        }
+
+        models.forEach((model) => {
+            const modelDiv = document.createElement('div');
+            modelDiv.classList.add('model-item', 'mb-4');
+            modelDiv.innerHTML = `
+                <h4>${model.name || 'No Name Provided'}</h4>
+                <p><strong>Description:</strong> ${model.description || 'No Description Available'}</p>
+            `;
+            resultsContainer.appendChild(modelDiv);
+        });
+    };
 });
