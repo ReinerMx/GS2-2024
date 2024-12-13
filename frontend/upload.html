@@ -90,72 +90,49 @@
 
     <!-- Main Content -->
     <main class="container mt-4 upload-page">
-      <h2 class="upload-title">Upload Your Model</h2>
-      <p>
-        Upload a STAC-compliant JSON file with your model's metadata. We’ll
-        extract all necessary fields automatically. <br />
-        If any data is missing, we’ll guide you to fill in the required
-        information.
-      </p>
 
-      <!-- Additional Fields for User Input -->
-      <div class="form-group">
-        <label for="userDescription">Add Your Description (Optional)</label>
-        <textarea
-          id="userDescription"
-          name="userDescription"
-          class="form-control"
-          rows="3"
-          placeholder="Add any additional information about your model..."
-        ></textarea>
-      </div>
+      <div id="uploadContainer" class="container upload-page">
+        <h2 class="upload-title">Upload Your Model</h2>
+        <p class="upload-instructions">
+          Follow these steps to upload your files: <br />
+          1. Upload the <strong>Collection</strong> file first. <br />
+          2. Then, upload <strong>Item</strong> files related to the collection.
+        </p>
 
-      <!-- Upload Form -->
-      <section class="upload-section">
-        <form id="uploadForm" enctype="multipart/form-data" class="upload-form">
-          <div class="form-group">
-            <label for="modelFile">Choose Model File (STAC JSON format)</label>
-            <input
-              type="file"
-              class="form-control-file"
-              id="modelFile"
-              name="modelFile"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            id="submitButton"
-            class="btn btn-primary btn-lg btn-block"
-          >
+        <div id="statusMessage" class="status-message"></div>
+      
+        <!-- Drag-and-Drop + File Upload Section -->
+        <div id="dropZone" class="drop-zone">
+          <p>
+            Drag & drop your file here, or <span class="click-trigger">click to select</span>.
+          </p>
+        </div>
+      
+        <form id="uploadForm" enctype="multipart/form-data">
+          <input 
+            type="file"  
+            id="modelFile" 
+            name="modelFile" 
+            class="form-control-file d-none" 
+            accept=".json"
+            required />
+          <textarea
+            id="userDescription"
+            name="userDescription"
+            rows="4"
+            placeholder="Optional: Add additional details about your model..."
+          ></textarea>
+      
+          <button type="submit" id="submitButton" class="btn btn-primary btn-lg btn-block mt-3">
             Upload Model
           </button>
         </form>
-        <small class="form-text text-muted mt-2"
-          >Ensure the file adheres to the STAC metadata format. Invalid files
-          will require additional manual data entry.</small
-        >
-      </section>
-
-      <!-- Missing Fields Section (hidden by default) -->
-      <div id="missingFieldsForm" class="hidden">
-        <h3>Additional Required Data</h3>
-        <p>
-          The uploaded file is missing some required metadata. Please fill in
-          the missing information below.
-        </p>
-        <form id="missingFieldsContainer" class="form-group"></form>
-        <button
-          type="submit"
-          class="btn btn-secondary"
-          id="submitMissingDataButton"
-        >
-          Submit Additional Data
-        </button>
+        <small class="form-text text-muted mt-3 text-center">
+          Ensure the file adheres to the STAC metadata format. <br />
+          Need help? Check out our <a href="tutorials.html">tutorials</a>.
+        </small>
       </div>
 
-      <!-- Status Message -->
-      <div id="statusMessage" class="status-message"></div>
     </main>
 
     <!-- Footer -->
