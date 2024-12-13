@@ -196,7 +196,7 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
                     summaries: stacData.summaries || null,
                     links: stacData.links || [],
                     item_assets: stacData.item_assets || null,
-                    userDescription: userDescription || null,
+                    user_description: userDescription || null,
                 };
 
                 await Collection.create(collectionData, { transaction });
@@ -231,6 +231,7 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
                     properties: stacData.properties,
                     links: stacData.links || [],
                     collection_id: collection.collection_id,
+                    user_description: userDescription || null,
                 };
 
                 const savedItem = await Item.create(itemData, { transaction });

@@ -28,6 +28,7 @@ const User = require('./User'); // Import the User model
  * @property {Object} [item_assets] - Optional. A dictionary describing assets available in member Items.
  * @property {Asset[]} assets - Related assets, linked via the `Asset` model.
  * @property {number|null} [user_id] - Optional. References the user ID of the creator or owner of the Collection.
+ * @property {string} [user_description] - Optional. A user-provided description of the Collection.
  * 
  * @see https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#item-asset-definition-object
  */
@@ -473,6 +474,15 @@ const Collection = sequelize.define('Collection', {
         },
         onDelete: 'SET NULL',
     },
+
+    /**
+ * The description the user can provide manually on the website.
+ */
+user_description: {
+    type:DataTypes.STRING,
+    allowNull:true,
+  
+  }
 }, {
     tableName: 'collection',
     timestamps: false, 
