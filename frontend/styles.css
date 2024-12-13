@@ -580,175 +580,96 @@ body {
   
 
 /* ********** Model Details Styling ********** */
-
-/* General container for model details */
-.model-details-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 25px; /* Increased padding for better spacing */
-    background-color: #fefefe; /* Brighter background for better readability */
-    border-radius: 12px; /* Slightly rounded corners for a modern look */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
-    margin: 20px auto;
-    max-width: 1200px; /* Restricts the width on larger screens */
-    font-family: Arial, sans-serif;
-    color: #333;
+/* Center Header */
+.center-header {
+    margin-bottom: 30px;
 }
 
-/* Header for the model name and brief description */
-.model-header {
-    text-align: center;
-    padding-bottom: 20px; /* More spacing for a cleaner look */
-    border-bottom: 2px solid #e6e6e6; /* Slightly darker border for separation */
-}
-
-.model-header h3 {
-    font-size: 2.4rem; /* Slightly larger for emphasis */
-    color: #0073e6;
-    margin: 0;
-    font-weight: 700;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
-}
-
-.model-header p {
-    font-size: 1.1rem; /* Slightly larger for readability */
-    color: #555;
-    margin: 10px 0 0;
-    line-height: 1.6;
-}
-
-/* Section styling for each category (Overview, Technical Details, Links) */
-.model-section {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Softer shadow */
-    border-left: 5px solid #007bff; /* Thicker border for emphasis */
-    padding: 20px;
-    margin-bottom: 25px; /* Consistent spacing between sections */
-    background-color: #ffffff; /* White background for clarity */
-    border-radius: 8px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
-}
-
-.model-section:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-}
-
-.model-section h4 {
-    font-size: 1.4rem; /* Larger for better visibility */
-    color: #0056b3; /* Slightly darker blue */
-    font-weight: 600;
-    margin-bottom: 15px;
-    border-left: 5px solid #0056b3; /* Matches section border */
-    padding-left: 12px;
-}
-
-/* Typography and layout for details inside each section */
-.model-section p {
-    font-size: 1rem;
-    color: #333;
-    margin: 8px 0;
-    line-height: 1.6;
-}
-
-/* Styling for labels within the details */
-.model-section p strong {
-    color: #444;
-    font-weight: 600; /* Slightly bolder for emphasis */
-}
-
-/* Styling for Links in the Links Section */
-.styled-link {
-    display: inline-block;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #0073e6;
+.center-header h2 {
+    font-size: 2rem;
     font-weight: bold;
-    font-size: 1rem; /* Slightly larger for better visibility */
-    text-decoration: none;
+    margin-bottom: 10px;
 }
 
-.styled-link:hover {
-    color: #005bb5;
-    text-decoration: underline;
+.center-header p {
+    font-size: 1.2rem;
+    color: #6c757d; /* Subtle muted text */
 }
 
-/* Ensuring labels before links don't get truncated */
-.model-section p {
+/* Grid Layout */
+.grid-container {
+    display: grid;
+    grid-template-columns: 60% 40%; /* Left: 60%, Right: 40% */
+    gap: 20px; /* Space between columns */
+    align-items: start; /* Align items at the top */
+}
+
+/* Left Section: Model Details */
+.info-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Right Section: Coverage */
+.coverage-section {
     display: flex;
-    align-items: center;
-    gap: 10px; /* Increased gap for better spacing */
-    overflow: hidden;
+    flex-direction: column; /* Stack map and graph vertically */
+    gap: 20px;
 }
 
-.model-section p strong {
-    flex-shrink: 0; /* Keeps the label from shrinking */
-}
-
-/* Leaflet Map Styling */
+/* Map Styling */
 #map {
-    width: 100%;
-    height: 450px; /* Increased height for better visibility */
-    border-radius: 10px; /* Rounded corners for modern look */
-    margin-top: 25px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    height: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Styles for the map container */
-.map-container {
-    height: 400px;
-    border: 1px solid #ccc;
+/* Temporal Coverage Section */
+.temporal-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.temporal-section h5 {
+    margin-bottom: 15px;
+}
+
+.temporal-section {
+    margin-top: 20px;
+    text-align: center;
   }
   
-/* Styles for the apply filter button */
-  .apply-filter-btn {
-    margin-top: 15px;
+  .temporal-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px auto;
+    font-size: 14px;
+    color: #6c757d;
   }
-
-/* Button styles for actions or external links */
-.action-btn {
-    background-color: #0073e6;
-    color: #ffffff;
+  
+  .temporal-timeline .start-date,
+  .temporal-timeline .end-date {
     font-weight: bold;
-    padding: 12px 25px; /* Increased padding for better appearance */
-    border: none;
-    border-radius: 6px; /* Slightly rounded for modern design */
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    display: inline-block;
-    text-decoration: none;
-    margin-top: 15px;
-}
+  }
+  
+  .temporal-timeline .timeline-line {
+    flex-grow: 1;
+    height: 2px;
+    background-color: #007bff;
+    margin: 0 10px;
+    border-radius: 1px;
+  }
+  
 
-.action-btn:hover {
-    background-color: #005bb5;
-    transform: scale(1.07); /* Slightly increased scale for hover effect */
-}
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .model-details-container {
-        padding: 20px;
-        max-width: 100%;
-    }
 
-    .model-header h3 {
-        font-size: 2rem;
-    }
-
-    .model-section h4 {
-        font-size: 1.2rem;
-    }
-
-    #map {
-        height: 300px; /* Reduced height for smaller screens */
-    }
-}
-
-/* DARK MODE */
+/* ********** Dark Mode ********** */
 body.dark-mode {
     background-color: #121212;
     color: #ffffff;

@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const modelDetailsContainer = document.getElementById('modelDetailsContainer');
+    const temporalChartContainer = document.getElementById('temporalChart');
 
-    if (!modelDetailsContainer) {
-        console.error('Error: modelDetailsContainer element not found');
+    if (!modelDetailsContainer || !temporalChartContainer) {
+        console.error('Error: Required elements not found');
         return;
     }
 
@@ -24,6 +25,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!response.ok) throw new Error('Failed to fetch model details');
 
             const model = await response.json();
+
+
+            // Temporal Coverage Timeline
+            if (model.properties.start_datetime && model.properties.end_datetime) {
+                const startDate = new Date(model.properties.start_datetime);
+                const endDate = new Date(model.properties.end_datetime);
+                renderTemporalCoverageTimeline(startDate, endDate);
+            } else {
+                console.warn('Temporal coverage data is missing.');
+                temporalChartContainer.innerHTML = '<p class="text-muted"><em>No temporal coverage data available.</em></p>';
+            }
 
             // Render temporal coverage
             const temporalCoverageHTML = model.properties.start_datetime && model.properties.end_datetime
@@ -88,6 +100,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error loading model details:', error);
             modelDetailsContainer.innerHTML = '<p class="error-text">Error loading model details.</p>';
         }
+    };
+
+    const renderTemporalCoverageTimeline = (startDate, endDate) => {
+        temporalChartContainer.innerHTML = `
+            <div class="temporal-timeline">
+                <span class="start-date">${startDate.toLocaleDateString()}</span>
+                <span class="timeline-line"></span>
+                <span class="end-date">${endDate.toLocaleDateString()}</span>
+            </div>
+        `;
     };
 
     await loadModelDetails(collectionId, itemId);

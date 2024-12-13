@@ -93,17 +93,37 @@
     </nav>
 
     <main class="container mt-4">
-      <h2>Model Details</h2>
-
-      <div id="modelDetailsContainer" class="info-section">
-        <!-- Model details will be loaded here -->
+      <!-- Center Section: Name and User Description -->
+      <div class="center-header text-center">
+        <h2 id="modelName">Model Name</h2>
+        <p id="userDescription" class="text-muted">Optional user description goes here.</p>
       </div>
-
-      <h4>Spatial Coverage</h4>
-      <div id="map" class="map-section mt-4">
-        <!-- Leaflet map will be rendered here -->
+    
+      <!-- Grid Layout -->
+      <div class="grid-container">
+        <!-- Left Section: Model Details -->
+        <div id="modelDetailsContainer" class="info-section">
+          <!-- Model details will be dynamically loaded here -->
+        </div>
+    
+        <!-- Right Section: Spatial and Temporal Coverage -->
+        <div class="coverage-section">
+          <div id="map" class="map-section">
+            <!-- Leaflet map will be rendered here -->
+          </div>
+          <div id="temporalChart" class="temporal-section">
+            <h5>Temporal Coverage</h5>
+            <div class="temporal-timeline">
+              <span class="start-date"></span>
+              <span class="timeline-line"></span>
+              <span class="end-date"></span>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
+    
+    
 
     <!-- Footer -->
     <footer class="footer text-center">
