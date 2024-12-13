@@ -96,7 +96,11 @@
         <p class="upload-instructions">
           Follow these steps to upload your files: <br />
           1. Upload the <strong>Collection</strong> file first. <br />
-          2. Then, upload <strong>Item</strong> files related to the collection.
+          2. Then upload <strong>Item</strong> files related to the collection. <br />
+          <br />
+          All uploaded files will be validated against the 
+           <a href="https://github.com/stac-extensions/mlm">STAC specifications</a> to ensure compliance. <br />
+          If any errors are found, you will be notified and guided to resolve them.
         </p>
 
         <div id="statusMessage" class="status-message"></div>
@@ -104,7 +108,7 @@
         <!-- Drag-and-Drop + File Upload Section -->
         <div id="dropZone" class="drop-zone">
           <p>
-            Drag & drop your file here, or <span class="click-trigger">click to select</span>.
+            Drag & drop your file here or <span class="click-trigger">click to select</span>.
           </p>
         </div>
       
