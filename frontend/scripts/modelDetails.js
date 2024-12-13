@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const modelDetailsContainer = document.getElementById('modelDetailsContainer');
     const temporalChartContainer = document.getElementById('temporalChart');
+    const modelNameElement = document.getElementById('modelName');
+    const userDescriptionElement = document.getElementById('userDescription');
 
     if (!modelDetailsContainer || !temporalChartContainer) {
         console.error('Error: Required elements not found');
@@ -26,7 +28,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const model = await response.json();
 
-
+            // Populate Model Name and User Description
+            modelNameElement.textContent = model.properties['mlm:name'] ;
+            userDescriptionElement.textContent = model.user_description || 'No description provided by the user.';
+            
             // Temporal Coverage Timeline
             if (model.properties.start_datetime && model.properties.end_datetime) {
                 const startDate = new Date(model.properties.start_datetime);

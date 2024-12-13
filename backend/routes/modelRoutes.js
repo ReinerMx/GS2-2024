@@ -76,11 +76,11 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
             include: [
                 {
                     model: MlmModel,
-                    as: 'mlmModels', 
+                    as: 'mlmModels',
                 },
                 {
                     model: Asset,
-                    as: 'assets', 
+                    as: 'assets',
                 },
             ],
         });
@@ -90,10 +90,11 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
             return res.status(404).json({ error: 'Item not found' });
         }
 
-        // Format the response to include mlm_model and assets
+        // Format the response to include mlm_model, assets, and user_description
         const response = {
             ...item.dataValues, // Include the item data
-            mlm_model: item.mlm_model, // Include the related mlm_model
+            user_description: item.user_description, // Include the user_description field
+            mlm_model: item.mlmModels, // Include the related mlm_model
             assets: item.assets, // Include the related assets
         };
 
@@ -103,6 +104,7 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
         res.status(500).json({ error: 'Error fetching item' });
     }
 });
+
 
 // Search endpoint (GET)
 router.get('/search', async (req, res) => {
