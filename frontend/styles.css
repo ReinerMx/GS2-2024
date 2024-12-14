@@ -353,13 +353,26 @@ body.dark-mode .autocomplete li:hover {
 }
 
 /* ********** Footer Styling ********** */
-/* Footer layout and link styles */
+html, body {
+    height: 100%; /* Die gesamte Höhe der Seite einnehmen */
+    margin: 0; /* Standard-Ränder entfernen */
+    display: flex;
+    flex-direction: column; /* Vertikale Anordnung */
+}
+
+main {
+    flex: 1; /* Hauptinhalt füllt den verfügbaren Platz */
+}
+
 .footer {
     background-color: #f8f9fa;
     color: #6c757d;
     padding: 30px 0;
     border-top: 1px solid #e9ecef;
+    text-align: center; 
+    margin-top: auto !important;
 }
+
 
 .footer-logo img {
     height: 40px;
