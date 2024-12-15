@@ -48,12 +48,20 @@ app.use(
           "https://cdn.jsdelivr.net", // Allow SimpleMDE styles
           "https://maxcdn.bootstrapcdn.com" // Allow Font Awesome styles
         ],
-        imgSrc: ["'self'", "data:", "https://*.tile.openstreetmap.org", "https://cdnjs.cloudflare.com"],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "https://*.tile.openstreetmap.org",
+          "https://cdnjs.cloudflare.com",
+          "https://via.placeholder.com" // Allow Placeholder images
+        ],
+        connectSrc: ["'self'", "https://*.tile.openstreetmap.org"], // Ensure OSM tiles load correctly
       },
     },
     crossOriginEmbedderPolicy: false, // Optional for external resources
   })
 );
+
 
 app.use(morgan("dev"));
 app.use(express.json());

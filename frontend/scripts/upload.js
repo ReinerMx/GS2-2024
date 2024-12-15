@@ -85,8 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
   
-      const formData = new FormData(uploadForm);
-          // Include the rendered Markdown content as part of the form submission
+    const formData = new FormData(uploadForm);
+    // Include the rendered Markdown content as part of the form submission
     formData.set("userDescription", simplemde.value());
   
       try {
@@ -102,7 +102,10 @@ document.addEventListener("DOMContentLoaded", () => {
   
         if (response.ok) {
           displayStatusMessage(result.message || "Upload successful!");
+
+          // Reset the form and editor
           uploadForm.reset();
+          simplemde.value(""); // Clear SimpleMDE content
           dropZone.innerHTML = `<p>Drag & drop your file here, or <span class="text-primary click-trigger">click to select</span>.</p>`;
         } else {
           displayStatusMessage(result.error || "An error occurred.", true);
