@@ -5,6 +5,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitButton = document.getElementById("submitButton");
     const statusMessage = document.getElementById("statusMessage");
   
+
+  // Initialize SimpleMDE for userDescription
+  const simplemde = new SimpleMDE({ 
+    element: document.getElementById("userDescription"),
+    placeholder: "Optional: Add additional details using Markdown...",
+    spellChecker: false, // Set false if no spellcheck is required
+    autosave: {
+      enabled: true,
+      unique_id: "userDescription_autosave",
+      delay: 1000,
+    },
+  });
+
     /**
      * Displays feedback messages to the user.
      */
@@ -73,6 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   
       const formData = new FormData(uploadForm);
+          // Include the rendered Markdown content as part of the form submission
+    formData.set("userDescription", simplemde.value());
   
       try {
         submitButton.disabled = true;

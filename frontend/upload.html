@@ -10,6 +10,7 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
   </head>
 
   <body>
@@ -120,12 +121,13 @@
             class="form-control-file d-none" 
             accept=".json"
             required />
-          <textarea
+            <textarea
             id="userDescription"
             name="userDescription"
-            rows="4"
-            placeholder="Optional: Add additional details about your model..."
+            rows="10"
+            placeholder="Optional: Add additional details about your model using Markdown..."
           ></textarea>
+          
       
           <button type="submit" id="submitButton" class="btn btn-primary btn-lg btn-block mt-3">
             Upload Model
@@ -186,5 +188,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="scripts/upload.js"></script>
     <script src="scripts/appearance.js"></script>
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
   </body>
 </html>

@@ -29,7 +29,6 @@ const app = express();
 app.use(cors());
 app.use(
   helmet({
-    crossOriginEmbedderPolicy: false,
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
@@ -39,20 +38,23 @@ app.use(
           "https://cdn.jsdelivr.net",
           "https://stackpath.bootstrapcdn.com",
           "https://cdnjs.cloudflare.com",
-          "https://unpkg.com", // Added unpkg for Leaflet script
+          "https://unpkg.com"
         ],
         styleSrc: [
           "'self'",
           "https://stackpath.bootstrapcdn.com",
           "https://cdnjs.cloudflare.com",
-          "https://unpkg.com", // Added unpkg for Leaflet CSS
+          "https://unpkg.com",
+          "https://cdn.jsdelivr.net", // Allow SimpleMDE styles
+          "https://maxcdn.bootstrapcdn.com" // Allow Font Awesome styles
         ],
         imgSrc: ["'self'", "data:", "https://*.tile.openstreetmap.org", "https://cdnjs.cloudflare.com"],
-
       },
     },
+    crossOriginEmbedderPolicy: false, // Optional for external resources
   })
 );
+
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

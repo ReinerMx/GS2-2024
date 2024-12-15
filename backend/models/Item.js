@@ -28,7 +28,7 @@ console.log('Available sequelize methods:', Object.keys(sequelize));
  * @property {string} [links[].type] - OPTIONAL. The media type of the linked resource.
  * @property {string} [links[].title] - OPTIONAL. A human-readable title for the link.
  * @property {string|null} collection - The ID of the Collection this Item belongs to, if applicable.
- * @property {string|null} user_description - The user-provided description of the Item.
+ * @property {text|null} user_description - The user-provided description of the Item.
  * 
  * @see https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md#links
  */
@@ -323,7 +323,7 @@ collection_id: {
  * The description the user can provide manually on the website.
  */
 user_description: {
-  type:DataTypes.STRING,
+  type:DataTypes.TEXT,
   allowNull:true,
 
 },

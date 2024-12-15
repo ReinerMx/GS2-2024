@@ -27,7 +27,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Populate Model Name and User Description
             modelNameElement.textContent = model.properties['mlm:name'] || 'Unknown Model';
-            userDescriptionElement.textContent = model.user_description || 'No description provided.';
+            // convert Markdown in HTML
+            if (model.user_description) {
+                userDescriptionElement.innerHTML = marked.parse(model.user_description);
+            } else {
+                userDescriptionElement.innerHTML = '<em>No description provided.</em>';
+            }
+
 
             // Render Temporal Coverage Timeline
             if (model.properties.start_datetime && model.properties.end_datetime) {
