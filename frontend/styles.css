@@ -656,8 +656,7 @@ main {
     justify-content: center;
     gap: 10px;
     margin: 10px auto;
-    font-size: 14px;
-    color: #6c757d;
+    font-size: 16px;
 }
 
 .temporal-timeline .start-date,
@@ -667,7 +666,7 @@ main {
 
 .temporal-timeline .timeline-line {
     flex-grow: 1;
-    height: 2px;
+    height: 4px;
     background-color: #007bff;
     margin: 0 10px;
     border-radius: 1px;
@@ -690,14 +689,59 @@ main {
     margin-bottom: 10px;
 }
 
+.links-box {
+    word-wrap: break-word; /* Lange Wörter oder URLs umbrechen */
+    overflow-wrap: break-word; /* Alternative für moderne Browser */
+    max-width: 100%; /* Verhindert, dass Inhalte die Box überschreiten */
+    overflow: hidden; /* Verhindert, dass Inhalte visuell überlaufen */
+}
+
 .link-item a {
-    color: #007bff;
+    display: inline-block; /* Blockiert lange URLs und ermöglicht Umbruch */
+    word-break: break-all; /* Erzwingt Umbruch für lange Links */
+    color: #007bff; /* Link-Farbe */
     text-decoration: underline;
 }
 
 .link-item a:hover {
-    color: #0056b3;
+    color: #0056b3; /* Link-Farbe beim Hover */
 }
+
+
+/* Color box styles for classes */
+.classification-classes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.class-item {
+    display: flex;
+    gap: 10px; /* Abstand zwischen Box und Text */
+}
+
+.color-box {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex-shrink: 0; /* Verhindert das Schrumpfen der Box */
+}
+
+/* Use data-color to dynamically apply the color */
+.color-box[data-color] {
+    background-color: var(--color, transparent);
+}
+
+/* Fallback to data-color using JS */
+.color-box[data-color]:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: attr(data-color);
+}
+
 
 
 /* ********** Dark Mode ********** */
