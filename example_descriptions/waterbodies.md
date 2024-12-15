@@ -1,25 +1,20 @@
 # Water-Bodies-S6 🌊  
-**Framework**: Scikit-Learn | **Architektur**: RandomForestClassifier  
+**Framework**: Scikit-Learn | **Architecture**: RandomForestClassifier  
 
-### 📝 Beschreibung  
-Klassifiziert Pixel von EO-Daten in:  
-- **NON-WATER** (0) `#000000`  
-- **WATER** (1) `#0000FF`  
-- **CLOUD** (2) `#FFFFFF`  
+---
 
-### 📊 Eingabedaten  
-- **Bänder**: B01–B12, NDVI, NDWI1, NDWI2  
-- **Shape**: `[batch, 12, 10980, 10980]`  
+## 🌟 Why Use This Model?  
+This model is ideal for **water resource management enthusiasts** and researchers working on Earth Observation data. It leverages Sentinel imagery to **distinguish water bodies** accurately, making it a powerful tool for environmental monitoring.  
 
-### 🔢 Ausgabe  
-- **Shape**: `[batch, 10980, 10980]`  
-- **Format**: `uint8`  
+### 🎯 Motivation  
+- Are you tracking seasonal changes in rivers or lakes?  
+- Do you want a reliable classifier for detecting water pixels while ignoring clouds?  
+This model simplifies your workflow with **pixel-level segmentation**.
 
-### ⚙️ Hyperparameter  
-- `n_estimators`: 200 | `criterion`: Gini  
-- `max_features`: sqrt  
+---
 
-### 📅 Trainingszeitraum  
-2023-06-13 bis 2023-06-18  
+## 🏁 Key Highlights  
+- **Fast & Efficient**: Runs smoothly on CPU with a **RandomForestClassifier** backbone.  
+- **Purpose-Built**: Optimized for EO bands like NDVI, NDWI1, and NDWI2.  
 
-🔗 [Details zum Modell](http://localhost:5555/collections/ml-models-rs/items/water-bodies-model-pystac)
+📈 *Perfect for projects focused on water mapping and environmental conservation.*  

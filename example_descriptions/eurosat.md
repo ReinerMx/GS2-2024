@@ -1,19 +1,20 @@
-# EuroSAT Land Cover 🛰️  
-**Framework**: PyTorch | **Architektur**: ResNet-18  
+# ResNet-18 Sentinel-2 ALL MOCO 🌾  
+**Framework**: PyTorch | **Architecture**: ResNet-18  
 
-🌍 **Beschreibung**  
-Klassifiziert Sentinel-2 Bilder in 10 Landbedeckungsklassen:  
-- **Forest**, **Pasture**, **River**, **SeaLake**, ...  
+---
 
-📊 **Input**:  
-- **Bänder**: B01–B12  
-- **Shape**: `[batch, 13, 64, 64]`  
+## 🤖 Who Should Use This?  
+This model is perfect for researchers and analysts tackling **land cover classification** tasks. Leveraging Sentinel-2 data and a robust ResNet-18 backbone, it identifies scenes like **forests**, **urban areas**, and **croplands**.  
 
-🎯 **Output**:  
-- **Shape**: `[batch, 10]`  
-- **Kategorien**: Scene-Classification  
+### 🧭 Motivation  
+Need a model to **understand land usage** or monitor deforestation trends?  
+- Classify **10 land cover types** with ease.  
+- Ensure efficient deployment on standard GPUs with a **batch size of 3300**.  
 
-⚙️ **Training**:  
-- **Batch-Größe**: 3300 | **GPU**: NVIDIA (24GB)  
+---
 
-🔗 [Details ansehen](http://localhost:5555/collections/ml-models-rs/items/item_landcover_eurosat_sentinel2)
+## 🎉 Why You’ll Love It  
+- **Lightweight & Effective**: ResNet-18 offers a great balance of speed and accuracy.  
+- **Ready-to-Use**: Pretrained on EuroSAT data, ensuring quick results.
+
+🌱 *Accelerate your land use analysis to support better environmental decisions.*  

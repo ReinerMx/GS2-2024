@@ -1,19 +1,21 @@
-# Satlas Solar Farm 🏭  
-**Framework**: PyTorch | **Architektur**: Swin Transformer V2  
+# Satlas Solar Farm Segmentation ☀️  
+**Framework**: PyTorch | **Architecture**: Swin Transformer V2 (U-Net Head)  
 
-📌 **Einsatzgebiet**:  
-Segmentiert Solar-Farmen auf Sentinel-2 Bildern.
+---
 
-🔍 **Input**:  
-- **Bänder**: 9 Sentinel-2 (4 Zeitschritte)  
-- **Shape**: `[batch, 36, 1024, 1024]`  
+## 🔍 What’s Special About It?  
+This model helps you identify **solar farm locations** across large-scale Sentinel-2 imagery. Designed for **sustainability projects** and renewable energy mapping, it enables confident segmentation at **high precision**.  
 
-🎯 **Output**:  
-- **Name**: Confidence Array  
-- **Shape**: `[batch, 1, 1024, 1024]`  
+### 🌍 Motivation  
+Are you mapping clean energy infrastructure globally?  
+With a **pretrained Swin Transformer** architecture, you can:  
+- **Spot solar farms** efficiently, even in challenging terrain.  
+- **Understand growth trends** of renewable energy installations over time.  
 
-⚙️ **Trainingsinfo**:  
-- **Hardware**: GPU (Ampere/NVIDIA)  
-- **Batch-Größe**: 10  
+---
 
-🔗 [Modell-Details](http://localhost:5555/collections/ml-models-rs/items/item_solar_satlas_sentinel2)
+## 🚀 Why It Stands Out  
+- **Optimized for GPU**: Built to leverage CUDA acceleration for faster processing.  
+- **Multi-Temporal Support**: Handles 4 time-step series for improved accuracy.  
+
+🔆 *Empower your renewable energy analysis with data-driven insights.*  
