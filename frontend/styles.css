@@ -497,9 +497,6 @@ main {
 /* ********** Upload page ********** */
 
 /* General Styling */
-body {
-    font-family: 'Roboto', sans-serif;
-  }
   
   /* Heading */
   .upload-title {
@@ -604,11 +601,6 @@ body {
     margin-bottom: 10px;
 }
 
-.center-header p {
-    font-size: 1.2rem;
-    color: #6c757d; /* Subtle muted text */
-}
-
 /* Grid Layout */
 .grid-container {
     display: grid;
@@ -679,6 +671,9 @@ body {
     border-radius: 1px;
   }
   
+  .center-header .user-description {
+    text-align: left;
+}
 
 
 
