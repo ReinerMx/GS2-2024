@@ -73,40 +73,21 @@ const Item = sequelize.define('Item', {
    * https://datatracker.ietf.org/doc/html/rfc7946#section-3.1
    * https://datatracker.ietf.org/doc/html/rfc7946#section-3.2
    */ 
+
   geometry: {
-    type: DataTypes.JSONB,
-    allowNull: true, // Optional but has additional requirements
+    type: DataTypes.GEOMETRY('GEOMETRY', 4326), // GEOMETRY-Type with SRID 4326
+    allowNull: true, 
     validate: {
-      isValidGeoJSON(value) {
-        if (value === null) return; // Allow null when no geometry is provided
+      isValidGeometry(value) {
+        if (value === null) return; 
   
-        const isValidGeoJSONType = (type) =>
-          ['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon', 'GeometryCollection'].includes(type);
-  
-        // Check that the input is an object
-        if (typeof value !== 'object' || Array.isArray(value)) {
+        if (typeof value !== 'object') {
           throw new Error("'geometry' must be a valid GeoJSON object.");
         }
   
-        // Check the required "type" field
-        if (!value.type || !isValidGeoJSONType(value.type)) {
-          throw new Error(
-            `'geometry.type' must be one of 'Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon', 'GeometryCollection'.`
-          );
-        }
-  
-        // Validate "coordinates" or "geometries" based on "type"
-        if (value.type === 'GeometryCollection') {
-          if (!value.geometries || !Array.isArray(value.geometries)) {
-            throw new Error("'geometry.geometries' must be an array for GeometryCollection.");
-          }
-          value.geometries.forEach((geometry, index) => {
-            if (!geometry.type || !isValidGeoJSONType(geometry.type)) {
-              throw new Error(`Invalid 'geometry.type' in geometries[${index}].`);
-            }
-          });
-        } else if (!value.coordinates) {
-          throw new Error("'geometry.coordinates' is required for non-GeometryCollection types.");
+        const validTypes = ['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon', 'GeometryCollection'];
+        if (!value.type || !validTypes.includes(value.type)) {
+          throw new Error(`Invalid 'geometry.type'. Must be one of ${validTypes.join(', ')}.`);
         }
       },
     },

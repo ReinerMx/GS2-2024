@@ -3,15 +3,47 @@ const express = require('express');
 const fs = require('fs');
 const sequelize = require('../config/db');
 const { MlmModel, Asset, Collection, Item } = require('../models');
+const { Op } = require("sequelize"); // Sequelize Operatoren
 const upload = require('../middleware/uploadMiddleware');
+
 
 // Initialize the router
 const router = express.Router();
 
-// Get the root endpoint
 router.get('/', (req, res) => {
-    res.json({ message: "Welcome to the STAC API" });
+    res.json({
+        stac_version: "1.0.0",
+        id: "root",
+        description: "STAC API Root",
+        conformsTo: [
+            "https://api.stacspec.org/v1.0.0/core",
+            "https://api.stacspec.org/v1.0.0/item-search"
+        ],
+        links: [
+            {
+                rel: "self",
+                href: "http://localhost:5555/",
+                type: "application/json"
+            },
+            {
+                rel: "search",
+                href: "http://localhost:5555/search",
+                type: "application/json"
+            },
+            {
+                rel: "conformance",
+                href: "http://localhost:5555/conformance",
+                type: "application/json"
+            },
+            {
+                rel: "collections",
+                href: "http://localhost:5555/collections",
+                type: "application/json"
+            }
+        ]
+    });
 });
+
 
 // Conformance endpoint
 router.get('/conformance', (req, res) => {
@@ -113,57 +145,116 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
 
 
 
-// Search endpoint (GET)
-router.get('/search', async (req, res) => {
-    const { bbox, datetime, collection_id } = req.query;
+// STAC-conform /search-Route
+router.all('/search', async (req, res) => {
+    const isPost = req.method === 'POST';
+    const params = isPost ? req.body : req.query;
+
+    const { bbox, datetime, collections, limit = 10 } = params;
 
     try {
-        const where = {};
+        const where = [];
 
-        if (collection_id) {
-            where.collection_id = collection_id;
+        // Collection Filter
+        if (collections) {
+            where.push({ collection_id: { [Op.in]: Array.isArray(collections) ? collections : [collections] } });
         }
-
+        
+        // Bounding Box Filter
         if (bbox) {
-            where.bbox = bbox.split(',').map(Number);
+            let parsedBbox;
+            if (typeof bbox === 'string') {
+                parsedBbox = bbox.split(',').map(Number);
+            } else if (Array.isArray(bbox)) {
+                parsedBbox = bbox.map(Number);
+            }
+        
+            if (parsedBbox.length === 4) {
+                const [minX, minY, maxX, maxY] = parsedBbox;
+                where.push(sequelize.literal(`
+                    ST_Intersects(
+                        geometry,
+                        ST_MakeEnvelope(${minX}, ${minY}, ${maxX}, ${maxY}, 4326)
+                    )
+                `));
+            } else {
+                throw new Error("bbox must contain exactly 4 coordinates: [minX, minY, maxX, maxY]");
+            }
         }
-
+        
+        // Datetime Filter
         if (datetime) {
-            where['properties.datetime'] = datetime;
+            let start, end;
+        
+            if (Array.isArray(datetime) && datetime.length === 2) {
+                [start, end] = datetime;
+            } else if (typeof datetime === 'string' && datetime.includes('/')) {
+                [start, end] = datetime.split('/');
+            } else {
+                throw new Error("Invalid datetime format. Use 'start/end' or ['start', 'end']");
+            }
+        
+            // Check if the datetime values are valid
+            if (!isNaN(Date.parse(start)) && !isNaN(Date.parse(end))) {
+                where.push({
+                    [Op.and]: [
+                        sequelize.literal(`CAST(properties->>'start_datetime' AS TIMESTAMP) <= '${end}'`),
+                        sequelize.literal(`CAST(properties->>'end_datetime' AS TIMESTAMP) >= '${start}'`)
+                    ]
+                });
+            } else {
+                throw new Error("Invalid datetime values. Ensure they are ISO 8601-compliant.");
+            }
         }
-
-        const items = await Item.findAll({ where });
-        res.json({ items });
+        
+        // Search Items
+        const items = await Item.findAll({
+            where: { [Op.and]: where },
+            limit,
+        });
+        
+        // STAConform Response
+        res.json({
+            type: "FeatureCollection",
+            features: items.map(item => ({
+                type: "Feature",
+                id: item.item_id,
+                stac_version: "1.0.0",
+                geometry: item.geometry ? {
+                    type: item.geometry.type,
+                    coordinates: item.geometry.coordinates
+                } : null,
+                bbox: item.bbox,
+                properties: item.properties,
+                collection: item.collection_id,
+                links: [
+                    {
+                        rel: "self",
+                        href: `http://localhost:5555/collections/${item.collection_id}/items/${item.item_id}`,
+                        type: "application/json"
+                    },
+                    {
+                        rel: "collection",
+                        href: `http://localhost:5555/collections/${item.collection_id}`,
+                        type: "application/json"
+                    }
+                ]
+            })),
+            links: [
+                {
+                    rel: "self",
+                    href: `http://localhost:5555/search`,
+                    type: "application/json"
+                }
+            ],
+            context: {
+                returned: items.length,
+                limit: limit
+            }
+        });
     } catch (error) {
-        console.error('Error searching items:', error);
-        res.status(500).json({ error: 'Error searching items' });
-    }
-});
-
-// Search endpoint (POST)
-router.post('/search', async (req, res) => {
-    const { bbox, datetime, collection_id } = req.body;
-
-    try {
-        const where = {};
-
-        if (collection_id) {
-            where.collection_id = collection_id;
-        }
-
-        if (bbox) {
-            where.bbox = bbox;
-        }
-
-        if (datetime) {
-            where['properties.datetime'] = datetime;
-        }
-
-        const items = await Item.findAll({ where });
-        res.json({ items });
-    } catch (error) {
-        console.error('Error searching items:', error);
-        res.status(500).json({ error: 'Error searching items' });
+        console.error("Error in /search route:", error);
+        res.status(400).json({ error: error.message });
     }
 });
 

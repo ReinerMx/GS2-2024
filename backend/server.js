@@ -19,6 +19,24 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+/**
+ * Define API routes.
+ * - User routes: /api/users
+ * - Model routes: /
+ */
+app.use("/", modelRoutes);
+app.use("/api/users", userRoutes);
+
+// Serve static files from the 'frontend' directory
+const path = require("path");
+app.use(express.static(path.join(__dirname, "../frontend")));
+
+
 /**
  * Middleware configuration.
  * - Enables CORS for cross-origin resource sharing.
@@ -62,32 +80,6 @@ app.use(
   })
 );
 
-
-app.use(morgan("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Serve static files from the 'frontend' directory
-const path = require("path");
-app.use(express.static(path.join(__dirname, "../frontend")));
-
-
-/**
- * Define API routes.
- * - User routes: /api/users
- * - Model routes: /
- */
-app.use("/", modelRoutes);
-app.use("/api/users", userRoutes);
-
-/**
- * Root endpoint to verify the server status.
- * @route GET /
- * @returns {string} - Server status message.
- */
-app.get("/", (req, res) => {
-  res.send("API is online and functional");
-});
 
 // Error handling middleware to catch and handle any errors during request processing
 app.use(errorHandler);
