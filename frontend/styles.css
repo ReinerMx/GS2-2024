@@ -590,6 +590,7 @@ main {
   
 
 /* ********** Model Details Styling ********** */
+
 /* Center Header */
 .center-header {
     margin-bottom: 30px;
@@ -601,7 +602,11 @@ main {
     margin-bottom: 10px;
 }
 
-/* Grid Layout */
+.center-header .user-description {
+    text-align: left;
+}
+
+/* ********** Grid Layout ********** */
 .grid-container {
     display: grid;
     grid-template-columns: 60% 40%; /* Left: 60%, Right: 40% */
@@ -609,7 +614,7 @@ main {
     align-items: start; /* Align items at the top */
 }
 
-/* Left Section: Model Details */
+/* ********** Left Section: Model Details ********** */
 .info-section {
     background-color: #ffffff;
     padding: 20px;
@@ -617,7 +622,7 @@ main {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Right Section: Coverage */
+/* ********** Right Section: Coverage ********** */
 .coverage-section {
     display: flex;
     flex-direction: column; /* Stack map and graph vertically */
@@ -637,18 +642,15 @@ main {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    text-align: center;
 }
 
 .temporal-section h5 {
     margin-bottom: 15px;
 }
 
-.temporal-section {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .temporal-timeline {
+.temporal-timeline {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -656,25 +658,46 @@ main {
     margin: 10px auto;
     font-size: 14px;
     color: #6c757d;
-  }
-  
-  .temporal-timeline .start-date,
-  .temporal-timeline .end-date {
+}
+
+.temporal-timeline .start-date,
+.temporal-timeline .end-date {
     font-weight: bold;
-  }
-  
-  .temporal-timeline .timeline-line {
+}
+
+.temporal-timeline .timeline-line {
     flex-grow: 1;
     height: 2px;
     background-color: #007bff;
     margin: 0 10px;
     border-radius: 1px;
-  }
-  
-  .center-header .user-description {
-    text-align: left;
 }
 
+/* ********** Links Section ********** */
+.links-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.links-container h4 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.link-item {
+    margin-bottom: 10px;
+}
+
+.link-item a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.link-item a:hover {
+    color: #0056b3;
+}
 
 
 /* ********** Dark Mode ********** */

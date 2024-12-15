@@ -99,29 +99,41 @@
         <p id="userDescription" class="user-description">Optional user description goes here.</p>
     </div>
     
-      <!-- Grid Layout -->
-      <div class="grid-container">
-        <!-- Left Section: Model Details -->
-        <div id="modelDetailsContainer" class="info-section">
-          <!-- Model details will be dynamically loaded here -->
-        </div>
-    
-        <!-- Right Section: Spatial and Temporal Coverage -->
-        <div class="coverage-section">
-          <div id="map" class="map-section">
-            <!-- Leaflet map will be rendered here -->
-          </div>
-          <div id="temporalChart" class="temporal-section">
-            <h5>Temporal Coverage</h5>
-            <div class="temporal-timeline">
-              <span class="start-date"></span>
-              <span class="timeline-line"></span>
-              <span class="end-date"></span>
-            </div>
-          </div>
-        </div>
+<!-- Grid Layout -->
+<div class="grid-container">
+  <!-- Left Section: Model Details -->
+  <div id="modelDetailsContainer" class="info-section">
+    <!-- Model details will be dynamically loaded here -->
+  </div>
+
+  <!-- Right Section: Spatial and Temporal Coverage -->
+  <div class="coverage-section">
+    <!-- Spatial Coverage -->
+    <div>
+      <h4 class="section-title">Spatial Coverage</h4>
+      <div id="map" class="map-section">
+        <!-- Leaflet map will be rendered here -->
       </div>
-    </main>
+    </div>
+
+    <!-- Temporal Coverage -->
+    <div id="temporalChart" class="temporal-section">
+      <h4 class="section-title">Temporal Coverage</h4>
+      <div class="temporal-timeline">
+        <span class="start-date"></span>
+        <span class="timeline-line"></span>
+        <span class="end-date"></span>
+      </div>
+    </div>
+
+    <!-- Links Section -->
+    <div id="linksContainer" class="links-container mt-4">
+      <!-- Links will be dynamically loaded here -->
+    </div>
+  </div>
+</div>
+</main>
+
     
     
 

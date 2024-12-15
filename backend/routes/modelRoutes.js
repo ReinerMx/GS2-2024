@@ -69,11 +69,16 @@ router.get('/collections/:collection_id/items', async (req, res) => {
 // Get a specific item by ID in a collection
 router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
     const { collection_id, item_id } = req.params;
+
     try {
-        // Fetch the item along with related mlm_model and assets
+        // Fetch the item along with its parent collection, mlm_model, and assets
         const item = await Item.findOne({
             where: { collection_id, item_id },
             include: [
+                {
+                    model: Collection,
+                    as: 'parentCollection', 
+                },
                 {
                     model: MlmModel,
                     as: 'mlmModels',
@@ -90,20 +95,22 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
             return res.status(404).json({ error: 'Item not found' });
         }
 
-        // Format the response to include mlm_model, assets, and user_description
+        // Format the response to include related data
         const response = {
-            ...item.dataValues, // Include the item data
-            user_description: item.user_description, // Include the user_description field
-            mlm_model: item.mlmModels, // Include the related mlm_model
-            assets: item.assets, // Include the related assets
+            ...item.dataValues,
+            parentCollection: item.parentCollection, // Include parentCollection
+            user_description: item.user_description,
+            mlm_model: item.mlmModels,
+            assets: item.assets,
         };
 
-        res.json(response); // Send the formatted response
+        res.json(response);
     } catch (error) {
         console.error('Error fetching item:', error);
         res.status(500).json({ error: 'Error fetching item' });
     }
 });
+
 
 
 // Search endpoint (GET)

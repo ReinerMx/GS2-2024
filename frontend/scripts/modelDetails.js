@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const temporalChartContainer = document.getElementById('temporalChart');
     const modelNameElement = document.getElementById('modelName');
     const userDescriptionElement = document.getElementById('userDescription');
+    const linksContainer = document.getElementById('linksContainer');
 
     if (!modelDetailsContainer || !temporalChartContainer || !modelNameElement || !userDescriptionElement) {
         console.error('Error: Required elements not found');
@@ -39,26 +40,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (model.properties.start_datetime && model.properties.end_datetime) {
                 const startDate = new Date(model.properties.start_datetime);
                 const endDate = new Date(model.properties.end_datetime);
-                temporalChartContainer.innerHTML = `
-                    <div class="temporal-timeline">
+
+                // Find the timeline container within the temporalChartContainer
+                const timelineContainer = temporalChartContainer.querySelector('.temporal-timeline');
+
+                if (timelineContainer) {
+                    timelineContainer.innerHTML = `
                         <span class="start-date">${startDate.toLocaleDateString()}</span>
                         <span class="timeline-line"></span>
                         <span class="end-date">${endDate.toLocaleDateString()}</span>
-                    </div>
-                `;
+                    `;
+                }
             } else {
-                temporalChartContainer.innerHTML = '<p class="text-muted"><em>No temporal coverage data available.</em></p>';
+                const timelineContainer = temporalChartContainer.querySelector('.temporal-timeline');
+                if (timelineContainer) {
+                    timelineContainer.innerHTML = '<p class="text-muted"><em>No temporal coverage data available.</em></p>';
+                }
             }
 
-            // Render Assets Section
-            const assetsHTML = model.assets?.map(asset => `
-                <div class="asset">
-                    <h5>${asset.title || 'Untitled Asset'}</h5>
-                    <p>${asset.description || 'No description available.'}</p>
-                    <p><strong>Type:</strong> ${asset.type}</p>
-                    <p><strong>Link:</strong> <a href="${asset.href}" target="_blank">${asset.href}</a></p>
-                </div>
-            `).join('') || '<p>No assets available.</p>';
 
             // Render Input and Output
             const inputsHTML = model.properties['mlm:input']?.map(input => `
@@ -87,30 +86,59 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
             `).join('') || '<p>No output data available.</p>';
 
+            // Function to render hyperparameters as a list
+            const renderHyperparameters = (hyperparameters) => {
+                if (!hyperparameters || typeof hyperparameters !== 'object' || Object.keys(hyperparameters).length === 0) {
+                    return ''; // Skip rendering if hyperparameters are null, not an object, or empty
+                }
+                return `
+                    <div class="hyperparameters-section">
+                        <p><strong>Hyperparameters:</strong></p>
+                        <ul>
+                            ${Object.entries(hyperparameters)
+                                .map(([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`)
+                                .join('')}
+                        </ul>
+                    </div>
+                `;
+            };
+
+            const createDetailRow = (label, value) => {
+                if (value == null || value === 'N/A') return ''; // Skip rendering if value is null or 'N/A'
+                return `<p><strong>${label}:</strong> ${value}</p>`;
+            };
+
             // Populate Model Details
-            modelDetailsContainer.innerHTML = `
-                <div class="model-details-container">
-                    <div class="text-section">
-                        <h4>Overview</h4>
-                        <p><strong>Architecture:</strong> ${model.properties['mlm:architecture'] || 'N/A'}</p>
-                        <p><strong>Framework:</strong> ${model.properties['mlm:framework']} v${model.properties['mlm:framework_version'] || 'N/A'}</p>
-                        <p><strong>Tasks:</strong> ${model.properties['mlm:tasks']?.join(', ') || 'N/A'}</p>
-                        <p><strong>Accelerator:</strong> ${model.properties['mlm:accelerator'] || 'N/A'}</p>
-                    </div>
-                    <div class="input-section">
-                        <h4>Input</h4>
-                        ${inputsHTML}
-                    </div>
-                    <div class="output-section">
-                        <h4>Output</h4>
-                        ${outputsHTML}
-                    </div>
-                    <div class="assets-section">
-                        <h4>Assets</h4>
-                        ${assetsHTML}
-                    </div>
+        modelDetailsContainer.innerHTML = `
+            <div class="model-details-container">
+                <div class="text-section">
+                    <h4>Overview</h4>
+                    ${createDetailRow('Collection', model.parentCollection?.title)}
+                    ${createDetailRow('STAC Version', model.stac_version)}
+                    ${createDetailRow('STAC Extensions', model.stac_extensions?.join(', '))}
+                    ${createDetailRow('Architecture', model.properties['mlm:architecture'])}
+                    ${createDetailRow('Tasks', model.properties['mlm:tasks']?.join(', '))}
+                    ${createDetailRow('Framework', `${model.properties['mlm:framework'] || ''} v${model.properties['mlm:framework_version'] || ''}`.trim())}
+                    ${createDetailRow('Memory Size', model.properties['mlm:memory_size'])}
+                    ${createDetailRow('Total Parameters', model.properties['mlm:total_parameters'])}
+                    ${createDetailRow('Pretrained', model.properties['mlm:pretrained'] ? `Yes (Source: ${model.properties['mlm:pretrained_source'] || 'N/A'})` : null)}
+                    ${createDetailRow('Batch Size Suggestion', model.properties['mlm:batch_size_suggestion'])}
+                    ${createDetailRow('Accelerator', model.properties['mlm:accelerator'])}
+                    ${createDetailRow('Accelerator Constrained', model.properties['mlm:accelerator_constrained'] ? 'Yes' : 'No')}
+                    ${createDetailRow('Accelerator Summary', model.properties['mlm:accelerator_summary'])}
+                    ${createDetailRow('Accelerator Count', model.properties['mlm:accelerator_count'])}                    
+                    ${renderHyperparameters(model.properties['mlm:hyperparameters'])}
                 </div>
-            `;
+                <div class="input-section">
+                    <h4>Input</h4>
+                    ${inputsHTML}
+                </div>
+                <div class="output-section">
+                    <h4>Output</h4>
+                    ${outputsHTML}
+                </div>
+            </div>
+        `;
 
             // Render Spatial Coverage (Map)
             const map = L.map('map').setView([0, 0], 2);
@@ -130,6 +158,30 @@ document.addEventListener('DOMContentLoaded', async () => {
                     map.setView([lat, lon], 10);
                 }
             }
+
+            // Links Section
+            if (model.assets) {
+                const linksHTML = Object.keys(model.assets)
+                    .map(key => {
+                        const asset = model.assets[key];
+                        return `
+                            <div class="link-item">
+                                <p><strong>${asset.title || key}:</strong> ${asset.description || ''}</p>
+                                <p><strong>Type:</strong> ${asset.type || 'Unknown'}</p>
+                                <a href="${asset.href}" target="_blank">${asset.href}</a>
+                            </div>
+                        `;
+                    })
+                    .join('');
+                linksContainer.innerHTML = `
+                    <h4>Available Links</h4>
+                    <div class="links-box">
+                        ${linksHTML}
+                    </div>
+                `;
+            } else {
+                linksContainer.innerHTML = '<p>No links available.</p>';
+                        }
         } catch (error) {
             console.error('Error loading model details:', error);
             modelDetailsContainer.innerHTML = '<p class="error-text">Error loading model details.</p>';
