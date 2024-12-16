@@ -127,26 +127,31 @@
             <h5>Framework</h5>
             <div>
               <label><input type="checkbox" name="framework" value="pytorch" /> PyTorch</label><br />
-              <label><input type="checkbox" name="framework" value="scikit-learn" /> Scikit-Learn</label><br />
-              <label><input type="checkbox" name="framework" value="tensorflow" /> TensorFlow</label>
+              <label><input type="checkbox" name="framework" value="tensorflow" /> TensorFlow</label><br />
+              <label><input type="checkbox" name="framework" value="scikit-learn" /> scikit-learn</label><br />
+              <label><input type="checkbox" name="framework" value="hugging-face" /> Hugging Face</label><br />
+              <label><input type="checkbox" name="framework" value="keras" /> Keras</label><br />
+              <label><input type="checkbox" name="framework" value="onnx" /> ONNX</label><br />
+              <label><input type="checkbox" name="framework" value="rgee" /> rgee</label><br />
+              <label><input type="checkbox" name="framework" value="spatialrf" /> spatialRF</label><br />
+              <label><input type="checkbox" name="framework" value="jax" /> JAX</label><br />
+              <label><input type="checkbox" name="framework" value="mxnet" /> MXNet</label><br />
+              <label><input type="checkbox" name="framework" value="caffe" /> Caffe</label><br />
+              <label><input type="checkbox" name="framework" value="pymc" /> PyMC</label><br />
+              <label><input type="checkbox" name="framework" value="weka" /> Weka</label><br />
             </div>
           </div>
           <!-- Architecture Filter -->
           <div class="filter-section mt-4">
             <h5>Architecture</h5>
             <div>
-              <label><input type="checkbox" name="architecture" value="ResNet-18" /> ResNet-18</label><br />
-              <label><input type="checkbox" name="architecture" value="RandomForestClassifier" /> RandomForestClassifier</label><br />
-              <label><input type="checkbox" name="architecture" value="Swin Transformer V2" /> Swin Transformer V2</label>
+                <label><input type="checkbox" name="architecture" value="ResNet" /> ResNet</label><br />
+                <label><input type="checkbox" name="architecture" value="VGG" /> VGG</label><br />
+                <label><input type="checkbox" name="architecture" value="GAN or Vision Transformer" /> GAN or Vision Transformer</label><br />
+                <label><input type="checkbox" name="architecture" value="unknown" /> Unknown</label><br />
             </div>
           </div>
-          <!-- Parameters Filter -->
-          <div class="filter-section mt-4">
-            <h5>Parameters</h5>
-            <label>Min: <input type="number" id="minParameters" placeholder="Min Params" /></label><br />
-            <label>Max: <input type="number" id="maxParameters" placeholder="Max Params" /></label>
-          </div>
-          <!-- Bands Filter -->
+          <!-- Bands Filter 
           <div class="filter-section mt-4">
             <h5>Input Bands</h5>
             <div>
@@ -156,6 +161,7 @@
               <label><input type="checkbox" name="inputBand" value="NDVI" /> NDVI</label>
             </div>
           </div>
+          -->
           <!-- Temporal Filter -->
           <div class="filter-section mt-4">
             <h5>Temporal Coverage</h5>
