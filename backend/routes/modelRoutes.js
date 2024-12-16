@@ -3,15 +3,21 @@ const express = require('express');
 const fs = require('fs');
 const sequelize = require('../config/db');
 const { MlmModel, Asset, Collection, Item } = require('../models');
-const { Op } = require("sequelize"); // Sequelize Operatoren
+const { Op } = require("sequelize"); // Sequelize operators for database queries
 const upload = require('../middleware/uploadMiddleware');
 
 
 // Initialize the router
 const router = express.Router();
 
+/**
+ * @route GET /
+ * @description Returns the STAC API root with supported conformance classes and links.
+ * @access Public
+ */
 router.get('/', (req, res) => {
     res.json({
+        type: "Catalog",
         stac_version: "1.0.0",
         id: "root",
         description: "STAC API Root",
@@ -26,11 +32,6 @@ router.get('/', (req, res) => {
                 type: "application/json"
             },
             {
-                rel: "search",
-                href: "http://localhost:5555/search",
-                type: "application/json"
-            },
-            {
                 rel: "conformance",
                 href: "http://localhost:5555/conformance",
                 type: "application/json"
@@ -39,13 +40,21 @@ router.get('/', (req, res) => {
                 rel: "collections",
                 href: "http://localhost:5555/collections",
                 type: "application/json"
+            },
+            {
+                rel: "search",
+                href: "http://localhost:5555/search",
+                type: "application/json"
             }
         ]
     });
 });
 
-
-// Conformance endpoint
+/**
+ * @route GET /conformance
+ * @description Returns the supported conformance classes of the STAC API.
+ * @access Public
+ */
 router.get('/conformance', (req, res) => {
     res.json({ conformsTo: [
         "https://api.stacspec.org/v1.0.0/core",
@@ -53,7 +62,11 @@ router.get('/conformance', (req, res) => {
     ] });
 });
 
-// List all collections
+/**
+ * @route GET /collections
+ * @description Fetches and returns all available STAC collections.
+ * @access Public
+ */
 router.get('/collections', async (req, res) => {
     try {
         const collections = await Collection.findAll();
@@ -64,7 +77,12 @@ router.get('/collections', async (req, res) => {
     }
 });
 
-// Get a specific collection by ID
+/**
+ * @route GET /collections/:collection_id
+ * @description Fetches a specific STAC collection by ID.
+ * @param {string} collection_id - The ID of the collection.
+ * @access Public
+ */
 router.get('/collections/:collection_id', async (req, res) => {
     const { collection_id } = req.params;
     try {
@@ -81,7 +99,12 @@ router.get('/collections/:collection_id', async (req, res) => {
     }
 });
 
-// List all items in a specific collection
+/**
+ * @route GET /collections/:collection_id/items
+ * @description Fetches all items in a specific collection.
+ * @param {string} collection_id - The ID of the collection.
+ * @access Public
+ */
 router.get('/collections/:collection_id/items', async (req, res) => {
     const { collection_id } = req.params;
     try {
@@ -98,7 +121,13 @@ router.get('/collections/:collection_id/items', async (req, res) => {
     }
 });
 
-// Get a specific item by ID in a collection
+/**
+ * @route GET /collections/:collection_id/items/:item_id
+ * @description Fetches a specific item within a collection by its ID.
+ * @param {string} collection_id - The ID of the collection.
+ * @param {string} item_id - The ID of the item.
+ * @access Public
+ */
 router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
     const { collection_id, item_id } = req.params;
 
@@ -143,9 +172,11 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
     }
 });
 
-
-
-// STAC-conform /search-Route
+/**
+ * @route ALL /search
+ * @description Searches items based on bounding box, datetime, and collections filters.
+ * @access Public
+ */
 router.all('/search', async (req, res) => {
     const isPost = req.method === 'POST';
     const params = isPost ? req.body : req.query;
@@ -260,8 +291,9 @@ router.all('/search', async (req, res) => {
 
 
 /**
- * Route to handle file upload and model data extraction.
- * Parses uploaded STAC JSON and saves related collections, items, assets, and models.
+ * @route POST /upload
+ * @description Handles file uploads and processes STAC data into collections or items.
+ * @access Public
  */
 router.post('/upload', upload.single('modelFile'), async (req, res) => {
     const { userDescription } = req.body;
