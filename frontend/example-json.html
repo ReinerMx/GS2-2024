@@ -80,6 +80,118 @@
 
     <!-- Main Content -->
     <main class="container mt-4 upload-page">
+      <style>
+        .dropdown {
+          margin: 20px 0;
+        }
+
+        .dropdown h3 {
+          cursor: pointer;
+          background-color: #f1f1f1;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+        }
+
+        .dropdown-content {
+          display: none;
+          margin: 10px 0;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          background-color: #fafafa;
+        }
+
+        .dropdown-content ul {
+          margin: 0;
+          padding-left: 20px;
+        }
+
+        .dropdown-content li {
+          margin-bottom: 5px;
+        }
+      </style>
+
+      <div class="dropdown">
+        <h3 onclick="toggleDropdown('key-fields-dropdown')">Explanation of the Key Fields:</h3>
+        <div id="key-fields-dropdown" class="dropdown-content">
+          <ul>
+            <li>
+              <strong>stac_version</strong>: The version of the STAC specification, here "1.0.0".
+            </li>
+            <li>
+              <strong>stac_extensions</strong>: A list of STAC extensions that are relevant to the
+              model (e.g., EO for Earth Observation, ML for Machine Learning, etc.).
+            </li>
+            <li>
+              <strong>type</strong>: The type of the STAC resource, in this case, a "Feature".
+            </li>
+            <li><strong>id</strong>: A unique ID for the model.</li>
+            <li>
+              <strong>properties</strong>: A collection of key-value pairs for metadata about the
+              model:
+              <ul>
+                <li><strong>title</strong> and <strong>description</strong> describe the model.</li>
+                <li>
+                  <strong>start_datetime</strong> and <strong>end_datetime</strong> define the
+                  period during which the model is trained or available.
+                </li>
+                <li>
+                  <strong>model_task</strong> specifies the task of the model (e.g., classification,
+                  regression).
+                </li>
+                <li>
+                  <strong>input_data_type</strong>, <strong>output_data_type</strong>,
+                  <strong>input_bands</strong>, and <strong>output_classes</strong> specify the
+                  types of input and output data, as well as the input bands and output classes of
+                  the model.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>geometry</strong>: The spatial extent of the model, here specified as a
+              Polygon.
+            </li>
+            <li>
+              <strong>links</strong>: URLs that link to other resources or references related to the
+              model (e.g., the model itself, thumbnails, etc.).
+            </li>
+            <li>
+              <strong>assets</strong>: Files associated with the model, such as the model file
+              itself and metadata files.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <h3 onclick="toggleDropdown('customization-dropdown')">Customization:</h3>
+        <div id="customization-dropdown" class="dropdown-content">
+          <ul>
+            <li><strong>id</strong>: Customize the model ID.</li>
+            <li>
+              <strong>title</strong>, <strong>description</strong>, <strong>model_task</strong>,
+              etc.: These fields should be adjusted to reflect the actual model.
+            </li>
+            <li>
+              <strong>assets</strong>: The links to model files and metadata should point to the
+              actual files on your server or in your repository.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <script>
+        function toggleDropdown(id) {
+          const content = document.getElementById(id);
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        }
+      </script>
+
       <h2 class="upload-title">STAC-Conform JSON-Template:</h2>
       <p>Ensure your JSON file follows this structure:</p>
 
@@ -161,101 +273,6 @@
   
             </pre
         >
-      </section>
-
-      <h3 id="explanation-of-the-key-fields-">Explanation of the Key Fields:</h3>
-      <ul>
-        <li><strong>stac_version</strong>: The version of the STAC specification, here "1.0.0".</li>
-        <li>
-          <strong>stac_extensions</strong>: A list of STAC extensions that are relevant to the model
-          (e.g., EO for Earth Observation, ML for Machine Learning, etc.).
-        </li>
-        <li><strong>type</strong>: The type of the STAC resource, in this case, a "Feature".</li>
-        <li><strong>id</strong>: A unique ID for the model.</li>
-        <li>
-          <strong>properties</strong>: A collection of key-value pairs for metadata about the model:
-          <ul>
-            <li><strong>title</strong> and <strong>description</strong> describe the model.</li>
-            <li>
-              <strong>start_datetime</strong> and <strong>end_datetime</strong> define the period
-              during which the model is trained or available.
-            </li>
-            <li>
-              <strong>model_task</strong> specifies the task of the model (e.g., classification,
-              regression).
-            </li>
-            <li>
-              <strong>input_data_type</strong>, <strong>output_data_type</strong>,
-              <strong>input_bands</strong>, and <strong>output_classes</strong> specify the types of
-              input and output data, as well as the input bands and output classes of the model.
-            </li>
-          </ul>
-        </li>
-        <li>
-          <strong>geometry</strong>: The spatial extent of the model, here specified as a Polygon.
-        </li>
-        <li>
-          <strong>links</strong>: URLs that link to other resources or references related to the
-          model (e.g., the model itself, thumbnails, etc.).
-        </li>
-        <li>
-          <strong>assets</strong>: Files associated with the model, such as the model file itself
-          and metadata files.
-        </li>
-      </ul>
-      <h3 id="customization-">Customization:</h3>
-      <ul>
-        <li><strong>id</strong>: Customize the model ID.</li>
-        <li>
-          <strong>title</strong>, <strong>description</strong>, <strong>model_task</strong>, etc.:
-          These fields should be adjusted to reflect the actual model.
-        </li>
-        <li>
-          <strong>assets</strong>: The links to model files and metadata should point to the actual
-          files on your server or in your repository.
-        </li>
-      </ul>
-      <br />
-      <hr />
-      <br />
-
-      <!-- Upload and Validation Section -->
-      <section class="upload-section">
-        <h2>Upload and Validate your Metadata here:</h2>
-        <form id="uploadForm" enctype="multipart/form-data" class="upload-form">
-          <!-- File Input for Model File (STAC JSON format) -->
-          <div class="form-group">
-            <label for="modelFile">Choose Model File (STAC JSON format)</label>
-            <input type="file" class="form-control-file" id="modelFile" name="modelFile" required />
-          </div>
-
-          <!-- File Input for Metadata -->
-          <div class="form-group">
-            <label for="metadataFile">Choose Metadata File (STAC JSON format)</label>
-            <input type="file" class="form-control-file" id="metadata-file" name="metadata-file" />
-          </div>
-
-          <!-- Submit Button for Upload -->
-          <button type="submit" id="submitButton" class="btn btn-primary btn-lg btn-block">
-            Upload Model
-          </button>
-
-          <!-- Button to Validate Metadata -->
-          <button
-            type="button"
-            onclick="validateMetadata()"
-            class="btn btn-secondary btn-lg btn-block mt-2"
-          >
-            Validate Metadata
-          </button>
-        </form>
-
-        <div id="validation-result" class="mt-3"></div>
-
-        <small class="form-text text-muted mt-2">
-          Ensure the file adheres to the STAC metadata format. Invalid files will require additional
-          manual data entry.
-        </small>
       </section>
 
       <script>

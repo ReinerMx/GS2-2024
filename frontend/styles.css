@@ -155,8 +155,8 @@ body.dark-mode .autocomplete li:hover {
 
 /* Überschriebenes Hintergrundbild für die Tutorials-Seite */
 .tutorials-page .main-section {
-    background: url('images/earth5.jpg') center/cover no-repeat;
-}
+    background-color: #f8f9fa;
+} 
 
 .main-section h1 {
     font-size: 2.8rem;
@@ -895,3 +895,223 @@ input:checked + .slider:before {
   .user-icon:hover {
     transform: scale(1.1); /* Leicht vergrößern bei Hover */
   }
+
+/**************++++++++++++++++++**************/
+/************** Tutorial Navbar **************/
+/**************++++++++++++++++++**************/
+
+
+
+
+
+
+
+.product-navbar nav ul li a {
+    text-decoration: none !important; /* Kein Unterstrich */
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px 15px;
+    color: #6c757d; /* Standard: ausgegraut */
+    transition: color 0.3s ease, border-color 0.3s ease; /* Übergang auch für die border-color */
+    border-bottom: 2px solid transparent; /* Standardmäßig transparent */
+}
+
+
+
+
+.product-navbar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    gap: 20px;
+}
+
+.product-navbar nav ul li {
+    display: inline;
+}
+
+.product-navbar nav ul li a {
+    text-decoration: none; /* Kein Unterstrich */
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px 15px;
+    color: #6c757d; /* Standard: ausgegraut */
+    transition: color 0.3s ease, border-color 0.3s ease; /* Übergang auch für die border-color */
+    border-bottom: 2px solid transparent; /* Standardmäßig transparent */
+}
+/* Aktiver Tab */
+.product-navbar nav ul li a.active {
+    color: #212529; /* Aktiver Link: dunkles Grau/Schwarz */
+    border-bottom: 2px solid #212529; /* Dunkler Strich am unteren Rand */
+}
+
+/* Hover */
+.product-navbar nav ul li a:hover {
+    color: #495057; /* Mittelgrau beim Hover */
+    border-bottom: 2px solid #495057; /* Passende Hover-Unterstreichung */
+}
+/* Inhaltsabschnitte */
+.content-section {
+    display: none; /* Standardmäßig ausblenden */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.content-section:target {
+    display: block; /* Nur der aktive Abschnitt wird angezeigt */
+    opacity: 1;
+}
+
+.content-section h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.section-margin {
+    margin: 30px 0; /* Oben und unten 30px Abstand, links und rechts 0 */
+  }
+  
+
+/* ********** Tutorials Page Styles ********** */
+/* Neue Klasse für die Tutorials-Seite */
+.tutorials-page {
+    padding: 40px 20px;
+    background-color: #f1f1f1; /* Helles Grau für den Hintergrund */
+}
+
+/* Main Section für Tutorials */
+.tutorials-page .main-section {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #e9ecef; /* Etwas dunkleres Grau für die Hauptsektion */
+    color: #212529; /* Dunkles Grau für den Text */
+}
+
+.tutorials-page h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #212529; /* Dunkles Grau für den Titel */
+    text-shadow: none;
+}
+
+.tutorials-page p.lead {
+    font-size: 1.25rem;
+    margin-bottom: 50px;
+    color: #495057; /* Mittelgrau für den Einführungstext */
+}
+
+/* Navbar in der Tutorials-Seite */
+.tutorials-page .product-navbar {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.tutorials-page .product-navbar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tutorials-page .product-navbar nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+.tutorials-page .product-navbar nav ul li a {
+    text-decoration: none;
+    color: #212529; /* Dunkles Grau für die Navbar-Links */
+    font-weight: bold;
+}
+
+.tutorials-page .product-navbar nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Content Section für Tutorials */
+.tutorials-page .content-section {
+    background-color: #fff; /* Weißer Hintergrund für die Sektionen */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sanfte Schatten für den Content */
+    margin-bottom: 2rem;
+    color: #212529; /* Dunkles Grau für den Text */
+}
+
+.tutorials-page .content-section h2 {
+    color: #212529; /* Dunkles Grau für die Sektionstitel */
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.tutorials-page .custom-paragraph {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #495057; /* Mittelgrau für Absätze */
+    margin-bottom: 1rem;
+}
+
+/* Q&A Styles */
+.tutorials-page .faq-container {
+    margin-top: 1rem;
+}
+
+.tutorials-page .faq-item {
+    background-color: #fff; /* Weißer Hintergrund für jedes Q&A-Element */
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sanfte Schatten für die FAQ-Elemente */
+}
+
+.tutorials-page .faq-question {
+    font-size: 1.1rem;
+    color: #007bff; /* Blau für die Fragen */
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+.tutorials-page .faq-answer {
+    padding-left: 1rem;
+    font-size: 1rem;
+    color: #212529; /* Dunkles Grau für die Antworten */
+    display: none;
+}
+
+.tutorials-page .faq-item button:focus + .faq-answer {
+    display: block;
+}
+
+.tutorials-page .faq-item button:focus {
+    outline: none;
+}
+
+/* Buttons */
+.tutorials-page .btn {
+    background-color: #343a40; /* Dunkles Grau für den Button-Hintergrund */
+    color: #fff; /* Weiße Schrift für den Button */
+    font-size: 0.95rem;
+    border-radius: 20px;
+    padding: 8px 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tutorials-page .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(52, 58, 64, 0.3); /* Dunklerer Schatten bei Hover */
+}
+
+/* ********** Responsiveness ********** */
+@media (max-width: 768px) {
+    .tutorials-page .content-section {
+        padding: 1rem;
+    }
+
+    .tutorials-page .product-navbar nav ul li {
+        display: block;
+        margin-bottom: 10px;
+    }
+}
