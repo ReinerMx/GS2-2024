@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
 
-  <body class="tutorials-page">
+  <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="index.html">
@@ -77,127 +77,151 @@
         </ul>
       </div>
     </nav>
-
     <!-- Main Content -->
-    <main class="main-section">
-      <h1>Tutorials</h1>
-      <p class="lead">
-        Welcome to the HuggingEarth tutorials page.<br />
-        Here, you'll find step-by-step guides to help you use the platform effectively, integrate
-        models into your workflow, and explore the advanced features available.
-      </p>
+    <main>
+      <div class="text-center">
+        <h1 class="tutorials-title">Tutorials</h1>
+        <p class="lead tutorial-description">
+          Welcome to the HuggingEarth tutorials page.<br />
+          Here, you'll find step-by-step guides to help you use the platform effectively, integrate
+          models into your workflow, and explore the advanced features available.
+        </p>
+      </div>
 
-      <div class="row justify-content-center">
-        <!-- Getting Started -->
-        <div class="col-md-3 feature text-center">
-          <img src="images/discover.png" alt="Icon for Getting Started" class="img-fluid" />
-          <h3>Getting Started</h3>
-          <p>
-            To begin, sign up via the <a href="register.html">Registration page</a>. After logging
-            in, explore the <a href="index.html">Dashboard</a>, which gives you access to key
-            features like searching for models, uploading your contributions, and discovering
-            community-shared models.
-          </p>
-          <!--<img src="images/click.gif" alt="Animation for Getting Started" class="gif-style" /> -->
-        </div>
-        <!-- Uploading Your Own Models -->
-        <div class="col-md-3 feature text-center">
-          <img src="images/upload-guide.png" alt="Icon for Uploading Models" class="img-fluid" />
-          <h3>Uploading Your Own Models</h3>
-          <p class="custom-paragraph">Follow these steps to upload your models:</p>
-          <!-- Inner Div for List -->
-          <div class="list-container">
-            <ol class="custom-paragraph">
-              <li>
-                First, prepare your metadata in STAC-compliant JSON format using this
-                <a href="example-json.html">template</a>.
-              </li>
-              <li>
-                Go to the <a href="upload.html">Upload page</a>, fill out the form, and upload your
-                file.
-              </li>
-              <li>
-                If you encounter issues, check the
-                <a href="tutorials.html#validation">validation tutorial</a>.
-              </li>
-              <li>
-                Successfully uploaded models can be found in your
-                <a href="account.html">account</a>.
-              </li>
-            </ol>
-          </div>
-        </div>
+      <!-- Navbar -->
+      <div class="product-navbar">
+        <nav>
+          <ul>
+            <li>
+              <a href="#beschreibung" id="tab-beschreibung" class="tutorial-nav-link"
+                >Getting Started</a
+              >
+            </li>
+            <li>
+              <a href="#technische-details" id="tab-technische-details" class="tutorial-nav-link">
+                Uploading Your Own Models
+              </a>
+            </li>
+            <li>
+              <a href="#geometrie" id="tab-geometrie" class="tutorial-nav-link"
+                >Integrating with Python and R</a
+              >
+            </li>
+            <li><a href="#leasing" id="tab-leasing" class="tutorial-nav-link">Q&A's</a></li>
+          </ul>
+        </nav>
+      </div>
 
-        <!-- Integrating with Python and R -->
-        <div class="col-md-3 feature text-center">
-          <img
-            src="images/python-r.png"
-            alt="Icon for Python and R Integration"
-            class="img-fluid"
-          />
-          <h3>Integrating with Python and R</h3>
-          <p class="custom-paragraph">
-            Follow these steps to integrate models into your workflows:
-          </p>
-          <!-- Inner Div for List -->
-          <div class="list-container">
-            <ol class="custom-paragraph">
-              <li>
-                Install the required STAC client: <code>pip install pystac</code> for Python or
-                <code>install.packages('rstac')</code> for R.
-              </li>
-              <li>Download model metadata from the <a href="catalog.html">Catalog page</a>.</li>
-              <li>
-                Integrate it using tools like <code>pystac.Item()</code> in Python or
-                <code>stac_read()</code> in R.
-              </li>
-              <li>
-                Check out our <a href="tutorials.html#examples">example notebooks</a> for practical
-                usage.
-              </li>
-            </ol>
-          </div>
+      <!-- Inhalt für die einzelnen Sektionen -->
+      <div
+        id="beschreibung"
+        class="content-section section-margin"
+        style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px"
+      >
+        <h2 class="section-title">Getting Started</h2>
+        <p class="custom-paragraph">
+          To begin, sign up via the <a href="register.html">Registration page</a>. After logging in,
+          explore the <a href="index.html">Dashboard</a>, which gives you access to key features
+          like searching for models, uploading your contributions, and discovering community-shared
+          models.
+        </p>
+      </div>
+
+      <div
+        id="technische-details"
+        class="content-section section-margin"
+        style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px"
+      >
+        <h2 class="section-title">Uploading Your Own Models</h2>
+        <p class="custom-paragraph">Follow these steps to upload your models:</p>
+        <div class="list-container">
+          <ol class="custom-paragraph">
+            <li>
+              First, prepare your metadata in STAC-compliant JSON format using this
+              <a href="example-json.html">template</a>.
+            </li>
+            <li>
+              Go to the <a href="upload.html">Upload page</a>, fill out the form, and upload your
+              file.
+            </li>
+            <li>
+              If you encounter issues, check the
+              <a href="tutorials.html#validation">validation tutorial</a>.
+            </li>
+            <li>
+              Successfully uploaded models can be found in your
+              <a href="account.html">account</a>.
+            </li>
+          </ol>
         </div>
       </div>
 
-      <div class="faq-container">
-        <h1>Q&A's</h1>
-        <div class="faq-item">
-          <button class="faq-question">What is the HuggingEarth-Catalog?</button>
-          <div class="faq-answer">
-            <p>
-              The HuggingEarth-Catalog is a platform that provides geoscientific models to browse,
-              retrieve, and integrate data into workflows.
-            </p>
-          </div>
+      <div
+        id="geometrie"
+        class="content-section section-margin"
+        style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px"
+      >
+        <h2 class="section-title">Integrating with Python and R</h2>
+        <p class="custom-paragraph">Follow these steps to integrate models into your workflows:</p>
+        <div class="list-container">
+          <ol class="custom-paragraph">
+            <li>
+              Install the required STAC client: <code>pip install pystac</code> for Python or
+              <code>install.packages('rstac')</code> for R.
+            </li>
+            <li>Download model metadata from the <a href="catalog.html">Catalog page</a>.</li>
+            <li>
+              Integrate it using tools like <code>pystac.Item()</code> in Python or
+              <code>stac_read()</code> in R.
+            </li>
+            <li>
+              Check out our <a href="tutorials.html#examples">example notebooks</a> for practical
+              usage.
+            </li>
+          </ol>
         </div>
-        <div class="faq-item">
-          <button class="faq-question">How do I sign up?</button>
-          <div class="faq-answer">
-            <p>
-              Click on "Login" on the <a href="login.html">Login page</a> and follow the
-              instructions. A valid email address is required for registration.
-            </p>
+      </div>
+
+      <div id="leasing" class="content-section">
+        <div class="faq-container">
+          <h1 class="faq-title">Q&A's</h1>
+          <div class="faq-item">
+            <button class="faq-question">What is the HuggingEarth-Catalog?</button>
+            <div class="faq-answer">
+              <p>
+                The HuggingEarth-Catalog is a platform that provides geoscientific models to browse,
+                retrieve, and integrate data into workflows.
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">Which models can I use?</button>
-          <div class="faq-answer">
-            <p>
-              The platform offers various models for climate data analysis, environmental
-              monitoring, and geodata integration. You can find a list of models on the
-              <a href="catalog.html">Catalog page</a>.
-            </p>
+          <div class="faq-item">
+            <button class="faq-question">How do I sign up?</button>
+            <div class="faq-answer">
+              <p>
+                Click on "Login" on the <a href="login.html">Login page</a> and follow the
+                instructions. A valid email address is required for registration.
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">How do I integrate the platform into Python?</button>
-          <div class="faq-answer">
-            <p>
-              Install the `pystac` library and use it to integrate data directly from the platform
-              into your workflows. Example codes can be found in our
-              <a href="tutorials.html#pystac">PySTAC tutorial</a>.
-            </p>
+          <div class="faq-item">
+            <button class="faq-question">Which models can I use?</button>
+            <div class="faq-answer">
+              <p>
+                The platform offers various models for climate data analysis, environmental
+                monitoring, and geodata integration. You can find a list of models on the
+                <a href="catalog.html">Catalog page</a>.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">How do I integrate the platform into Python?</button>
+            <div class="faq-answer">
+              <p>
+                Install the `pystac` library and use it to integrate data directly from the platform
+                into your workflows. Example codes can be found in our
+                <a href="tutorials.html#pystac">PySTAC tutorial</a>.
+              </p>
+            </div>
           </div>
         </div>
       </div>
