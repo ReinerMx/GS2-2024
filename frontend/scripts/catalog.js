@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add Leaflet Draw tool
     const drawControl = new L.Control.Draw({
         draw: {
-            polygon: true,
+            polygon: false,
             rectangle: true,
             polyline: false,
             circle: false,

@@ -99,8 +99,8 @@
     </nav>
 
     <div class="container-fluid mt-4">
-      <div class="row">
-        <!-- Sidebar and Search Container in the same row -->
+      <div id="mainContainer" class="row">
+        <!-- Sidebar für Filter -->
         <aside class="col-md-3 filter-sidebar">
           <h4>Filters</h4>
           <!-- Temporal Filter -->
@@ -123,31 +123,27 @@
             <button id="applyGeoFilter" class="btn btn-primary mt-3 apply-filter-btn">Apply Filter</button>
           </div>
         </aside>
-
-          <!-- Search and Model Catalog Container -->
-          <section class="col-md-9 search-catalog-container">
-            <div class="search-bar-container">
-              <h2>Model Catalog</h2>
-              <p>Explore available Earth Observation Machine Learning models. Use the search below to find models that match your needs.</p>
-              <div class="input-group mb-3">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="searchInput"
-                  placeholder="Search for models by name or description"
-                />
-                <div class="input-group-append">
-                  <button class="btn btn-primary" id="searchButton" type="button">Search</button>
-                </div>
+    
+        <!-- Hauptbereich für Model Catalog -->
+        <section class="col-md-9 search-catalog-container">
+          <div class="search-bar-container">
+            <h2>Model Catalog</h2>
+            <p>Explore available Earth Observation Machine Learning models. Use the search below to find models that match your needs.</p>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" id="searchInput" placeholder="Search for models by name or description" />
+              <div class="input-group-append">
+                <button class="btn btn-primary" id="searchButton" type="button">Search</button>
               </div>
             </div>
-            <div id="resultsContainer" class="container">
-              <!-- Model list or search results will be displayed here -->
-            </div>
-          </section>
-        </div>
+          </div>
+          <div id="resultsContainer">
+            <div class="filtered-results-header">Filtered Models</div>
+            <!-- Modelle werden hier eingefügt -->
+          </div>
+        </section>
       </div>
-
+    </div>
+    
 
     <!-- Footer -->
     <footer class="footer text-center">
