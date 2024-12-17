@@ -50,6 +50,11 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
         console.log('Geographic Filter GeoJSON:', geoJSON);
         filters.geoFilter = geoJSON.geometry;
         console.log("Received GeoJSON:", JSON.stringify(geoJSON)); // Log only when geoJSON exists
+    
+            // Berechne Bounding Box
+            const bbox = turf.bbox(geoJSON); // Requires turf.js
+            filters.bbox = bbox; // Speichere die Bounding Box
+            console.log("Bounding Box:", bbox); 
     }
 
     // Add the time filter if startDate or endDate is provided
@@ -75,7 +80,7 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
         const models = await response.json();
         console.log('Filtered Models:', models);
 
-        displayModels(models.features || []);
+        displayModels(models.features || [], filters);
     } catch (error) {
         console.error('Error applying filters:', error);
         resultsContainer.innerHTML = '<p>Error fetching filtered models.</p>';
@@ -128,15 +133,22 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
             resultsContainer.innerHTML = '<p>No collections found.</p>';
             return;
         }
+        
 
         collections.forEach((collection) => {
             console.log('Rendering collection:', collection);
             const collectionDiv = document.createElement('div');
-            collectionDiv.classList.add('collection-item', 'mb-4');
+            collectionDiv.classList.add('model-item', 'mb-4');
+
+    // Keywords als einzelne Span-Elemente rendern (für Arrays)
+    const keywordsHTML = Array.isArray(collection.keywords) && collection.keywords.length > 0
+        ? collection.keywords.map(keyword => `<span>${keyword.trim()}</span>`).join(' ')
+        : '';
 
             collectionDiv.innerHTML = `
-                <h4>${collection.title || 'No Title'}</h4>
-                <p>${collection.description || 'No Description'}</p>
+                <h4>${collection.title}</h4>
+                <p>${collection.description}</p>
+                <div class="collection-keywords">${keywordsHTML}</div>
                 <button class="btn btn-primary view-items-btn" data-id="${collection.collection_id}">View Items</button>
             `;
 
@@ -159,11 +171,12 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
         items.forEach((item) => {
             console.log('Rendering item:', item);
             const itemDiv = document.createElement('div');
-            itemDiv.classList.add('item', 'mb-4');
+            itemDiv.classList.add('model-item', 'mb-4');
 
             itemDiv.innerHTML = `
                 <h5>${item.properties['mlm:name'] || 'No Name'}</h5>
                 <p>${item.properties.description || 'No Description Available'}</p>
+                <p><strong>Collection:</strong> ${item.collection_id}</p>
                 <button class="btn btn-info view-details-btn" data-collection-id="${item.collection_id}" data-item-id="${item.item_id}">View Details</button>
             `;
 
@@ -218,30 +231,54 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
         }
     });
 
-    // Function to display models for geographic filter
-    const displayModels = (models) => {
-        resultsContainer.innerHTML = ''; // Clear previous content
 
-        if (models.length === 0) {
-            resultsContainer.innerHTML = '<p>No models found.</p>';
-            return;
+// Function to display models for geographic filter
+const displayModels = (models, filters) => {
+    resultsContainer.innerHTML = ''; // Clear previous content
+
+    // Zusammenfassung der Filter
+    let filtersSummary = [];
+    if (filters.geoFilter) {
+        filtersSummary.push("Geographic Filter Applied");
+        if (filters.bbox) {
+            const [minX, minY, maxX, maxY] = filters.bbox;
+            filtersSummary.push(`Bounding Box: [${minX.toFixed(2)}, ${minY.toFixed(2)}, ${maxX.toFixed(2)}, ${maxY.toFixed(2)}]`);
         }
+    }    
+    if (filters.datetime) filtersSummary.push(`Time Range: ${filters.datetime}`);
+    if (filtersSummary.length === 0) filtersSummary = "None";
 
-        models.forEach((model) => {
-            const modelDiv = document.createElement('div');
-            modelDiv.classList.add('model-item', 'mb-4');
-            modelDiv.innerHTML = `
-            <h5>${model.properties['mlm:name'] || 'No Name'}</h5>
-            <p>${model.properties.description || 'No Description Available'}</p>
-            <button class="btn btn-info view-details-btn" 
+    // Filterbox erstellen
+    resultsContainer.innerHTML = `
+        <div class="filtered-results-header">
+            <h4>Filtered Models</h4>
+            <p><strong>Filters used:</strong> ${filtersSummary.join(" | ")}</p>
+            <p>Displaying <strong>${models.length}</strong> models.</p>
+        </div>
+        <div class="row" id="modelGrid"></div>
+    `;
+
+    const grid = document.getElementById('modelGrid');
+
+    // Modelle anzeigen
+    models.forEach((model) => {
+        const modelDiv = document.createElement('div');
+        modelDiv.classList.add('model-item');
+        modelDiv.innerHTML = `
+            <h5>${model.properties['mlm:name']}</h5>
+            <p>${model.properties.description}</p>
+            <p><strong>Collection:</strong> ${model.collection}</p>
+            <button class="btn btn-primary view-details-btn" 
                 data-collection-id="${model.collection}" 
                 data-item-id="${model.id}">
                 View Details
             </button>
         `;
-            resultsContainer.appendChild(modelDiv);
-        });
-            // Event-Listener for the buttons
+        grid.appendChild(modelDiv);
+    });
+
     attachViewDetailsListeners();
-    };
+};
+
+
 });
