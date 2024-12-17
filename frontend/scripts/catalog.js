@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Initialize Leaflet map
-    const map = L.map('map').setView([51.505, -0.09], 5);
+    const map = L.map('map').setView([51.505, -0.09], 3);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
     }).addTo(map);
@@ -34,48 +34,54 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('GeoJSON:', layer.toGeoJSON());
     });
 
-    // Event listener for applying geographic filter
-    document.getElementById('applyGeoFilter').addEventListener('click', async () => {
-        const filters = {}; // <-- Hier wird das filters-Objekt initialisiert
-        
-        if (!drawnGeometry && !(startDateInput.value || endDateInput.value)) {
-            alert('Please provide either a geographic region or a time range!');
-            return;
-        }        
+    // Event listener for applying geographic filterr
+document.getElementById('applyGeoFilter').addEventListener('click', async () => {
+    const filters = {}; // Initialize the filters object
 
-            // Füge die Geometrie hinzu, falls sie existiert
+    // Ensure either geometry or time range is provided
+    if (!drawnGeometry && !(startDateInput.value || endDateInput.value)) {
+        alert('Please provide either a geographic region or a time range!');
+        return;
+    }
+
+    // Add the geographic filter if a shape was drawn
     if (drawnGeometry) {
         const geoJSON = drawnGeometry.toGeoJSON();
         console.log('Geographic Filter GeoJSON:', geoJSON);
         filters.geoFilter = geoJSON.geometry;
+        console.log("Received GeoJSON:", JSON.stringify(geoJSON)); // Log only when geoJSON exists
     }
 
-    // Füge den Zeitfilter hinzu, falls vorhanden
+    // Add the time filter if startDate or endDate is provided
     if (startDateInput.value || endDateInput.value) {
         filters.datetime = `${startDateInput.value || ".."}/${endDateInput.value || ".."}`;
     }
 
-
     console.log('Sending filters:', filters);
+    console.log("Received geoFilter on server:", filters.geoFilter);
+    console.log("Serialized geoFilter for PostGIS:", JSON.stringify(filters.geoFilter));
+    
 
-        try {
-            const response = await fetch('/search', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(filters),
-            });
-    
-            if (!response.ok) throw new Error('Error fetching filtered models');
-    
-            const models = await response.json();
-            console.log('Filtered Models:', models);
-    
-            displayModels(models.features || []);
-        } catch (error) {
-            console.error('Error applying filters:', error);
-            resultsContainer.innerHTML = '<p>Error fetching filtered models.</p>';
-        }
-    });
+    // Send filters to the backend
+    try {
+        const response = await fetch('/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filters),
+        });
+
+        if (!response.ok) throw new Error('Error fetching filtered models');
+
+        const models = await response.json();
+        console.log('Filtered Models:', models);
+
+        displayModels(models.features || []);
+    } catch (error) {
+        console.error('Error applying filters:', error);
+        resultsContainer.innerHTML = '<p>Error fetching filtered models.</p>';
+    }
+});
+
 
     // Debugging initialization
     console.log('Document loaded. Initializing collections and event listeners.');
@@ -235,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
             resultsContainer.appendChild(modelDiv);
         });
-            // Event-Listener für die Buttons anfügen
+            // Event-Listener for the buttons
     attachViewDetailsListeners();
     };
 });

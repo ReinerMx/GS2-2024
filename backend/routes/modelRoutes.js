@@ -172,39 +172,62 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
     }
 });
 
+
 /**
  * @route ALL /search
- * @description Searches items based on bounding box, datetime, and collections filters.
+ * @description Searches items in the database based on geographic filters (GeoJSON or Bounding Box), 
+ *              temporal coverage (datetime range), and collection filters.
+ *              Returns a STAC-compliant FeatureCollection as a response.
  * @access Public
  */
 router.all('/search', async (req, res) => {
+    // Check if the request method is POST, otherwise default to query parameters
     const isPost = req.method === 'POST';
     const params = isPost ? req.body : req.query;
 
-    const { bbox, datetime, collections, limit = 10 } = params;
+    // Destructure parameters from request
+    const { bbox, datetime, collections, limit = 10, geoFilter } = params;
 
     try {
-        const where = [];
+        const where = []; // Array to store filtering conditions for SQL query
 
-        // Collection Filter
-        if (collections) {
-            where.push({ collection_id: { [Op.in]: Array.isArray(collections) ? collections : [collections] } });
+        /** 
+         * GeoJSON Filter:
+         * If a GeoJSON geometry is provided (e.g., a polygon), 
+         * add a spatial filter using PostGIS ST_Intersects and ST_GeomFromGeoJSON.
+         */
+        if (geoFilter) {
+            where.push(sequelize.literal(`
+                ST_Intersects(
+                    geometry, 
+                    ST_GeomFromGeoJSON('${JSON.stringify(geoFilter)}')
+                )
+            `));
         }
-        
-        // Bounding Box Filter
+
+        /**
+         * Bounding Box Filter:
+         * Filters items based on a rectangular bounding box defined by coordinates.
+         * BBOX must be in the format [minX, minY, maxX, maxY].
+         */
         if (bbox) {
             let parsedBbox;
+
+            // Parse bbox input: if it's a string, split and convert to numbers
             if (typeof bbox === 'string') {
                 parsedBbox = bbox.split(',').map(Number);
             } else if (Array.isArray(bbox)) {
                 parsedBbox = bbox.map(Number);
             }
-        
+
+            // Ensure bbox contains exactly 4 valid coordinates
             if (parsedBbox.length === 4) {
                 const [minX, minY, maxX, maxY] = parsedBbox;
+
+                // Use PostGIS ST_MakeEnvelope to create a rectangle and filter intersections
                 where.push(sequelize.literal(`
                     ST_Intersects(
-                        geometry,
+                        geometry, 
                         ST_MakeEnvelope(${minX}, ${minY}, ${maxX}, ${maxY}, 4326)
                     )
                 `));
@@ -212,43 +235,61 @@ router.all('/search', async (req, res) => {
                 throw new Error("bbox must contain exactly 4 coordinates: [minX, minY, maxX, maxY]");
             }
         }
-        
-        // Datetime Filter
+
+        /**
+         * Datetime Filter:
+         * Filters results based on a start and end datetime range.
+         * Accepts ISO 8601 formatted strings in 'start/end' format.
+         */
         if (datetime) {
             let start, end;
-        
-            if (Array.isArray(datetime) && datetime.length === 2) {
-                [start, end] = datetime;
-            } else if (typeof datetime === 'string' && datetime.includes('/')) {
+
+            // Parse datetime string: split by '/' into start and end
+            if (typeof datetime === 'string' && datetime.includes('/')) {
                 [start, end] = datetime.split('/');
             } else {
-                throw new Error("Invalid datetime format. Use 'start/end' or ['start', 'end']");
+                throw new Error("Invalid datetime format. Use 'start/end'.");
             }
 
-            console.log("Start:", start, "End:", end);
-console.log("Generated Query:", where);
-
-        
-            // Check if the datetime values are valid
+            // Validate the datetime strings
             if (!isNaN(Date.parse(start)) && !isNaN(Date.parse(end))) {
-                where.push({
-                    [Op.and]: [
-                        sequelize.literal(`properties->>'start_datetime' <= '${end}'`),
-                        sequelize.literal(`properties->>'end_datetime' >= '${start}'`)
-                    ]
-                });                
+                // Add datetime conditions to the SQL WHERE clause
+                where.push(sequelize.literal(`properties->>'start_datetime' <= '${end}'`));
+                where.push(sequelize.literal(`properties->>'end_datetime' >= '${start}'`));
             } else {
                 throw new Error("Invalid datetime values. Ensure they are ISO 8601-compliant.");
             }
         }
-        
-        // Search Items
+
+        /**
+         * Collections Filter:
+         * Filters results based on one or more collection IDs.
+         * If 'collections' is provided, include it as a condition.
+         */
+        if (collections) {
+            where.push({ 
+                collection_id: { 
+                    [Op.in]: Array.isArray(collections) ? collections : [collections] 
+                } 
+            });
+        }
+
+        console.log("Generated WHERE conditions:", where); // Debug log for SQL conditions
+
+        /**
+         * Execute the query:
+         * Use Sequelize `findAll` to fetch filtered items from the database.
+         * Combine all conditions with an AND operator to ensure they all apply.
+         */
         const items = await Item.findAll({
             where: { [Op.and]: where },
-            limit,
+            limit, // Limit the number of results returned
         });
-        
-        // STAConform Response
+
+        /**
+         * Respond with STAC-compliant FeatureCollection:
+         * Format the results as GeoJSON features with relevant properties, geometry, and links.
+         */
         res.json({
             type: "FeatureCollection",
             features: items.map(item => ({
@@ -283,16 +324,16 @@ console.log("Generated Query:", where);
                 }
             ],
             context: {
-                returned: items.length,
-                limit: limit
+                returned: items.length, // Number of items returned
+                limit: limit // Limit applied
             }
         });
     } catch (error) {
+        // Handle errors and send error response
         console.error("Error in /search route:", error);
         res.status(400).json({ error: error.message });
     }
 });
-
 
 /**
  * @route POST /upload
