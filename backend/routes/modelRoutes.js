@@ -111,8 +111,8 @@ router.get('/collections/:collection_id/items', async (req, res) => {
         const items = await Item.findAll({ where: { collection_id } });
 
         if (!items || items.length === 0) {
-            return res.status(404).json({ error: 'No items found in this collection' });
-        }
+            return res.json({ items: [] }); // Rückgabe eines leeren Arrays
+        }        
 
         res.json({ items });
     } catch (error) {
@@ -224,15 +224,19 @@ router.all('/search', async (req, res) => {
             } else {
                 throw new Error("Invalid datetime format. Use 'start/end' or ['start', 'end']");
             }
+
+            console.log("Start:", start, "End:", end);
+console.log("Generated Query:", where);
+
         
             // Check if the datetime values are valid
             if (!isNaN(Date.parse(start)) && !isNaN(Date.parse(end))) {
                 where.push({
                     [Op.and]: [
-                        sequelize.literal(`CAST(properties->>'start_datetime' AS TIMESTAMP) <= '${end}'`),
-                        sequelize.literal(`CAST(properties->>'end_datetime' AS TIMESTAMP) >= '${start}'`)
+                        sequelize.literal(`properties->>'start_datetime' <= '${end}'`),
+                        sequelize.literal(`properties->>'end_datetime' >= '${start}'`)
                     ]
-                });
+                });                
             } else {
                 throw new Error("Invalid datetime values. Ensure they are ISO 8601-compliant.");
             }

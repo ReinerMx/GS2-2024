@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const resultsContainer = document.getElementById('resultsContainer');
     const searchInput = document.getElementById('searchInput');
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+
 
     // Initialize Leaflet map
     const map = L.map('map').setView([51.505, -0.09], 5);
@@ -33,24 +36,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event listener for applying geographic filter
     document.getElementById('applyGeoFilter').addEventListener('click', async () => {
-        if (!drawnGeometry) {
-            alert('Please draw a geographic region first!');
+        const filters = {}; // <-- Hier wird das filters-Objekt initialisiert
+        
+        if (!drawnGeometry && !(startDateInput.value || endDateInput.value)) {
+            alert('Please provide either a geographic region or a time range!');
             return;
-        }
+        }        
 
+            // Füge die Geometrie hinzu, falls sie existiert
+    if (drawnGeometry) {
         const geoJSON = drawnGeometry.toGeoJSON();
         console.log('Geographic Filter GeoJSON:', geoJSON);
+        filters.geoFilter = geoJSON.geometry;
+    }
+
+    // Füge den Zeitfilter hinzu, falls vorhanden
+    if (startDateInput.value || endDateInput.value) {
+        filters.datetime = `${startDateInput.value || ".."}/${endDateInput.value || ".."}`;
+    }
+
+
+    console.log('Sending filters:', filters);
 
         try {
-            const response = await fetch('/api/models', {
+            const response = await fetch('/search', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ geoFilter: geoJSON.geometry }),
+                body: JSON.stringify(filters),
             });
+    
+            if (!response.ok) throw new Error('Error fetching filtered models');
+    
             const models = await response.json();
-            displayModels(models);
+            console.log('Filtered Models:', models);
+    
+            displayModels(models.features || []);
         } catch (error) {
-            console.error('Error applying geographic filter:', error);
+            console.error('Error applying filters:', error);
+            resultsContainer.innerHTML = '<p>Error fetching filtered models.</p>';
         }
     });
 
@@ -202,10 +225,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const modelDiv = document.createElement('div');
             modelDiv.classList.add('model-item', 'mb-4');
             modelDiv.innerHTML = `
-                <h4>${model.name || 'No Name Provided'}</h4>
-                <p><strong>Description:</strong> ${model.description || 'No Description Available'}</p>
-            `;
+            <h5>${model.properties['mlm:name'] || 'No Name'}</h5>
+            <p>${model.properties.description || 'No Description Available'}</p>
+            <button class="btn btn-info view-details-btn" 
+                data-collection-id="${model.collection}" 
+                data-item-id="${model.id}">
+                View Details
+            </button>
+        `;
             resultsContainer.appendChild(modelDiv);
         });
+            // Event-Listener für die Buttons anfügen
+    attachViewDetailsListeners();
     };
 });
