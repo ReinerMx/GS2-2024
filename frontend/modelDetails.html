@@ -93,17 +93,49 @@
     </nav>
 
     <main class="container mt-4">
-      <h2>Model Details</h2>
+      <!-- Center Section: Name and User Description -->
+      <div class="center-header text-center">
+        <h2 id="modelName">Model Name</h2>
+        <p id="userDescription" class="user-description">Optional user description goes here.</p>
+    </div>
+    
+<!-- Grid Layout -->
+<div class="grid-container">
+  <!-- Left Section: Model Details -->
+  <div id="modelDetailsContainer" class="info-section">
+    <!-- Model details will be dynamically loaded here -->
+  </div>
 
-      <div id="modelDetailsContainer" class="info-section">
-        <!-- Model details will be loaded here -->
-      </div>
-
-      <h4>Spatial Coverage</h4>
-      <div id="map" class="map-section mt-4">
+  <!-- Right Section: Spatial and Temporal Coverage -->
+  <div class="coverage-section">
+    <!-- Spatial Coverage -->
+    <div>
+      <h4 class="section-title">Spatial Coverage</h4>
+      <div id="map" class="map-section">
         <!-- Leaflet map will be rendered here -->
       </div>
-    </main>
+    </div>
+
+    <!-- Temporal Coverage -->
+    <div id="temporalChart" class="temporal-section">
+      <h4 class="section-title">Temporal Coverage</h4>
+      <div class="temporal-timeline">
+        <span class="start-date"></span>
+        <span class="timeline-line"></span>
+        <span class="end-date"></span>
+      </div>
+    </div>
+
+    <!-- Links Section -->
+    <div id="linksContainer" class="links-container mt-4">
+      <!-- Links will be dynamically loaded here -->
+    </div>
+  </div>
+</div>
+</main>
+
+    
+    
 
     <!-- Footer -->
     <footer class="footer text-center">
@@ -153,5 +185,6 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="scripts/modelDetails.js"></script>
     <script src="scripts/appearance.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </body>
 </html>

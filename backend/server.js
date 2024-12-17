@@ -7,9 +7,6 @@ const dotenv = require("dotenv"); // Environment variable manager
 const userRoutes = require("./routes/userRoutes"); // User-related routes
 const modelRoutes = require("./routes/modelRoutes"); // Model-related routes (e.g., uploading, fetching metadata)
 const errorHandler = require("./middleware/errorHandler"); // Middleware for handling errors
-const sequelize = require("./config/db"); // Sequelize instance for database connection
-
-const { User, Collection, Item, MlmModel, Asset } = require('./models'); // Models
 
 // Load environment variables from .env file
 dotenv.config();
@@ -22,6 +19,24 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+/**
+ * Define API routes.
+ * - User routes: /api/users
+ * - Model routes: /
+ */
+app.use("/", modelRoutes);
+app.use("/api/users", userRoutes);
+
+// Serve static files from the 'frontend' directory
+const path = require("path");
+app.use(express.static(path.join(__dirname, "../frontend")));
+
+
 /**
  * Middleware configuration.
  * - Enables CORS for cross-origin resource sharing.
@@ -32,7 +47,6 @@ const app = express();
 app.use(cors());
 app.use(
   helmet({
-    crossOriginEmbedderPolicy: false,
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
@@ -42,44 +56,30 @@ app.use(
           "https://cdn.jsdelivr.net",
           "https://stackpath.bootstrapcdn.com",
           "https://cdnjs.cloudflare.com",
-          "https://unpkg.com", // Added unpkg for Leaflet script
+          "https://unpkg.com"
         ],
         styleSrc: [
           "'self'",
           "https://stackpath.bootstrapcdn.com",
           "https://cdnjs.cloudflare.com",
-          "https://unpkg.com", // Added unpkg for Leaflet CSS
+          "https://unpkg.com",
+          "https://cdn.jsdelivr.net", // Allow SimpleMDE styles
+          "https://maxcdn.bootstrapcdn.com" // Allow Font Awesome styles
         ],
-        imgSrc: ["'self'", "data:", "https://*.tile.openstreetmap.org"],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "https://*.tile.openstreetmap.org",
+          "https://cdnjs.cloudflare.com",
+          "https://via.placeholder.com" // Allow Placeholder images
+        ],
+        connectSrc: ["'self'", "https://*.tile.openstreetmap.org"], // Ensure OSM tiles load correctly
       },
     },
+    crossOriginEmbedderPolicy: false, // Optional for external resources
   })
 );
-app.use(morgan("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the 'frontend' directory
-const path = require("path");
-app.use(express.static(path.join(__dirname, "../frontend")));
-
-
-/**
- * Define API routes.
- * - User routes: /api/users
- * - Model routes: /api/models
- */
-app.use("/api/models", modelRoutes);
-app.use("/api/users", userRoutes);
-
-/**
- * Root endpoint to verify the server status.
- * @route GET /
- * @returns {string} - Server status message.
- */
-app.get("/", (req, res) => {
-  res.send("API is online and functional");
-});
 
 // Error handling middleware to catch and handle any errors during request processing
 app.use(errorHandler);

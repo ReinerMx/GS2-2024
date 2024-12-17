@@ -33,7 +33,7 @@ const defineRelationships = () => {
     defineRelationships(); // Define relationships after models are loaded
 
     console.log('Synchronizing models...');
-    await sequelize.sync({ force: true });
+    await sequelize.sync();
     console.log('All models synchronized successfully.');
   } catch (error) {
     console.error('Error during database initialization:', error);

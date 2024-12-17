@@ -1,156 +1,122 @@
-/**
- * JavaScript file to handle the DOM interaction and form submission for uploading models.
- * This file includes validation for input fields and handling responses from the server.
- */
+document.addEventListener("DOMContentLoaded", () => {
+    const uploadForm = document.getElementById("uploadForm");
+    const fileInput = document.getElementById("modelFile");
+    const dropZone = document.getElementById("dropZone");
+    const submitButton = document.getElementById("submitButton");
+    const statusMessage = document.getElementById("statusMessage");
+  
 
-document.addEventListener('DOMContentLoaded', () => {
-    const uploadForm = document.getElementById('uploadForm');
-    const fileInput = document.getElementById('modelFile');
-    const submitButton = document.getElementById('submitButton');
-    const missingFieldsForm = document.getElementById('missingFieldsForm');
-    const missingFieldsContainer = document.getElementById('missingFieldsContainer');
-    const submitMissingDataButton = document.getElementById('submitMissingDataButton');
-    const statusMessage = document.getElementById('statusMessage');
+  // Initialize SimpleMDE for userDescription
+  const simplemde = new SimpleMDE({ 
+    element: document.getElementById("userDescription"),
+    placeholder: "Optional: Add additional details using Markdown...",
+    spellChecker: false, // Set false if no spellcheck is required
+    autosave: {
+      enabled: true,
+      unique_id: "userDescription_autosave",
+      delay: 1000,
+    },
+  });
 
     /**
-     * Displays a status message to the user.
-     *
-     * @param {string} message - The message to display.
-     * @param {boolean} [isError=false] - Whether the message represents an error.
+     * Displays feedback messages to the user.
      */
     const displayStatusMessage = (message, isError = false) => {
-        statusMessage.textContent = message;
-        statusMessage.className = `status-message ${isError ? 'text-danger' : 'text-success'}`;
+      statusMessage.textContent = message;
+      statusMessage.className = `alert ${
+        isError ? "alert-danger" : "alert-success"
+      }`;
+      statusMessage.classList.remove("d-none");
+      setTimeout(() => statusMessage.classList.add("d-none"), 5000);
     };
-
+  
     /**
-     * Handles the main form submission, validates fields, and sends the data to the server.
-     *
-     * @param {Event} event - The submit event.
+     * Updates drop zone text after a file is selected.
      */
-    uploadForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        // Create FormData object and append additional fields
-        const formData = new FormData(uploadForm);
-        formData.append('userDescription', document.getElementById('userDescription').value.trim());
-
-        // Validate file input
-        if (!fileInput.files.length) {
-            alert('Please upload a model file.');
-            return;
-        }
-
-        try {
-            // Show loading indicator
-            submitButton.disabled = true;
-            submitButton.innerText = 'Uploading...';
-
-            // Send the POST request
-            const response = await fetch('/api/models/upload', {
-                method: 'POST',
-                body: formData,
-            });
-
-            const result = await response.json();
-
-            // Handle the server response
-            if (response.ok) {
-                displayStatusMessage('Model uploaded successfully! Details:\n' + JSON.stringify(result.details, null, 2));
-                uploadForm.reset(); // Reset the form
-                missingFieldsForm.style.display = 'none'; // Hide missing fields form
-            } else if (response.status === 400 && result.missingFields) {
-                alert('The file is missing required STAC-compliant metadata fields. Please provide them below.');
-                displayMissingFields(result.missingFields);
-            } else {
-                displayStatusMessage(`Error: ${result.message}`, true);
-            }
-        } catch (error) {
-            console.error('Upload failed:', error);
-            displayStatusMessage('An error occurred while uploading the model.', true);
-        } finally {
-            // Reset loading indicator
-            submitButton.disabled = false;
-            submitButton.innerText = 'Upload Model';
-        }
+    const updateDropZoneText = (fileName) => {
+      dropZone.innerHTML = `<p>File ready to upload: <strong>${fileName}</strong></p>`;
+    };
+  
+    /**
+     * Drag-and-drop event handlers.
+     */
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.classList.add("dragging");
     });
-
-    /**
-     * Displays input fields for the missing metadata fields and allows the user to fill them in.
-     *
-     * @param {Array<string>} missingFields - List of missing field names.
-     */
-    function displayMissingFields(missingFields) {
-        // Clear previous content
-        missingFieldsContainer.innerHTML = '';
-
-        // Create input fields dynamically for each missing field
-        missingFields.forEach(field => {
-            const fieldLabel = document.createElement('label');
-            fieldLabel.textContent = `Please provide ${field}:`;
-            fieldLabel.htmlFor = field;
-
-            const fieldInput = document.createElement('input');
-            fieldInput.type = 'text';
-            fieldInput.id = field;
-            fieldInput.name = field;
-            fieldInput.className = 'form-control';
-            fieldInput.required = true;
-
-            const formGroup = document.createElement('div');
-            formGroup.className = 'form-group';
-            formGroup.appendChild(fieldLabel);
-            formGroup.appendChild(fieldInput);
-
-            missingFieldsContainer.appendChild(formGroup);
-        });
-
-        // Show the missing fields form
-        missingFieldsForm.style.display = 'block';
-    }
-
-    /**
-     * Handles submission of additional data for missing fields.
-     *
-     * @param {Event} event - The click event on the submit button.
-     */
-    submitMissingDataButton.addEventListener('click', async (event) => {
-        event.preventDefault();
-
-        const formData = new FormData(uploadForm);
-
-        // Collect additional data for missing fields
-        missingFieldsContainer.querySelectorAll('input').forEach(input => {
-            formData.append(input.name, input.value);
-        });
-
-        try {
-            // Show loading indicator
-            submitMissingDataButton.disabled = true;
-            submitMissingDataButton.innerText = 'Submitting...';
-
-            // Resubmit form data
-            const response = await fetch('/api/models/upload', {
-                method: 'POST',
-                body: formData,
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                displayStatusMessage('Model uploaded successfully with manually provided data!');
-                uploadForm.reset(); // Clear the form
-                missingFieldsForm.style.display = 'none'; // Hide missing fields form
-            } else {
-                displayStatusMessage(`Error: ${result.message}`, true);
-            }
-        } catch (error) {
-            console.error('Upload failed:', error);
-            displayStatusMessage('An error occurred while uploading the model with the additional data.', true);
-        } finally {
-            // Reset loading indicator
-            submitMissingDataButton.disabled = false;
-            submitMissingDataButton.innerText = 'Submit Additional Data';
-        }
+  
+    dropZone.addEventListener("dragleave", () => {
+      dropZone.classList.remove("dragging");
     });
-});
+  
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("dragging");
+      const files = e.dataTransfer.files;
+      if (files.length) {
+        fileInput.files = files;
+        updateDropZoneText(files[0].name);
+      }
+    });
+  
+    // File input click trigger
+    dropZone.addEventListener("click", () => fileInput.click());
+  
+    // Update drop zone text when file is selected
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files.length) {
+        updateDropZoneText(fileInput.files[0].name);
+      }
+      const file = fileInput.files[0];
+      if (file && file.type !== 'application/json') {
+          displayStatusMessage('Only JSON files are allowed. Please select a valid file.', true);
+          fileInput.value = ''; // Clear the invalid file
+      }
+    });
+  
+    /**
+     * Handles form submission.
+     */
+    uploadForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+  
+      if (!fileInput.files.length) {
+        displayStatusMessage("Please select a file before uploading.", true);
+        return;
+      }
+  
+    const formData = new FormData(uploadForm);
+    // Include the rendered Markdown content as part of the form submission
+    formData.set("userDescription", simplemde.value());
+  
+      try {
+        submitButton.disabled = true;
+        submitButton.textContent = "Uploading...";
+  
+        const response = await fetch("/upload", {
+          method: "POST",
+          body: formData,
+        });
+  
+        const result = await response.json();
+  
+        if (response.ok) {
+          displayStatusMessage(result.message || "Upload successful!");
+
+          // Reset the form and editor
+          uploadForm.reset();
+          simplemde.value(""); // Clear SimpleMDE content
+          dropZone.innerHTML = `<p>Drag & drop your file here, or <span class="text-primary click-trigger">click to select</span>.</p>`;
+        } else {
+          displayStatusMessage(result.error || "An error occurred.", true);
+        }
+      } catch (error) {
+        console.error("Upload failed:", error);
+        displayStatusMessage("An unexpected error occurred.", true);
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Upload Model";
+      }
+    });
+  });
+  
