@@ -276,6 +276,7 @@ body {
     border-radius: 8px; /* Rounded corners */
     padding: 20px; /* Inner padding */
     margin-bottom: 20px; /* Bottom spacing */
+    margin-left:10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     transition: transform 0.2s, box-shadow 0.2s;
     text-align: center; /* Center content */

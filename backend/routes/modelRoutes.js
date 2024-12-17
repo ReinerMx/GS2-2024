@@ -467,7 +467,16 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
         });
     } catch (error) {
         console.error('Error saving STAC data to database:', error);
-        res.status(500).json({ error: 'Error saving STAC data to database' });
+
+        // Handle unique constraint errors
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({
+                error: `An item with the ID "${error.fields.item_id}" already exists. Please use a different ID or update the existing item.`,
+            });
+        }
+    
+        // Handle other errors
+        res.status(500).json({ error: 'An unexpected error occurred while saving data.' });
     } finally {
         if (req.file && req.file.path) {
             fs.unlinkSync(req.file.path);
