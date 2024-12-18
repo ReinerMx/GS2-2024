@@ -224,12 +224,52 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
         const searchTerm = searchInput.value.trim();
         console.log('Search input changed:', searchTerm);
         if (!searchTerm) {
-            loadAllCollections();
+            loadAllCollections(); // shows all collections
         } else {
-            // Implement search functionality if required
-            console.log('Performing search is not yet implemented.');
+            fetchSearchResults(searchTerm); // shows search results
         }
     });
+
+    const fetchSearchResults = async (keyword) => {
+        try {
+            const response = await fetch(`/searchbar?keyword=${encodeURIComponent(keyword)}`);
+            if (!response.ok) throw new Error("Error fetching search results");
+            const { collections, items } = await response.json();
+            console.log('Search Results:', { collections, items });
+    
+            displaySearchResults(collections, items); 
+        } catch (error) {
+            console.error('Error during search:', error);
+            resultsContainer.innerHTML = '<p>Error fetching search results.</p>';
+        }
+    };
+    
+    // function to display search results
+    const displaySearchResults = (collections, items) => {
+        resultsContainer.innerHTML = '';
+    
+        if (collections.length === 0 && items.length === 0) {
+            resultsContainer.innerHTML = '<p>No results found.</p>';
+            return;
+        }
+    
+        if (collections.length > 0) {
+            const collectionHeader = document.createElement('h4');
+            collectionHeader.textContent = 'Collections';
+            resultsContainer.appendChild(collectionHeader);
+    
+            displayCollections(collections); 
+        }
+    
+        if (items.length > 0) {
+            const itemHeader = document.createElement('h4');
+            itemHeader.textContent = 'Items';
+            resultsContainer.appendChild(itemHeader);
+    
+            displayItems(items); 
+        }
+    };
+    
 
 
 // Function to display models for geographic filter

@@ -336,6 +336,55 @@ router.all('/search', async (req, res) => {
 });
 
 /**
+ * @route GET /searchbar
+ * @description Searches for collections and items based on a keyword search.
+ * @param {string} keyword - The search keyword to match against collection titles, descriptions, item names, and descriptions.
+ * @access Public
+ */
+router.get('/searchbar', async (req, res) => {
+    const { keyword } = req.query;
+
+    if (!keyword) {
+        return res.status(400).json({ error: "Please provide a search keyword." });
+    }
+
+    try {
+        const keywordFilter = {
+            [Op.or]: [
+                { title: { [Op.iLike]: `%${keyword}%` } }, // search for collections with matching titles
+                { description: { [Op.iLike]: `%${keyword}%` } }, // search for collections with matching descriptions
+            ],
+        };
+
+        // search for collections
+        const collections = await Collection.findAll({
+            where: keywordFilter,
+            attributes: ['collection_id', 'title', 'description'],
+        });
+
+        // search for items
+        const items = await Item.findAll({
+            where: {
+                [Op.or]: [
+                    { 'properties.mlm:name': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching names
+                    { 'properties.description': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching descriptions
+                ],
+            },
+            attributes: ['item_id', 'properties', 'collection_id'],
+        });
+
+        res.json({
+            collections: collections, // returns the collections
+            items: items, // returns the items
+        });
+    } catch (error) {
+        console.error('Error in searchbar route:', error);
+        res.status(500).json({ error: "An error occurred while performing the search." });
+    }
+});
+
+
+/**
  * @route POST /upload
  * @description Handles file uploads and processes STAC data into collections or items.
  * @access Public
@@ -470,10 +519,13 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
 
         // Handle unique constraint errors
         if (error.name === 'SequelizeUniqueConstraintError') {
+            const duplicateField = error.errors[0]?.path || 'unknown';
+            const duplicateValue = error.errors[0]?.value || 'unknown';
             return res.status(400).json({
-                error: `An item with the ID "${error.fields.item_id}" already exists. Please use a different ID or update the existing item.`,
+                error: `An entry with the ${duplicateField} "${duplicateValue}" already exists. Please use a different ID or update the existing entry.`,
             });
         }
+        
     
         // Handle other errors
         res.status(500).json({ error: 'An unexpected error occurred while saving data.' });
