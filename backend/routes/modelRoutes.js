@@ -353,13 +353,14 @@ router.get('/searchbar', async (req, res) => {
             [Op.or]: [
                 { title: { [Op.iLike]: `%${keyword}%` } }, // search for collections with matching titles
                 { description: { [Op.iLike]: `%${keyword}%` } }, // search for collections with matching descriptions
+                { keywords: { [Op.contains]: [keyword] } }, // search for collections with matching keywords
             ],
         };
 
         // search for collections
         const collections = await Collection.findAll({
             where: keywordFilter,
-            attributes: ['collection_id', 'title', 'description'],
+            attributes: ['collection_id', 'title', 'description', 'keywords'],
         });
 
         // search for items
@@ -368,6 +369,9 @@ router.get('/searchbar', async (req, res) => {
                 [Op.or]: [
                     { 'properties.mlm:name': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching names
                     { 'properties.description': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching descriptions
+                    { 'properties.mlm:tasks': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching tasks
+                    { 'properties.mlm:framework': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching frameworks
+                    { 'properties.mlm:architecture': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching architectures
                 ],
             },
             attributes: ['item_id', 'properties', 'collection_id'],
