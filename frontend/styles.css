@@ -88,16 +88,27 @@ body {
     align-items: center;
 }
 
-/* Search Bar in Navbar EXTENSION */
-/* Autocomplete Styles für Dark Mode */
+
+
+
+
+
+
+
+
+
+
+/* ********** Autocomplete Styles ********** */
+
+/* Base styles for autocomplete list */
 .autocomplete {
-    display: none; /* Startet als unsichtbar */
+    display: none; /* Hidden by default */
     list-style-type: none;
     padding: 0;
     margin: 0;
     border: 1px solid #ddd;
     border-radius: 4px;
-    max-height: 150px;
+    max-height: 200px;
     overflow-y: auto;
     position: absolute;
     z-index: 1000;
@@ -105,38 +116,85 @@ body {
     top: 100%;
     left: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9; /* Standard-Hintergrundfarbe für hellen Modus */
-    color: #333; /* Standard-Textfarbe für hellen Modus */
+    background-color: #f9f9f9; /* Light mode background */
+    color: #333; /* Text color for light mode */
 }
 
-/* Dark Mode Anpassungen für Autocomplete */
-body.dark-mode .autocomplete {
-    background-color: #333; /* Dunklerer Hintergrund im Dark Mode */
-    color: #f9f9f9; /* Helle Textfarbe im Dark Mode */
-    border-color: #555; /* Etwas dunklerer Rand */
-}
-
-body.dark-mode .autocomplete li:hover {
-    background: #2d828e; /* Anpassung der Hover-Farbe für Dark Mode */
-    color: white;
-}
-
-/* Sichtbarkeit der Autocomplete-Liste beim Tippen oder Fokussieren */
-#search-bar:focus + .autocomplete,
-#search-bar:not(:placeholder-shown) + .autocomplete {
-    display: block; /* Wird sichtbar, wenn das Suchfeld fokussiert ist oder Text eingegeben wurde */
-}
-
+/* Autocomplete item styles */
 .autocomplete li {
     padding: 10px;
     cursor: pointer;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0; /* Separator for items */
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Hover-Effekt für Listenelemente */
+/* Hover effect for autocomplete items */
 .autocomplete li:hover {
-    background: #256e77;
+    background-color: #256e77; /* Blue hover effect */
     color: white;
 }
+
+/* Visibility when the search bar is focused or contains text */
+#search-bar:focus + .autocomplete,
+#search-bar:not(:placeholder-shown) + .autocomplete {
+    display: block; /* Show the autocomplete dropdown */
+}
+
+/* ********** Dark Mode Styles ********** */
+body.dark-mode .autocomplete {
+    background-color: #333; /* Dark mode background */
+    color: #f9f9f9; /* Light text for dark mode */
+    border-color: #555; /* Darker border for dark mode */
+}
+
+body.dark-mode .autocomplete li:hover {
+    background-color: #2d828e; /* Adjusted hover background for dark mode */
+    color: white; /* Ensure text remains readable */
+}
+
+/* Individual autocomplete item hover in dark mode */
+body.dark-mode .autocomplete-item:hover {
+    background-color: #444; /* Slightly lighter than the dark mode background */
+    color: white;
+}
+
+/* ********** Responsive Adjustments ********** */
+@media (max-width: 768px) {
+    .autocomplete {
+        max-width: calc(100vw - 20px); /* Prevent overflow on mobile */
+        left: 10px; /* Add padding for smaller screens */
+        right: 10px;
+    }
+
+    .model-item {
+        padding: 10px;
+        font-size: 14px; /* Adjust font size for smaller screens */
+    }
+}
+
+/* ********** Debugging Helper Styles ********** */
+/* Use during debugging to visualize autocomplete */
+.autocomplete {
+    outline: 1px solid rgba(0, 123, 255, 0.2); /* Light blue outline for debugging */
+}
+
+/* Force visibility during debugging */
+.autocomplete {
+    display: block !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* ********** Main Section Styles ********** */

@@ -351,42 +351,68 @@ router.get('/searchbar', async (req, res) => {
     try {
         const keywordFilter = {
             [Op.or]: [
-                { title: { [Op.iLike]: `%${keyword}%` } }, // search for collections with matching titles
-                { description: { [Op.iLike]: `%${keyword}%` } }, // search for collections with matching descriptions
-                { keywords: { [Op.contains]: [keyword] } }, // search for collections with matching keywords
+                { title: { [Op.iLike]: `%${keyword}%` } },
+                { description: { [Op.iLike]: `%${keyword}%` } },
+                { keywords: { [Op.contains]: [keyword] } },
             ],
         };
 
-        // search for collections
+        // Search for collections
         const collections = await Collection.findAll({
             where: keywordFilter,
             attributes: ['collection_id', 'title', 'description', 'keywords'],
         });
 
-        // search for items
+        // Search for items
         const items = await Item.findAll({
             where: {
                 [Op.or]: [
-                    { 'properties.mlm:name': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching names
-                    { 'properties.description': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching descriptions
-                    { 'properties.mlm:tasks': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching tasks
-                    { 'properties.mlm:framework': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching frameworks
-                    { 'properties.mlm:architecture': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching architectures
+                    { 'properties.mlm:name': { [Op.iLike]: `%${keyword}%` } },
+                    { 'properties.description': { [Op.iLike]: `%${keyword}%` } },
+                    { 'properties.mlm:tasks': { [Op.iLike]: `%${keyword}%` } },
+                    { 'properties.mlm:framework': { [Op.iLike]: `%${keyword}%` } },
+                    { 'properties.mlm:architecture': { [Op.iLike]: `%${keyword}%` } },
                 ],
             },
             attributes: ['item_id', 'properties', 'collection_id'],
         });
 
+        console.log('Collections:', collections); // Debug collections
+        console.log('Items:', items); // Debug items
+
+        const suggestions = [
+            ...collections.map(c => ({
+                type: 'collection',
+                id: c.collection_id,
+                title: c.title,
+            })),
+            ...items.map(i => ({
+                type: 'item',
+                id: i.item_id,
+                title: i.properties?.['mlm:name'] || 'No Name',
+            })),
+        ];
+
+        console.log('Suggestions:', suggestions); // Debug suggestions
+        res.json({ suggestions });
+    } catch (error) {
+        console.error('Error in /searchbar route:', error);
+        res.status(500).json({ error: "An error occurred while performing the search." });
+    }
+});
+
+/** 
         res.json({
             collections: collections, // returns the collections
             items: items, // returns the items
+            suggestions: suggestions, // returns the autocomplete suggestions
         });
     } catch (error) {
         console.error('Error in searchbar route:', error);
         res.status(500).json({ error: "An error occurred while performing the search." });
     }
 });
-
+*/
 
 /**
  * @route POST /upload

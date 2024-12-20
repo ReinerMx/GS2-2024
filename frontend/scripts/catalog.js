@@ -3,7 +3,73 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
+    const autocompleteList = document.createElement('ul');
+    autocompleteList.setAttribute('id', 'autocomplete-list');
+    autocompleteList.setAttribute('class', 'autocomplete');
+    document.body.appendChild(autocompleteList);
 
+    // Adjust the position of the autocomplete list
+    const positionAutocomplete = () => {
+        const rect = searchInput.getBoundingClientRect();
+        autocompleteList.style.position = 'absolute';
+        autocompleteList.style.top = `${rect.bottom + window.scrollY}px`;
+        autocompleteList.style.left = `${rect.left + window.scrollX}px`;
+        autocompleteList.style.width = `${rect.width}px`;
+    };
+
+    // Event listener for updating autocomplete position on resize
+    window.addEventListener('resize', positionAutocomplete);
+
+    // Function to fetch and display autocomplete suggestions
+    const fetchAutocompleteSuggestions = async (query) => {
+        if (!query.trim()) {
+            autocompleteList.innerHTML = ''; // Clear suggestions
+            return;
+        }
+    
+        try {
+            const response = await fetch(`/searchbar?keyword=${encodeURIComponent(query)}`);
+            if (!response.ok) throw new Error('Error fetching autocomplete suggestions');
+    
+            const { suggestions } = await response.json();
+            console.log('Autocomplete Suggestions:', suggestions); // Debug log
+            autocompleteList.innerHTML = ''; // Clear previous suggestions
+    
+            suggestions.forEach((suggestion) => {
+                const li = document.createElement('li');
+                li.textContent = suggestion.title || suggestion.name;
+                li.classList.add('autocomplete-item');
+                li.addEventListener('click', () => handleSuggestionClick(suggestion));
+                autocompleteList.appendChild(li);
+            });
+    
+            positionAutocomplete(); // Ensure the list is positioned correctly
+        } catch (error) {
+            console.error('Error fetching autocomplete suggestions:', error);
+        }
+    };
+    
+
+    const handleSuggestionClick = (suggestion) => {
+        // Fill the search input with the clicked suggestion
+        searchInput.value = suggestion.title || suggestion.name;
+        autocompleteList.innerHTML = ''; // Clear the autocomplete list
+        // Optionally trigger a full search based on the selected suggestion
+        fetchSearchResults(searchInput.value.trim());
+    };
+
+    // Attach an input event listener to the search input
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim();
+        fetchAutocompleteSuggestions(query);
+    });
+
+    // Close the autocomplete list if the user clicks outside
+    document.addEventListener('click', (event) => {
+        if (!autocompleteList.contains(event.target) && event.target !== searchInput) {
+            autocompleteList.innerHTML = ''; // Clear suggestions
+        }
+    });
 
     // Initialize Leaflet map
     const map = L.map('map').setView([51.505, -0.09], 3);
@@ -34,59 +100,57 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('GeoJSON:', layer.toGeoJSON());
     });
 
-    // Event listener for applying geographic filterr
-document.getElementById('applyGeoFilter').addEventListener('click', async () => {
-    const filters = {}; // Initialize the filters object
+    // Event listener for applying geographic filter
+    document.getElementById('applyGeoFilter').addEventListener('click', async () => {
+        const filters = {}; // Initialize the filters object
 
-    // Ensure either geometry or time range is provided
-    if (!drawnGeometry && !(startDateInput.value || endDateInput.value)) {
-        alert('Please provide either a geographic region or a time range!');
-        return;
-    }
+        // Ensure either geometry or time range is provided
+        if (!drawnGeometry && !(startDateInput.value || endDateInput.value)) {
+            alert('Please provide either a geographic region or a time range!');
+            return;
+        }
 
-    // Add the geographic filter if a shape was drawn
-    if (drawnGeometry) {
-        const geoJSON = drawnGeometry.toGeoJSON();
-        console.log('Geographic Filter GeoJSON:', geoJSON);
-        filters.geoFilter = geoJSON.geometry;
-        console.log("Received GeoJSON:", JSON.stringify(geoJSON)); // Log only when geoJSON exists
-    
+        // Add the geographic filter if a shape was drawn
+        if (drawnGeometry) {
+            const geoJSON = drawnGeometry.toGeoJSON();
+            console.log('Geographic Filter GeoJSON:', geoJSON);
+            filters.geoFilter = geoJSON.geometry;
+            console.log("Received GeoJSON:", JSON.stringify(geoJSON)); // Log only when geoJSON exists
+
             // Berechne Bounding Box
             const bbox = turf.bbox(geoJSON); // Requires turf.js
             filters.bbox = bbox; // Speichere die Bounding Box
-            console.log("Bounding Box:", bbox); 
-    }
+            console.log("Bounding Box:", bbox);
+        }
 
-    // Add the time filter if startDate or endDate is provided
-    if (startDateInput.value || endDateInput.value) {
-        filters.datetime = `${startDateInput.value || ".."}/${endDateInput.value || ".."}`;
-    }
+        // Add the time filter if startDate or endDate is provided
+        if (startDateInput.value || endDateInput.value) {
+            filters.datetime = `${startDateInput.value || ".."}/${endDateInput.value || ".."}`;
+        }
 
-    console.log('Sending filters:', filters);
-    console.log("Received geoFilter on server:", filters.geoFilter);
-    console.log("Serialized geoFilter for PostGIS:", JSON.stringify(filters.geoFilter));
-    
+        console.log('Sending filters:', filters);
+        console.log("Received geoFilter on server:", filters.geoFilter);
+        console.log("Serialized geoFilter for PostGIS:", JSON.stringify(filters.geoFilter));
 
-    // Send filters to the backend
-    try {
-        const response = await fetch('/search', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(filters),
-        });
+        // Send filters to the backend
+        try {
+            const response = await fetch('/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(filters),
+            });
 
-        if (!response.ok) throw new Error('Error fetching filtered models');
+            if (!response.ok) throw new Error('Error fetching filtered models');
 
-        const models = await response.json();
-        console.log('Filtered Models:', models);
+            const models = await response.json();
+            console.log('Filtered Models:', models);
 
-        displayModels(models.features || [], filters);
-    } catch (error) {
-        console.error('Error applying filters:', error);
-        resultsContainer.innerHTML = '<p>Error fetching filtered models.</p>';
-    }
-});
-
+            displayModels(models.features || [], filters);
+        } catch (error) {
+            console.error('Error applying filters:', error);
+            resultsContainer.innerHTML = '<p>Error fetching filtered models.</p>';
+        }
+    });
 
     // Debugging initialization
     console.log('Document loaded. Initializing collections and event listeners.');
@@ -133,17 +197,16 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
             resultsContainer.innerHTML = '<p>No collections found.</p>';
             return;
         }
-        
 
         collections.forEach((collection) => {
             console.log('Rendering collection:', collection);
             const collectionDiv = document.createElement('div');
             collectionDiv.classList.add('model-item', 'mb-4');
 
-    // Keywords als einzelne Span-Elemente rendern (für Arrays)
-    const keywordsHTML = Array.isArray(collection.keywords) && collection.keywords.length > 0
-        ? collection.keywords.map(keyword => `<span>${keyword.trim()}</span>`).join(' ')
-        : '';
+            // Keywords als einzelne Span-Elemente rendern (für Arrays)
+            const keywordsHTML = Array.isArray(collection.keywords) && collection.keywords.length > 0
+                ? collection.keywords.map(keyword => `<span>${keyword.trim()}</span>`).join(' ')
+                : '';
 
             collectionDiv.innerHTML = `
                 <h4>${collection.title}</h4>
@@ -157,6 +220,7 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
 
         attachViewItemsListeners();
     };
+
 
     // Function to display items in a collection
     const displayItems = (items) => {
@@ -230,6 +294,7 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
         }
     });
 
+
     const fetchSearchResults = async (keyword) => {
         try {
             const response = await fetch(`/searchbar?keyword=${encodeURIComponent(keyword)}`);
@@ -243,6 +308,10 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
             resultsContainer.innerHTML = '<p>Error fetching search results.</p>';
         }
     };
+
+
+
+
     
     // function to display search results
     const displaySearchResults = (collections, items) => {
