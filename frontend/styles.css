@@ -9,21 +9,21 @@ body {
     margin: auto;
 }
 
-/* Neue Klasse für das innere Div */
+/* new class for inner div */
 .list-container {
-    margin-left: 20px; /* Schiebt das Div mit der Liste nach innen */
-    margin-right: 20px; /* Optional: Abstand auf der rechten Seite */
+    margin-left: 20px; 
+    margin-right: 20px; 
   }
 
 /* ********** Buttons ********** */
 .btn-primary {
-    background-color: #007bff; /* Einheitliches Blau */
+    background-color: #007bff; 
     border-color: #007bff;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3; /* Dunkleres Blau beim Hover */
+    background-color: #0056b3; 
     border-color: #0056b3;
 }
 
@@ -88,16 +88,6 @@ body {
     align-items: center;
 }
 
-
-
-
-
-
-
-
-
-
-
 /* ********** Autocomplete Styles ********** */
 
 /* Base styles for autocomplete list */
@@ -125,7 +115,7 @@ body {
     padding: 10px;
     cursor: pointer;
     font-size: 14px;
-    border-bottom: 1px solid #f0f0f0; /* Separator for items */
+    border-bottom: 1px solid #f0f0f0; /* Separator between items */
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -179,23 +169,10 @@ body.dark-mode .autocomplete-item:hover {
     outline: 1px solid rgba(0, 123, 255, 0.2); /* Light blue outline for debugging */
 }
 
-/* Force visibility during debugging */
+/* Hide the autocomplete dropdown by default */
 .autocomplete {
-    display: block !important;
+    display: none; /* Ensures visibility only when triggered */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ********** Main Section Styles ********** */
 /* General reset for full height */
@@ -239,7 +216,6 @@ body {
     background-color: #f8f9fa;
 } 
 
-
 /* ********** Feature Section ********** */
 /* Styles for individual features */
 .feature {
@@ -249,11 +225,10 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
-    overflow: hidden; /* Sicherstellen, dass Inhalte nicht über den Rand hinausgehen */
-    max-width: 100%; /* Sicherstellen, dass der Container nicht zu groß wird */
-    text-align: center; /* Zentriert die Inhalte */
+    overflow: hidden; /* Ensures content doesn’t overflow */
+    max-width: 100%; /* Ensures the container doesn’t get too large */
+    text-align: center; /* Centers content */
 }
-
 
 .feature:hover {
     transform: translateY(-5px);
@@ -286,14 +261,14 @@ body {
 }
 
 .custom-paragraph {
-    font-family: Arial, sans-serif;  /* Beispiel-Schriftart */
-    font-size: 16px;  /* Beispiel-Schriftgröße */
-    line-height: 1.5;  /* Zeilenhöhe für bessere Lesbarkeit */
-    color: #666;  /* Textfarbe */
-    margin: 0 0 1em 0;  /* Abstand nach unten */
-    padding: 0;  /* Kein Innenabstand */
+    font-family: Arial, sans-serif;  /* Example font */
+    font-size: 16px;  /* Example font size */
+    line-height: 1.5;  /* Line height for better readability */
+    color: #666;  /* Text color */
+    margin: 0 0 1em 0;  /* Bottom spacing */
+    padding: 0;  /* No inner spacing */
   }
-  
+
 /* ********** Button Styles ********** */
 /* General button styling */
 .btn {
@@ -301,9 +276,16 @@ body {
 }
 
 .btn:hover {
-    transform: scale(1.05); /* Reduziertes Scaling */
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); /* Leichterer Schatten */
+    transform: scale(1.05); /* Reduced scaling */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); /* Subtle shadow */
 }
+
+
+
+
+
+
+
 
 
 /* ********** Sidebar Styling ********** */
