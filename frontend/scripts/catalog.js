@@ -121,6 +121,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const bbox = turf.bbox(geoJSON); // Requires turf.js
             filters.bbox = bbox; // Speichere die Bounding Box
             console.log("Bounding Box:", bbox);
+
+            if (drawnGeometry) {
+                const filterLayer = L.geoJSON(drawnGeometry.toGeoJSON(), {
+                    style: { color: "#ff7800", weight: 2, fillOpacity: 0.2 }
+                }).addTo(map);
+            
+                map.fitBounds(filterLayer.getBounds());
+            }
+            
         }
 
         // Add the time filter if startDate or endDate is provided
@@ -338,8 +347,42 @@ document.addEventListener('DOMContentLoaded', () => {
             displayItems(items); 
         }
     };
-    
 
+    
+    /**
+     * 
+     * @param {*} mapId 
+     * @param {*} bbox 
+     * @returns 
+     */
+    const initializeMap = (mapId, bbox) => {
+        if (!bbox || bbox.length !== 4) {
+            console.warn(`Invalid BBOX for map ${mapId}:`, bbox);
+            return null; // Return null if bbox is invalid
+        }
+    
+        const [minX, minY, maxX, maxY] = bbox;
+    
+        // Initialize the Leaflet map
+        const map = L.map(mapId).setView([(minY + maxY) / 2, (minX + maxX) / 2], 5);
+    
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+    
+        // Add a rectangle for the BBOX
+        const bounds = [[minY, minX], [maxY, maxX]];
+        L.rectangle(bounds, { color: "#3388ff", weight: 1 }).addTo(map);
+    
+        // Fit the map to the BBOX
+        map.fitBounds(bounds);
+    
+        return map; // Return the map object
+    };
+    
+    
 
 // Function to display models for geographic filter
 const displayModels = (models, filters) => {
@@ -367,17 +410,37 @@ const displayModels = (models, filters) => {
 
     const grid = document.getElementById('modelGrid');
 
-    models.forEach((model) => {
+    models.forEach((model, index) => {
         const overlap = model.properties.overlap_percentage 
-        ? parseFloat(model.properties.overlap_percentage).toFixed(2) + "%"
-        : "N/A"; // Fallback if overlap_percentage is null or undefined    
+            ? parseFloat(model.properties.overlap_percentage).toFixed(2) + "%"
+            : "No spatial filter applied."; // Fallback if overlap_percentage is null or undefined
+
+        // Extract and format temporal coverage
+        const startDatetime = model.properties?.start_datetime 
+            ? new Date(model.properties.start_datetime).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            })
+            : "N/A";
+        const endDatetime = model.properties?.end_datetime 
+            ? new Date(model.properties.end_datetime).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            })
+            : "N/A";
+        
         const modelDiv = document.createElement('div');
         modelDiv.classList.add('model-item');
         modelDiv.innerHTML = `
             <h5>${model.properties['mlm:name']}</h5>
             <p>${model.properties.description}</p>
             <p><strong>Collection:</strong> ${model.collection}</p>
-            <p><strong>Overlap:</strong> ${overlap}</p>
+            <p><strong>Temporal Coverage:</strong> ${startDatetime} - ${endDatetime}</p>
+            <p><strong>Area covered by the model:</strong> ${overlap}</p>
+            <p><strong>Legend:</strong> 
+            <span style="color: orange;">●</span> Filtered Region 
+            <span style="color: blue;">●</span> Model Region
+        </p>
+        
+            <div id="map-${index}" style="height: 200px;"></div>
             <button class="btn btn-primary view-details-btn" 
                 data-collection-id="${model.collection}" 
                 data-item-id="${model.id}">
@@ -385,7 +448,19 @@ const displayModels = (models, filters) => {
             </button>
         `;
         grid.appendChild(modelDiv);
+    
+        // Initialize the map for this item's bbox
+        const map = initializeMap(`map-${index}`, model.bbox);
+    
+        if (map && drawnGeometry) { // Ensure the map and drawnGeometry exist
+            const filterLayer = L.geoJSON(drawnGeometry.toGeoJSON(), {
+                style: { color: "#ff7800", weight: 2, fillOpacity: 0.2 }
+            }).addTo(map);
+    
+            map.fitBounds(filterLayer.getBounds());
+        }
     });
+    
 
     attachViewDetailsListeners();
 };
