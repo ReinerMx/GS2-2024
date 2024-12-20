@@ -131,8 +131,8 @@ body {
 
 /* Hover effect for autocomplete items */
 .autocomplete li:hover {
-    background-color: #256e77; /* Blue hover effect */
-    color: white;
+    background-color: #cee5ff; /* Blue hover effect */
+    color: black;
 }
 
 /* Visibility when the search bar is focused or contains text */
@@ -149,7 +149,7 @@ body.dark-mode .autocomplete {
 }
 
 body.dark-mode .autocomplete li:hover {
-    background-color: #2d828e; /* Adjusted hover background for dark mode */
+    background-color: #cee5ff; /* Adjusted hover background for dark mode */
     color: white; /* Ensure text remains readable */
 }
 
@@ -1058,7 +1058,7 @@ input:checked + .slider:before {
 }
 
 .faq-question:hover {
-    background-color: #256e77;
+    background-color: #cee5ff;
     transform: scale(1.02);
 }
 
@@ -1081,8 +1081,8 @@ input:checked + .slider:before {
 /* Entferne die Standard-Fokus-Linie */
 .faq-question:focus {
     outline: none;
-    box-shadow: 0 0 4px #256e77; /* Alternativer Fokus-Stil mit Farbe */
-    background-color: #256e77; /* Angleichung an Hover- oder Klickfarbe */
+    box-shadow: 0 0 4px #cee5ff; /* Alternativer Fokus-Stil mit Farbe */
+    background-color: #cee5ff; /* Angleichung an Hover- oder Klickfarbe */
 }
 
 /* Responsiveness */
