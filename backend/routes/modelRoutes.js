@@ -181,116 +181,63 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
  * @access Public
  */
 router.all('/search', async (req, res) => {
-    // Check if the request method is POST, otherwise default to query parameters
     const isPost = req.method === 'POST';
     const params = isPost ? req.body : req.query;
-
-    // Destructure parameters from request
     const { bbox, datetime, collections, limit = 10, geoFilter } = params;
 
     try {
-        const where = []; // Array to store filtering conditions for SQL query
+        const where = [];
+        const attributes = {
+            include: []
+        };
 
-        /** 
-         * GeoJSON Filter:
-         * If a GeoJSON geometry is provided (e.g., a polygon), 
-         * add a spatial filter using PostGIS ST_Intersects and ST_GeomFromGeoJSON.
-         */
         if (geoFilter) {
+            const geoJSON = sequelize.escape(JSON.stringify(geoFilter));
             where.push(sequelize.literal(`
                 ST_Intersects(
                     geometry, 
-                    ST_GeomFromGeoJSON('${JSON.stringify(geoFilter)}')
+                    ST_GeomFromGeoJSON(${geoJSON})
+                )
+            `));
+            attributes.include.push([
+                sequelize.literal(`
+                    CASE 
+                        WHEN ST_IsEmpty(geometry) OR ST_IsEmpty(ST_GeomFromGeoJSON(${geoJSON})) THEN 0
+                        ELSE ST_Area(ST_Intersection(geometry, ST_GeomFromGeoJSON(${geoJSON}))) / ST_Area(ST_GeomFromGeoJSON(${geoJSON})) * 100
+                    END
+                `), 'overlap_percentage'
+            ]);
+        }
+
+        if (bbox) {
+            const [minX, minY, maxX, maxY] = typeof bbox === 'string'
+                ? bbox.split(',').map(Number)
+                : bbox;
+            where.push(sequelize.literal(`
+                ST_Intersects(
+                    geometry, 
+                    ST_MakeEnvelope(${minX}, ${minY}, ${maxX}, ${maxY}, 4326)
                 )
             `));
         }
 
-        /**
-         * Bounding Box Filter:
-         * Filters items based on a rectangular bounding box defined by coordinates.
-         * BBOX must be in the format [minX, minY, maxX, maxY].
-         */
-        if (bbox) {
-            let parsedBbox;
-
-            // Parse bbox input: if it's a string, split and convert to numbers
-            if (typeof bbox === 'string') {
-                parsedBbox = bbox.split(',').map(Number);
-            } else if (Array.isArray(bbox)) {
-                parsedBbox = bbox.map(Number);
-            }
-
-            // Ensure bbox contains exactly 4 valid coordinates
-            if (parsedBbox.length === 4) {
-                const [minX, minY, maxX, maxY] = parsedBbox;
-
-                // Use PostGIS ST_MakeEnvelope to create a rectangle and filter intersections
-                where.push(sequelize.literal(`
-                    ST_Intersects(
-                        geometry, 
-                        ST_MakeEnvelope(${minX}, ${minY}, ${maxX}, ${maxY}, 4326)
-                    )
-                `));
-            } else {
-                throw new Error("bbox must contain exactly 4 coordinates: [minX, minY, maxX, maxY]");
-            }
-        }
-
-        /**
-         * Datetime Filter:
-         * Filters results based on a start and end datetime range.
-         * Accepts ISO 8601 formatted strings in 'start/end' format.
-         */
         if (datetime) {
-            let start, end;
-
-            // Parse datetime string: split by '/' into start and end
-            if (typeof datetime === 'string' && datetime.includes('/')) {
-                [start, end] = datetime.split('/');
-            } else {
-                throw new Error("Invalid datetime format. Use 'start/end'.");
-            }
-
-            // Validate the datetime strings
+            const [start, end] = datetime.split('/');
             if (!isNaN(Date.parse(start)) && !isNaN(Date.parse(end))) {
-                // Add datetime conditions to the SQL WHERE clause
                 where.push(sequelize.literal(`properties->>'start_datetime' <= '${end}'`));
                 where.push(sequelize.literal(`properties->>'end_datetime' >= '${start}'`));
             } else {
-                throw new Error("Invalid datetime values. Ensure they are ISO 8601-compliant.");
+                throw new Error("Invalid datetime values.");
             }
         }
 
-        /**
-         * Collections Filter:
-         * Filters results based on one or more collection IDs.
-         * If 'collections' is provided, include it as a condition.
-         */
         if (collections) {
-            where.push({ 
-                collection_id: { 
-                    [Op.in]: Array.isArray(collections) ? collections : [collections] 
-                } 
-            });
+            where.push({ collection_id: { [Op.in]: Array.isArray(collections) ? collections : [collections] } });
         }
 
-        console.log("Generated WHERE conditions:", where); // Debug log for SQL conditions
+        const items = await Item.findAll({ attributes, where: { [Op.and]: where }, limit });
 
-        /**
-         * Execute the query:
-         * Use Sequelize `findAll` to fetch filtered items from the database.
-         * Combine all conditions with an AND operator to ensure they all apply.
-         */
-        const items = await Item.findAll({
-            where: { [Op.and]: where },
-            limit, // Limit the number of results returned
-        });
-
-        /**
-         * Respond with STAC-compliant FeatureCollection:
-         * Format the results as GeoJSON features with relevant properties, geometry, and links.
-         */
-        res.json({
+        const response = {
             type: "FeatureCollection",
             features: items.map(item => ({
                 type: "Feature",
@@ -301,7 +248,12 @@ router.all('/search', async (req, res) => {
                     coordinates: item.geometry.coordinates
                 } : null,
                 bbox: item.bbox,
-                properties: item.properties,
+                properties: {
+                    ...item.properties,
+                    overlap_percentage: item.dataValues.overlap_percentage
+                    ? parseFloat(item.dataValues.overlap_percentage).toFixed(2)
+                    : null // Ensure it's either a number or null
+                },
                 collection: item.collection_id,
                 links: [
                     {
@@ -316,24 +268,18 @@ router.all('/search', async (req, res) => {
                     }
                 ]
             })),
-            links: [
-                {
-                    rel: "self",
-                    href: `http://localhost:5555/search`,
-                    type: "application/json"
-                }
-            ],
-            context: {
-                returned: items.length, // Number of items returned
-                limit: limit // Limit applied
-            }
-        });
+            links: [{ rel: "self", href: `http://localhost:5555/search`, type: "application/json" }],
+            context: { returned: items.length, limit }
+        };
+
+        console.log("Response JSON:", JSON.stringify(response, null, 2));
+        res.json(response);
     } catch (error) {
-        // Handle errors and send error response
         console.error("Error in /search route:", error);
         res.status(400).json({ error: error.message });
     }
 });
+
 
 /**
  * @route GET /searchbar

@@ -345,7 +345,6 @@ document.addEventListener('DOMContentLoaded', () => {
 const displayModels = (models, filters) => {
     resultsContainer.innerHTML = ''; // Clear previous content
 
-    // Zusammenfassung der Filter
     let filtersSummary = [];
     if (filters.geoFilter) {
         filtersSummary.push("Geographic Filter Applied");
@@ -353,11 +352,10 @@ const displayModels = (models, filters) => {
             const [minX, minY, maxX, maxY] = filters.bbox;
             filtersSummary.push(`Bounding Box: [${minX.toFixed(2)}, ${minY.toFixed(2)}, ${maxX.toFixed(2)}, ${maxY.toFixed(2)}]`);
         }
-    }    
+    }
     if (filters.datetime) filtersSummary.push(`Time Range: ${filters.datetime}`);
     if (filtersSummary.length === 0) filtersSummary = "None";
 
-    // Filterbox erstellen
     resultsContainer.innerHTML = `
         <div class="filtered-results-header">
             <h4>Filtered Models</h4>
@@ -369,14 +367,17 @@ const displayModels = (models, filters) => {
 
     const grid = document.getElementById('modelGrid');
 
-    // Modelle anzeigen
     models.forEach((model) => {
+        const overlap = model.properties.overlap_percentage 
+        ? parseFloat(model.properties.overlap_percentage).toFixed(2) + "%"
+        : "N/A"; // Fallback if overlap_percentage is null or undefined    
         const modelDiv = document.createElement('div');
         modelDiv.classList.add('model-item');
         modelDiv.innerHTML = `
             <h5>${model.properties['mlm:name']}</h5>
             <p>${model.properties.description}</p>
             <p><strong>Collection:</strong> ${model.collection}</p>
+            <p><strong>Overlap:</strong> ${overlap}</p>
             <button class="btn btn-primary view-details-btn" 
                 data-collection-id="${model.collection}" 
                 data-item-id="${model.id}">
@@ -388,6 +389,4 @@ const displayModels = (models, filters) => {
 
     attachViewDetailsListeners();
 };
-
-
 });
