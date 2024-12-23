@@ -11,17 +11,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Adjust the position of the autocomplete list
     const positionAutocomplete = () => {
         const rect = searchInput.getBoundingClientRect();
+        console.log('Autocomplete Position:', rect.bottom, rect.left, rect.width);
         autocompleteList.style.position = 'absolute';
         autocompleteList.style.top = `${rect.bottom + window.scrollY}px`;
         autocompleteList.style.left = `${rect.left + window.scrollX}px`;
         autocompleteList.style.width = `${rect.width}px`;
+        autocompleteList.style.display = 'block';
     };
+    
 
     // Event listener for updating autocomplete position on resize
     window.addEventListener('resize', positionAutocomplete);
 
     // Function to fetch and display autocomplete suggestions
     const fetchAutocompleteSuggestions = async (query) => {
+        console.log('Fetching suggestions for:', query);
+
         if (!query.trim()) {
             autocompleteList.innerHTML = ''; // Clear suggestions
             return;
@@ -39,9 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const li = document.createElement('li');
                 li.textContent = suggestion.title || suggestion.name;
                 li.classList.add('autocomplete-item');
-                li.addEventListener('click', () => handleSuggestionClick(suggestion));
                 autocompleteList.appendChild(li);
             });
+            console.log('Autocomplete List Content:', autocompleteList.innerHTML);
+            
     
             positionAutocomplete(); // Ensure the list is positioned correctly
         } catch (error) {
@@ -59,17 +65,21 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Attach an input event listener to the search input
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.trim();
-        fetchAutocompleteSuggestions(query);
-    });
+    searchInput.addEventListener('input', (e) => {
+        console.log('Input event triggered:', e.target.value); // Debug-Ausgabe
+        fetchAutocompleteSuggestions(e.target.value.trim());
+    });    
 
     // Close the autocomplete list if the user clicks outside
     document.addEventListener('click', (event) => {
         if (!autocompleteList.contains(event.target) && event.target !== searchInput) {
-            autocompleteList.innerHTML = ''; // Clear suggestions
+            setTimeout(() => {
+                autocompleteList.innerHTML = '';
+            }, 100);
         }
     });
+    
+    
 
     // Initialize Leaflet map
     const map = L.map('map').setView([51.505, -0.09], 3);
