@@ -340,7 +340,7 @@ router.get('/searchbar', async (req, res) => {
         ];
 
         console.log('Suggestions:', suggestions); // Debug suggestions
-        res.json({ suggestions });
+        res.json({ collections, items, suggestions })
     } catch (error) {
         console.error('Error in /searchbar route:', error);
         res.status(500).json({ error: "An error occurred while performing the search." });
