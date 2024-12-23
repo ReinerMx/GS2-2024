@@ -363,16 +363,20 @@ router.get('/searchbar', async (req, res) => {
  */
 router.get('/filters', async (req, res) => {
     try {
-        // Fetch distinct tasks from JSONB properties
-        const tasks = await Item.findAll({
-            attributes: [
-                [sequelize.literal("DISTINCT properties->>'mlm:tasks'"), 'task'],
-            ],
-            where: sequelize.literal("properties->>'mlm:tasks' IS NOT NULL"),
-            raw: true,
+        const rawTasks = await Item.findAll({
+            attributes: [[sequelize.fn('DISTINCT', sequelize.json('properties.mlm:tasks')), 'task']],
+            where: sequelize.where(sequelize.json('properties.mlm:tasks'), { [Op.ne]: null }),
         });
 
-        // Fetch distinct frameworks from JSONB properties
+        // Flatten, deduplicate, and clean up tasks
+        const tasks = [
+            ...new Set(rawTasks.flatMap(row => {
+                const taskArray = JSON.parse(row.dataValues.task) || [];
+                return Array.isArray(taskArray) ? taskArray : [taskArray];
+            })),
+        ].filter(Boolean); // Remove null or undefined tasks
+
+        // Fetch other categories as before
         const frameworks = await Item.findAll({
             attributes: [
                 [sequelize.literal("DISTINCT properties->>'mlm:framework'"), 'framework'],
@@ -381,7 +385,6 @@ router.get('/filters', async (req, res) => {
             raw: true,
         });
 
-        // Fetch distinct architectures from JSONB properties
         const architectures = await Item.findAll({
             attributes: [
                 [sequelize.literal("DISTINCT properties->>'mlm:architecture'"), 'architecture'],
@@ -390,18 +393,16 @@ router.get('/filters', async (req, res) => {
             raw: true,
         });
 
-        // Fetch distinct keywords by unnesting the array
         const keywords = await Collection.findAll({
             attributes: [
                 [sequelize.literal('DISTINCT UNNEST(keywords)'), 'keyword'],
             ],
-            where: sequelize.literal("keywords IS NOT NULL"), // Ensure the array is not null
+            where: sequelize.literal("keywords IS NOT NULL"),
             raw: true,
         });
 
-        // Return results as arrays
         res.json({
-            tasks: tasks.map(row => row.task).filter(Boolean), // Filter null values
+            tasks,
             frameworks: frameworks.map(row => row.framework).filter(Boolean),
             architectures: architectures.map(row => row.architecture).filter(Boolean),
             keywords: keywords.map(row => row.keyword).filter(Boolean),
@@ -411,6 +412,7 @@ router.get('/filters', async (req, res) => {
         res.status(500).json({ error: 'Error fetching filters' });
     }
 });
+
 
 
 

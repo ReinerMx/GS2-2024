@@ -96,55 +96,57 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
         }
     });
-    
-    const filterContainer = document.getElementById('filterContainer');
 
-    const loadFilters = async () => {
-        try {
-            const response = await fetch('/filters');
-            if (!response.ok) throw new Error('Error fetching filters');
+const filterContainer = document.getElementById('filterContainer');
 
-            const { tasks, frameworks, architectures, keywords } = await response.json();
+const loadFilters = async () => {
+    try {
+        const response = await fetch('/filters');
+        if (!response.ok) throw new Error('Error fetching filters');
 
-            // Funktion zur Erstellung der Filterkategorie
-            const renderCategory = (title, items) => {
-                if (items.length === 0) return;
+        const { tasks, frameworks, architectures, keywords } = await response.json();
 
-                const categoryDiv = document.createElement('div');
-                categoryDiv.classList.add('filter-category');
+        // Function to render categories
+        const renderCategory = (title, items) => {
+            if (!items || items.length === 0) return;
 
-                const header = document.createElement('h4');
-                header.textContent = title;
-                categoryDiv.appendChild(header);
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('filter-category');
 
-                items.forEach(item => {
-                    const filterItem = document.createElement('div');
-                    filterItem.classList.add('filter-item');
-                    filterItem.textContent = item;
+            const header = document.createElement('h4');
+            header.textContent = title;
+            categoryDiv.appendChild(header);
 
-                    // Filterfunktion bei Klick
-                    filterItem.addEventListener('click', () => {
-                        searchInput.value = item; // Setze den Filter in die Suchleiste
-                        fetchSearchResults(item); // Führe Suche aus
-                    });
+            // Render each item as a separate box
+            [...new Set(items)].forEach((item) => { // Deduplicate items
+                const filterItem = document.createElement('div');
+                filterItem.classList.add('filter-item');
+                filterItem.textContent = item; // Ensure items display cleanly
 
-                    categoryDiv.appendChild(filterItem);
+                // Add click functionality
+                filterItem.addEventListener('click', () => {
+                    searchInput.value = item;
+                    fetchSearchResults(item);
                 });
 
-                filterContainer.appendChild(categoryDiv);
-            };
+                categoryDiv.appendChild(filterItem);
+            });
 
-            // Render die Kategorien
-            renderCategory('Tasks', tasks);
-            renderCategory('Frameworks', frameworks);
-            renderCategory('Architectures', architectures);
-            renderCategory('Keywords', keywords);
-        } catch (error) {
-            console.error('Error loading filters:', error);
-        }
-    };
+            filterContainer.appendChild(categoryDiv);
+        };
 
-    loadFilters(); // Lade die Filter bei Seiteninitialisierung
+        // Render categories with clean tasks
+        renderCategory('Tasks', tasks);
+        renderCategory('Frameworks', frameworks);
+        renderCategory('Architectures', architectures);
+        renderCategory('Keywords', keywords);
+    } catch (error) {
+        console.error('Error loading filters:', error);
+    }
+};
+
+loadFilters(); // Initialize filters on page load
+
     
 
     // Initialize Leaflet map
