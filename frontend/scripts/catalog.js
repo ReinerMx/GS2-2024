@@ -317,11 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsContainer.innerHTML = '<p>Error fetching search results.</p>';
         }
     };
-
-
-
-
-    
+ 
     // function to display search results
     const displaySearchResults = (collections, items) => {
         resultsContainer.innerHTML = '';
