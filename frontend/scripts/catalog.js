@@ -74,8 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    
-
     const handleSuggestionClick = (suggestion) => {
         // Fill the search input with the clicked suggestion
         searchInput.value = suggestion.title || suggestion.name;
@@ -99,6 +97,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
+    const filterContainer = document.getElementById('filterContainer');
+
+    const loadFilters = async () => {
+        try {
+            const response = await fetch('/filters');
+            if (!response.ok) throw new Error('Error fetching filters');
+
+            const { tasks, frameworks, architectures, keywords } = await response.json();
+
+            // Funktion zur Erstellung der Filterkategorie
+            const renderCategory = (title, items) => {
+                if (items.length === 0) return;
+
+                const categoryDiv = document.createElement('div');
+                categoryDiv.classList.add('filter-category');
+
+                const header = document.createElement('h4');
+                header.textContent = title;
+                categoryDiv.appendChild(header);
+
+                items.forEach(item => {
+                    const filterItem = document.createElement('div');
+                    filterItem.classList.add('filter-item');
+                    filterItem.textContent = item;
+
+                    // Filterfunktion bei Klick
+                    filterItem.addEventListener('click', () => {
+                        searchInput.value = item; // Setze den Filter in die Suchleiste
+                        fetchSearchResults(item); // Führe Suche aus
+                    });
+
+                    categoryDiv.appendChild(filterItem);
+                });
+
+                filterContainer.appendChild(categoryDiv);
+            };
+
+            // Render die Kategorien
+            renderCategory('Tasks', tasks);
+            renderCategory('Frameworks', frameworks);
+            renderCategory('Architectures', architectures);
+            renderCategory('Keywords', keywords);
+        } catch (error) {
+            console.error('Error loading filters:', error);
+        }
+    };
+
+    loadFilters(); // Lade die Filter bei Seiteninitialisierung
     
 
     // Initialize Leaflet map

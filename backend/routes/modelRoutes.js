@@ -356,6 +356,65 @@ router.get('/searchbar', async (req, res) => {
 });
 
 /**
+ * @route GET /filters
+ * @description Fetches distinct values for tasks, frameworks, architectures, and keywords for filtering.
+ * @access Public
+ * @returns {Object} - An object containing arrays of distinct values for tasks, frameworks, architectures, and keywords.
+ */
+router.get('/filters', async (req, res) => {
+    try {
+        // Fetch distinct tasks from JSONB properties
+        const tasks = await Item.findAll({
+            attributes: [
+                [sequelize.literal("DISTINCT properties->>'mlm:tasks'"), 'task'],
+            ],
+            where: sequelize.literal("properties->>'mlm:tasks' IS NOT NULL"),
+            raw: true,
+        });
+
+        // Fetch distinct frameworks from JSONB properties
+        const frameworks = await Item.findAll({
+            attributes: [
+                [sequelize.literal("DISTINCT properties->>'mlm:framework'"), 'framework'],
+            ],
+            where: sequelize.literal("properties->>'mlm:framework' IS NOT NULL"),
+            raw: true,
+        });
+
+        // Fetch distinct architectures from JSONB properties
+        const architectures = await Item.findAll({
+            attributes: [
+                [sequelize.literal("DISTINCT properties->>'mlm:architecture'"), 'architecture'],
+            ],
+            where: sequelize.literal("properties->>'mlm:architecture' IS NOT NULL"),
+            raw: true,
+        });
+
+        // Fetch distinct keywords by unnesting the array
+        const keywords = await Collection.findAll({
+            attributes: [
+                [sequelize.literal('DISTINCT UNNEST(keywords)'), 'keyword'],
+            ],
+            where: sequelize.literal("keywords IS NOT NULL"), // Ensure the array is not null
+            raw: true,
+        });
+
+        // Return results as arrays
+        res.json({
+            tasks: tasks.map(row => row.task).filter(Boolean), // Filter null values
+            frameworks: frameworks.map(row => row.framework).filter(Boolean),
+            architectures: architectures.map(row => row.architecture).filter(Boolean),
+            keywords: keywords.map(row => row.keyword).filter(Boolean),
+        });
+    } catch (error) {
+        console.error('Error fetching filters:', error);
+        res.status(500).json({ error: 'Error fetching filters' });
+    }
+});
+
+
+
+/**
  * @route POST /upload
  * @description Handles file uploads and processes STAC data into collections or items.
  * @access Public

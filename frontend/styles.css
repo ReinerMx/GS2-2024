@@ -159,6 +159,42 @@ mark {
     color: black; /* Ensure readable contrast */
 }
 
+/* ********** Filters below search bar ********** */
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.filter-category {
+    margin-bottom: 20px;
+}
+
+.filter-category h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.filter-item {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-item:hover {
+    background-color: #cee5ff;
+    color: black;
+}
+
+
 /* ********** Dark Mode Styles ********** */
 body.dark-mode .autocomplete {
     background-color: #333; /* Dark mode background */
