@@ -10,6 +10,8 @@ const upload = require('../middleware/uploadMiddleware');
 // Initialize the router
 const router = express.Router();
 
+/* ******** STAC CORE API ******** */
+
 /**
  * @route GET /
  * @description Returns the STAC API root with supported conformance classes and links.
@@ -280,6 +282,7 @@ router.all('/search', async (req, res) => {
     }
 });
 
+/* ******** CUSTOM API ENDPOINTS ******** */
 
 /**
  * @route GET /searchbar
@@ -299,7 +302,7 @@ router.get('/searchbar', async (req, res) => {
             [Op.or]: [
                 { title: { [Op.iLike]: `%${keyword}%` } },
                 { description: { [Op.iLike]: `%${keyword}%` } },
-                { keywords: { [Op.contains]: [keyword] } },
+                sequelize.literal(`ARRAY_TO_STRING("keywords", ' ') ILIKE '%${keyword}%'`)
             ],
         };
 
@@ -326,16 +329,21 @@ router.get('/searchbar', async (req, res) => {
         console.log('Collections:', collections); // Debug collections
         console.log('Items:', items); // Debug items
 
+        // Map suggestions
         const suggestions = [
             ...collections.map(c => ({
                 type: 'collection',
                 id: c.collection_id,
                 title: c.title,
+                keywords: c.keywords,
             })),
             ...items.map(i => ({
                 type: 'item',
                 id: i.item_id,
                 title: i.properties?.['mlm:name'] || 'No Name',
+                tasks: i.properties?.['mlm:tasks'] || [],
+                architecture: i.properties?.['mlm:architecture'] || 'Unknown',
+                framework: i.properties?.['mlm:framework'] || 'Unknown',
             })),
         ];
 
@@ -346,19 +354,6 @@ router.get('/searchbar', async (req, res) => {
         res.status(500).json({ error: "An error occurred while performing the search." });
     }
 });
-
-/** 
-        res.json({
-            collections: collections, // returns the collections
-            items: items, // returns the items
-            suggestions: suggestions, // returns the autocomplete suggestions
-        });
-    } catch (error) {
-        console.error('Error in searchbar route:', error);
-        res.status(500).json({ error: "An error occurred while performing the search." });
-    }
-});
-*/
 
 /**
  * @route POST /upload

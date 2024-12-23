@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to fetch and display autocomplete suggestions
     const fetchAutocompleteSuggestions = async (query) => {
         console.log('Fetching suggestions for:', query);
-
+    
         if (!query.trim()) {
             autocompleteList.innerHTML = ''; // Clear suggestions
             return;
@@ -40,20 +40,40 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Autocomplete Suggestions:', suggestions); // Debug log
             autocompleteList.innerHTML = ''; // Clear previous suggestions
     
+            const highlight = (text, query) => {
+                const regex = new RegExp(query, 'gi');
+                return text.replace(regex, (match) => `<mark>${match}</mark>`);
+            };
+            
+            // Aktualisieren Sie die Darstellung in der Autocomplete-Liste:
             suggestions.forEach((suggestion) => {
                 const li = document.createElement('li');
-                li.textContent = suggestion.title || suggestion.name;
                 li.classList.add('autocomplete-item');
+            
+                if (suggestion.type === 'collection') {
+                    li.innerHTML = `
+                        <strong>${highlight(suggestion.title || 'Unnamed Collection', query)}</strong>
+                        <small>Keywords: ${suggestion.keywords ? suggestion.keywords.map(k => highlight(k, query)).join(', ') : 'None'}</small>
+                    `;
+                } else if (suggestion.type === 'item') {
+                    li.innerHTML = `
+                        <strong>${highlight(suggestion.title || 'Unnamed Item', query)}</strong>
+                        <small>Tasks: ${suggestion.tasks ? suggestion.tasks.map(t => highlight(t, query)).join(', ') : 'None'}</small>
+                        <small>Architecture: ${highlight(suggestion.architecture, query)}</small>
+                        <small>Framework: ${highlight(suggestion.framework, query)}</small>
+                    `;
+                }
+            
+                li.addEventListener('click', () => handleSuggestionClick(suggestion));
                 autocompleteList.appendChild(li);
             });
-            console.log('Autocomplete List Content:', autocompleteList.innerHTML);
-            
     
             positionAutocomplete(); // Ensure the list is positioned correctly
         } catch (error) {
             console.error('Error fetching autocomplete suggestions:', error);
         }
     };
+    
     
 
     const handleSuggestionClick = (suggestion) => {
