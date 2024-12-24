@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize SimpleMDE for userDescription
   const simplemde = new SimpleMDE({ 
     element: document.getElementById("userDescription"),
-    placeholder: "Optional: Add additional details using Markdown...",
+    placeholder: "Add model description, motivation, intended use cases and limitations, additional notes on model usage.",
     spellChecker: false, // Set false if no spellcheck is required
     autosave: {
       enabled: true,
