@@ -99,17 +99,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const filterContainer = document.getElementById('filterContainer');
 
-const loadFilters = async () => {
-    try {
-        const response = await fetch('/filters');
-        if (!response.ok) throw new Error('Error fetching filters');
+    // Load filters from the backend
+    const loadFilters = async () => {
+        try {
+            const response = await fetch('/filters');
+            if (!response.ok) throw new Error('Error fetching filters');
+            const { tasks, frameworks, architectures, keywords, dataTypes, ioRequirements, bandCounts } = await response.json();
+            updateBandCountSlider(bandCounts);
+            renderFilters({ tasks, frameworks, architectures, keywords, dataTypes, ioRequirements });
+        } catch (error) {
+            console.error('Error loading filters:', error);
+        }
+    };
 
-        const { tasks, frameworks, architectures, keywords } = await response.json();
+    const updateBandCountSlider = ({ min, max }) => {
+        bandCountSlider.min = min;
+        bandCountSlider.max = max;
+        bandCountSlider.value = min;
+        bandCountLabel.textContent = min;
 
-        // Function to render categories
-        const renderCategory = (title, items) => {
+        bandCountSlider.addEventListener('input', () => {
+            bandCountLabel.textContent = bandCountSlider.value;
+        });
+    };
+
+    const renderFilters = (filters) => {
+        filterContainer.innerHTML = '';
+        Object.entries(filters).forEach(([title, items]) => {
             if (!items || items.length === 0) return;
-
             const categoryDiv = document.createElement('div');
             categoryDiv.classList.add('filter-category');
 
@@ -117,33 +134,21 @@ const loadFilters = async () => {
             header.textContent = title;
             categoryDiv.appendChild(header);
 
-            // Render each item as a separate box
-            [...new Set(items)].forEach((item) => { // Deduplicate items
+            items.forEach((item) => {
                 const filterItem = document.createElement('div');
                 filterItem.classList.add('filter-item');
-                filterItem.textContent = item; // Ensure items display cleanly
-
-                // Add click functionality
+                filterItem.textContent = item;
                 filterItem.addEventListener('click', () => {
                     searchInput.value = item;
                     fetchSearchResults(item);
                 });
-
                 categoryDiv.appendChild(filterItem);
             });
 
             filterContainer.appendChild(categoryDiv);
-        };
+        });
+    };
 
-        // Render categories with clean tasks
-        renderCategory('Tasks', tasks);
-        renderCategory('Frameworks', frameworks);
-        renderCategory('Architectures', architectures);
-        renderCategory('Keywords', keywords);
-    } catch (error) {
-        console.error('Error loading filters:', error);
-    }
-};
 
 loadFilters(); // Initialize filters on page load
 

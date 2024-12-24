@@ -298,36 +298,39 @@ router.get('/searchbar', async (req, res) => {
     }
 
     try {
-        const keywordFilter = {
+        // Filter for collections
+        const collectionFilter = {
             [Op.or]: [
                 { title: { [Op.iLike]: `%${keyword}%` } },
                 { description: { [Op.iLike]: `%${keyword}%` } },
-                sequelize.literal(`ARRAY_TO_STRING("keywords", ' ') ILIKE '%${keyword}%'`)
+                sequelize.literal(`ARRAY_TO_STRING("keywords", ' ') ILIKE '%${keyword}%'`),
             ],
         };
 
-        // Search for collections
+        // Search in collections
         const collections = await Collection.findAll({
-            where: keywordFilter,
+            where: collectionFilter,
             attributes: ['collection_id', 'title', 'description', 'keywords'],
         });
 
-        // Search for items
+        // Filter for items
+        const itemFilter = {
+            [Op.or]: [
+                { 'properties.mlm:name': { [Op.iLike]: `%${keyword}%` } },
+                { 'properties.description': { [Op.iLike]: `%${keyword}%` } },
+                { 'properties.mlm:tasks': { [Op.iLike]: `%${keyword}%` } },
+                { 'properties.mlm:framework': { [Op.iLike]: `%${keyword}%` } },
+                { 'properties.mlm:architecture': { [Op.iLike]: `%${keyword}%` } },
+                sequelize.literal(`properties->>'mlm:data_type' ILIKE '%${keyword}%'`), // Match data types
+                sequelize.literal(`properties->>'mlm:io_requirements' ILIKE '%${keyword}%'`), // Match IO requirements
+            ],
+        };
+
+        // Search in items
         const items = await Item.findAll({
-            where: {
-                [Op.or]: [
-                    { 'properties.mlm:name': { [Op.iLike]: `%${keyword}%` } },
-                    { 'properties.description': { [Op.iLike]: `%${keyword}%` } },
-                    { 'properties.mlm:tasks': { [Op.iLike]: `%${keyword}%` } },
-                    { 'properties.mlm:framework': { [Op.iLike]: `%${keyword}%` } },
-                    { 'properties.mlm:architecture': { [Op.iLike]: `%${keyword}%` } },
-                ],
-            },
+            where: itemFilter,
             attributes: ['item_id', 'properties', 'collection_id'],
         });
-
-        console.log('Collections:', collections); // Debug collections
-        console.log('Items:', items); // Debug items
 
         // Map suggestions
         const suggestions = [
@@ -348,12 +351,13 @@ router.get('/searchbar', async (req, res) => {
         ];
 
         console.log('Suggestions:', suggestions); // Debug suggestions
-        res.json({ collections, items, suggestions })
+        res.json({ collections, items, suggestions });
     } catch (error) {
         console.error('Error in /searchbar route:', error);
         res.status(500).json({ error: "An error occurred while performing the search." });
     }
 });
+
 
 /**
  * @route GET /filters
@@ -401,11 +405,84 @@ router.get('/filters', async (req, res) => {
             raw: true,
         });
 
+        // Fetch distinct data types (e.g., Sentinel-2, Landsat)
+        const rawDataTypes = await Item.findAll({
+            attributes: [[sequelize.literal("properties->>'mlm:input'"), 'data_type']],
+            where: sequelize.literal("properties->>'mlm:input' IS NOT NULL"),
+            raw: true,
+        });
+
+        const dataTypes = [
+            ...new Set(
+                rawDataTypes.flatMap(row => {
+                    try {
+                        const inputs = JSON.parse(row.data_type);
+                        return inputs.map(input => input.name.match(/(Sentinel-\d+|Landsat|EO Data)/)?.[0] || null);
+                    } catch {
+                        return [];
+                    }
+                })
+            ),
+        ].filter(Boolean); // Remove null or undefined entries
+        
+
+        // Fetch distinct input/output requirements and band counts
+        const rawIORequirements = await Item.findAll({
+            attributes: [[sequelize.literal("properties->>'mlm:output'"), 'io_requirements']],
+            where: sequelize.literal("properties->>'mlm:output' IS NOT NULL"),
+            raw: true,
+        });
+
+        const rawBandCounts = await Item.findAll({
+            attributes: [[sequelize.literal("properties->>'mlm:input'"), 'bands']],
+            where: sequelize.literal("properties->>'mlm:input' IS NOT NULL"),
+            raw: true,
+        });
+
+        // Process input/output requirements
+        const ioRequirements = [
+            ...new Set(
+                rawIORequirements.flatMap(row => {
+                    try {
+                        const outputs = JSON.parse(row.io_requirements);
+                        return outputs.flatMap(output => {
+                            const requirements = [];
+                            if (output.result.shape) requirements.push(`Resolution: ${output.result.shape.slice(1).join("x")}`);
+                            return requirements;
+                        });
+                    } catch {
+                        return [];
+                    }
+                })
+            ),
+        ];
+
+        // Extract and deduplicate band counts
+        const bandCounts = [
+            ...new Set(
+                rawBandCounts.flatMap(row => {
+                    try {
+                        const inputs = JSON.parse(row.bands);
+                        return inputs.map(input => input.bands.length); // Get the number of bands
+                    } catch {
+                        return [];
+                    }
+                })
+            ),
+        ];
+
+        // Return results as arrays
         res.json({
             tasks,
             frameworks: frameworks.map(row => row.framework).filter(Boolean),
             architectures: architectures.map(row => row.architecture).filter(Boolean),
             keywords: keywords.map(row => row.keyword).filter(Boolean),
+            dataTypes,
+            ioRequirements,
+            bandCounts: {
+                min: Math.min(...bandCounts), // Minimum number of bands
+                max: Math.max(...bandCounts), // Maximum number of bands
+            },
         });
     } catch (error) {
         console.error('Error fetching filters:', error);
