@@ -16,7 +16,10 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <link 
       rel="stylesheet" 
-      href="styles.css" />
+      href="css/styles.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/catalog.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 
@@ -124,21 +127,32 @@
           </div>
         </aside>
     
-        <!-- Hauptbereich für Model Catalog -->
+        <!-- Main Content -->
         <section class="col-md-9 search-catalog-container">
           <div class="search-bar-container">
             <h2>Model Catalog</h2>
             <p>Explore available Earth Observation Machine Learning models. Use the search below to find models that match your needs.</p>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" id="searchInput" placeholder="Search collections and items (name, description, keywords, tasks, framework, architecture)" />
+              <input type="text" class="form-control" id="searchInput" placeholder="Search collections and items (name, description, keywords, tasks, framework, architecture)" autocomplete="off"/>
+              <ul id="autocomplete-list" class="autocomplete"></ul>
               <div class="input-group-append">
                 <button class="btn btn-primary" id="searchButton" type="button">Search</button>
               </div>
             </div>
+            <div id="filterContainer" class="filter-container">
+              <!-- Dynamic filters are added here -->
+          </div>
+          <div class="filter-section mt-4">
+            <h5>Number of Bands</h5>
+            <input type="range" id="bandCountSlider" min="1" max="10" step="1" value="1" />
+            <span id="bandCountLabel">1</span> Bands
+        </div>
+        
+          
           </div>
           <div id="resultsContainer">
             <div class="filtered-results-header">Filtered Models</div>
-            <!-- Modelle werden hier eingefügt -->
+            <!-- Models are added here -->
           </div>
         </section>
       </div>

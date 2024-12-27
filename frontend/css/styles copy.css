@@ -9,21 +9,21 @@ body {
     margin: auto;
 }
 
-/* Neue Klasse für das innere Div */
+/* new class for inner div */
 .list-container {
-    margin-left: 20px; /* Schiebt das Div mit der Liste nach innen */
-    margin-right: 20px; /* Optional: Abstand auf der rechten Seite */
+    margin-left: 20px; 
+    margin-right: 20px; 
   }
 
 /* ********** Buttons ********** */
 .btn-primary {
-    background-color: #007bff; /* Einheitliches Blau */
+    background-color: #007bff; 
     border-color: #007bff;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3; /* Dunkleres Blau beim Hover */
+    background-color: #0056b3; 
     border-color: #0056b3;
 }
 
@@ -88,56 +88,155 @@ body {
     align-items: center;
 }
 
-/* Search Bar in Navbar EXTENSION */
-/* Autocomplete Styles für Dark Mode */
+/* ********** Autocomplete Styles ********** */
+
+/* Autocomplete List Styles */
 .autocomplete {
-    display: none; /* Startet als unsichtbar */
+    display: none; /* Hidden by default */
+    position: absolute; /* Positioned relative to the input field */
+    z-index: 1000; /* Ensure visibility above other elements */
     list-style-type: none;
     padding: 0;
     margin: 0;
     border: 1px solid #ddd;
     border-radius: 4px;
-    max-height: 150px;
-    overflow-y: auto;
-    position: absolute;
-    z-index: 1000;
-    width: 100%;
-    top: 100%;
+    max-height: 200px; /* Limit the height for scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    width: 100%; /* Match the width of the input field */
+    top: 100%; /* Position directly below the input */
     left: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9; /* Standard-Hintergrundfarbe für hellen Modus */
-    color: #333; /* Standard-Textfarbe für hellen Modus */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    background-color: #f9f9f9; /* Light background color */
+    color: #333; /* Default text color */
 }
 
-/* Dark Mode Anpassungen für Autocomplete */
+/* Autocomplete Item Styles */
+.autocomplete li {
+    padding: 10px; /* Padding for click area */
+    cursor: pointer;
+    font-size: 14px; /* Consistent font size */
+    border-bottom: 1px solid #f0f0f0; /* Separator for items */
+    transition: background-color 0.2s ease, color 0.2s ease; /* Smooth hover effects */
+}
+
+/* Hover Effect for Autocomplete Items */
+.autocomplete li:hover {
+    background-color: #cee5ff; /* Highlight on hover */
+    color: black;
+}
+
+/* Show Autocomplete Dropdown When Input Is Focused or Has Text */
+#search-bar:focus + .autocomplete,
+#search-bar:not(:placeholder-shown) + .autocomplete {
+    display: block; /* Make the dropdown visible */
+}
+
+/* Enhanced Autocomplete Item Layout */
+.autocomplete-item {
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd; /* Divider for items */
+}
+.autocomplete-item strong {
+    font-size: 14px; /* Highlighted text size */
+    margin-bottom: 5px; /* Spacing below title */
+}
+.autocomplete-item small {
+    color: #666; /* Subdued color for additional info */
+    font-size: 12px; /* Smaller font for metadata */
+}
+
+/* Hover Effect for Enhanced Autocomplete Items */
+.autocomplete-item:hover {
+    background-color: #f0f0f0; /* Subtle background change on hover */
+}
+
+/* Highlighted Text Styles */
+mark {
+    background-color: lightblue; /* Highlight color */
+    color: black; /* Ensure readable contrast */
+}
+
+/* ********** Filters below search bar ********** */
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.filter-category {
+    margin-bottom: 20px;
+}
+
+.filter-category h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.filter-item {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-item:hover {
+    background-color: #cee5ff;
+    color: black;
+}
+
+
+/* ********** Dark Mode Styles ********** */
 body.dark-mode .autocomplete {
-    background-color: #333; /* Dunklerer Hintergrund im Dark Mode */
-    color: #f9f9f9; /* Helle Textfarbe im Dark Mode */
-    border-color: #555; /* Etwas dunklerer Rand */
+    background-color: #333; /* Dark mode background */
+    color: #f9f9f9; /* Light text for dark mode */
+    border-color: #555; /* Darker border for dark mode */
 }
 
 body.dark-mode .autocomplete li:hover {
-    background: #2d828e; /* Anpassung der Hover-Farbe für Dark Mode */
+    background-color: #cee5ff; /* Adjusted hover background for dark mode */
+    color: white; /* Ensure text remains readable */
+}
+
+/* Individual autocomplete item hover in dark mode */
+body.dark-mode .autocomplete-item:hover {
+    background-color: #444; /* Slightly lighter than the dark mode background */
     color: white;
 }
 
-/* Sichtbarkeit der Autocomplete-Liste beim Tippen oder Fokussieren */
-#search-bar:focus + .autocomplete,
-#search-bar:not(:placeholder-shown) + .autocomplete {
-    display: block; /* Wird sichtbar, wenn das Suchfeld fokussiert ist oder Text eingegeben wurde */
+/* ********** Responsive Adjustments ********** */
+@media (max-width: 768px) {
+    .autocomplete {
+        max-width: calc(100vw - 20px); /* Prevent overflow on mobile */
+        left: 10px; /* Add padding for smaller screens */
+        right: 10px;
+    }
+
+    .model-item {
+        padding: 10px;
+        font-size: 14px; /* Adjust font size for smaller screens */
+    }
 }
 
-.autocomplete li {
-    padding: 10px;
-    cursor: pointer;
+/* ********** Debugging Helper Styles ********** */
+/* Use during debugging to visualize autocomplete */
+.autocomplete {
+    outline: 1px solid rgba(0, 123, 255, 0.2); /* Light blue outline for debugging */
 }
 
-/* Hover-Effekt für Listenelemente */
-.autocomplete li:hover {
-    background: #256e77;
-    color: white;
+/* Hide the autocomplete dropdown by default */
+.autocomplete {
+    display: none; /* Ensures visibility only when triggered */
 }
-
 
 /* ********** Main Section Styles ********** */
 /* General reset for full height */
@@ -181,7 +280,6 @@ body {
     background-color: #f8f9fa;
 } 
 
-
 /* ********** Feature Section ********** */
 /* Styles for individual features */
 .feature {
@@ -191,11 +289,10 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
-    overflow: hidden; /* Sicherstellen, dass Inhalte nicht über den Rand hinausgehen */
-    max-width: 100%; /* Sicherstellen, dass der Container nicht zu groß wird */
-    text-align: center; /* Zentriert die Inhalte */
+    overflow: hidden; /* Ensures content doesn’t overflow */
+    max-width: 100%; /* Ensures the container doesn’t get too large */
+    text-align: center; /* Centers content */
 }
-
 
 .feature:hover {
     transform: translateY(-5px);
@@ -228,14 +325,14 @@ body {
 }
 
 .custom-paragraph {
-    font-family: Arial, sans-serif;  /* Beispiel-Schriftart */
-    font-size: 16px;  /* Beispiel-Schriftgröße */
-    line-height: 1.5;  /* Zeilenhöhe für bessere Lesbarkeit */
-    color: #666;  /* Textfarbe */
-    margin: 0 0 1em 0;  /* Abstand nach unten */
-    padding: 0;  /* Kein Innenabstand */
+    font-family: Arial, sans-serif;  /* Example font */
+    font-size: 16px;  /* Example font size */
+    line-height: 1.5;  /* Line height for better readability */
+    color: #666;  /* Text color */
+    margin: 0 0 1em 0;  /* Bottom spacing */
+    padding: 0;  /* No inner spacing */
   }
-  
+
 /* ********** Button Styles ********** */
 /* General button styling */
 .btn {
@@ -243,9 +340,16 @@ body {
 }
 
 .btn:hover {
-    transform: scale(1.05); /* Reduziertes Scaling */
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); /* Leichterer Schatten */
+    transform: scale(1.05); /* Reduced scaling */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); /* Subtle shadow */
 }
+
+
+
+
+
+
+
 
 
 /* ********** Sidebar Styling ********** */
@@ -1000,7 +1104,7 @@ input:checked + .slider:before {
 }
 
 .faq-question:hover {
-    background-color: #256e77;
+    background-color: #cee5ff;
     transform: scale(1.02);
 }
 
@@ -1023,8 +1127,8 @@ input:checked + .slider:before {
 /* Entferne die Standard-Fokus-Linie */
 .faq-question:focus {
     outline: none;
-    box-shadow: 0 0 4px #256e77; /* Alternativer Fokus-Stil mit Farbe */
-    background-color: #256e77; /* Angleichung an Hover- oder Klickfarbe */
+    box-shadow: 0 0 4px #cee5ff; /* Alternativer Fokus-Stil mit Farbe */
+    background-color: #cee5ff; /* Angleichung an Hover- oder Klickfarbe */
 }
 
 /* Responsiveness */

@@ -1,0 +1,20 @@
+/* ********** Sidebar Styling ********** */
+/* Styles for the filter sidebar */
+.filter-sidebar {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    height: fit-content;
+}
+
+.filter-sidebar h4, .filter-section h5 {
+    color: #007bff;
+}
+
+.filter-section label {
+    color: #555;
+    font-weight: 400;
+}

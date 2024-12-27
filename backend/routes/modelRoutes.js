@@ -10,6 +10,8 @@ const upload = require('../middleware/uploadMiddleware');
 // Initialize the router
 const router = express.Router();
 
+/* ******** STAC CORE API ******** */
+
 /**
  * @route GET /
  * @description Returns the STAC API root with supported conformance classes and links.
@@ -181,116 +183,63 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
  * @access Public
  */
 router.all('/search', async (req, res) => {
-    // Check if the request method is POST, otherwise default to query parameters
     const isPost = req.method === 'POST';
     const params = isPost ? req.body : req.query;
-
-    // Destructure parameters from request
     const { bbox, datetime, collections, limit = 10, geoFilter } = params;
 
     try {
-        const where = []; // Array to store filtering conditions for SQL query
+        const where = [];
+        const attributes = {
+            include: []
+        };
 
-        /** 
-         * GeoJSON Filter:
-         * If a GeoJSON geometry is provided (e.g., a polygon), 
-         * add a spatial filter using PostGIS ST_Intersects and ST_GeomFromGeoJSON.
-         */
         if (geoFilter) {
+            const geoJSON = sequelize.escape(JSON.stringify(geoFilter));
             where.push(sequelize.literal(`
                 ST_Intersects(
                     geometry, 
-                    ST_GeomFromGeoJSON('${JSON.stringify(geoFilter)}')
+                    ST_GeomFromGeoJSON(${geoJSON})
+                )
+            `));
+            attributes.include.push([
+                sequelize.literal(`
+                    CASE 
+                        WHEN ST_IsEmpty(geometry) OR ST_IsEmpty(ST_GeomFromGeoJSON(${geoJSON})) THEN 0
+                        ELSE ST_Area(ST_Intersection(geometry, ST_GeomFromGeoJSON(${geoJSON}))) / ST_Area(ST_GeomFromGeoJSON(${geoJSON})) * 100
+                    END
+                `), 'overlap_percentage'
+            ]);
+        }
+
+        if (bbox) {
+            const [minX, minY, maxX, maxY] = typeof bbox === 'string'
+                ? bbox.split(',').map(Number)
+                : bbox;
+            where.push(sequelize.literal(`
+                ST_Intersects(
+                    geometry, 
+                    ST_MakeEnvelope(${minX}, ${minY}, ${maxX}, ${maxY}, 4326)
                 )
             `));
         }
 
-        /**
-         * Bounding Box Filter:
-         * Filters items based on a rectangular bounding box defined by coordinates.
-         * BBOX must be in the format [minX, minY, maxX, maxY].
-         */
-        if (bbox) {
-            let parsedBbox;
-
-            // Parse bbox input: if it's a string, split and convert to numbers
-            if (typeof bbox === 'string') {
-                parsedBbox = bbox.split(',').map(Number);
-            } else if (Array.isArray(bbox)) {
-                parsedBbox = bbox.map(Number);
-            }
-
-            // Ensure bbox contains exactly 4 valid coordinates
-            if (parsedBbox.length === 4) {
-                const [minX, minY, maxX, maxY] = parsedBbox;
-
-                // Use PostGIS ST_MakeEnvelope to create a rectangle and filter intersections
-                where.push(sequelize.literal(`
-                    ST_Intersects(
-                        geometry, 
-                        ST_MakeEnvelope(${minX}, ${minY}, ${maxX}, ${maxY}, 4326)
-                    )
-                `));
-            } else {
-                throw new Error("bbox must contain exactly 4 coordinates: [minX, minY, maxX, maxY]");
-            }
-        }
-
-        /**
-         * Datetime Filter:
-         * Filters results based on a start and end datetime range.
-         * Accepts ISO 8601 formatted strings in 'start/end' format.
-         */
         if (datetime) {
-            let start, end;
-
-            // Parse datetime string: split by '/' into start and end
-            if (typeof datetime === 'string' && datetime.includes('/')) {
-                [start, end] = datetime.split('/');
-            } else {
-                throw new Error("Invalid datetime format. Use 'start/end'.");
-            }
-
-            // Validate the datetime strings
+            const [start, end] = datetime.split('/');
             if (!isNaN(Date.parse(start)) && !isNaN(Date.parse(end))) {
-                // Add datetime conditions to the SQL WHERE clause
                 where.push(sequelize.literal(`properties->>'start_datetime' <= '${end}'`));
                 where.push(sequelize.literal(`properties->>'end_datetime' >= '${start}'`));
             } else {
-                throw new Error("Invalid datetime values. Ensure they are ISO 8601-compliant.");
+                throw new Error("Invalid datetime values.");
             }
         }
 
-        /**
-         * Collections Filter:
-         * Filters results based on one or more collection IDs.
-         * If 'collections' is provided, include it as a condition.
-         */
         if (collections) {
-            where.push({ 
-                collection_id: { 
-                    [Op.in]: Array.isArray(collections) ? collections : [collections] 
-                } 
-            });
+            where.push({ collection_id: { [Op.in]: Array.isArray(collections) ? collections : [collections] } });
         }
 
-        console.log("Generated WHERE conditions:", where); // Debug log for SQL conditions
+        const items = await Item.findAll({ attributes, where: { [Op.and]: where }, limit });
 
-        /**
-         * Execute the query:
-         * Use Sequelize `findAll` to fetch filtered items from the database.
-         * Combine all conditions with an AND operator to ensure they all apply.
-         */
-        const items = await Item.findAll({
-            where: { [Op.and]: where },
-            limit, // Limit the number of results returned
-        });
-
-        /**
-         * Respond with STAC-compliant FeatureCollection:
-         * Format the results as GeoJSON features with relevant properties, geometry, and links.
-         */
-        res.json({
+        const response = {
             type: "FeatureCollection",
             features: items.map(item => ({
                 type: "Feature",
@@ -301,7 +250,12 @@ router.all('/search', async (req, res) => {
                     coordinates: item.geometry.coordinates
                 } : null,
                 bbox: item.bbox,
-                properties: item.properties,
+                properties: {
+                    ...item.properties,
+                    overlap_percentage: item.dataValues.overlap_percentage
+                    ? parseFloat(item.dataValues.overlap_percentage).toFixed(2)
+                    : null // Ensure it's either a number or null
+                },
                 collection: item.collection_id,
                 links: [
                     {
@@ -316,24 +270,19 @@ router.all('/search', async (req, res) => {
                     }
                 ]
             })),
-            links: [
-                {
-                    rel: "self",
-                    href: `http://localhost:5555/search`,
-                    type: "application/json"
-                }
-            ],
-            context: {
-                returned: items.length, // Number of items returned
-                limit: limit // Limit applied
-            }
-        });
+            links: [{ rel: "self", href: `http://localhost:5555/search`, type: "application/json" }],
+            context: { returned: items.length, limit }
+        };
+
+        console.log("Response JSON:", JSON.stringify(response, null, 2));
+        res.json(response);
     } catch (error) {
-        // Handle errors and send error response
         console.error("Error in /search route:", error);
         res.status(400).json({ error: error.message });
     }
 });
+
+/* ******** CUSTOM API ENDPOINTS ******** */
 
 /**
  * @route GET /searchbar
@@ -349,43 +298,199 @@ router.get('/searchbar', async (req, res) => {
     }
 
     try {
-        const keywordFilter = {
+        // Filter for collections
+        const collectionFilter = {
             [Op.or]: [
-                { title: { [Op.iLike]: `%${keyword}%` } }, // search for collections with matching titles
-                { description: { [Op.iLike]: `%${keyword}%` } }, // search for collections with matching descriptions
-                { keywords: { [Op.contains]: [keyword] } }, // search for collections with matching keywords
+                { title: { [Op.iLike]: `%${keyword}%` } },
+                { description: { [Op.iLike]: `%${keyword}%` } },
+                sequelize.literal(`ARRAY_TO_STRING("keywords", ' ') ILIKE '%${keyword}%'`),
             ],
         };
 
-        // search for collections
+        // Search in collections
         const collections = await Collection.findAll({
-            where: keywordFilter,
+            where: collectionFilter,
             attributes: ['collection_id', 'title', 'description', 'keywords'],
         });
 
-        // search for items
+        // Filter for items
+        const itemFilter = {
+            [Op.or]: [
+                { 'properties.mlm:name': { [Op.iLike]: `%${keyword}%` } },
+                { 'properties.description': { [Op.iLike]: `%${keyword}%` } },
+                { 'properties.mlm:tasks': { [Op.iLike]: `%${keyword}%` } },
+                { 'properties.mlm:framework': { [Op.iLike]: `%${keyword}%` } },
+                { 'properties.mlm:architecture': { [Op.iLike]: `%${keyword}%` } },
+                sequelize.literal(`properties->>'mlm:data_type' ILIKE '%${keyword}%'`), // Match data types
+                sequelize.literal(`properties->>'mlm:io_requirements' ILIKE '%${keyword}%'`), // Match IO requirements
+            ],
+        };
+
+        // Search in items
         const items = await Item.findAll({
-            where: {
-                [Op.or]: [
-                    { 'properties.mlm:name': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching names
-                    { 'properties.description': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching descriptions
-                    { 'properties.mlm:tasks': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching tasks
-                    { 'properties.mlm:framework': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching frameworks
-                    { 'properties.mlm:architecture': { [Op.iLike]: `%${keyword}%` } }, // search for items with matching architectures
-                ],
-            },
+            where: itemFilter,
             attributes: ['item_id', 'properties', 'collection_id'],
         });
 
-        res.json({
-            collections: collections, // returns the collections
-            items: items, // returns the items
-        });
+        // Map suggestions
+        const suggestions = [
+            ...collections.map(c => ({
+                type: 'collection',
+                id: c.collection_id,
+                title: c.title,
+                keywords: c.keywords,
+            })),
+            ...items.map(i => ({
+                type: 'item',
+                id: i.item_id,
+                title: i.properties?.['mlm:name'] || 'No Name',
+                tasks: i.properties?.['mlm:tasks'] || [],
+                architecture: i.properties?.['mlm:architecture'] || 'Unknown',
+                framework: i.properties?.['mlm:framework'] || 'Unknown',
+            })),
+        ];
+
+        console.log('Suggestions:', suggestions); // Debug suggestions
+        res.json({ collections, items, suggestions });
     } catch (error) {
-        console.error('Error in searchbar route:', error);
+        console.error('Error in /searchbar route:', error);
         res.status(500).json({ error: "An error occurred while performing the search." });
     }
 });
+
+
+/**
+ * @route GET /filters
+ * @description Fetches distinct values for tasks, frameworks, architectures, and keywords for filtering.
+ * @access Public
+ * @returns {Object} - An object containing arrays of distinct values for tasks, frameworks, architectures, and keywords.
+ */
+router.get('/filters', async (req, res) => {
+    try {
+        const rawTasks = await Item.findAll({
+            attributes: [[sequelize.fn('DISTINCT', sequelize.json('properties.mlm:tasks')), 'task']],
+            where: sequelize.where(sequelize.json('properties.mlm:tasks'), { [Op.ne]: null }),
+        });
+
+        // Flatten, deduplicate, and clean up tasks
+        const tasks = [
+            ...new Set(rawTasks.flatMap(row => {
+                const taskArray = JSON.parse(row.dataValues.task) || [];
+                return Array.isArray(taskArray) ? taskArray : [taskArray];
+            })),
+        ].filter(Boolean); // Remove null or undefined tasks
+
+        // Fetch other categories as before
+        const frameworks = await Item.findAll({
+            attributes: [
+                [sequelize.literal("DISTINCT properties->>'mlm:framework'"), 'framework'],
+            ],
+            where: sequelize.literal("properties->>'mlm:framework' IS NOT NULL"),
+            raw: true,
+        });
+
+        const architectures = await Item.findAll({
+            attributes: [
+                [sequelize.literal("DISTINCT properties->>'mlm:architecture'"), 'architecture'],
+            ],
+            where: sequelize.literal("properties->>'mlm:architecture' IS NOT NULL"),
+            raw: true,
+        });
+
+        const keywords = await Collection.findAll({
+            attributes: [
+                [sequelize.literal('DISTINCT UNNEST(keywords)'), 'keyword'],
+            ],
+            where: sequelize.literal("keywords IS NOT NULL"),
+            raw: true,
+        });
+
+        // Fetch distinct data types (e.g., Sentinel-2, Landsat)
+        const rawDataTypes = await Item.findAll({
+            attributes: [[sequelize.literal("properties->>'mlm:input'"), 'data_type']],
+            where: sequelize.literal("properties->>'mlm:input' IS NOT NULL"),
+            raw: true,
+        });
+
+        const dataTypes = [
+            ...new Set(
+                rawDataTypes.flatMap(row => {
+                    try {
+                        const inputs = JSON.parse(row.data_type);
+                        return inputs.map(input => input.name.match(/(Sentinel-\d+|Landsat|EO Data)/)?.[0] || null);
+                    } catch {
+                        return [];
+                    }
+                })
+            ),
+        ].filter(Boolean); // Remove null or undefined entries
+        
+
+        // Fetch distinct input/output requirements and band counts
+        const rawIORequirements = await Item.findAll({
+            attributes: [[sequelize.literal("properties->>'mlm:output'"), 'io_requirements']],
+            where: sequelize.literal("properties->>'mlm:output' IS NOT NULL"),
+            raw: true,
+        });
+
+        const rawBandCounts = await Item.findAll({
+            attributes: [[sequelize.literal("properties->>'mlm:input'"), 'bands']],
+            where: sequelize.literal("properties->>'mlm:input' IS NOT NULL"),
+            raw: true,
+        });
+
+        // Process input/output requirements
+        const ioRequirements = [
+            ...new Set(
+                rawIORequirements.flatMap(row => {
+                    try {
+                        const outputs = JSON.parse(row.io_requirements);
+                        return outputs.flatMap(output => {
+                            const requirements = [];
+                            if (output.result.shape) requirements.push(`Resolution: ${output.result.shape.slice(1).join("x")}`);
+                            return requirements;
+                        });
+                    } catch {
+                        return [];
+                    }
+                })
+            ),
+        ];
+
+        // Extract and deduplicate band counts
+        const bandCounts = [
+            ...new Set(
+                rawBandCounts.flatMap(row => {
+                    try {
+                        const inputs = JSON.parse(row.bands);
+                        return inputs.map(input => input.bands.length); // Get the number of bands
+                    } catch {
+                        return [];
+                    }
+                })
+            ),
+        ];
+
+        // Return results as arrays
+        res.json({
+            tasks,
+            frameworks: frameworks.map(row => row.framework).filter(Boolean),
+            architectures: architectures.map(row => row.architecture).filter(Boolean),
+            keywords: keywords.map(row => row.keyword).filter(Boolean),
+            dataTypes,
+            ioRequirements,
+            bandCounts: {
+                min: Math.min(...bandCounts), // Minimum number of bands
+                max: Math.max(...bandCounts), // Maximum number of bands
+            },
+        });
+    } catch (error) {
+        console.error('Error fetching filters:', error);
+        res.status(500).json({ error: 'Error fetching filters' });
+    }
+});
+
+
 
 
 /**

@@ -3,7 +3,156 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
+    const autocompleteList = document.createElement('ul');
+    autocompleteList.setAttribute('id', 'autocomplete-list');
+    autocompleteList.setAttribute('class', 'autocomplete');
+    document.body.appendChild(autocompleteList);
 
+    // Adjust the position of the autocomplete list
+    const positionAutocomplete = () => {
+        const rect = searchInput.getBoundingClientRect();
+        console.log('Autocomplete Position:', rect.bottom, rect.left, rect.width);
+        autocompleteList.style.position = 'absolute';
+        autocompleteList.style.top = `${rect.bottom + window.scrollY}px`;
+        autocompleteList.style.left = `${rect.left + window.scrollX}px`;
+        autocompleteList.style.width = `${rect.width}px`;
+        autocompleteList.style.display = 'block';
+    };
+    
+
+    // Event listener for updating autocomplete position on resize
+    window.addEventListener('resize', positionAutocomplete);
+
+    // Function to fetch and display autocomplete suggestions
+    const fetchAutocompleteSuggestions = async (query) => {
+        console.log('Fetching suggestions for:', query);
+    
+        if (!query.trim()) {
+            autocompleteList.innerHTML = ''; // Clear suggestions
+            return;
+        }
+    
+        try {
+            const response = await fetch(`/searchbar?keyword=${encodeURIComponent(query)}`);
+            if (!response.ok) throw new Error('Error fetching autocomplete suggestions');
+    
+            const { suggestions } = await response.json();
+            console.log('Autocomplete Suggestions:', suggestions); // Debug log
+            autocompleteList.innerHTML = ''; // Clear previous suggestions
+    
+            const highlight = (text, query) => {
+                const regex = new RegExp(query, 'gi');
+                return text.replace(regex, (match) => `<mark>${match}</mark>`);
+            };
+            
+            // Aktualisieren Sie die Darstellung in der Autocomplete-Liste:
+            suggestions.forEach((suggestion) => {
+                const li = document.createElement('li');
+                li.classList.add('autocomplete-item');
+            
+                if (suggestion.type === 'collection') {
+                    li.innerHTML = `
+                        <strong>${highlight(suggestion.title || 'Unnamed Collection', query)}</strong>
+                        <small>Keywords: ${suggestion.keywords ? suggestion.keywords.map(k => highlight(k, query)).join(', ') : 'None'}</small>
+                    `;
+                } else if (suggestion.type === 'item') {
+                    li.innerHTML = `
+                        <strong>${highlight(suggestion.title || 'Unnamed Item', query)}</strong>
+                        <small>Tasks: ${suggestion.tasks ? suggestion.tasks.map(t => highlight(t, query)).join(', ') : 'None'}</small>
+                        <small>Architecture: ${highlight(suggestion.architecture, query)}</small>
+                        <small>Framework: ${highlight(suggestion.framework, query)}</small>
+                    `;
+                }
+            
+                li.addEventListener('click', () => handleSuggestionClick(suggestion));
+                autocompleteList.appendChild(li);
+            });
+    
+            positionAutocomplete(); // Ensure the list is positioned correctly
+        } catch (error) {
+            console.error('Error fetching autocomplete suggestions:', error);
+        }
+    };
+    
+    const handleSuggestionClick = (suggestion) => {
+        // Fill the search input with the clicked suggestion
+        searchInput.value = suggestion.title || suggestion.name;
+        autocompleteList.innerHTML = ''; // Clear the autocomplete list
+        // Optionally trigger a full search based on the selected suggestion
+        fetchSearchResults(searchInput.value.trim());
+    };
+
+    // Attach an input event listener to the search input
+    searchInput.addEventListener('input', (e) => {
+        console.log('Input event triggered:', e.target.value); // Debug-Ausgabe
+        fetchAutocompleteSuggestions(e.target.value.trim());
+    });    
+
+    // Close the autocomplete list if the user clicks outside
+    document.addEventListener('click', (event) => {
+        if (!autocompleteList.contains(event.target) && event.target !== searchInput) {
+            setTimeout(() => {
+                autocompleteList.innerHTML = '';
+            }, 100);
+        }
+    });
+
+const filterContainer = document.getElementById('filterContainer');
+
+    // Load filters from the backend
+    const loadFilters = async () => {
+        try {
+            const response = await fetch('/filters');
+            if (!response.ok) throw new Error('Error fetching filters');
+            const { tasks, frameworks, architectures, keywords, dataTypes, ioRequirements, bandCounts } = await response.json();
+            updateBandCountSlider(bandCounts);
+            renderFilters({ tasks, frameworks, architectures, keywords, dataTypes, ioRequirements });
+        } catch (error) {
+            console.error('Error loading filters:', error);
+        }
+    };
+
+    const updateBandCountSlider = ({ min, max }) => {
+        bandCountSlider.min = min;
+        bandCountSlider.max = max;
+        bandCountSlider.value = min;
+        bandCountLabel.textContent = min;
+
+        bandCountSlider.addEventListener('input', () => {
+            bandCountLabel.textContent = bandCountSlider.value;
+        });
+    };
+
+    const renderFilters = (filters) => {
+        filterContainer.innerHTML = '';
+        Object.entries(filters).forEach(([title, items]) => {
+            if (!items || items.length === 0) return;
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('filter-category');
+
+            const header = document.createElement('h4');
+            header.textContent = title;
+            categoryDiv.appendChild(header);
+
+            items.forEach((item) => {
+                const filterItem = document.createElement('div');
+                filterItem.classList.add('filter-item');
+                filterItem.textContent = item;
+                filterItem.addEventListener('click', () => {
+                    searchInput.value = item;
+                    fetchSearchResults(item);
+                });
+                categoryDiv.appendChild(filterItem);
+            });
+
+            filterContainer.appendChild(categoryDiv);
+        });
+    };
+
+
+loadFilters(); // Initialize filters on page load
+
+    
 
     // Initialize Leaflet map
     const map = L.map('map').setView([51.505, -0.09], 3);
@@ -34,59 +183,66 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('GeoJSON:', layer.toGeoJSON());
     });
 
-    // Event listener for applying geographic filterr
-document.getElementById('applyGeoFilter').addEventListener('click', async () => {
-    const filters = {}; // Initialize the filters object
+    // Event listener for applying geographic filter
+    document.getElementById('applyGeoFilter').addEventListener('click', async () => {
+        const filters = {}; // Initialize the filters object
 
-    // Ensure either geometry or time range is provided
-    if (!drawnGeometry && !(startDateInput.value || endDateInput.value)) {
-        alert('Please provide either a geographic region or a time range!');
-        return;
-    }
+        // Ensure either geometry or time range is provided
+        if (!drawnGeometry && !(startDateInput.value || endDateInput.value)) {
+            alert('Please provide either a geographic region or a time range!');
+            return;
+        }
 
-    // Add the geographic filter if a shape was drawn
-    if (drawnGeometry) {
-        const geoJSON = drawnGeometry.toGeoJSON();
-        console.log('Geographic Filter GeoJSON:', geoJSON);
-        filters.geoFilter = geoJSON.geometry;
-        console.log("Received GeoJSON:", JSON.stringify(geoJSON)); // Log only when geoJSON exists
-    
+        // Add the geographic filter if a shape was drawn
+        if (drawnGeometry) {
+            const geoJSON = drawnGeometry.toGeoJSON();
+            console.log('Geographic Filter GeoJSON:', geoJSON);
+            filters.geoFilter = geoJSON.geometry;
+            console.log("Received GeoJSON:", JSON.stringify(geoJSON)); // Log only when geoJSON exists
+
             // Berechne Bounding Box
             const bbox = turf.bbox(geoJSON); // Requires turf.js
             filters.bbox = bbox; // Speichere die Bounding Box
-            console.log("Bounding Box:", bbox); 
-    }
+            console.log("Bounding Box:", bbox);
 
-    // Add the time filter if startDate or endDate is provided
-    if (startDateInput.value || endDateInput.value) {
-        filters.datetime = `${startDateInput.value || ".."}/${endDateInput.value || ".."}`;
-    }
+            if (drawnGeometry) {
+                const filterLayer = L.geoJSON(drawnGeometry.toGeoJSON(), {
+                    style: { color: "#ff7800", weight: 2, fillOpacity: 0.2 }
+                }).addTo(map);
+            
+                map.fitBounds(filterLayer.getBounds());
+            }
+            
+        }
 
-    console.log('Sending filters:', filters);
-    console.log("Received geoFilter on server:", filters.geoFilter);
-    console.log("Serialized geoFilter for PostGIS:", JSON.stringify(filters.geoFilter));
-    
+        // Add the time filter if startDate or endDate is provided
+        if (startDateInput.value || endDateInput.value) {
+            filters.datetime = `${startDateInput.value || ".."}/${endDateInput.value || ".."}`;
+        }
 
-    // Send filters to the backend
-    try {
-        const response = await fetch('/search', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(filters),
-        });
+        console.log('Sending filters:', filters);
+        console.log("Received geoFilter on server:", filters.geoFilter);
+        console.log("Serialized geoFilter for PostGIS:", JSON.stringify(filters.geoFilter));
 
-        if (!response.ok) throw new Error('Error fetching filtered models');
+        // Send filters to the backend
+        try {
+            const response = await fetch('/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(filters),
+            });
 
-        const models = await response.json();
-        console.log('Filtered Models:', models);
+            if (!response.ok) throw new Error('Error fetching filtered models');
 
-        displayModels(models.features || [], filters);
-    } catch (error) {
-        console.error('Error applying filters:', error);
-        resultsContainer.innerHTML = '<p>Error fetching filtered models.</p>';
-    }
-});
+            const models = await response.json();
+            console.log('Filtered Models:', models);
 
+            displayModels(models.features || [], filters);
+        } catch (error) {
+            console.error('Error applying filters:', error);
+            resultsContainer.innerHTML = '<p>Error fetching filtered models.</p>';
+        }
+    });
 
     // Debugging initialization
     console.log('Document loaded. Initializing collections and event listeners.');
@@ -133,17 +289,16 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
             resultsContainer.innerHTML = '<p>No collections found.</p>';
             return;
         }
-        
 
         collections.forEach((collection) => {
             console.log('Rendering collection:', collection);
             const collectionDiv = document.createElement('div');
             collectionDiv.classList.add('model-item', 'mb-4');
 
-    // Keywords als einzelne Span-Elemente rendern (für Arrays)
-    const keywordsHTML = Array.isArray(collection.keywords) && collection.keywords.length > 0
-        ? collection.keywords.map(keyword => `<span>${keyword.trim()}</span>`).join(' ')
-        : '';
+            // Keywords als einzelne Span-Elemente rendern (für Arrays)
+            const keywordsHTML = Array.isArray(collection.keywords) && collection.keywords.length > 0
+                ? collection.keywords.map(keyword => `<span>${keyword.trim()}</span>`).join(' ')
+                : '';
 
             collectionDiv.innerHTML = `
                 <h4>${collection.title}</h4>
@@ -157,6 +312,7 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
 
         attachViewItemsListeners();
     };
+
 
     // Function to display items in a collection
     const displayItems = (items) => {
@@ -230,6 +386,7 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
         }
     });
 
+
     const fetchSearchResults = async (keyword) => {
         try {
             const response = await fetch(`/searchbar?keyword=${encodeURIComponent(keyword)}`);
@@ -243,7 +400,7 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
             resultsContainer.innerHTML = '<p>Error fetching search results.</p>';
         }
     };
-    
+ 
     // function to display search results
     const displaySearchResults = (collections, items) => {
         resultsContainer.innerHTML = '';
@@ -269,14 +426,47 @@ document.getElementById('applyGeoFilter').addEventListener('click', async () => 
             displayItems(items); 
         }
     };
-    
 
+    
+    /**
+     * 
+     * @param {*} mapId 
+     * @param {*} bbox 
+     * @returns 
+     */
+    const initializeMap = (mapId, bbox) => {
+        if (!bbox || bbox.length !== 4) {
+            console.warn(`Invalid BBOX for map ${mapId}:`, bbox);
+            return null; // Return null if bbox is invalid
+        }
+    
+        const [minX, minY, maxX, maxY] = bbox;
+    
+        // Initialize the Leaflet map
+        const map = L.map(mapId).setView([(minY + maxY) / 2, (minX + maxX) / 2], 5);
+    
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+    
+        // Add a rectangle for the BBOX
+        const bounds = [[minY, minX], [maxY, maxX]];
+        L.rectangle(bounds, { color: "#3388ff", weight: 1 }).addTo(map);
+    
+        // Fit the map to the BBOX
+        map.fitBounds(bounds);
+    
+        return map; // Return the map object
+    };
+    
+    
 
 // Function to display models for geographic filter
 const displayModels = (models, filters) => {
     resultsContainer.innerHTML = ''; // Clear previous content
 
-    // Zusammenfassung der Filter
     let filtersSummary = [];
     if (filters.geoFilter) {
         filtersSummary.push("Geographic Filter Applied");
@@ -284,11 +474,10 @@ const displayModels = (models, filters) => {
             const [minX, minY, maxX, maxY] = filters.bbox;
             filtersSummary.push(`Bounding Box: [${minX.toFixed(2)}, ${minY.toFixed(2)}, ${maxX.toFixed(2)}, ${maxY.toFixed(2)}]`);
         }
-    }    
+    }
     if (filters.datetime) filtersSummary.push(`Time Range: ${filters.datetime}`);
     if (filtersSummary.length === 0) filtersSummary = "None";
 
-    // Filterbox erstellen
     resultsContainer.innerHTML = `
         <div class="filtered-results-header">
             <h4>Filtered Models</h4>
@@ -300,14 +489,37 @@ const displayModels = (models, filters) => {
 
     const grid = document.getElementById('modelGrid');
 
-    // Modelle anzeigen
-    models.forEach((model) => {
+    models.forEach((model, index) => {
+        const overlap = model.properties.overlap_percentage 
+            ? parseFloat(model.properties.overlap_percentage).toFixed(2) + "%"
+            : "No spatial filter applied."; // Fallback if overlap_percentage is null or undefined
+
+        // Extract and format temporal coverage
+        const startDatetime = model.properties?.start_datetime 
+            ? new Date(model.properties.start_datetime).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            })
+            : "N/A";
+        const endDatetime = model.properties?.end_datetime 
+            ? new Date(model.properties.end_datetime).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            })
+            : "N/A";
+        
         const modelDiv = document.createElement('div');
         modelDiv.classList.add('model-item');
         modelDiv.innerHTML = `
             <h5>${model.properties['mlm:name']}</h5>
             <p>${model.properties.description}</p>
             <p><strong>Collection:</strong> ${model.collection}</p>
+            <p><strong>Temporal Coverage:</strong> ${startDatetime} - ${endDatetime}</p>
+            <p><strong>Area covered by the model:</strong> ${overlap}</p>
+            <p><strong>Legend:</strong> 
+            <span style="color: orange;">●</span> Filtered Region 
+            <span style="color: blue;">●</span> Model Region
+        </p>
+        
+            <div id="map-${index}" style="height: 200px;"></div>
             <button class="btn btn-primary view-details-btn" 
                 data-collection-id="${model.collection}" 
                 data-item-id="${model.id}">
@@ -315,10 +527,20 @@ const displayModels = (models, filters) => {
             </button>
         `;
         grid.appendChild(modelDiv);
+    
+        // Initialize the map for this item's bbox
+        const map = initializeMap(`map-${index}`, model.bbox);
+    
+        if (map && drawnGeometry) { // Ensure the map and drawnGeometry exist
+            const filterLayer = L.geoJSON(drawnGeometry.toGeoJSON(), {
+                style: { color: "#ff7800", weight: 2, fillOpacity: 0.2 }
+            }).addTo(map);
+    
+            map.fitBounds(filterLayer.getBounds());
+        }
     });
+    
 
     attachViewDetailsListeners();
 };
-
-
 });
