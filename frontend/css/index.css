@@ -1,0 +1,36 @@
+/* ********** Main Section Styles ********** */
+/* General reset for full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Flexbox container for full height */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Full viewport height */
+}
+
+/* Main content grows to take available space */
+.main-section {
+    flex: 1; /* Makes the main section grow to fill remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers content vertically */
+    align-items: center;     /* Centers content horizontally */
+    text-align: center;      /* Centers text */
+    background: url('../images/earth6.jpg') center/cover no-repeat;
+    color: white;
+    padding: 20px;
+}
+
+.main-section h1 {
+    font-size: 2.5rem; /* Adjust font size if needed */
+    line-height: 1.2; /* Line height for better readability */
+}
+
+.main-section .row {
+    margin-top: 60px; /* Add spacing above the row of boxes */
+}

@@ -1,0 +1,48 @@
+/* ********** Impressum Section ********** */
+
+/* Email Icon in Impressum */
+.email-icon {
+    width: 20px;
+    vertical-align: middle;
+  }
+  .project-section {
+    display: flex; /* Inhalte nebeneinander platzieren */
+    justify-content: space-between; /* Abstand zwischen den beiden Spalten */
+    gap: 2rem; /* Abstand zwischen den Spalten */
+    max-width: 1200px; /* Maximale Breite für die gesamte Section */
+    margin: 0 auto; /* Zentriert die Section horizontal */
+  }
+  
+  .project-section .left-column {
+    flex: 1; /* Linke Spalte nimmt den verfügbaren Platz ein */
+  }
+  
+  .project-section .right-column {
+    flex: 1; /* Rechte Spalte nimmt den verfügbaren Platz ein */
+    display: flex;
+    flex-direction: column; /* Inhalte vertikal anordnen */
+    justify-content: flex-end; /* Elemente nach unten ausrichten */
+    align-items: center; /* Horizontale Zentrierung */
+    height: 100%; /* Volle Höhe der rechten Spalte */
+  }
+  
+  .project-section .gif-style {
+    max-width: 100%; /* Breite anpassen */
+    max-height: 300px; /* Maximale Höhe des GIFs */
+    width: auto; /* Seitenverhältnis beibehalten */
+    border-radius: 15px; /* Abgerundete Ecken */
+  }
+  
+  @media (max-width: 768px) {
+    .project-section {
+      flex-direction: column; /* Inhalte untereinander bei schmalen Bildschirmen */
+      align-items: center; /* Zentrierung der Inhalte */
+    }
+  
+    .right-column {
+      justify-content: center; /* Zentriert das GIF vertikal */
+      margin-top: 1rem; /* Abstand nach oben */
+    }
+  }
+  
+  

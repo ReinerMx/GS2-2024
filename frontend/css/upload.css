@@ -1,0 +1,94 @@
+/* ********** Upload page ********** */
+
+/* General Styling */
+  
+  /* Heading */
+  .upload-title {
+    font-size: 30px;
+    font-weight: 500; /* Reduced boldness */
+    margin-bottom: 20px;
+    text-align: center;
+    color: #343a40;
+  }
+  
+  /* Instructions */
+  .upload-instructions {
+    font-size: 16px;
+    color: #6c757d;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  /* Drag-and-Drop Zone */
+  .drop-zone {
+    border: 2px solid #007bff; /* Dark blue border */
+    border-radius: 8px;
+    background-color: rgba(0, 123, 255, 0.1); /* Light blue transparent background */
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    margin-bottom: 15px;
+  }
+  
+  .drop-zone:hover {
+    background-color: rgba(0, 123, 255, 0.15); /* Slightly darker on hover */
+  }
+  
+  .drop-zone.dragging {
+    background-color: rgba(0, 123, 255, 0.2);
+    border-color: #0056b3; /* Darker blue on drag */
+  }
+  
+  .drop-zone p {
+    margin: 0;
+    font-size: 16px;
+    color: #343a40;
+  }
+  
+  .drop-zone .click-trigger,
+  .drop-zone .drag-label {
+    font-weight: 600; /* Slightly bold for consistency */
+    color: #0056b3; /* Dark blue */
+  }
+  
+  /* Text Input */
+  textarea {
+    border-radius: 4px; /* Slight rounding */
+    border: 1px solid #ced4da;
+    padding: 10px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0px 2px 4px rgba(0, 123, 255, 0.2);
+    outline: none;
+  }
+  
+  /* Submit Button */
+  button {
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02);
+  }
+  
+  /* Footer Text Link */
+  form-text a {
+    color: #007bff;
+    text-decoration: underline;
+  }
+  
+  form-text a:hover {
+    color: #0056b3;
+    text-decoration: none;
+  }
+  

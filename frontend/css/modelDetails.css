@@ -1,0 +1,152 @@
+/* ********** Model Details Styling ********** */
+
+/* Center Header */
+.center-header {
+    margin-bottom: 30px;
+}
+
+.center-header h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.center-header .user-description {
+    text-align: left;
+}
+
+/* ********** Grid Layout ********** */
+.grid-container {
+    display: grid;
+    grid-template-columns: 60% 40%; /* Left: 60%, Right: 40% */
+    gap: 20px; /* Space between columns */
+    align-items: start; /* Align items at the top */
+}
+
+/* ********** Left Section: Model Details ********** */
+.info-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ********** Right Section: Coverage ********** */
+.coverage-section {
+    display: flex;
+    flex-direction: column; /* Stack map and graph vertically */
+    gap: 20px;
+}
+
+/* Map Styling */
+#map {
+    height: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Temporal Coverage Section */
+.temporal-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    text-align: center;
+}
+
+.temporal-section h5 {
+    margin-bottom: 15px;
+}
+
+.temporal-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px auto;
+    font-size: 16px;
+}
+
+.temporal-timeline .start-date,
+.temporal-timeline .end-date {
+    font-weight: bold;
+}
+
+.temporal-timeline .timeline-line {
+    flex-grow: 1;
+    height: 4px;
+    background-color: #007bff;
+    margin: 0 10px;
+    border-radius: 1px;
+}
+
+/* ********** Links Section ********** */
+.links-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.links-container h4 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.link-item {
+    margin-bottom: 10px;
+}
+
+.links-box {
+    word-wrap: break-word; /* Lange Wörter oder URLs umbrechen */
+    overflow-wrap: break-word; /* Alternative für moderne Browser */
+    max-width: 100%; /* Verhindert, dass Inhalte die Box überschreiten */
+    overflow: hidden; /* Verhindert, dass Inhalte visuell überlaufen */
+}
+
+.link-item a {
+    display: inline-block; /* Blockiert lange URLs und ermöglicht Umbruch */
+    word-break: break-all; /* Erzwingt Umbruch für lange Links */
+    color: #007bff; /* Link-Farbe */
+    text-decoration: underline;
+}
+
+.link-item a:hover {
+    color: #0056b3; /* Link-Farbe beim Hover */
+}
+
+
+/* Color box styles for classes */
+.classification-classes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.class-item {
+    display: flex;
+    gap: 10px; /* Abstand zwischen Box und Text */
+}
+
+.color-box {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex-shrink: 0; /* Verhindert das Schrumpfen der Box */
+}
+
+/* Use data-color to dynamically apply the color */
+.color-box[data-color] {
+    background-color: var(--color, transparent);
+}
+
+/* Fallback to data-color using JS */
+.color-box[data-color]:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: attr(data-color);
+}

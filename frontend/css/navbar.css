@@ -1,0 +1,183 @@
+/* ********** Navbar Styles ********** */
+/* Styles for the main navigation bar */
+.navbar {
+    padding: 10px 20px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+/* Search Bar in Navbar */
+.search-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    max-width: 400px;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.search-bar input[type="text"] {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding-left: 8px;
+    font-size: 1rem;
+    color: #333;
+    background-color: transparent;
+}
+
+.search-bar input[type="text"]::placeholder {
+    color: #aaa;
+}
+
+.search-bar::before {
+    content: "\1F50D";
+    font-size: 1.2rem;
+    color: #aaa;
+    margin-right: 8px;
+}
+
+.navbar-nav.ml-auto {
+    display: flex;
+    align-items: center;
+}
+
+/* Search Bar in Navbar EXTENSION */
+/* Autocomplete Styles für Dark Mode */
+.autocomplete {
+    display: none; /* Startet als unsichtbar */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9; /* Standard-Hintergrundfarbe für hellen Modus */
+    color: #333; /* Standard-Textfarbe für hellen Modus */
+}
+
+/* Dark Mode Anpassungen für Autocomplete */
+body.dark-mode .autocomplete {
+    background-color: #333; /* Dunklerer Hintergrund im Dark Mode */
+    color: #f9f9f9; /* Helle Textfarbe im Dark Mode */
+    border-color: #555; /* Etwas dunklerer Rand */
+}
+
+body.dark-mode .autocomplete li:hover {
+    background: #2d828e; /* Anpassung der Hover-Farbe für Dark Mode */
+    color: white;
+}
+
+/* Sichtbarkeit der Autocomplete-Liste beim Tippen oder Fokussieren */
+#search-bar:focus + .autocomplete,
+#search-bar:not(:placeholder-shown) + .autocomplete {
+    display: block; /* Wird sichtbar, wenn das Suchfeld fokussiert ist oder Text eingegeben wurde */
+}
+
+.autocomplete li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Hover-Effekt für Listenelemente */
+.autocomplete li:hover {
+    background: #256e77;
+    color: white;
+}
+
+
+/* Responsiveness */
+@media (max-width: 600px) {
+    .faq-container {
+        padding: 15px;
+    }
+
+    .faq-question {
+        font-size: 14px;
+    }
+
+    .faq-answer {
+        font-size: 12px;
+    }
+}
+
+/* Benutzer-Symbol Styling */
+.navbar .nav-item.dropdown img {
+    cursor: pointer;
+    border-radius: 50%; /* Rundes Symbol */
+    transition: transform 0.3s ease;
+    width: 24px; /* Größe des Symbols */
+    height: 24px;
+}
+
+.navbar .nav-item.dropdown img:hover {
+    transform: scale(1.1); /* Symbol leicht vergrößern bei Hover */
+}
+
+/* Dropdown-Menü Styling */
+.dropdown-menu {
+    min-width: 150px; /* Breite des Dropdown-Menüs */
+    text-align: left; /* Text linksbündig */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Schatteneffekt */
+    border-radius: 5px; /* Abgerundete Ecken */
+    background-color: #ffffff; /* Hintergrundfarbe */
+    color: #333; /* Textfarbe */
+    padding: 5px 0;
+    z-index: 1000;
+}
+
+/* Links im Dropdown-Menü */
+.dropdown-menu a {
+    padding: 10px 15px;
+    display: block;
+    text-decoration: none; /* Keine Unterstreichung */
+    color: #333; /* Textfarbe */
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f0f0; /* Hintergrundfarbe bei Hover */
+}
+
+/* Anpassungen für mobile Bildschirme */
+@media (max-width: 576px) {
+    .dropdown-menu {
+        min-width: 100px; /* Schmaleres Menü auf kleineren Bildschirmen */
+    }
+}
+/* user-icon */
+.user-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    border-radius: 50%; /* Rundes Symbol */
+    transition: transform 0.3s ease;
+  }
+  
+  
+  .user-icon:hover {
+    transform: scale(1.1); /* Leicht vergrößern bei Hover */
+  }
