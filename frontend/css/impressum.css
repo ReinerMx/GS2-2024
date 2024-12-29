@@ -2,47 +2,46 @@
 
 /* Email Icon in Impressum */
 .email-icon {
-    width: 20px;
-    vertical-align: middle;
-  }
-  .project-section {
-    display: flex; /* Inhalte nebeneinander platzieren */
-    justify-content: space-between; /* Abstand zwischen den beiden Spalten */
-    gap: 2rem; /* Abstand zwischen den Spalten */
-    max-width: 1200px; /* Maximale Breite für die gesamte Section */
-    margin: 0 auto; /* Zentriert die Section horizontal */
-  }
-  
-  .project-section .left-column {
-    flex: 1; /* Linke Spalte nimmt den verfügbaren Platz ein */
-  }
-  
-  .project-section .right-column {
-    flex: 1; /* Rechte Spalte nimmt den verfügbaren Platz ein */
+    width: 20px; /* Set the width of the email icon */
+    vertical-align: middle; /* Align the icon vertically in the middle */
+}
+
+.project-section {
+    display: flex; /* Place contents side by side */
+    justify-content: space-between; /* Space between the two columns */
+    gap: 2rem; /* Gap between the columns */
+    max-width: 1200px; /* Maximum width for the entire section */
+    margin: 0 auto; /* Center the section horizontally */
+}
+
+.project-section .left-column {
+    flex: 1; /* Left column takes up available space */
+}
+
+.project-section .right-column {
+    flex: 1; /* Right column takes up available space */
     display: flex;
-    flex-direction: column; /* Inhalte vertikal anordnen */
-    justify-content: flex-end; /* Elemente nach unten ausrichten */
-    align-items: center; /* Horizontale Zentrierung */
-    height: 100%; /* Volle Höhe der rechten Spalte */
-  }
-  
-  .project-section .gif-style {
-    max-width: 100%; /* Breite anpassen */
-    max-height: 300px; /* Maximale Höhe des GIFs */
-    width: auto; /* Seitenverhältnis beibehalten */
-    border-radius: 15px; /* Abgerundete Ecken */
-  }
-  
-  @media (max-width: 768px) {
+    flex-direction: column; /* Arrange contents vertically */
+    justify-content: flex-end; /* Align elements to the bottom */
+    align-items: center; /* Center elements horizontally */
+    height: 100%; /* Full height of the right column */
+}
+
+.project-section .gif-style {
+    max-width: 100%; /* Adjust width */
+    max-height: 300px; /* Maximum height of the GIF */
+    width: auto; /* Maintain aspect ratio */
+    border-radius: 15px; /* Rounded corners */
+}
+
+@media (max-width: 768px) {
     .project-section {
-      flex-direction: column; /* Inhalte untereinander bei schmalen Bildschirmen */
-      align-items: center; /* Zentrierung der Inhalte */
+        flex-direction: column; /* Stack contents vertically on narrow screens */
+        align-items: center; /* Center contents */
     }
-  
+
     .right-column {
-      justify-content: center; /* Zentriert das GIF vertikal */
-      margin-top: 1rem; /* Abstand nach oben */
+        justify-content: center; /* Center the GIF vertically */
+        margin-top: 1rem; /* Top margin */
     }
-  }
-  
-  
+}
