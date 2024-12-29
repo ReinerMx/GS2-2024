@@ -87,7 +87,7 @@ body.dark-mode .autocomplete {
 }
 
 body.dark-mode .autocomplete li:hover {
-    background: #2d828e; /* Anpassung der Hover-Farbe für Dark Mode */
+    background: rgb(13, 40, 52); /* Anpassung der Hover-Farbe für Dark Mode */
     color: white;
 }
 
@@ -104,7 +104,7 @@ body.dark-mode .autocomplete li:hover {
 
 /* Hover-Effekt für Listenelemente */
 .autocomplete li:hover {
-    background: #256e77;
+    background: #90d5ff;
     color: white;
 }
 
