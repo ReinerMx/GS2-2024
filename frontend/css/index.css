@@ -21,7 +21,7 @@ body {
     justify-content: center; /* Centers content vertically */
     align-items: center;     /* Centers content horizontally */
     text-align: center;      /* Centers text */
-    background: url('images/earth6.jpg') center/cover no-repeat;
+    background: url('../images/earth6.jpg') center/cover no-repeat;
     color: white;
     padding: 20px;
 }
