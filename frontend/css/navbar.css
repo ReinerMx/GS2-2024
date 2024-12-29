@@ -1,183 +1,182 @@
 /* ********** Navbar Styles ********** */
 /* Styles for the main navigation bar */
 .navbar {
-    padding: 10px 20px;
+    padding: 10px 20px; /* Padding around the navbar */
 }
 
 .navbar-brand {
-    display: flex;
-    align-items: center;
+    display: flex; /* Flexbox for alignment */
+    align-items: center; /* Center items vertically */
 }
 
 .navbar-brand img {
-    height: 40px;
-    margin-right: 10px;
+    height: 40px; /* Set logo height */
+    margin-right: 10px; /* Space to the right of the logo */
 }
 
 /* Search Bar in Navbar */
 .search-container {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
+    flex-grow: 1; /* Allow the search container to grow */
+    display: flex; /* Flexbox for alignment */
+    justify-content: center; /* Center the search bar */
 }
 
 .search-bar {
-    display: flex;
-    align-items: center;
-    max-width: 400px;
-    width: 100%;
-    padding: 8px 12px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    background-color: #f9f9f9;
+    display: flex; /* Flexbox for alignment */
+    align-items: center; /* Center items vertically */
+    max-width: 400px; /* Maximum width of the search bar */
+    width: 100%; /* Full width */
+    padding: 8px 12px; /* Padding inside the search bar */
+    border-radius: 20px; /* Rounded corners */
+    border: 1px solid #ddd; /* Light gray border */
+    background-color: #f9f9f9; /* Light gray background */
 }
 
 .search-bar input[type="text"] {
-    border: none;
-    outline: none;
-    width: 100%;
-    padding-left: 8px;
-    font-size: 1rem;
-    color: #333;
-    background-color: transparent;
+    border: none; /* Remove border */
+    outline: none; /* Remove outline */
+    width: 100%; /* Full width */
+    padding-left: 8px; /* Padding on the left */
+    font-size: 1rem; /* Font size */
+    color: #333; /* Text color */
+    background-color: transparent; /* Transparent background */
 }
 
 .search-bar input[type="text"]::placeholder {
-    color: #aaa;
+    color: #aaa; /* Placeholder text color */
 }
 
 .search-bar::before {
-    content: "\1F50D";
-    font-size: 1.2rem;
-    color: #aaa;
-    margin-right: 8px;
+    content: "\1F50D"; /* Unicode for magnifying glass icon */
+    font-size: 1.2rem; /* Icon size */
+    color: #aaa; /* Icon color */
+    margin-right: 8px; /* Space to the right of the icon */
 }
 
 .navbar-nav.ml-auto {
-    display: flex;
-    align-items: center;
+    display: flex; /* Flexbox for alignment */
+    align-items: center; /* Center items vertically */
 }
 
-/* Search Bar in Navbar EXTENSION */
-/* Autocomplete Styles für Dark Mode */
+/* Search Bar in Navbar Extension */
+/* Autocomplete Styles for Dark Mode */
 .autocomplete {
-    display: none; /* Startet als unsichtbar */
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    max-height: 150px;
-    overflow-y: auto;
-    position: absolute;
-    z-index: 1000;
-    width: 100%;
-    top: 100%;
-    left: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9; /* Standard-Hintergrundfarbe für hellen Modus */
-    color: #333; /* Standard-Textfarbe für hellen Modus */
+    display: none; /* Initially hidden */
+    list-style-type: none; /* Remove list styling */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+    max-height: 150px; /* Maximum height */
+    overflow-y: auto; /* Scrollable if content overflows */
+    position: absolute; /* Absolute positioning */
+    z-index: 1000; /* Ensure it appears above other elements */
+    width: 100%; /* Full width */
+    top: 100%; /* Position below the search bar */
+    left: 0; /* Align to the left */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    background-color: #f9f9f9; /* Light background color */
+    color: #333; /* Text color */
 }
 
-/* Dark Mode Anpassungen für Autocomplete */
+/* Dark Mode Adjustments for Autocomplete */
 body.dark-mode .autocomplete {
-    background-color: #333; /* Dunklerer Hintergrund im Dark Mode */
-    color: #f9f9f9; /* Helle Textfarbe im Dark Mode */
-    border-color: #555; /* Etwas dunklerer Rand */
+    background-color: #333; /* Dark background color */
+    color: #f9f9f9; /* Light text color */
+    border-color: #555; /* Darker border color */
 }
 
 body.dark-mode .autocomplete li:hover {
-    background: rgb(13, 40, 52); /* Anpassung der Hover-Farbe für Dark Mode */
-    color: white;
+    background: rgb(13, 40, 52); /* Darker hover background */
+    color: white; /* Light text color on hover */
 }
 
-/* Sichtbarkeit der Autocomplete-Liste beim Tippen oder Fokussieren */
+/* Visibility of Autocomplete List when Typing or Focusing */
 #search-bar:focus + .autocomplete,
 #search-bar:not(:placeholder-shown) + .autocomplete {
-    display: block; /* Wird sichtbar, wenn das Suchfeld fokussiert ist oder Text eingegeben wurde */
+    display: block; /* Show when search bar is focused or has text */
 }
 
 .autocomplete li {
-    padding: 10px;
-    cursor: pointer;
+    padding: 10px; /* Padding inside list items */
+    cursor: pointer; /* Pointer cursor on hover */
 }
 
-/* Hover-Effekt für Listenelemente */
+/* Hover Effect for List Items */
 .autocomplete li:hover {
-    background: #90d5ff;
-    color: white;
+    background: #90d5ff; /* Light blue background on hover */
+    color: white; /* White text color on hover */
 }
-
 
 /* Responsiveness */
 @media (max-width: 600px) {
     .faq-container {
-        padding: 15px;
+        padding: 15px; /* Padding inside FAQ container */
     }
 
     .faq-question {
-        font-size: 14px;
+        font-size: 14px; /* Font size for FAQ questions */
     }
 
     .faq-answer {
-        font-size: 12px;
+        font-size: 12px; /* Font size for FAQ answers */
     }
 }
 
-/* Benutzer-Symbol Styling */
+/* User Icon Styling */
 .navbar .nav-item.dropdown img {
-    cursor: pointer;
-    border-radius: 50%; /* Rundes Symbol */
-    transition: transform 0.3s ease;
-    width: 24px; /* Größe des Symbols */
-    height: 24px;
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 50%; /* Round icon */
+    transition: transform 0.3s ease; /* Smooth transform transition */
+    width: 24px; /* Icon width */
+    height: 24px; /* Icon height */
 }
 
 .navbar .nav-item.dropdown img:hover {
-    transform: scale(1.1); /* Symbol leicht vergrößern bei Hover */
+    transform: scale(1.1); /* Slightly enlarge on hover */
 }
 
-/* Dropdown-Menü Styling */
+/* Dropdown Menu Styling */
 .dropdown-menu {
-    min-width: 150px; /* Breite des Dropdown-Menüs */
-    text-align: left; /* Text linksbündig */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Schatteneffekt */
-    border-radius: 5px; /* Abgerundete Ecken */
-    background-color: #ffffff; /* Hintergrundfarbe */
-    color: #333; /* Textfarbe */
-    padding: 5px 0;
-    z-index: 1000;
+    min-width: 150px; /* Minimum width of the dropdown menu */
+    text-align: left; /* Left-align text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #ffffff; /* Background color */
+    color: #333; /* Text color */
+    padding: 5px 0; /* Padding inside the dropdown menu */
+    z-index: 1000; /* Ensure it appears above other elements */
 }
 
-/* Links im Dropdown-Menü */
+/* Links in Dropdown Menu */
 .dropdown-menu a {
-    padding: 10px 15px;
-    display: block;
-    text-decoration: none; /* Keine Unterstreichung */
-    color: #333; /* Textfarbe */
-    transition: background-color 0.2s ease;
+    padding: 10px 15px; /* Padding inside links */
+    display: block; /* Block display for full width */
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Text color */
+    transition: background-color 0.2s ease; /* Smooth background transition */
 }
 
 .dropdown-menu a:hover {
-    background-color: #f0f0f0; /* Hintergrundfarbe bei Hover */
+    background-color: #f0f0f0; /* Light gray background on hover */
 }
 
-/* Anpassungen für mobile Bildschirme */
+/* Adjustments for Mobile Screens */
 @media (max-width: 576px) {
     .dropdown-menu {
-        min-width: 100px; /* Schmaleres Menü auf kleineren Bildschirmen */
+        min-width: 100px; /* Narrower menu on smaller screens */
     }
 }
-/* user-icon */
+
+/* User Icon */
 .user-icon {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    border-radius: 50%; /* Rundes Symbol */
-    transition: transform 0.3s ease;
-  }
-  
-  
-  .user-icon:hover {
-    transform: scale(1.1); /* Leicht vergrößern bei Hover */
-  }
+    width: 24px; /* Icon width */
+    height: 24px; /* Icon height */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 50%; /* Round icon */
+    transition: transform 0.3s ease; /* Smooth transform transition */
+}
+
+.user-icon:hover {
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
