@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Adjust the position of the autocomplete list
     const positionAutocomplete = () => {
         const rect = searchInput.getBoundingClientRect();
-        console.log('Autocomplete Position:', rect.bottom, rect.left, rect.width);
         autocompleteList.style.position = 'absolute';
         autocompleteList.style.top = `${rect.bottom + window.scrollY}px`;
         autocompleteList.style.left = `${rect.left + window.scrollX}px`;
@@ -99,55 +98,114 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const filterContainer = document.getElementById('filterContainer');
 
-    // Load filters from the backend
-    const loadFilters = async () => {
-        try {
-            const response = await fetch('/filters');
-            if (!response.ok) throw new Error('Error fetching filters');
-            const { tasks, frameworks, architectures, keywords, dataTypes, ioRequirements, bandCounts } = await response.json();
-            updateBandCountSlider(bandCounts);
-            renderFilters({ tasks, frameworks, architectures, keywords, dataTypes, ioRequirements });
-        } catch (error) {
-            console.error('Error loading filters:', error);
-        }
-    };
+const loadFilters = async () => {
+    try {
+        const response = await fetch('/filters');
+        if (!response.ok) throw new Error('Error fetching filters');
+        const { tasks, frameworks, architectures, keywords, dataTypes, ioRequirements, bandCounts } = await response.json();
 
-    const updateBandCountSlider = ({ min, max }) => {
-        bandCountSlider.min = min;
-        bandCountSlider.max = max;
-        bandCountSlider.value = min;
-        bandCountLabel.textContent = min;
+        // Pass all filters, including bandCounts, to renderFilters
+        renderFilters({ tasks, frameworks, architectures, keywords, dataTypes, ioRequirements, bandCounts });
+    } catch (error) {
+        console.error('Error loading filters:', error);
+    }
+};
 
-        bandCountSlider.addEventListener('input', () => {
-            bandCountLabel.textContent = bandCountSlider.value;
-        });
-    };
+/**
+ * Function to render filters dynamically
+ * @param {*} filters 
+ */
+const renderFilters = (filters) => {
+    filterContainer.innerHTML = `
+    <div class="additional-filters-container mt-3">
+      <div class="d-flex justify-content-between align-items-center additional-filters-header" data-toggle="collapse" data-target="#advancedFilters" aria-expanded="false" aria-controls="advancedFilters">
+        <span class="filter-title">Additional Filters</span>
+        <span class="caret-icon">&#9660;</span>
+      </div>
+      <div class="collapse mt-2" id="advancedFilters">
+        <div class="card card-body">
+          <div class="left-column">
+            <div class="filter-category">
+              <h6>Tasks</h6>
+              <div id="tasksContainer"></div>
+            </div>
+            <div class="filter-category">
+              <h6>Frameworks</h6>
+              <div id="frameworksContainer"></div>
+            </div>
+            <div class="filter-category">
+              <h6>Architectures</h6>
+              <div id="architecturesContainer"></div>
+            </div>
+          </div>
+          <div class="right-column">
+            <div class="filter-category">
+              <h6>Keywords</h6>
+              <div id="keywordsContainer"></div>
+            </div>
+            <div class="filter-category">
+              <h6>Data Types</h6>
+              <div id="dataTypesContainer"></div>
+            </div>
+            <div class="filter-category">
+              <h6>IO Requirements</h6>
+              <div id="ioRequirementsContainer"></div>
+            </div>
+          </div>
+          <!-- Number of Bands slider -->
+          <div class="slider-section">
+            <h5>Number of Bands</h5>
+            <input type="range" id="bandCountSlider" min="${filters.bandCounts?.min || 1}" max="${filters.bandCounts?.max || 10}" step="1" value="${filters.bandCounts?.min || 1}" />
+            <span id="bandCountLabel">${filters.bandCounts?.min || 1}</span> Bands
+          </div>
+        </div>
+      </div>
+    </div>
+`;
 
-    const renderFilters = (filters) => {
-        filterContainer.innerHTML = '';
-        Object.entries(filters).forEach(([title, items]) => {
-            if (!items || items.length === 0) return;
-            const categoryDiv = document.createElement('div');
-            categoryDiv.classList.add('filter-category');
+    // Fill each specific filter category
+    const tasksContainer = document.getElementById('tasksContainer');
+    const frameworksContainer = document.getElementById('frameworksContainer');
+    const architecturesContainer = document.getElementById('architecturesContainer');
+    const keywordsContainer = document.getElementById('keywordsContainer');
+    const dataTypesContainer = document.getElementById('dataTypesContainer');
+    const ioRequirementsContainer = document.getElementById('ioRequirementsContainer');
 
-            const header = document.createElement('h4');
-            header.textContent = title;
-            categoryDiv.appendChild(header);
-
+    // Helper function to populate filters
+    const populateFilterCategory = (container, items) => {
+        if (items && container) {
             items.forEach((item) => {
                 const filterItem = document.createElement('div');
                 filterItem.classList.add('filter-item');
                 filterItem.textContent = item;
                 filterItem.addEventListener('click', () => {
-                    searchInput.value = item;
-                    fetchSearchResults(item);
+                    searchInput.value = item; // Fill search input
+                    fetchSearchResults(item); // Trigger search on click
                 });
-                categoryDiv.appendChild(filterItem);
+                container.appendChild(filterItem);
             });
-
-            filterContainer.appendChild(categoryDiv);
-        });
+        }
     };
+
+    // Populate the filter categories
+    populateFilterCategory(tasksContainer, filters.tasks);
+    populateFilterCategory(frameworksContainer, filters.frameworks);
+    populateFilterCategory(architecturesContainer, filters.architectures);
+    populateFilterCategory(keywordsContainer, filters.keywords);
+    populateFilterCategory(dataTypesContainer, filters.dataTypes);
+    populateFilterCategory(ioRequirementsContainer, filters.ioRequirements);
+
+    // Add event listener for the band count slider
+    const bandCountSlider = document.getElementById('bandCountSlider');
+    const bandCountLabel = document.getElementById('bandCountLabel');
+
+    if (bandCountSlider) {
+        bandCountSlider.addEventListener('input', () => {
+            bandCountLabel.textContent = bandCountSlider.value;
+        });
+    }
+};
+
 
 
 loadFilters(); // Initialize filters on page load

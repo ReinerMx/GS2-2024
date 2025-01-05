@@ -1,10 +1,9 @@
-/* ********** Sidebar Styling ********** */
-/* Styles for the filter sidebar */
+/* Sidebar Styling */
 .filter-sidebar {
     background-color: #f8f9fa;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
     height: fit-content;
@@ -12,9 +11,98 @@
 
 .filter-sidebar h4, .filter-section h5 {
     color: #007bff;
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 18px; /* Larger font size for headings */
 }
 
 .filter-section label {
     color: #555;
     font-weight: 400;
+}
+
+.additional-filters-container {
+    background-color: #f7f7f7;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    width: 100%;
+    margin-bottom: 30px; /* Larger space to the results */
+}
+
+.card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 20px; /* Space between columns */
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between categories */
+}
+
+.filter-category {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.filter-category h6 {
+    margin-bottom: 10px;
+    font-size: 16px; /* Larger font size for categories */
+    font-weight: 600;
+}
+
+.filter-item {
+    background-color: #f1f1f1;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 14px; /* Slightly larger font size for filter items */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.filter-item:hover {
+    background-color: #007bff; /* Light blue on hover */
+    color: white; /* White text on hover */
+}
+
+.slider-section {
+    grid-column: 1 / -1; /* Slider spans both columns */
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+.filter-section input[type="range"] {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.filter-section span {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .card-body {
+        grid-template-columns: 1fr; /* Single column layout for small screens */
+    }
+}
+
+.search-catalog-container {
+    padding-top: 10px;
+    margin-top: 20px; /* Space below for clarity */
 }
