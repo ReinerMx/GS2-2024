@@ -1,0 +1,15 @@
+{
+  "id": "invalid-links",
+  "type": "Collection",
+  "stac_version": "1.0.0",
+  "description": "Links should be an array.",
+  "extent": {
+    "spatial": {
+      "bbox": [[-10.0, 40.0, 10.0, 50.0]]
+    },
+    "temporal": {
+      "interval": [["2024-01-01T00:00:00Z", "2024-12-31T23:59:59Z"]]
+    }
+  },
+  "links": "invalid-links"  // Hier sollte ein Array sein
+}

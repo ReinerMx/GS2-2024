@@ -1,0 +1,270 @@
+{
+    "type": "Feature",
+    "stac_version": "1.0.0",
+    "id": "item_marine_satlas_sentinel2",
+    "properties": {
+        "start_datetime": "1900-01-01T00:00:00Z",
+        "end_datetime": "9999-01-01T00:00:00Z",
+        "description": "Sourced from satlas source code released by Allen AI under Apache 2.0. The forward pass was rewritten for torchscripting. Batch size suggestion is based on running on a NVIDIA 3090 with 24GB of GPU memory",
+        "mlm:framework": "pytorch",
+        "mlm:framework_version": "2.3.0+cu121",
+        "file:size": 333000000,
+        "mlm:memory_size": 389750988,
+        "mlm:batch_size_suggestion": 9,
+        "mlm:accelerator": "cuda",
+        "mlm:accelerator_constrained": false,
+        "mlm:accelerator_summary": "It is recommended to use a GPU due to the computational demands of the model.",
+        "mlm:name": "Satlas Marine Infrastucture Detection",
+        "mlm:architecture": "Swin Transformer V2 with R-CNN head",
+        "mlm:tasks": [
+            "object-detection"
+        ],
+        "mlm:input": [
+            {
+                "name": "3 Band Sentinel-2 3 Time Step Series Batch",
+                "bands": [
+                    "B02",
+                    "B03",
+                    "B04",
+                    "B02",
+                    "B03",
+                    "B04",
+                    "B02",
+                    "B03",
+                    "B04"
+                ],
+                "input": {
+                    "shape": [
+                        -1,
+                        9,
+                        1024,
+                        1024
+                    ],
+                    "dim_order": [
+                        "batch",
+                        "channel",
+                        "height",
+                        "width"
+                    ],
+                    "data_type": "float32"
+                },
+                "norm_by_channel": true,
+                "norm_type": "min-max",
+                "resize_type": "crop",
+                "statistics": [
+                    {
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    {
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    {
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    {
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    {
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    {
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    {
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    {
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    {
+                        "minimum": 0,
+                        "maximum": 255
+                    }
+                ],
+                "pre_processing_function": {
+                    "format": "documentation-link",
+                    "expression": "https://github.com/allenai/satlas/blob/main/Normalization.md#sentinel-2-example"
+                }
+            }
+        ],
+        "mlm:output": [
+            {
+                "name": "bboxes",
+                "tasks": [
+                    "object-detection"
+                ],
+                "result": {
+                    "shape": [
+                        -1,
+                        -1,
+                        4
+                    ],
+                    "dim_order": [
+                        "batch",
+                        "detections",
+                        "coordinates"
+                    ],
+                    "data_type": "float32"
+                },
+                "classification:classes": [
+                    {
+                        "value": 1,
+                        "name": "wind_turbine",
+                        "description": "wind_turbine"
+                    },
+                    {
+                        "value": 2,
+                        "name": "platform",
+                        "description": "platform"
+                    }
+                ],
+                "post_processing_function": null
+            },
+            {
+                "name": "labels",
+                "tasks": [
+                    "object-detection"
+                ],
+                "result": {
+                    "shape": [
+                        -1,
+                        -1
+                    ],
+                    "dim_order": [
+                        "batch",
+                        "detections"
+                    ],
+                    "data_type": "int64"
+                },
+                "classification:classes": [
+                    {
+                        "value": 1,
+                        "name": "wind_turbine",
+                        "description": "wind_turbine"
+                    },
+                    {
+                        "value": 2,
+                        "name": "platform",
+                        "description": "platform"
+                    }
+                ],
+                "post_processing_function": null
+            },
+            {
+                "name": "classes",
+                "tasks": [
+                    "object-detection"
+                ],
+                "result": {
+                    "shape": [
+                        -1,
+                        -1
+                    ],
+                    "dim_order": [
+                        "batch",
+                        "detections"
+                    ],
+                    "data_type": "float32"
+                },
+                "classification:classes": [
+                    {
+                        "value": 1,
+                        "name": "wind_turbine",
+                        "description": "wind_turbine"
+                    },
+                    {
+                        "value": 2,
+                        "name": "platform",
+                        "description": "platform"
+                    }
+                ],
+                "post_processing_function": null
+            }
+        ],
+        "mlm:total_parameters": 89748193,
+        "mlm:pretrained": true,
+        "mlm:pretrained_source": "Sentinel-2 imagery and SATLAS labels",
+        "datetime": null
+    },
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [
+                    -7.882190080512502,
+                    37.13739173208318
+                ],
+                [
+                    -7.882190080512502,
+                    58.21798141355221
+                ],
+                [
+                    27.911651652899923,
+                    58.21798141355221
+                ],
+                [
+                    27.911651652899923,
+                    37.13739173208318
+                ],
+                [
+                    -7.882190080512502,
+                    37.13739173208318
+                ]
+            ]
+        ]
+    },
+    "links": [
+        {
+            "rel": "derived_from",
+            "href": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l1c",
+            "type": "application/json"
+        },
+        {
+            "rel": "self",
+            "href": "s3://wherobots-modelhub-prod/professional/object-detection/marine-satlas-sentinel2/model-metadata.json/item_marine_satlas_sentinel2.json",
+            "type": "application/json"
+        }
+    ],
+    "assets": {
+        "model": {
+            "href": "s3://wherobots-modelhub-prod/professional/object-detection/marine-satlas-sentinel2/scripting/model.pt",
+            "type": "application/octet-stream; application=pytorch",
+            "title": "TorchScript model exported from private, edited, hard fork of Satlas github repo.",
+            "description": "A Swin Transformer backbone with an R-CNN based head trained on the visual Sentinel-2 Top of Atmosphere product.",
+            "mlm_artifact_type": "torch.jit.script",
+            "file:size": 333000000,
+            "roles": [
+                "mlm:model",
+                "data"
+            ]
+        },
+        "source_code": {
+            "href": "https://github.com/wherobots/modelhub/blob/main/model-forge/satlas/marine/export.py",
+            "type": "text/x-python",
+            "title": "Model implementation.",
+            "description": "Source code to export the model.",
+            "roles": [
+                "mlm:model",
+                "code"
+            ]
+        }
+    },
+    "bbox": [
+        -7.882190080512502,
+        37.13739173208318,
+        27.911651652899923,
+        58.21798141355221
+    ],
+    "stac_extensions": [
+        "https://stac-extensions.github.io/file/v2.1.0/schema.json",
+        "https://crim-ca.github.io/mlm-extension/v1.2.0/schema.json"
+    ]
+}

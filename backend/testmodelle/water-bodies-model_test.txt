@@ -1,0 +1,54 @@
+{
+    "type": "Feature",
+    "stac_version": "1.0.0",
+    "id": "water-bodies-model_test",
+    "properties": {
+        "description": "Test model for water body classification with reduced inputs.",
+        "mlm:framework": "onnx",
+        "mlm:framework_version": "1.10.2",
+        "mlm:name": "Water-Bodies-Test-Model",
+        "mlm:input": [
+            {
+                "name": "EO Data Reduced",
+                "bands": ["B02", "B03", "B04", "B08"],
+                "input": {
+                    "shape": [-1, 4, 512, 512],
+                    "data_type": "float32",
+                    "dim_order": ["batch", "channel", "height", "width"]
+                }
+            }
+        ],
+        "mlm:output": [
+            {
+                "name": "WATER_CLASSIFICATION",
+                "result": {
+                    "shape": [-1, 512, 512],
+                    "data_type": "uint8",
+                    "dim_order": ["batch", "height", "width"]
+                }
+            }
+        ],
+        "mlm:tasks": ["classification"],
+        "start_datetime": "2021-01-01T00:00:00Z",
+        "end_datetime": "2023-12-31T23:59:59Z"
+    },
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [-120.065, 36.930],
+                [-120.065, 38.843],
+                [-121.876, 38.843],
+                [-121.876, 36.930],
+                [-120.065, 36.930]
+            ]
+        ]
+    },
+    "links": [
+        {
+            "rel": "self",
+            "href": "https://example.com/test-model.json",
+            "type": "application/json"
+        }
+    ]
+}

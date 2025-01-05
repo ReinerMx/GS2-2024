@@ -1,0 +1,14 @@
+{
+  "id": "invalid-date",
+  "type": "Collection",
+  "stac_version": "1.0.0",
+  "description": "Invalid temporal date format.",
+  "extent": {
+    "spatial": {
+      "bbox": [[-10.0, 40.0, 10.0, 50.0]]
+    },
+    "temporal": {
+      "interval": [["invalid-date", "2024-12-31T23:59:59Z"]]
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+    "type": "Feature",
+    "stac_version": "1.0.0",
+    "id": "item_solar_satlas_sentinel2_test",
+    "properties": {
+        "start_datetime": "2000-01-01T00:00:00Z",
+        "end_datetime": "2022-12-31T23:59:59Z",
+        "description": "Test model based on Satlas Solar Farm segmentation.",
+        "mlm:framework": "tensorflow",
+        "mlm:framework_version": "2.8.0",
+        "mlm:name": "Satlas Solar Farm Segmentation (Test)",
+        "mlm:tasks": ["semantic-segmentation"],
+        "mlm:input": [
+            {
+                "name": "Test Band Series",
+                "bands": ["B01", "B02", "B03", "B04"],
+                "input": {
+                    "shape": [-1, 4, 512, 512],
+                    "dim_order": ["batch", "channel", "height", "width"],
+                    "data_type": "float32"
+                },
+                "norm_by_channel": true,
+                "resize_type": "resize"
+            }
+        ],
+        "mlm:output": [
+            {
+                "name": "segmentation",
+                "result": {
+                    "shape": [-1, 1, 512, 512],
+                    "data_type": "float32"
+                }
+            }
+        ],
+        "mlm:total_parameters": 5000000,
+        "mlm:pretrained": false,
+        "datetime": null
+    },
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [-7.882, 37.137],
+                [27.911, 37.137],
+                [27.911, 58.217],
+                [-7.882, 58.217],
+                [-7.882, 37.137]
+            ]
+        ]
+    },
+    "links": [
+        {
+            "rel": "derived_from",
+            "href": "https://example.com/test-data.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "self",
+            "href": "s3://test-bucket/model-metadata-test.json",
+            "type": "application/json"
+        }
+    ]
+}

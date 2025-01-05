@@ -1,0 +1,14 @@
+{
+  "id": "invalid-bbox",
+  "type": "Collection",
+  "stac_version": "1.0.0",
+  "description": "Bounding box is not an array.",
+  "extent": {
+    "spatial": {
+      "bbox": "invalid-bbox"  // Hier sollte ein Array sein
+    },
+    "temporal": {
+      "interval": [["2024-01-01T00:00:00Z", "2024-12-31T23:59:59Z"]]
+    }
+  }
+}

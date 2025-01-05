@@ -1,41 +1,40 @@
 /* ********** Footer Styling ********** */
 html, body {
-    height: 100%; /* full height */
-    margin: 0; /* Standard-Ränder entfernen */
+    height: 100%; /* Full height for the entire page */
+    margin: 0; /* Remove default margins */
     display: flex;
-    flex-direction: column; /* Vertikale Anordnung */
+    flex-direction: column; /* Arrange elements vertically */
 }
 
 main {
-    flex: 1; /* Hauptinhalt füllt den verfügbaren Platz */
+    flex: 1; /* Main content fills the available space */
 }
 
 .footer {
-    background-color: #f8f9fa;
-    color: #6c757d;
-    padding: 30px 0;
-    border-top: 1px solid #e9ecef;
-    text-align: center; 
-    margin-top: auto !important;
+    background-color: #f8f9fa; /* Light gray background color */
+    color: #6c757d; /* Gray text color */
+    padding: 30px 0; /* Padding at the top and bottom */
+    border-top: 1px solid #e9ecef; /* Light gray top border */
+    text-align: center; /* Center-align text */
+    margin-top: auto !important; /* Push footer to the bottom */
 }
 
-
 .footer-logo img {
-    height: 40px;
+    height: 40px; /* Set logo height */
 }
 
 .footer-links a {
-    color: #6c757d;
-    text-decoration: none;
-    margin: 0 10px;
-    font-weight: 500;
+    color: #6c757d; /* Gray link color */
+    text-decoration: none; /* Remove underline from links */
+    margin: 0 10px; /* Horizontal margin between links */
+    font-weight: 500; /* Medium font weight */
 }
 
 .footer-links a:hover {
-    color: #007bff;
+    color: #007bff; /* Change link color on hover */
 }
 
 /* Adjusted Footer GitHub Icon */
 .footer-git .github-icon {
-    width: 30px;
+    width: 30px; /* Set GitHub icon width */
 }
