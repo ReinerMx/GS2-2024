@@ -21,14 +21,19 @@ document.addEventListener("DOMContentLoaded", () => {
     /**
      * Displays feedback messages to the user.
      */
-    const displayStatusMessage = (message, isError = false) => {
+    function displayStatusMessage(message, isError = false) {
       statusMessage.textContent = message;
-      statusMessage.className = `alert ${
-        isError ? "alert-danger" : "alert-success"
-      }`;
+      statusMessage.className = `alert ${isError ? "alert-danger" : "alert-success"}`;
       statusMessage.classList.remove("d-none");
-      setTimeout(() => statusMessage.classList.add("d-none"), 5000);
-    };
+    
+      // successful message auto-hide
+      if (!isError) {
+        setTimeout(() => {
+          statusMessage.classList.add("d-none");
+        }, 5000);
+      }
+    }
+    
   
     /**
      * Updates drop zone text after a file is selected.
@@ -64,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // Update drop zone text when file is selected
     fileInput.addEventListener("change", () => {
+      statusMessage.classList.add("d-none"); // Hide previous message when file is changed
       if (fileInput.files.length) {
         updateDropZoneText(fileInput.files[0].name);
       }
@@ -108,11 +114,15 @@ document.addEventListener("DOMContentLoaded", () => {
           simplemde.value(""); // Clear SimpleMDE content
           dropZone.innerHTML = `<p>Drag & drop your file here, or <span class="text-primary click-trigger">click to select</span>.</p>`;
         } else {
-          displayStatusMessage(result.error || "An error occurred.", true);
-        }
+          let errorMessage = result.error || "An error occurred.";
+          if (result.details && Array.isArray(result.details)) {
+            errorMessage += "\nDetails:\n" + result.details.map(detail => `• ${detail}`).join("\n");
+          }
+          displayStatusMessage(errorMessage, true);
+      }
       } catch (error) {
         console.error("Upload failed:", error);
-        displayStatusMessage("An unexpected error occurred.", true);
+        displayStatusMessage(error.message, true);
       } finally {
         submitButton.disabled = false;
         submitButton.textContent = "Upload Model";

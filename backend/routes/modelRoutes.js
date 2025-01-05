@@ -626,6 +626,15 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
     } catch (error) {
         console.error('Error saving STAC data to database:', error);
 
+        // Handle validation errors
+        if (error.name === 'SequelizeValidationError') {
+            const validationErrors = error.errors.map((err) => `${err.path}: ${err.message}`);
+            return res.status(400).json({
+                error: "Validation Error",
+                details: validationErrors 
+            });
+        }
+
         // Handle unique constraint errors
         if (error.name === 'SequelizeUniqueConstraintError') {
             const duplicateField = error.errors[0]?.path || 'unknown';
