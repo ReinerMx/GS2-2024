@@ -9,12 +9,11 @@ body {
     margin: auto;
 }
 
-/* Neue Klasse für das innere Div */
+/* List Container */
 .list-container {
-    margin-left: 20px; /* Schiebt das Div mit der Liste nach innen */
-    margin-right: 20px; /* Optional: Abstand auf der rechten Seite */
-  }
-
+    margin-left: 20px; /* Indent the list container */
+    margin-right: 20px; /* Optional: right margin */
+}
 
 /* ********** Buttons ********** */
 .btn-primary {
@@ -27,11 +26,9 @@ body {
     background-color: #0056b3; 
     border-color: #0056b3;
 }
-  
 
 /* ********** Autocomplete Styles ********** */
-
-/* Autocomplete List Styles */
+/* Autocomplete List */
 .autocomplete {
     display: none; /* Hidden by default */
     position: absolute; /* Positioned relative to the input field */
@@ -51,7 +48,7 @@ body {
     color: #333; /* Default text color */
 }
 
-/* Autocomplete Item Styles */
+/* Autocomplete Item */
 .autocomplete li {
     padding: 10px; /* Padding for click area */
     cursor: pointer;
@@ -80,10 +77,12 @@ body {
     cursor: pointer;
     border-bottom: 1px solid #ddd; /* Divider for items */
 }
+
 .autocomplete-item strong {
     font-size: 14px; /* Highlighted text size */
     margin-bottom: 5px; /* Spacing below title */
 }
+
 .autocomplete-item small {
     color: #666; /* Subdued color for additional info */
     font-size: 12px; /* Smaller font for metadata */
@@ -94,13 +93,13 @@ body {
     background-color: #f0f0f0; /* Subtle background change on hover */
 }
 
-/* Highlighted Text Styles */
+/* Highlighted Text */
 mark {
     background-color: lightblue; /* Highlight color */
     color: black; /* Ensure readable contrast */
 }
 
-/* ********** Filters below search bar ********** */
+/* ********** Filters Below Search Bar ********** */
 .filter-container {
     display: flex;
     flex-wrap: wrap;
@@ -134,7 +133,6 @@ mark {
     background-color: #cee5ff;
     color: black;
 }
-
 
 /* ********** Dark Mode Styles ********** */
 body.dark-mode .autocomplete {
@@ -178,10 +176,6 @@ body.dark-mode .autocomplete-item:hover {
 .autocomplete {
     display: none; /* Ensures visibility only when triggered */
 }
-
-
-
-
 
 /* ********** Feature Section ********** */
 /* Styles for individual features */
@@ -227,6 +221,7 @@ body.dark-mode .autocomplete-item:hover {
     padding: 8px 20px;
 }
 
+/* Custom Paragraph */
 .custom-paragraph {
     font-family: Arial, sans-serif;  /* Example font */
     font-size: 16px;  /* Example font size */
@@ -234,7 +229,7 @@ body.dark-mode .autocomplete-item:hover {
     color: #666;  /* Text color */
     margin: 0 0 1em 0;  /* Bottom spacing */
     padding: 0;  /* No inner spacing */
-  }
+}
 
 /* ********** Button Styles ********** */
 /* General button styling */
@@ -247,16 +242,6 @@ body.dark-mode .autocomplete-item:hover {
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); /* Subtle shadow */
 }
 
-
-
-
-
-
-
-
-
-
-
 /* ********** General Card Styling ********** */
 .card-box, .collection-item, .item-box, .model-card, .model-item {
     background-color: #ffffff; /* White background */
@@ -264,7 +249,7 @@ body.dark-mode .autocomplete-item:hover {
     border-radius: 8px; /* Rounded corners */
     padding: 20px; /* Inner padding */
     margin-bottom: 20px; /* Bottom spacing */
-    margin-left:10px;
+    margin-left: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     transition: transform 0.2s, box-shadow 0.2s;
     text-align: center; /* Center content */
@@ -369,8 +354,6 @@ body.dark-mode .autocomplete-item:hover {
     margin: auto;
 }
 
-
-
 /* ********** Keyword Styling ********** */
 .collection-keywords {
     display: center;
@@ -429,7 +412,6 @@ body.dark-mode .autocomplete-item:hover {
     border-radius: 4px;
 }
 
-
 /* ********** Status Message ********** */
 /* Success message styling */
 .status-message {
@@ -437,9 +419,6 @@ body.dark-mode .autocomplete-item:hover {
     color: #28a745;
 }
 
-
-
-    
 /* ********** Responsive Design ********** */
 /* Adjust layout for different screen sizes */
 @media (max-width: 992px) {
@@ -492,12 +471,6 @@ body.dark-mode .autocomplete-item:hover {
     font-family: monospace;
 }
 
-
-  
-
-
-
-
 /* ********** Dark Mode ********** */
 body.dark-mode {
     background-color: #121212;
@@ -506,8 +479,8 @@ body.dark-mode {
 
 .navbar.dark-mode {
     background-color: black;
-    color: white;}
-
+    color: white;
+}
 
 footer.dark-mode {
     background-color: #222222;
@@ -525,31 +498,27 @@ footer.dark-mode {
     margin-left: 1rem;
 }
 
-
-
-/*##############################   UI(Design)   ##############################*/
+/* ********** UI (Design) ********** */
 /* The switch - the box around the slider */
 .switch {
     display: block;
     --width-of-switch: 2.8em;
     --height-of-switch: 1.6em;
-    /* size of sliding icon -- sun and moon */
-    --size-of-icon: 1.12em;
-    /* it is like a inline-padding of switch */
-    --slider-offset: 0.24em;
+    --size-of-icon: 1.12em; /* Size of sliding icon -- sun and moon */
+    --slider-offset: 0.24em; /* Inline-padding of switch */
     position: relative;
     width: var(--width-of-switch);
     height: var(--height-of-switch);
     margin-top: 7px; /* Added margin to move the switch lower */
-  }
-  
-  /* Hide default HTML checkbox */
-  .switch input {
+}
+
+/* Hide default HTML checkbox */
+.switch input {
     opacity: 0;
     width: 0;
     height: 0;
-  }
-  
+}
+
 /* The slider */
 .slider {
     position: absolute;
@@ -584,9 +553,5 @@ input:checked + .slider {
 input:checked + .slider:before {
     left: calc(100% - (var(--size-of-icon,1em) + var(--slider-offset,0.2em)));
     background: #303136;
-    /* change the value of second inset in box-shadow to change the angle and direction of the moon */
-    box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
+    box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb; /* Moon effect */
 }
-
-
-
