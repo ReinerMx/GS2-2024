@@ -5,12 +5,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitButton = document.getElementById("submitButton");
     const statusMessage = document.getElementById("statusMessage");
   
+  // Hide status message initially
+  statusMessage.classList.add("d-none");
 
   // Initialize SimpleMDE for userDescription
   const simplemde = new SimpleMDE({ 
     element: document.getElementById("userDescription"),
     placeholder: "Add model description, motivation, intended use cases and limitations, additional notes on model usage.",
-    spellChecker: false, // Set false if no spellcheck is required
+    spellChecker: true, // Enable spell checker
     autosave: {
       enabled: true,
       unique_id: "userDescription_autosave",

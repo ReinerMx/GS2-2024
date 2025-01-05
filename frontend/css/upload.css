@@ -81,24 +81,12 @@
     transform: scale(1.02);
   }
   
-  /* Footer Text Link */
-  form-text a {
-    color: #007bff;
-    text-decoration: underline;
-  }
-  
-  form-text a:hover {
-    color: #0056b3;
-    text-decoration: none;
-  }
-  
 
   #statusMessage {
-    white-space: pre-line; /* Für Zeilenumbrüche */
+    white-space: pre-line; 
     font-size: 16px;
     padding: 15px;
     border-radius: 5px;
-    border: 1px solid #f5c6cb;
   }
   
   .alert-danger {
