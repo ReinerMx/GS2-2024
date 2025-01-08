@@ -147,17 +147,6 @@ const renderFilters = (filters) => {
               <h6>Data Types</h6>
               <div id="dataTypesContainer"></div>
             </div>
-            <div class="filter-category">
-              <h6>IO Requirements</h6>
-              <div id="ioRequirementsContainer"></div>
-            </div>
-          </div>
-          <!-- Number of Bands slider -->
-          <div class="slider-section">
-            <h5>Number of Bands</h5>
-            <input type="range" id="bandCountSlider" min="${filters.bandCounts?.min || 1}" max="${filters.bandCounts?.max || 10}" step="1" value="${filters.bandCounts?.min || 1}" />
-            <span id="bandCountLabel">${filters.bandCounts?.min || 1}</span> Bands
-          </div>
         </div>
       </div>
     </div>

@@ -424,52 +424,6 @@ router.get('/filters', async (req, res) => {
                 })
             ),
         ].filter(Boolean); // Remove null or undefined entries
-        
-
-        // Fetch distinct input/output requirements and band counts
-        const rawIORequirements = await Item.findAll({
-            attributes: [[sequelize.literal("properties->>'mlm:output'"), 'io_requirements']],
-            where: sequelize.literal("properties->>'mlm:output' IS NOT NULL"),
-            raw: true,
-        });
-
-        const rawBandCounts = await Item.findAll({
-            attributes: [[sequelize.literal("properties->>'mlm:input'"), 'bands']],
-            where: sequelize.literal("properties->>'mlm:input' IS NOT NULL"),
-            raw: true,
-        });
-
-        // Process input/output requirements
-        const ioRequirements = [
-            ...new Set(
-                rawIORequirements.flatMap(row => {
-                    try {
-                        const outputs = JSON.parse(row.io_requirements);
-                        return outputs.flatMap(output => {
-                            const requirements = [];
-                            if (output.result.shape) requirements.push(`Resolution: ${output.result.shape.slice(1).join("x")}`);
-                            return requirements;
-                        });
-                    } catch {
-                        return [];
-                    }
-                })
-            ),
-        ];
-
-        // Extract and deduplicate band counts
-        const bandCounts = [
-            ...new Set(
-                rawBandCounts.flatMap(row => {
-                    try {
-                        const inputs = JSON.parse(row.bands);
-                        return inputs.map(input => input.bands.length); // Get the number of bands
-                    } catch {
-                        return [];
-                    }
-                })
-            ),
-        ];
 
         // Return results as arrays
         res.json({
@@ -478,11 +432,6 @@ router.get('/filters', async (req, res) => {
             architectures: architectures.map(row => row.architecture).filter(Boolean),
             keywords: keywords.map(row => row.keyword).filter(Boolean),
             dataTypes,
-            ioRequirements,
-            bandCounts: {
-                min: Math.min(...bandCounts), // Minimum number of bands
-                max: Math.max(...bandCounts), // Maximum number of bands
-            },
         });
     } catch (error) {
         console.error('Error fetching filters:', error);
