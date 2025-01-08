@@ -1,0 +1,23 @@
+{
+  "type": "Collection",
+  "stac_version": "1.0.0",
+  "id": "valid-collection",
+  "title": "Valid ML Model Collection",
+  "description": "This collection demonstrates a valid structure for STAC collections.",
+  "license": "CC-BY-4.0",
+  "extent": {
+    "spatial": {
+      "bbox": [[-180, -90, 180, 90]]
+    },
+    "temporal": {
+      "interval": [["2022-01-01T00:00:00Z", "2024-01-01T00:00:00Z"]]
+    }
+  },
+  "links": [
+    {
+      "rel": "self",
+      "type": "application/json",
+      "href": "https://example.com/collections/valid-collection"
+    }
+  ]
+}

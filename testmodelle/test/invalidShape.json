@@ -1,0 +1,24 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "collection": "valid-collection",
+  "id": "item-invalid-input-shape",
+  "properties": {
+    "mlm:name": "Mismatched Shape Model",
+    "mlm:tasks": ["segmentation"],
+    "mlm:input": [
+      {
+        "name": "Satellite Image",
+        "bands": ["B01", "B02", "B03"],
+        "input": {
+          "shape": [-1, 3, 224],
+          "dim_order": ["batch", "channel", "height", "width"],
+          "data_type": "float32"
+        }
+      }
+    ]
+  },
+  "geometry": null,
+  "bbox": [10, 20, 30, 40],
+  "links": []
+}

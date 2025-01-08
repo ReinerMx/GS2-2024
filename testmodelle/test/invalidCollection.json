@@ -1,0 +1,6 @@
+{
+  "type": "Collection",
+  "stac_version": "1.0.0",
+  "id": "invalid-collection-missing-fields",
+  "description": "This collection is missing required 'extent' and 'links' fields."
+}

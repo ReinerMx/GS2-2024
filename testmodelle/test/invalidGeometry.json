@@ -1,0 +1,15 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "collection": "valid-collection",
+  "id": "item-invalid-geometry",
+  "properties": {
+    "mlm:name": "Invalid Model",
+    "mlm:tasks": ["classification"]
+  },
+  "geometry": {
+    "type": "InvalidType",
+    "coordinates": [[0, 0], [1, 1]]
+  },
+  "links": []
+}
