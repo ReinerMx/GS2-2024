@@ -648,7 +648,15 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
                 error: `An entry with the ${duplicateField} "${duplicateValue}" already exists. Please use a different ID or update the existing entry.`,
             });
         }
-        
+
+        // Handle custom validation hooks
+        if (error.message.includes('bbox')) {
+            return res.status(400).json({
+                error: "Validation Error",
+                details: [error.message],
+            });
+        }
+                
     
         // Handle other errors
         res.status(500).json({ error: 'An unexpected error occurred while saving data.' });

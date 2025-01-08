@@ -24,12 +24,20 @@ document.addEventListener("DOMContentLoaded", () => {
      * Displays feedback messages to the user.
      */
     function displayStatusMessage(message, isError = false) {
-      statusMessage.innerHTML = Array.isArray(message)
-          ? message.map((msg) => `<li>${msg}</li>`).join("")
-          : message;
-  
+      if (Array.isArray(message)) {
+          // Display multiple errors in a list
+          statusMessage.innerHTML = `<ul>${message.map(msg => `<li>${msg}</li>`).join('')}</ul>`;
+      } else {
+          statusMessage.innerHTML = `<p>${message}</p>`;
+      }
       statusMessage.className = `alert ${isError ? "alert-danger" : "alert-success"}`;
       statusMessage.classList.remove("d-none");
+  
+      if (!isError) {
+          setTimeout(() => {
+              statusMessage.classList.add("d-none");
+          }, 5000); // Auto-hide success messages
+      }
   }
   
     /**
