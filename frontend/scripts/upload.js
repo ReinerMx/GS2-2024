@@ -24,18 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
      * Displays feedback messages to the user.
      */
     function displayStatusMessage(message, isError = false) {
-      statusMessage.textContent = message;
+      statusMessage.innerHTML = Array.isArray(message)
+          ? message.map((msg) => `<li>${msg}</li>`).join("")
+          : message;
+  
       statusMessage.className = `alert ${isError ? "alert-danger" : "alert-success"}`;
       statusMessage.classList.remove("d-none");
-    
-      // successful message auto-hide
-      if (!isError) {
-        setTimeout(() => {
-          statusMessage.classList.add("d-none");
-        }, 5000);
-      }
-    }
-    
+  }
   
     /**
      * Updates drop zone text after a file is selected.

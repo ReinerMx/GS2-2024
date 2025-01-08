@@ -490,9 +490,6 @@ router.get('/filters', async (req, res) => {
     }
 });
 
-
-
-
 /**
  * @route POST /upload
  * @description Handles file uploads and processes STAC data into collections or items.
@@ -625,6 +622,14 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
         });
     } catch (error) {
         console.error('Error saving STAC data to database:', error);
+
+        // Handle JSON parsing errors
+        if (error instanceof SyntaxError) {
+            return res.status(400).json({
+                error: 'Invalid JSON format. Please check for missing commas, braces, or brackets.',
+                details: error.message,
+            });
+        }
 
         // Handle validation errors
         if (error.name === 'SequelizeValidationError') {
