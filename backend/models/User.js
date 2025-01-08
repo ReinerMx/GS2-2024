@@ -27,6 +27,11 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  saved_collections: {
+    type: DataTypes.ARRAY(DataTypes.STRING), // List of collection IDs
+    allowNull: true,
+    defaultValue: [],
+  },
 }, {
   hooks: {
     // Hook to hash password before saving to the DB
