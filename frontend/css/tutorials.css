@@ -128,18 +128,22 @@
     color: #495057; /* Medium gray on hover */
     border-bottom: 2px solid #495057; /* Matching hover underline */
 }
-
-/* Content Sections */
+/* Standardmäßige Tab-Inhalte */
 .content-section {
-    display: none; /* Initially hidden */
-    opacity: 0; /* Initially transparent */
-    transition: opacity 0.3s ease; /* Smooth opacity transition */
+    display: none; /* Standardmäßig unsichtbar */
+        border: 1px solid #ccc; /* Rahmen */
+    border-radius: 10px; /* Abgerundete Ecken */
+    padding: 15px; /* Innenabstand */
+    margin: 20px; /* Außenabstand */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Weicher Schatten */
+    background-color: #fff; /* Hintergrundfarbe */
 }
 
+/* Aktiver Tab-Inhalt wird angezeigt */
 .content-section:target {
-    display: block; /* Show only the active section */
-    opacity: 1; /* Fully opaque */
+    display: block; /* Zeigt den aktiven Tab */
 }
+
 
 .content-section h2 {
     margin-bottom: 10px; /* Space below the heading */
@@ -210,6 +214,12 @@
     text-decoration: underline; /* Underline on hover */
 }
 
+/* Der erste Tab wird standardmäßig angezeigt */
+#beschreibung {
+    display: block; /* Standardinhalt anzeigen */
+}
+
+
 /* Content Section for Tutorials */
 .tutorials-page .content-section {
     background-color: #fff; /* White background for sections */
@@ -220,23 +230,22 @@
     color: #212529; /* Dark gray for text */
 }
 
-.tutorials-page .content-section h2 {
-    color: #212529; /* Dark gray for section titles */
-    margin-bottom: 1rem; /* Space below the title */
-    font-size: 1.8rem; /* Font size for section titles */
-}
 
 .tutorials-page .custom-paragraph {
     font-size: 1rem; /* Font size for paragraphs */
     line-height: 1.6; /* Line height for readability */
     color: #495057; /* Medium gray for paragraphs */
     margin-bottom: 1rem; /* Space below paragraphs */
+    border-radius: 5px; /* Rounded corners */
 }
 
-/* Q&A Styles */
 .tutorials-page .faq-container {
-    margin-top: 1rem; /* Space above the FAQ container */
+    border: none; /* Entfernt den Rahmen */
+    margin-top: 1rem; /* Beibehaltung des vertikalen Abstands */
+    background-color: transparent; /* Optional: Entfernt Hintergrundfarbe */
+    box-shadow: none; /* Optional: Entfernt Schatten */
 }
+
 
 .tutorials-page .faq-item {
     background-color: #fff; /* White background for each FAQ item */
@@ -271,6 +280,18 @@
     outline: none; /* Remove outline */
 }
 
+
+.tutorial-description {
+    font-size: 16px;
+    color: #6c757d;
+    margin: 30px; /* Abstand um das Element */
+    text-align: center;
+    background-color: #f8f9fa; /* Leichter Grauton */
+    border-radius: 10px; /* Abgerundete Ecken */
+    padding: 20px; /* Innenabstand */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten für 3D-Effekt */
+}
+  
 /* Buttons */
 .tutorials-page .btn {
     background-color: #343a40; /* Dark gray for button background */
