@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/footer.css" />
     <link rel="stylesheet" href="css/tutorials.css" />
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   </head>
 
   <body>
@@ -136,257 +135,84 @@
       </div>
 
       <div
-  id="technische-details"
-  class="content-section section-margin"
-  style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px"
->
-  <h2 class="section-title">Uploading Your Own Models: A Quick Guide</h2>
-  <p class="custom-paragraph">
-    Easily share your machine learning models with the community by following these steps.
-    Ensure your metadata complies with the STAC standard for seamless integration.
-  </p>
-  <div class="list-container">
-    <ol class="custom-paragraph">
-      <li>
-        <strong>Prepare your metadata:</strong> Create your metadata in
-        <strong>STAC-compliant JSON</strong> format using this
-        <a href="example-json.html" target="_blank"><em>template</em></a
-        >.
-      </li>
-      <li>
-        <strong>Upload your file:</strong> Navigate to the
-        <a href="upload.html" target="_blank"><em>Upload page</em></a
-        >, complete the form, and upload your file.
-      </li>
-      <li>
-        <strong>Handle errors:</strong> If you encounter any issues during the upload process,
-        a detailed error message will appear. For further assistance, feel free to
-        <a
-          href="http://localhost:5555/tutorials.html#more-questions"
-          id="contact-link"
-          class="tutorial-nav-link"
-        >
-          <em>Contact Us</em>.
-        </a>
-      </li>
-      <li>
-        <strong>Access your models:</strong> Successfully uploaded models will be visible in
-        your <a href="account.html" target="_blank"><em>account</em></a
-        >.
-      </li>
-    </ol>
-  </div>
-
-  <!-- Neuer Inhalt hinzugefügt -->
-  <div class="dropdown">
-    <h3 onclick="toggleDropdown('key-fields-dropdown')">Explanation of the Key Fields:</h3>
-    <div id="key-fields-dropdown" class="dropdown-content">
-      <ul>
-        <li>
-          <strong>stac_version</strong>: The version of the STAC specification, here "1.0.0".
-        </li>
-        <li>
-          <strong>stac_extensions</strong>: A list of STAC extensions that are relevant to the
-          model (e.g., EO for Earth Observation, ML for Machine Learning, etc.).
-        </li>
-        <li>
-          <strong>type</strong>: The type of the STAC resource, in this case, a "Feature".
-        </li>
-        <li><strong>id</strong>: A unique ID for the model.</li>
-        <li>
-          <strong>properties</strong>: A collection of key-value pairs for metadata about the
-          model:
-          <ul>
-            <li><strong>title</strong> and <strong>description</strong> describe the model.</li>
+        id="technische-details"
+        class="content-section section-margin"
+        style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px"
+      >
+        <h2 class="section-title">Uploading Your Own Models: A Quick Guide</h2>
+        <p class="custom-paragraph">
+          Easily share your machine learning models with the community by following these steps.
+          Ensure your metadata complies with the STAC standard for seamless integration.
+        </p>
+        <div class="list-container">
+          <ol class="custom-paragraph">
             <li>
-              <strong>start_datetime</strong> and <strong>end_datetime</strong> define the
-              period during which the model is trained or available.
+              <strong>Prepare your metadata:</strong> Create your metadata in
+              <strong>STAC-compliant JSON</strong> format using this
+              <a href="example-json.html" target="_blank"><em>template</em></a
+              >.
             </li>
             <li>
-              <strong>model_task</strong> specifies the task of the model (e.g., classification,
-              regression).
+              <strong>Upload your file:</strong> Navigate to the
+              <a href="upload.html" target="_blank"><em>Upload page</em></a
+              >, complete the form, and upload your file.
             </li>
             <li>
-              <strong>input_data_type</strong>, <strong>output_data_type</strong>,
-              <strong>input_bands</strong>, and <strong>output_classes</strong> specify the
-              types of input and output data, as well as the input bands and output classes of
-              the model.
+              <strong>Handle errors:</strong> If you encounter any issues during the upload process,
+              a detailed error message will appear. For further assistance, feel free to
+              <a href="impressum.html" target="_blank"><em>contact us</em></a
+              >.
             </li>
-          </ul>
-        </li>
-        <li>
-          <strong>geometry</strong>: The spatial extent of the model, here specified as a
-          Polygon.
-        </li>
-        <li>
-          <strong>links</strong>: URLs that link to other resources or references related to the
-          model (e.g., the model itself, thumbnails, etc.).
-        </li>
-        <li>
-          <strong>assets</strong>: Files associated with the model, such as the model file
-          itself and metadata files.
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="dropdown">
-    <h3 onclick="toggleDropdown('customization-dropdown')">Customization:</h3>
-    <div id="customization-dropdown" class="dropdown-content">
-      <ul>
-        <li><strong>id</strong>: Customize the model ID.</li>
-        <li>
-          <strong>title</strong>, <strong>description</strong>, <strong>model_task</strong>,
-          etc.: These fields should be adjusted to reflect the actual model.
-        </li>
-        <li>
-          <strong>assets</strong>: The links to model files and metadata should point to the
-          actual files on your server or in your repository.
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <h2 class="upload-title">STAC-Conform JSON-Template:</h2>
-  <p>Ensure your JSON file follows this structure:</p>
-
-  <!-- Sample JSON File Information -->
-  <section class="sample-section">
-    <pre class="sample-json">
-  {
-    "stac_version": "1.0.0",
-    "stac_extensions": [
-      "https://stac-extensions.github.io/eo/v1.0.0/schema.json",
-      "https://stac-extensions.github.io/label/v1.0.0/schema.json",
-      "https://stac-extensions.github.io/ml/v1.0.0/schema.json"
-    ],
-    "type": "Feature",
-    "id": "example-model-id",
-    "properties": {
-      "title": "Example ML Model for Land Classification",
-      "description": "A machine learning model for classifying land use types based on satellite imagery.",
-      "start_datetime": "2023-01-01T00:00:00Z",
-      "end_datetime": "2023-12-31T23:59:59Z",
-      "model_task": "classification",
-      "input_data_type": "satellite imagery",
-      "output_data_type": "land use categories",
-      "input_bands": [
-        "red",
-        "green",
-        "blue",
-        "infrared"
-      ],
-      "output_classes": [
-        "forest",
-        "urban",
-        "water",
-        "agriculture"
-      ],
-      "cloud_coverage": 5,
-      "platform": "Sentinel-2",
-      "version": "v1.0"
-    },
-    "geometry": {
-      "type": "Polygon",
-      "coordinates": [
-        [
-          [-180.0, -90.0],
-          [180.0, -90.0],
-          [180.0, 90.0],
-          [-180.0, 90.0],
-          [-180.0, -90.0]
-        ]
-      ]
-    },
-    "links": [
-      {
-        "rel": "self",
-        "href": "https://example.com/stac/catalog/example-model-id"
-      },
-      {
-        "rel": "item",
-        "href": "https://example.com/models/example-model-id"
-      },
-      {
-        "rel": "thumbnail",
-        "href": "https://example.com/thumbnails/example-thumbnail.jpg"
-      }
-    ],
-    "assets": {
-      "model_file": {
-        "href": "https://example.com/models/example-model.onnx",
-        "title": "Model File",
-        "type": "application/onnx"
-      },
-      "metadata": {
-        "href": "https://example.com/models/example-model-metadata.json",
-        "title": "Metadata File",
-        "type": "application/json"
-      }
-    }
-  }
-  
-            </pre>
-  </section>
-</div>
-
+            <li>
+              <strong>Access your models:</strong> Successfully uploaded models will be visible in
+              your <a href="account.html" target="_blank"><em>account</em></a
+              >.
+            </li>
+          </ol>
+        </div>
+      </div>
 
       <div
-      id="geometrie"
-      class="content-section section-margin"
-      style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px">
-      <h2 class="section-title">Integrating with Python and R: A Step-by-Step Guide</h2>
-      <p class="custom-paragraph">
-        Easily integrate machine learning models into your Python or R workflows by following these
-        steps:
-      </p>
-      <div class="list-container">
-        <ol class="custom-paragraph">
-          <li>
-            <strong>Install Python or R:</strong> Ensure you have Python or R installed on your system.
-            You can download the latest version of
-            <a href="https://www.python.org/downloads/" target="_blank"><em>Python here</em></a> or
-            <a href="https://cran.r-project.org/" target="_blank"><em>R here</em></a>.
-          </li>
-          <li>
-            <strong>Install the required STAC client:</strong> Use <code>pip install pystac</code> for
-            Python or <code>install.packages('rstac')</code> for R to set up the necessary tools.
-          </li>
-          <li>
-            <strong>Download model metadata:</strong> Navigate to the
-            <a href="catalog.html"><em>Catalog page</em></a> to select and download the required
-            metadata.
-          </li>
-          <li>
-            <strong>Integrate the model:</strong> Use <code>pystac.Item()</code> in Python or
-            <code>stac_read()</code> in R to load and manipulate the downloaded metadata for your
-            workflows.
-          </li>
-        </ol>
-      </div>
-    
-      <!-- Neue Boxen -->
-      <div class="double-div-container">
-        <div style="text-align: center;">
-          <h3>Python</h3>
-          <p><em><i>Example Code:</i> </em></p>
-
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
-            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-        </div>
-        <div>
-          <h3>R</h3>
-          <p><em><i>Example Code:</i> </em></p>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
-            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        id="geometrie"
+        class="content-section section-margin"
+        style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px"
+      >
+        <h2 class="section-title">Integrating with Python and R: A Step-by-Step Guide</h2>
+        <p class="custom-paragraph">
+          Easily integrate machine learning models into your Python or R workflows by following
+          these steps:
+        </p>
+        <div class="list-container">
+          <ol class="custom-paragraph">
+            <li>
+              <strong>Install Python or R:</strong> Ensure you have Python or R installed on your
+              system. You can download the latest version of
+              <a href="https://www.python.org/downloads/" target="_blank"><em>Python here</em></a>
+              or <a href="https://cran.r-project.org/" target="_blank"><em>R here</em></a
+              >.
+            </li>
+            <li>
+              <strong>Install the required STAC client:</strong> Use
+              <code>pip install pystac</code> for Python or
+              <code>install.packages('rstac')</code> for R to set up the necessary tools.
+            </li>
+            <li>
+              <strong>Download model metadata:</strong> Navigate to the
+              <a href="catalog.html"><em>Catalog page</em></a> to select and download the required
+              metadata.
+            </li>
+            <li>
+              <strong>Integrate the model:</strong> Use <code>pystac.Item()</code> in Python or
+              <code>stac_read()</code> in R to load and manipulate the downloaded metadata for your
+              workflows.
+            </li>
+          </ol>
+          <!-- <p class="custom-paragraph">
+          For further assistance, refer to the <a href="faq.html">FAQ</a> section or contact
+          support.
+        </p> -->
         </div>
       </div>
-    </div>
-    
-      </div>
-
       <div id="leasing" class="content-section">
         <div class="faq-container">
           <!-- General Questions -->
@@ -427,10 +253,8 @@
             <button class="faq-question">What should I do if I forget my password?</button>
             <div class="faq-answer">
               <p>
-                Please 
-                <a href="http://localhost:5555/tutorials.html#more-questions" id="contact-link" class="tutorial-nav-link">
-                  <em>Contact Us</em>. Currently we can only reset your password this way.
-                </a>
+                Click on "Forgot Password?" on the <a href="login.html">Login page</a>. Enter your
+                email address, and we'll send you a password reset link.
               </p>
             </div>
           </div>
@@ -479,23 +303,16 @@
             </div>
           </div>
         </div>
-
-        <div id="more-questions" class="more-questions-container">
+        <div class="more-questions-container">
           <h3>More Questions?</h3>
           <p>
             If you couldn't find the answer you were looking for, feel free to contact us using the
             form below:
           </p>
-          <form id="contact-form" class="contact-form">
+          <form class="contact-form" action="submit_contact_form.php" method="post">
             <div class="form-group">
-              <label for="from_email">Your Email:</label>
-              <input
-                type="email"
-                id="from_email"
-                name="from_email"
-                placeholder="Your Email"
-                required
-              />
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" placeholder="Your Email" required />
             </div>
             <div class="form-group">
               <label for="message">Message:</label>
@@ -507,12 +324,8 @@
                 required
               ></textarea>
             </div>
-            <!-- Versteckte Felder für zusätzliche Daten -->
-            <input type="hidden" id="from_name" name="from_name" />
-            <input type="hidden" id="to_name" name="to_name" value="HuggingEarth" />
             <button type="submit" class="btn-submit">Send Message</button>
           </form>
-          <div id="form-status"></div>
         </div>
       </div>
     </main>

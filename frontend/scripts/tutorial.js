@@ -1,4 +1,5 @@
-// FAQ Toggle Animation
+////////////////////////////////////////////
+// Q&A Toggle Animation
 document.addEventListener("DOMContentLoaded", () => {
   const faqItems = document.querySelectorAll(".faq-item");
 
@@ -22,6 +23,37 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+});
+
+////////////////////////////////////////////
+// EmailJS initialisieren
+emailjs.init("IVnkcCqedyLZPnBOn"); // Ersetze "IVnkcCqedyLZPnBOn" mit deinem Public Key
+
+// Formular-Handler
+document.getElementById("contact-form").addEventListener("submit", function (event) {
+  event.preventDefault(); // Verhindert Standardverhalten des Formulars (Seiten-Reload)
+
+  const status = document.getElementById("form-status"); // Statusnachricht
+  const form = this; // Das aktuelle Formular
+
+  // Setze das Feld from_name mit der E-Mail-Adresse aus dem Formular
+  document.getElementById("from_name").value = document.getElementById("from_email").value;
+
+  // EmailJS sendet die Daten
+  emailjs
+    .sendForm("service_v29cusi", "template_yyg0558", form) // Ersetze service_xxx123 und template_abc456
+    .then(
+      function () {
+        status.textContent = "Message sent successfully!";
+        status.style.color = "green";
+        form.reset(); // Formular zurücksetzen
+      },
+      function (error) {
+        status.textContent = "Failed to send message. Please try again.";
+        status.style.color = "red";
+        console.error("EmailJS Error:", error);
+      }
+    );
 });
 
 ////////////////////////////////////////////
@@ -70,4 +102,64 @@ document.addEventListener("DOMContentLoaded", function () {
       showTabContent(targetTab);
     });
   });
+});
+
+////////////////////////////////////////////
+/////////////////TEST///////////////////////
+////////////////////////////////////////////
+/*
+console.error = function () {}; // Nichts tun: Unterdrückt alle Fehler
+console.log = function () {};
+console.warn = function () {}; 
+ */
+
+// const originalConsoleError = console.error;
+
+/*
+console.error = function (...args) {
+  if (args[0]?.includes("runtime.lastError")) {
+    // Ignoriere nur Fehlermeldungen mit "runtime.lastError"
+    return;
+  }
+  //originalConsoleError.apply(console, args); // Alle anderen Fehler weiterhin ausgeben
+};
+
+Object.defineProperty(window, "console", {
+  value: {
+    log: () => {},
+    warn: () => {},
+    error: () => {},
+    info: () => {},
+    debug: () => {},
+  },
+  configurable: false,
+  writable: false,
+});
+*/
+
+//////////////////////////////////////////////////////////////////
+/////////////////////SCROLL///////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+// Füge einen Event-Listener nur für den "Contact Us"-Link hinzu
+document.getElementById("contact-link").addEventListener("click", function (event) {
+  event.preventDefault(); // Verhindert das Standardverhalten des Links
+
+  // Aktiviere den Tab "leasing"
+  document.getElementById("tab-leasing").classList.add("active");
+  document.getElementById("leasing").style.display = "block";
+
+  // Deaktiviere andere Tabs
+  document.querySelectorAll(".content-section").forEach((section) => {
+    if (section.id !== "leasing") {
+      section.style.display = "none";
+    }
+  });
+
+  // Scroll zur gewünschten Stelle
+  const target = document.getElementById("more-questions");
+  if (target) {
+    setTimeout(() => {
+      target.scrollIntoView({ behavior: "smooth" });
+    }, 200); // Leichte Verzögerung für ein besseres Scroll-Erlebnis
+  }
 });

@@ -56,13 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       name: "Account",
       link: "account.html",
-      aliases: [
-        "profile",
-        "user",
-        "account settings",
-        "my account",
-        "dashboard",
-      ],
+      aliases: ["profile", "user", "account settings", "my account", "dashboard"],
     },
     {
       name: "Catalog",
@@ -87,13 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       name: "Model Details",
       link: "modelDetails.html",
-      aliases: [
-        "details",
-        "info",
-        "model info",
-        "specifications",
-        "view model",
-      ],
+      aliases: ["details", "info", "model info", "specifications", "view model"],
     },
     {
       name: "Register",
@@ -141,8 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const query = input.value.trim().toLowerCase();
         const match = pages.find(
           (page) =>
-            page.name.toLowerCase() === query ||
-            page.aliases.some((alias) => alias === query)
+            page.name.toLowerCase() === query || page.aliases.some((alias) => alias === query)
         );
         if (match) {
           window.location.href = match.link;
