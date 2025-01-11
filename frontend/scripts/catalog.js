@@ -183,16 +183,6 @@ const renderFilters = (filters) => {
     populateFilterCategory(keywordsContainer, filters.keywords);
     populateFilterCategory(dataTypesContainer, filters.dataTypes);
     populateFilterCategory(ioRequirementsContainer, filters.ioRequirements);
-
-    // Add event listener for the band count slider
-    const bandCountSlider = document.getElementById('bandCountSlider');
-    const bandCountLabel = document.getElementById('bandCountLabel');
-
-    if (bandCountSlider) {
-        bandCountSlider.addEventListener('input', () => {
-            bandCountLabel.textContent = bandCountSlider.value;
-        });
-    }
 };
 
 
