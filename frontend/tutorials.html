@@ -111,9 +111,9 @@
               </a>
             </li>
             <li>
-              <a href="#geometrie" id="tab-geometrie" class="tutorial-nav-link"
-                >Integrating with Python and R</a
-              >
+              <a href="#geometrie" id="tab-geometrie" class="tutorial-nav-link">
+                Integrating with Python and R
+              </a>
             </li>
             <li><a href="#leasing" id="tab-leasing" class="tutorial-nav-link">Q&A's</a></li>
           </ul>
@@ -166,8 +166,7 @@
           id="contact-link"
           class="tutorial-nav-link"
         >
-          <em>Contact Us</em>.
-        </a>
+          <em>Contact Us</em></a>.
       </li>
       <li>
         <strong>Access your models:</strong> Successfully uploaded models will be visible in
@@ -177,7 +176,7 @@
     </ol>
   </div>
 
-  <!-- Neuer Inhalt hinzugefügt -->
+  <!-- Neuer Inhalt hinzugefügt  EXAMPLECODE-->
   <div class="dropdown">
     <h3 onclick="toggleDropdown('key-fields-dropdown')">Explanation of the Key Fields:</h3>
     <div id="key-fields-dropdown" class="dropdown-content">
@@ -386,100 +385,106 @@
     </div>
     
       </div>
-
       <div id="leasing" class="content-section">
-        <div class="faq-container">
+        <div class="faq-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
           <!-- General Questions -->
-          <h3>General</h3>
-          <div class="faq-item">
-            <button class="faq-question">What is the HuggingEarth-Catalog?</button>
-            <div class="faq-answer">
-              <p>
-                The HuggingEarth-Catalog is a platform that provides geoscientific models to browse,
-                retrieve, and integrate data into workflows.
-              </p>
+          <div class="faq-container">
+            <h3>General</h3>
+            <div class="faq-item">
+              <button class="faq-question">What is the HuggingEarth-Catalog?</button>
+              <div class="faq-answer">
+                <p>
+                  The HuggingEarth-Catalog is a platform that provides geoscientific models to browse,
+                  retrieve, and integrate data into workflows.
+                </p>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question">What is STAC, and why is it important?</button>
+              <div class="faq-answer">
+                <p>
+                  STAC (SpatioTemporal Asset Catalog) is a standard for organizing geospatial data,
+                  ensuring consistency and interoperability between datasets. Learn more on the
+                  <a href="https://stacspec.org/">official STAC website</a>.
+                </p>
+              </div>
             </div>
           </div>
-          <div class="faq-item">
-            <button class="faq-question">What is STAC, and why is it important?</button>
-            <div class="faq-answer">
-              <p>
-                STAC (SpatioTemporal Asset Catalog) is a standard for organizing geospatial data,
-                ensuring consistency and interoperability between datasets. Learn more on the
-                <a href="https://stacspec.org/">official STAC website</a>.
-              </p>
-            </div>
-          </div>
-
+      
           <!-- Account Questions -->
-          <h3>Account</h3>
-          <div class="faq-item">
-            <button class="faq-question">How do I sign up?</button>
-            <div class="faq-answer">
-              <p>
-                Click on "Login" on the <a href="login.html">Login page</a> and follow the
-                instructions. A valid email address is required for registration. Make sure to use a
-                secure password.
-              </p>
+          <div class="faq-container">
+            <h3>Account</h3>
+            <div class="faq-item">
+              <button class="faq-question">How do I sign up?</button>
+              <div class="faq-answer">
+                <p>
+                  Click on "Login" on the <a href="login.html">Login page</a> and follow the
+                  instructions. A valid email address is required for registration. Make sure to use a
+                  secure password.
+                </p>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question">What should I do if I forget my password?</button>
+              <div class="faq-answer">
+                <p>
+                  Please 
+                  <a href="http://localhost:5555/tutorials.html#more-questions" id="contact-link" class="tutorial-nav-link">
+                    <em>Contact Us</em></a>. Currently we can only reset your password this way.
+                </p>
+              </div>
             </div>
           </div>
-          <div class="faq-item">
-            <button class="faq-question">What should I do if I forget my password?</button>
-            <div class="faq-answer">
-              <p>
-                Please 
-                <a href="http://localhost:5555/tutorials.html#more-questions" id="contact-link" class="tutorial-nav-link">
-                  <em>Contact Us</em>. Currently we can only reset your password this way.
-                </a>
-              </p>
-            </div>
-          </div>
-
+      
           <!-- Model Questions -->
-          <h3>Models</h3>
-          <div class="faq-item">
-            <button class="faq-question">Which models can I use?</button>
-            <div class="faq-answer">
-              <p>
-                The platform offers various models for climate data analysis, environmental
-                monitoring, and geodata integration. You can find a list of models on the
-                <a href="catalog.html">Catalog page</a>.
-              </p>
+          <div class="faq-container">
+            <h3>Models</h3>
+            <div class="faq-item">
+              <button class="faq-question">Which models can I use?</button>
+              <div class="faq-answer">
+                <p>
+                  The platform offers various models for climate data analysis, environmental
+                  monitoring, and geodata integration. You can find a list of models on the
+                  <a href="catalog.html">Catalog page</a>.
+                </p>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question">How do I upload large models?</button>
+              <div class="faq-answer">
+                <p>
+                  For large models, ensure your internet connection is stable. If the upload fails,
+                  try compressing your model into a ZIP file before uploading.
+                </p>
+              </div>
             </div>
           </div>
-          <div class="faq-item">
-            <button class="faq-question">How do I upload large models?</button>
-            <div class="faq-answer">
-              <p>
-                For large models, ensure your internet connection is stable. If the upload fails,
-                try compressing your model into a ZIP file before uploading.
-              </p>
-            </div>
-          </div>
-
+      
           <!-- Technical Questions -->
-          <h3>Technical</h3>
-          <div class="faq-item">
-            <button class="faq-question">How do I integrate the platform into Python?</button>
-            <div class="faq-answer">
-              <p>
-                Install the `pystac` library and use it to integrate data directly from the platform
-                into your workflows. Example codes can be found in our
-                <a href="tutorials.html#pystac">PySTAC tutorial</a>.
-              </p>
+          <div class="faq-container">
+            <h3>Technical</h3>
+            <div class="faq-item">
+              <button class="faq-question">How do I integrate the platform into Python?</button>
+              <div class="faq-answer">
+                <p>
+                  Install the `pystac` library and use it to integrate data directly from the platform
+                  into your workflows. Example codes can be found in our
+                  <a href="tutorials.html#tab-geometrie">PySTAC tutorial</a>.
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question">How do I validate my metadata?</button>
-            <div class="faq-answer">
-              <p>
-                Use our metadata validation tool on the <a href="upload.html">Upload page</a>.
-                Ensure your file is in STAC-compliant JSON format.
-              </p>
+            <div class="faq-item">
+              <button class="faq-question">How do I validate my metadata?</button>
+              <div class="faq-answer">
+                <p>
+                  Use our metadata validation tool on the <a href="upload.html">Upload page</a>.
+                  Ensure your file is in STAC-compliant JSON format.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-
+      
         <div id="more-questions" class="more-questions-container">
           <h3>More Questions?</h3>
           <p>
@@ -515,6 +520,8 @@
           <div id="form-status"></div>
         </div>
       </div>
+      
+      
     </main>
 
     <!-- Footer -->

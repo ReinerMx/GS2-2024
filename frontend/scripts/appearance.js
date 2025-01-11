@@ -28,6 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function enableDarkMode(body, nav, footer) {
   body.classList.add("dark-mode");
+  document.querySelectorAll(".content-section, .faq-grid").forEach((el) => {
+    el.classList.add("dark-mode");
+  });
   if (nav) {
     nav.classList.remove("navbar-light", "bg-light");
     nav.classList.add("navbar-dark", "bg-dark");
@@ -37,6 +40,9 @@ function enableDarkMode(body, nav, footer) {
 
 function disableDarkMode(body, nav, footer) {
   body.classList.remove("dark-mode");
+  document.querySelectorAll(".content-section, .faq-grid").forEach((el) => {
+    el.classList.remove("dark-mode");
+  });
   if (nav) {
     nav.classList.remove("navbar-dark", "bg-dark");
     nav.classList.add("navbar-light", "bg-light");

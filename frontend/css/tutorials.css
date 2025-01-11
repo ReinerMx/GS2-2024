@@ -76,7 +76,7 @@
 /* Standard Light Mode */
 .faq-container {
     max-width: 800px; /* Maximum width of the container */
-    margin: 50px auto; /* Center the container with vertical margin */
+    margin: 5px ; /* Center the container with vertical margin */
     padding: 20px; /* Padding inside the container */
     background: transparent; /* Transparent background in light mode */
     box-shadow: 0 4px 8px rgba(98, 98, 98, 0.1); /* Light shadow for depth */
@@ -169,11 +169,39 @@
 /************** Tutorial Navbar **************/
 /**************++++++++++++++++++**************/
 
-/**************++++++++++++++++++**************/
-/**************++++++++++++++++++**************/
-/**************++++++++++++++++++**************/
+.product-navbar nav ul {
+    list-style: none; /* Remove list styling */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    display: inline-flex; /* Inline flexbox for alignment */
+    gap: 20px; /* Space between items */
+}
 
+.product-navbar nav ul li {
+    display: inline; /* Inline display for list items */
+}
 
+.product-navbar nav ul li a {
+    text-decoration: none; /* Remove underline */
+    font-weight: bold; /* Bold font weight */
+    font-size: 18px; /* Font size */
+    padding: 10px 15px; /* Padding inside the links */
+    color: #6c757d; /* Standard gray color */
+    transition: color 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
+    border-bottom: 2px solid transparent; /* Transparent bottom border */
+}
+
+/* Active Tab */
+.product-navbar nav ul li a.active {
+    color: #212529; /* Dark gray/black for active link */
+    border-bottom: 2px solid #212529; /* Dark bottom border for active link */
+}
+
+/* Hover Effect */
+.product-navbar nav ul li a:hover {
+    color: #495057; /* Medium gray on hover */
+    border-bottom: 2px solid #495057; /* Matching hover underline */
+}
 /* Standardmäßige Tab-Inhalte */
 .content-section {
     display: none; /* Standardmäßig unsichtbar */
@@ -230,13 +258,35 @@
 
 .tutorials-page p.lead {
     font-size: 1.25rem; /* Font size for lead paragraph */
-    margin-bottom: 50px; /* Space below the paragraph */
+    margin-bottom: 5px; /* Space below the paragraph */
     color: #495057; /* Medium gray for the lead text */
 }
- /**************++++++++++++++++++**************/
- /**************++++++++++++++++++**************/
- /**************++++++++++++++++++**************/
- 
+
+/* Navbar in the Tutorials Page */
+.tutorials-page .product-navbar {
+    text-align: center; /* Center-align the navbar */
+    margin-bottom: 2rem; /* Space below the navbar */
+}
+
+.tutorials-page .product-navbar nav ul {
+    list-style: none; /* Remove list styling */
+    padding: 0; /* Remove padding */
+}
+
+.tutorials-page .product-navbar nav ul li {
+    display: inline; /* Inline display for list items */
+    margin: 0 10px; /* Horizontal margin between items */
+}
+
+.tutorials-page .product-navbar nav ul li a {
+    text-decoration: none; /* Remove underline */
+    color: #212529; /* Dark gray for navbar links */
+    font-weight: bold; /* Bold font weight */
+}
+
+.tutorials-page .product-navbar nav ul li a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
 
 /* Der erste Tab wird standardmäßig angezeigt */
 #beschreibung {
@@ -336,109 +386,20 @@
     .tutorials-page .content-section {
         padding: 1rem; /* Reduced padding on smaller screens */
     }
-/*
+
     .tutorials-page .product-navbar nav ul li {
-        display: block; /* Block display for list items 
-        margin-bottom: 10px; /* Space below each item 
-    } */
-} 
+        display: block; /* Block display for list items */
+        margin-bottom: 10px; /* Space below each item */
+    }
+}
 
 /*************PRODUCT-NAVBAR*************/
 
-/* Globale Regeln für die product-navbar */
-.product-navbar {
-    text-align: center; /* Zentriert die Navbar */
-    margin-bottom: 2rem; /* Abstand unterhalb der Navbar */
-}
 
-.product-navbar nav ul {
-    list-style: none; /* Entfernt die Standard-Liste-Styling */
-    padding: 0;
-    margin: 0;
-    display: flex; /* Flexbox für horizontale Ausrichtung */
-    justify-content: center; /* Zentriert die Links */
-    gap: 20px; /* Abstand zwischen den Links */
-}
-
-.product-navbar nav ul li {
-    display: inline; /* Inline-Elemente */
-}
-
-.product-navbar nav ul li a {
-    text-decoration: none; /* Entfernt Unterstreichung */
-    font-weight: bold; /* Fettschrift */
-    font-size: 18px; /* Schriftgröße */
-    padding: 10px 15px; /* Abstand innerhalb der Links */
-    color: #6c757d; /* Graue Farbe */
-    transition: color 0.3s ease, border-color 0.3s ease; /* Sanfte Übergänge */
-    border-bottom: 2px solid transparent; /* Transparenter Unterstrich */
-}
-
-/* Hover-Effekt */
-.product-navbar nav ul li a:hover {
-    color: #495057; /* Dunklerer Grauton */
-    border-bottom: 2px solid #495057; /* Passender Unterstrich */
-}
-
-/* Aktiver Tab */
-.product-navbar nav ul li a.active {
-    color: #212529; /* Dunkler Grauton */
-    border-bottom: 2px solid #212529; /* Dunkler Unterstrich */
-}
-
-/* Spezifische Anpassungen für Tutorials-Seite */
-.tutorials-page .product-navbar {
-    margin-top: 20px; /* Zusätzlicher Abstand oben */
-    text-align: left; /* Beispiel: Andere Ausrichtung */
-}
-
-/* Responsiver Teil */
-@media (max-width: 768px) {
-    .product-navbar nav ul {
-        flex-direction: column; /* Elemente untereinander */
-        gap: 10px; /* Weniger Abstand zwischen den Elementen */
-    }
-
-    .product-navbar nav ul li {
-        display: block; /* Block-Elemente */
-        text-align: center; /* Zentriert die Texte */
-    }
-
-    .product-navbar nav ul li a {
-        display: block; /* Links als Block-Level-Elemente */
-        padding: 10px; /* Gleiche Innenabstände */
-    }
-}
-
-/*************Integrating with Python and R*************/
-
-
-.double-div-container {
-    display: flex; /* Flexbox-Anordnung */
-    justify-content: space-between; /* Boxen mit Abstand nebeneinander */
-    gap: 20px; /* Lücke zwischen den Boxen */
-    margin-top: 20px; /* Abstand oberhalb der Boxen */
-  }
-  
-  .double-div-container > div {
-    flex: 1; /* Boxen gleichmäßig verteilen */
-    border: 1px solid #ccc; /* Rahmen wie bestehende Inhalte */
-    border-radius: 10px; /* Abgerundete Ecken */
-    padding: 15px; /* Innenabstand */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Weicher Schatten */
-    background-color: #fff; /* Weißer Hintergrund */
-    text-align: center; /* Text zentrieren */
-  }
-  
 
 /*************SONSTIGES*************/
 strong {
     font-weight: bold; /* Stellt sicher, dass <strong> fett dargestellt wird */
 }
-
-html {
-    scroll-behavior: smooth;
-  }
-  
 
 

@@ -163,3 +163,29 @@ document.getElementById("contact-link").addEventListener("click", function (even
     }, 200); // Leichte Verzögerung für ein besseres Scroll-Erlebnis
   }
 });
+
+// Event Listener für externe Links
+document.querySelectorAll('a[href^="tutorials.html#"]').forEach((link) => {
+  link.addEventListener("click", function (event) {
+    const hash = this.href.split("#")[1]; // Extrahiere die ID aus dem Link
+    const targetTab = document.getElementById(hash);
+
+    if (targetTab) {
+      // Entferne "active" von allen Tabs und Sektionen
+      document.querySelectorAll(".tutorial-nav-link").forEach((tab) => {
+        tab.classList.remove("active");
+      });
+
+      document.querySelectorAll(".content-section").forEach((section) => {
+        section.style.display = "none";
+      });
+
+      // Setze den aktuellen Tab und die zugehörige Sektion auf "active"
+      targetTab.classList.add("active");
+      const targetSection = document.getElementById(hash.replace("tab-", ""));
+      if (targetSection) {
+        targetSection.style.display = "block";
+      }
+    }
+  });
+});

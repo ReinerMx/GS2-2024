@@ -1041,7 +1041,7 @@ input:checked + .slider:before {
 /* Standardheller Modus */
 .faq-container {
     max-width: 800px;
-    margin: 50px auto;
+    margin: 5px ;
     padding: 20px;
     background: transparent; /* Transparent im hellen Modus */
     box-shadow: 0 4px 8px rgba(98, 98, 98, 0.1);
@@ -1305,7 +1305,7 @@ input:checked + .slider:before {
 
 .tutorials-page p.lead {
     font-size: 1.25rem;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     color: #495057; /* Mittelgrau für den Einführungstext */
 }
 
