@@ -144,13 +144,13 @@ Object.defineProperty(window, "console", {
 document.getElementById("contact-link").addEventListener("click", function (event) {
   event.preventDefault(); // Verhindert das Standardverhalten des Links
 
-  // Aktiviere den Tab "leasing"
-  document.getElementById("tab-leasing").classList.add("active");
-  document.getElementById("leasing").style.display = "block";
+  // Aktiviere den Tab "q-and-a"
+  document.getElementById("tab-q-and-a").classList.add("active");
+  document.getElementById("q-and-a").style.display = "block";
 
   // Deaktiviere andere Tabs
   document.querySelectorAll(".content-section").forEach((section) => {
-    if (section.id !== "leasing") {
+    if (section.id !== "q-and-a") {
       section.style.display = "none";
     }
   });
