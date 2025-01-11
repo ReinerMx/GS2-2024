@@ -189,3 +189,11 @@ document.querySelectorAll('a[href^="tutorials.html#"]').forEach((link) => {
     }
   });
 });
+
+document.getElementById("scroll-to-json").addEventListener("click", function (e) {
+  e.preventDefault(); // Standardverhalten verhindern
+  const target = document.getElementById("json-template");
+  if (target) {
+    target.scrollIntoView({ behavior: "smooth" }); // Sanftes Scrollen
+  }
+});

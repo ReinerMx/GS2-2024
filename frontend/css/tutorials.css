@@ -73,7 +73,7 @@
 
 
 
-/* Standard Light Mode */
+/************* Standard Light Mode ************/
 .faq-container {
     max-width: 800px; /* Maximum width of the container */
     margin: 5px ; /* Center the container with vertical margin */
@@ -84,30 +84,38 @@
     color: #000; /* Standard text color for light mode */
 }
 
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-    .faq-container {
-        background: transparent; /* Transparent background in dark mode */
-        color: #d1e1e8; /* Light text color in dark mode */
-    }
+.section-title {
+    font-size: 24px; /* Schriftgröße */
+    font-weight: bold; /* Fettschrift */
+    color: #212529; /* Dunkelgrau für Text */
+    margin-bottom: 10px; /* Abstand unterhalb der Überschrift */
+}
 
-    .faq-container h1 {
-        color: #2d828e; /* New color for h1 text in dark mode */
-    }
+h2 {
+    font-size: 24px; /* Schriftgröße */
+    font-weight: bold; /* Fettschrift */
+    color: #212529; /* Dunkelgrau für Text */
+    margin-bottom: 10px; /* Abstand unterhalb der Überschrift */
+}
 
-    .faq-question {
-        background-color: #2d828e; /* Maintain background color */
-        color: #fff; /* Light text color for questions in dark mode */
-    }
+.custom-paragraph {
+    font-size: 16px; /* Schriftgröße */
+    line-height: 1.6; /* Zeilenhöhe */
+    color: #495057; /* Mittelgrau für Text */
+    margin-bottom: 1rem; /* Abstand unterhalb des Absatzes */
+}
+h3 {
+    font-size: 20px; /* Schriftgröße */
+    font-weight: bold; /* Fettschrift */
+    color: #343a40; /* Dunkelgrau für Überschriften */
+    margin-bottom: 8px; /* Abstand unterhalb der Überschrift */
+}
 
-    .faq-answer {
-        background-color: #555; /* Lighter background for answers in dark mode */
-    }
-
-    /* Optional: Set the box shadow color to something darker */
-    .faq-container {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Darker shadow for depth */
-    }
+p {
+    font-size: 16px; /* Schriftgröße */
+    line-height: 1.6; /* Zeilenhöhe */
+    color: #495057; /* Mittelgrau für Text */
+    margin-bottom: 1rem; /* Abstand unterhalb des Absatzes */
 }
 
 /* General FAQ Elements */
@@ -164,6 +172,81 @@
     box-shadow: 0 0 4px #cee5ff; /* Alternative focus style with color */
     background-color: #cee5ff; /* Match hover or click color */
 }
+
+/**************++++++++++++++++++**************/
+/**************DARK MODE STYLES**************/
+/**************++++++++++++++++++**************/
+.dark-mode .faq-container {
+    background: transparent; /* Transparent background in dark mode */
+    color: #d1e1e8; /* Light text color in dark mode */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Darker shadow for depth */
+}
+
+.dark-mode .faq-container h1 {
+    color: #2d828e; /* New color for h1 text in dark mode */
+}
+
+.dark-mode .faq-question {
+    background-color: #2d828e; /* Maintain background color */
+    color: #fff; /* Light text color for questions in dark mode */
+}
+
+.dark-mode .faq-answer {
+    background-color: #555; /* Lighter background for answers in dark mode */
+}
+
+.dark-mode .section-title {
+    color: #f8f9fa; /* Helles Grau für Text auf dunklem Hintergrund */
+}
+
+.dark-mode .custom-paragraph {
+    color: #f8f9fa; /* Hellgrau für Text auf dunklem Hintergrund */
+}
+
+.dark-mode h2 {
+    color: #f8f9fa; /* Helles Grau für Überschriften auf dunklem Hintergrund */
+}
+
+.dark-mode h3 {
+    color: #f8f9fa; /* Helles Grau für Überschriften auf dunklem Hintergrund */
+}
+
+.dark-mode p {
+    color: #d1e1e8; /* Hellgrau für Text auf dunklem Hintergrund */
+}
+
+.dark-mode .content-section {
+    display: none; /* Standardmäßig unsichtbar */
+    border: 1px solid #495057; /* Dunklerer Rahmen */
+    border-radius: 10px; /* Abgerundete Ecken */
+    padding: 15px; /* Innenabstand */
+    margin: 20px; /* Außenabstand */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stärkerer Schatten */
+    background-color: #343a40; /* Dunkler Hintergrund */
+    color: #f8f9fa; /* Helle Schriftfarbe */
+}
+.dark-mode .more-questions-container {
+    background-color: #2d2d2d; /* Dunkler Hintergrund */
+    color: #d1e1e8; /* Hellgrauer Text */
+    border: 1px solid #444; /* Optional: Dunklerer Rahmen */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Subtilerer Schatten */
+}
+
+.dark-mode .more-questions-container h3 {
+    color: #f8f9fa; /* Helle Farbe für die Überschrift */
+}
+
+.dark-mode .more-questions-container p {
+    color: #d1e1e8; /* Hellgrauer Text für den Absatz */
+}
+.dark-mode .tutorials-title {
+    color: #f8f9fa; /* Helle Farbe für die Hauptüberschrift */
+}
+
+.dark-mode .tutorial-description {
+    color: #495057; /* Hellgrau für den Text der Beschreibung */
+}
+
 
 /**************++++++++++++++++++**************/
 /************** Tutorial Navbar **************/
@@ -346,6 +429,7 @@
     display: none; /* Initially hidden */
 }
 
+
 .tutorials-page .faq-item button:focus + .faq-answer {
     display: block; /* Show answer when question is focused */
 }
@@ -391,7 +475,11 @@
         display: block; /* Block display for list items */
         margin-bottom: 10px; /* Space below each item */
     }
+        
+
 }
+
+
 
 /*************PRODUCT-NAVBAR*************/
 

@@ -6,6 +6,14 @@
     vertical-align: middle; /* Align the icon vertically in the middle */
 }
 
+/* GitHub Icon in Impressum */
+.github-icon {
+    width: 25px; /* Set the width of the github icon */
+    vertical-align: middle; /* Align the icon vertically in the middle */
+  }
+  
+
+
 .project-section {
     display: flex; /* Place contents side by side */
     justify-content: space-between; /* Space between the two columns */
@@ -27,21 +35,123 @@
     height: 100%; /* Full height of the right column */
 }
 
-.project-section .gif-style {
-    max-width: 100%; /* Adjust width */
-    max-height: 300px; /* Maximum height of the GIF */
-    width: auto; /* Maintain aspect ratio */
-    border-radius: 15px; /* Rounded corners */
+/* Grid-Container für das GIF */
+.gif-container {
+    display: flex; /* Aktiviert Flexbox */
+    justify-content: center; /* Zentriert horizontal */
+    align-items: center; /* Zentriert vertikal */
+    height: 100%; /* Passt sich der gesamten Höhe des Grid-Elements an */
 }
 
+/* Stil für das GIF */
+.gif-style {
+    max-width: 100%; /* Passt die Breite an */
+    max-height: 300px; /* Begrenzt die maximale Höhe */
+    width: auto; /* Beibehaltung des Seitenverhältnisses */
+    height: auto; /* Anpassung der Höhe */
+    border-radius: 8px; /* Abgerundete Ecken */
+}
+
+
+
+
+/* Bei kleineren Bildschirmen */
 @media (max-width: 768px) {
     .project-section {
-        flex-direction: column; /* Stack contents vertically on narrow screens */
-        align-items: center; /* Center contents */
-    }
-
-    .right-column {
-        justify-content: center; /* Center the GIF vertically */
-        margin-top: 1rem; /* Top margin */
+        grid-template-columns: 1fr; /* Nur eine Spalte */
     }
 }
+/* Standard Grid Layout (Desktop) */
+.grid-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Zwei Spalten */
+    gap: 20px; /* Abstand zwischen den Elementen */
+}
+
+/* Responsive Grid Layout (Mobile) */
+@media (max-width: 768px) {
+    .grid-section {
+        grid-template-columns: 1fr; /* Nur eine Spalte */
+        gap: 10px; /* Optional: Geringerer Abstand für mobile Geräte */
+    }
+}
+
+  
+  .grid-item {
+    background-color: #f8f9fa; /* Light gray background */
+    padding: 20px; /* Innenabstand */
+    border: 1px solid #ccc; /* Rahmen */
+    border-radius: 8px; /* Abgerundete Ecken */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Schatten */
+  }
+  
+  .grid-item img {
+    max-width: 100%; /* Responsive Bildgröße */
+    height: auto;
+  }
+  .license-section {
+    font-family: "Menlo", monospace; /* Schriftart für die Lizenz */
+    font-size: 0.65rem; /* Kleinere Schriftgröße */
+    line-height: 1.1; /* Kompakte Zeilenhöhe */
+    background-color: transparent; /* Kein Hintergrund */
+}
+
+.license-section h3 {
+    margin-bottom: 6px; /* Geringer Abstand zum Text darunter */
+    font-size: 0.8rem; /* Kleinere Schriftgröße für die Überschrift */
+    font-weight: bold;
+    text-align: center; 
+}
+
+.license-section p {
+    margin-bottom: 6px; /* Weniger Abstand zwischen Absätzen */
+}
+
+
+
+
+
+/*/////////////////////////////////////////////////////
+///////////////////////DARKMODE////////////////////////
+/////////////////////////////////////////////////////*/
+.dark-mode h1 {
+    color: #2d828e; /* Blauton passend zu Projektfarben */
+}
+
+.dark-mode h3 {
+    color: #f8f9fa; /* Hellgrau für kleinere Überschriften */
+}
+
+.dark-mode p {
+    color: #d1e1e8; /* Hellgrau für Absätze */
+}
+
+.dark-mode .grid-item {
+    background-color: #343a40; /* Dunkleres Grau für Boxen */
+    border: 1px solid #495057; /* Mittelgrauer Rahmen */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtiler Schatten */
+}
+
+.dark-mode .license-section {
+    color: #d1e1e8; /* Hellgrau für Text */
+    background-color: #343a40; /* Dunkler Hintergrund */
+}
+
+.dark-mode .license-section h3 {
+    color: #f8f9fa; /* Helles Grau für Überschrift */
+}
+
+body.dark-mode {
+    background-color: #121212; /* Sehr dunkler Hintergrund */
+    color: #f8f9fa; /* Standardtextfarbe */
+}
+
+.content-section.dark-mode {
+    background-color: #2d2d2d; /* Hintergrund für Content Sections */
+    color: #d1e1e8; /* Textfarbe */
+  }
+  
+.faq-grid.dark-mode {
+    background-color: #2d2d2d; /* Hintergrund für die FAQ-Grid */
+    border: 1px solid #444; /* Dunkler Rahmen */
+  }

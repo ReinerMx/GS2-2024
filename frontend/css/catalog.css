@@ -106,3 +106,61 @@
     padding-top: 10px;
     margin-top: 20px; /* Space below for clarity */
 }
+
+
+/* DARKMODE */
+/* Dark Mode Styles */
+body.dark-mode .filter-sidebar {
+    background-color: #2d2d2d; /* Dunkler Hintergrund */
+    color: #f8f9fa; /* Helle Schrift */
+    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1); /* Angepasster Schatten */
+}
+
+body.dark-mode .filter-sidebar h4, 
+body.dark-mode .filter-section h5 {
+    color: #d1e1e8; /* Helle Schrift für Überschriften */
+}
+
+body.dark-mode .additional-filters-container {
+    background-color: #343a40; /* Dunkler Hintergrund */
+    border: 1px solid #444; /* Dunkler Rahmen */
+    color: #f8f9fa; /* Helle Schrift */
+}
+
+body.dark-mode .card-body {
+    background-color: #2d2d2d; /* Dunkler Hintergrund */
+    color: #d1e1e8; /* Helle Schrift */
+}
+
+body.dark-mode .filter-category {
+    background-color: #3c3c3c; /* Dunkler Hintergrund für Kategorien */
+    border: 1px solid #555; /* Dunkler Rahmen */
+    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1); /* Subtiler Schatten */
+}
+
+body.dark-mode .filter-category h6 {
+    color: #f8f9fa; /* Helle Schrift für Kategorienamen */
+}
+
+body.dark-mode .filter-item {
+    background-color: #4c4c4c; /* Mittelgrauer Hintergrund für Filteritems */
+    border: 1px solid #666; /* Dunklerer Rahmen */
+    color: #f8f9fa; /* Helle Schrift */
+}
+
+body.dark-mode .filter-item:hover {
+    background-color: #007bff; /* Blau auf Hover */
+    color: #ffffff; /* Weiße Schrift auf Hover */
+}
+
+body.dark-mode .slider-section {
+    border-top: 1px solid #555; /* Dunkler Rahmen */
+}
+
+body.dark-mode .filter-section label {
+    color: #d1e1e8; /* Helle Schrift für Labels */
+}
+
+body.dark-mode .filter-section span {
+    color: #f8f9fa; /* Helle Schrift für zusätzliche Beschreibungen */
+}

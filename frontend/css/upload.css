@@ -8,8 +8,11 @@
     font-weight: 500; /* Reduced boldness */
     margin-bottom: 20px;
     text-align: center;
-    color: #343a40;
+    color: #212529;
   }
+  .dark-mode .upload-title {
+    color: #f8f9fa; /* Hellgrau für kleinere Überschriften */
+}
   
   /* Instructions */
   .upload-instructions {

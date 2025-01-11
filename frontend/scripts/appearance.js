@@ -28,25 +28,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function enableDarkMode(body, nav, footer) {
   body.classList.add("dark-mode");
-  document.querySelectorAll(".content-section, .faq-grid").forEach((el) => {
-    el.classList.add("dark-mode");
-  });
+
+  document
+    .querySelectorAll(
+      "h1, h2, h3, p, .content-section, .faq-grid, .grid-item, .license-section, .upload-title"
+    )
+    .forEach((el) => {
+      el.classList.add("dark-mode");
+    });
+
   if (nav) {
     nav.classList.remove("navbar-light", "bg-light");
     nav.classList.add("navbar-dark", "bg-dark");
   }
+
   if (footer) footer.classList.add("dark-mode");
 }
 
 function disableDarkMode(body, nav, footer) {
   body.classList.remove("dark-mode");
-  document.querySelectorAll(".content-section, .faq-grid").forEach((el) => {
-    el.classList.remove("dark-mode");
-  });
+
+  document
+    .querySelectorAll(
+      "h1, h2, h3, p, .content-section, .faq-grid, .grid-item, .license-section, .upload-title"
+    )
+    .forEach((el) => {
+      el.classList.remove("dark-mode");
+    });
+
   if (nav) {
     nav.classList.remove("navbar-dark", "bg-dark");
     nav.classList.add("navbar-light", "bg-light");
   }
+
   if (footer) footer.classList.remove("dark-mode");
 }
 
