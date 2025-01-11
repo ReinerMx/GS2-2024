@@ -289,7 +289,7 @@
 }
 
 /* Der erste Tab wird standardmäßig angezeigt */
-#beschreibung {
+#getting-started {
     display: block; /* Standardinhalt anzeigen */
 }
 
@@ -403,3 +403,12 @@ strong {
 }
 
 
+
+
+
+
+  .flex-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+  }

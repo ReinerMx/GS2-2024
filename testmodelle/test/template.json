@@ -1,0 +1,123 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "example-ml-model-item",
+  "collection": "ml-model-examples",
+  "properties": {
+    "start_datetime": "2023-01-01T00:00:00Z",
+    "end_datetime": "2024-01-01T00:00:00Z",
+    "description": "This is an example machine learning model for classification and segmentation tasks.",
+    "mlm:name": "Example ML Model",
+    "mlm:architecture": "Swin Transformer V2 + RandomForestClassifier",
+    "mlm:framework": "pytorch",
+    "mlm:framework_version": "2.3.0",
+    "mlm:tasks": [
+      "classification",
+      "semantic-segmentation"
+    ],
+    "mlm:input": [
+      {
+        "name": "Sentinel-2 EO Data",
+        "bands": [
+          "B01", "B02", "B03", "B04", "B08", "B11", "B12", "NDVI", "NDWI1"
+        ],
+        "input": {
+          "shape": [-1, 9, 1024, 1024],
+          "dim_order": ["batch", "channel", "height", "width"],
+          "data_type": "float32"
+        },
+        "norm_type": "z-score",
+        "statistics": [
+          {
+            "mean": 1354.0,
+            "stddev": 245.7
+          },
+          {
+            "mean": 1118.2,
+            "stddev": 333.0
+          }
+        ]
+      }
+    ],
+    "mlm:output": [
+      {
+        "name": "Segmentation Output",
+        "tasks": ["semantic-segmentation"],
+        "result": {
+          "shape": [-1, 1, 1024, 1024],
+          "dim_order": ["batch", "height", "width"],
+          "data_type": "uint8"
+        },
+        "classification:classes": [
+          {
+            "value": 0,
+            "name": "Non-Water",
+            "description": "Pixels without water",
+            "color_hint": "000000"
+          },
+          {
+            "value": 1,
+            "name": "Water",
+            "description": "Pixels with water",
+            "color_hint": "0000FF"
+          }
+        ]
+      }
+    ],
+    "mlm:total_parameters": 89748193,
+    "mlm:pretrained": true,
+    "mlm:pretrained_source": "Sentinel-2 data and Satlas annotations",
+    "mlm:memory_size": 1000000000,
+    "mlm:batch_size_suggestion": 10,
+    "mlm:accelerator": "cuda",
+    "mlm:accelerator_constrained": true,
+    "mlm:accelerator_summary": "Requires NVIDIA Ampere GPUs or newer for optimal performance."
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [-121.8768, 36.9306],
+        [-121.8768, 38.8433],
+        [-120.0653, 38.8433],
+        [-120.0653, 36.9306],
+        [-121.8768, 36.9306]
+      ]
+    ]
+  },
+  "bbox": [-121.8768, 36.9306, -120.0653, 38.8433],
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l1c",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "https://example.com/model-metadata/example-ml-model.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "model": {
+      "href": "https://example.com/models/example-model.onnx",
+      "type": "application/octet-stream; framework=onnx",
+      "title": "ONNX Model",
+      "description": "ONNX format of the example model.",
+      "roles": ["mlm:model"],
+      "mlm_artifact_type": "onnx"
+    },
+    "source_code": {
+      "href": "https://github.com/example/ml-model-code",
+      "type": "text/x-python",
+      "title": "Model Implementation Source Code",
+      "description": "Source code for model training and inference.",
+      "roles": ["code"]
+    }
+  },
+  "stac_extensions": [
+    "https://stac-extensions.github.io/file/v2.1.0/schema.json",
+    "https://stac-extensions.github.io/ml-model/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/eo/v1.1.0/schema.json"
+  ]
+}
