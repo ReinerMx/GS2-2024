@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/footer.css" />
     <link rel="stylesheet" href="css/tutorials.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   </head>
 
@@ -164,6 +165,7 @@
           <a href="https://pystac.readthedocs.io/en/latest/" target="_blank">pystac</a>.
         </p>
       </div>
+    
 
       <div
         id="upload"
@@ -172,57 +174,60 @@
       >
         <h2 class="section-title">Uploading Your Own Models: A Quick Guide</h2>
         <p class="custom-paragraph">
-          Easily share your machine learning models with the community by following these steps.
+          Easily share your models with the community by following these steps.
           Ensure your metadata complies with the STAC standard for seamless integration.
         </p>
         <div class="list-container">
           <ol class="custom-paragraph">
             <li>
+              <strong>Train your model</strong> and push relevant files, for example, to a GitHub repo:
+            </li>
+            <li>
               <strong>Prepare your metadata:</strong> Create your metadata in
               <a href="https://github.com/stac-extensions/mlm" target="_blank">
                 <strong>STAC-compliant JSON</strong>
               </a>
-              format using this
-              <a href="#json-template" id="scroll-to-json" class="scroll-link"> template below </a>
-              &#128071;&#127996; .
+              format. Have a look at the 
+              <strong>STAC Files Structure and Requirements</strong> and our 
+              <strong>examples</strong>.
             </li>
             <li>
               <strong>Upload your file:</strong> Navigate to the
-              <a href="upload.html" target="_blank"><em>upload page</em></a
-              >, complete the form, and upload your file.
+              <a href="upload.html" target="_blank"><em>upload page</em></a>
+              and 
+              <ol type="a">
+                <li> <strong>First:</strong> Upload the Collection,</li>
+                <li><strong>Then:</strong> Upload the Item(s) from the Collection</li>
+              </ol>
             </li>
-            <li>
               <strong>Handle errors:</strong> If you encounter any issues during the upload process,
               a detailed error message will appear. For further assistance, feel free to
-              <a
-                href="http://localhost:5555/tutorials.html#more-questions"
-                id="contact-link"
-                class="tutorial-nav-link"
-              >
-                <em>Contact Us</em></a
-              >.
-            </li>
+              <a href="http://localhost:5555/tutorials.html#more-questions"
+                 id="contact-link"
+                 class="tutorial-nav-link">
+                <em>contact us</em>
+              </a>.
             <li>
-              <strong>Access your models:</strong> Successfully uploaded models will be visible in
+              <strong>Access your models:</strong> Successfully uploaded model metadata will be visible in
               your <a href="account.html" target="_blank"><em>account</em></a> and in the
-              <a href="catalog.html" target="_blank"><em>model catalog</em></a
-              >.
+              <a href="catalog.html" target="_blank"><em>model catalog</em></a>.
             </li>
           </ol>
         </div>
+        
 
         <div class="full-width-container">
-          <details class="stac-details">
-            <summary class="stac-summary"><strong>STAC Files Structure and Requirements</strong></summary>
-            <div class="stac-content mt-4">
-              <p>This section describes the required and optional fields in the STAC <strong>Collection</strong> and <strong>Item</strong> files, including the validation rules and allowed values.</p>
+          <div class="stac-details">
+            <h2 class="stac-main-summary">STAC Files Structure and Requirements</h2>
+            <p class="stac-intro-text">This section describes the required and optional fields in the STAC <strong>Collection</strong> and <strong>Item</strong> files, including the validation rules and allowed values.</p>        
         
               <!-- Collection Section -->
-              <h2>Collection Structure</h2>
-              <p>A <strong>Collection</strong> groups ...</p>
-              <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                  <thead class="thead-dark">
+              <details class="stac-subsection">
+                <summary class="stac-sub-summary"><strong>Collection Structure</strong></summary>
+                <div class="table-responsive mt-3">
+                  <p>A <strong>Collection</strong> in the SpatioTemporal Asset Catalog (STAC) represents a logical grouping of related geospatial assets and their shared metadata. It acts as a higher-level container that provides a summary of the entire dataset, including information such as the dataset’s spatial and temporal extent, licensing details, keywords, and the contributing providers. Collections often represent a dataset, such as satellite imagery over a region or machine learning-ready training data for environmental monitoring. Collections may contain one or more Items.</p>
+                  <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
                     <tr>
                       <th scope="col">Field</th>
                       <th scope="col">Description</th>
@@ -463,13 +468,15 @@
                   </tbody>
                 </table>
               </div>
+            </details>
         
               <!-- Item Section -->
-              <h2>Item Structure</h2>
-              <p>An <strong>Item</strong> represents ...</p>
-              <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                  <thead class="thead-light">
+              <details class="stac-subsection">
+                <summary class="stac-sub-summary"><strong>Item Structure</strong></summary>
+                <div class="table-responsive mt-3">
+                  <p>An <strong>Item</strong> in STAC represents a structured metadata record that describes a single resource or asset, such as a machine learning model. It provides key information about the resource, including its purpose, relevant files, and how it can be accessed. This allows users to easily identify and utilize specific models or data assets within a catalog.</p>
+                  <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
                     <tr>
                       <th scope="col">Field</th>
                       <th scope="col">Description</th>
@@ -510,10 +517,13 @@
                       </td>
                       <td>No</td>
                       <td>
-                        - Must reference a valid <code>id</code> of a <code>Collection</code>.<br>
-                        - Uploading items is currently only possible if the referenced collection is already uploaded.
+                        <ul>
+                          <li>Must reference a valid <code>id</code> of a <code>Collection</code>.</li>
+                          <li>Uploading items is currently only possible if the referenced collection is already uploaded.</li>
+                        </ul>
                       </td>
                     </tr>                    
+                    
                     <tr>
                       <td><code>geometry</code></td>
                       <td>
@@ -525,11 +535,14 @@
                       </td>
                       <td>Yes, if <code>bbox</code> is provided</td>
                       <td>
-                        - Must conform to GeoJSON standards.<br>
-                        - Supported geometry types: <code>Point</code>, <code>MultiPoint</code>, <code>LineString</code>, <code>MultiLineString</code>, <code>Polygon</code>, <code>MultiPolygon</code>, and <code>GeometryCollection</code>.<br>
-                        - If <code>null</code>, the item's bounding box (<code>bbox</code>) must still be valid.
+                        <ul>
+                          <li>Must conform to GeoJSON standards.</li>
+                          <li>Supported geometry types: <code>Point</code>, <code>MultiPoint</code>, <code>LineString</code>, <code>MultiLineString</code>, <code>Polygon</code>, <code>MultiPolygon</code>, and <code>GeometryCollection</code>.</li>
+                          <li>If <code>null</code>, the item's bounding box (<code>bbox</code>) must still be valid.</li>
+                        </ul>
                       </td>
                     </tr>                    
+                    
                     <tr>
                       <td><code>bbox</code></td>
                       <td>
@@ -540,15 +553,17 @@
                       </td>
                       <td>Yes, if <code>geometry</code> is provided</td>
                       <td>
-                        - Must be an array with exactly 4 or 6 numeric elements.<br>
-                        - Format for 2D bounding box: <code>[minLon, minLat, maxLon, maxLat]</code>.<br>
-                        - Format for 3D bounding box: <code>[minLon, minLat, minElevation, maxLon, maxLat, maxElevation]</code>.<br>
-                        - Longitude (<code>minLon</code>, <code>maxLon</code>) must be between <code>-180</code> and <code>180</code>.<br>
-                        - Latitude (<code>minLat</code>, <code>maxLat</code>) must be between <code>-90</code> and <code>90</code>.<br>
-                        - Elevation (<code>minElevation</code>, <code>maxElevation</code>) must be valid if provided, and <code>minElevation</code> must not exceed <code>maxElevation</code>.<br>
-                        - This field is required if <code>geometry</code> is not <code>null</code> and prohibited if <code>geometry</code> is <code>null</code>.
+                        <ul>
+                          <li>Must be an array with exactly 4 or 6 numeric elements.</li>
+                          <li>Format for 2D bounding box: <code>[minLon, minLat, maxLon, maxLat]</code>.</li>
+                          <li>Format for 3D bounding box: <code>[minLon, minLat, minElevation, maxLon, maxLat, maxElevation]</code>.</li>
+                          <li>Longitude (<code>minLon</code>, <code>maxLon</code>) must be between <code>-180</code> and <code>180</code>.</li>
+                          <li>Latitude (<code>minLat</code>, <code>maxLat</code>) must be between <code>-90</code> and <code>90</code>.</li>
+                          <li>Elevation (<code>minElevation</code>, <code>maxElevation</code>) must be valid if provided, and <code>minElevation</code> must not exceed <code>maxElevation</code>.</li>
+                          <li>This field is required if <code>geometry</code> is not <code>null</code> and prohibited if <code>geometry</code> is <code>null</code>.</li>
+                        </ul>
                       </td>
-                    </tr>                    
+                    </tr>                                       
                     <tr>
                       <td><code>properties</code></td>
                       <td>
@@ -701,6 +716,7 @@
                   </tbody>
                 </table>
               </div>
+            </details>
             </div>
           </details>
         </div>
@@ -708,19 +724,23 @@
         
 
       <!-- Example Collection and Example Item side-by-side with Copy and Download -->
-      <section class="bottom-examples-container" style="margin-top: 50px;">
+      <section class="bottom-examples-container mt-5">
         <h2 class="text-center mb-4">STAC JSON Examples</h2>
-        <div class="d-flex justify-content-around flex-wrap">
+        <div class="examples-grid">
           <!-- Example Collection Section -->
-          <div class="example-collection p-3 border" style="flex: 1; min-width: 45%; margin: 10px;">
-            <h3>Example STAC Collection</h3>
-            <p>This example shows how a STAC-compliant ML model collection can be structured:</p>
-            <div class="button-group mb-2">
-              <button class="btn btn-secondary" onclick="copyToClipboard('collection-json')">Copy</button>
-              <button class="btn btn-primary" onclick="downloadJSON('collection.json', 'collection-json')">Download</button>
+          <div class="example-card">
+            <h3><i class="fas fa-folder"></i> Example STAC Collection</h3>
+            <p class="description-text">This example shows how a STAC-compliant ML model Collection can be structured:</p>
+            <div class="button-group">
+              <button class="btn-copy" onclick="copyToClipboard('collection-json')">
+                <i class="fas fa-copy"></i> Copy
+              </button>
+              <button class="btn-download" onclick="downloadJSON('collection.json', 'collection-json')">
+                <i class="fas fa-download"></i> Download
+              </button>
             </div>
             <details>
-              <summary><strong>View Example Collection</strong></summary>
+              <summary class="details-summary"><strong>View Example Collection</strong></summary>
               <pre id="collection-json" class="sample-json">
                     {
                       "stac_version": "1.0.0",
@@ -807,15 +827,19 @@
                 </div>
 
     <!-- Example Item Section -->
-    <div class="example-item p-3 border" style="flex: 1; min-width: 45%; margin: 10px;">
-      <h3>Example STAC Item</h3>
-      <p>This example shows how a STAC-compliant ML model Item can be structured:</p>
-      <div class="button-group mb-2">
-        <button class="btn btn-secondary" onclick="copyToClipboard('item-json')">Copy</button>
-        <button class="btn btn-primary" onclick="downloadJSON('item.json', 'item-json')">Download</button>
+    <div class="example-card">
+      <h3><i class="fas fa-file-code"></i> Example STAC Item</h3>
+      <p class="description-text">This example shows how a STAC-compliant ML model Item can be structured:</p>
+      <div class="button-group">
+        <button class="btn-copy" onclick="copyToClipboard('item-json')">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+        <button class="btn-download" onclick="downloadJSON('item.json', 'item-json')">
+          <i class="fas fa-download"></i> Download
+        </button>
       </div>
       <details>
-        <summary><strong>View Example Item</strong></summary>
+        <summary class="details-summary"><strong>View Example Item</strong></summary>
         <pre id="item-json" class="sample-json">
         {
           "type": "Feature",

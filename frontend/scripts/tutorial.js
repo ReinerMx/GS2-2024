@@ -233,14 +233,3 @@ document.querySelectorAll('a[href^="tutorials.html#"]').forEach((link) => {
   });
 });
 
-////////////////////////////////////////////
-// Scroll to JSON Example Section
-////////////////////////////////////////////
-
-document.getElementById("scroll-to-json").addEventListener("click", function (e) {
-  e.preventDefault(); // Prevent default anchor behavior.
-  const target = document.getElementById("json-template");
-  if (target) {
-    target.scrollIntoView({ behavior: "smooth" }); // Smooth scroll to the element.
-  }
-});
