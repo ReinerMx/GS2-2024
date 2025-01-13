@@ -117,6 +117,11 @@
               >
             </li>
             <li>
+              <a href="#api" id="tab-api" class="tutorial-nav-link"
+                >API</a
+              >
+            </li>
+            <li>
               <a href="#python" id="tab-python" class="tutorial-nav-link"
                 >Integrating with Python</a
               >
@@ -125,7 +130,7 @@
               <a href="#r" id="tab-r" class="tutorial-nav-link">Integrating with R</a>
             </li>
             <li>
-              <a href="#q-and-a" id="tab-q-and-a" class="tutorial-nav-link">Q&A's</a>
+              <a href="#q-and-a" id="tab-q-and-a" class="tutorial-nav-link">FAQ</a>
             </li>
           </ul>
         </nav>
@@ -831,179 +836,276 @@
                   </details>
                 </div>
 
-    <!-- Example Item Section -->
-    <div class="example-card">
-      <h3><i class="fas fa-file-code"></i> Example STAC Item</h3>
-      <p class="description-text">This example shows how a STAC-compliant ML model Item can be structured:</p>
-      <div class="button-group">
-        <button class="btn-copy" onclick="copyToClipboard('item-json')">
-          <i class="fas fa-copy"></i> Copy
-        </button>
-        <button class="btn-download" onclick="downloadJSON('item.json', 'item-json')">
-          <i class="fas fa-download"></i> Download
-        </button>
-      </div>
-      <details>
-        <summary class="details-summary"><strong>View Example Item</strong></summary>
-        <pre id="item-json" class="sample-json">
-        {
-          "type": "Feature",
-          "stac_version": "1.0.0",
-          "id": "example-ml-model-item",
-          "collection": "ml-model-examples",
-          "properties": {
-            "start_datetime": "2023-01-01T00:00:00Z",
-            "end_datetime": "2024-01-01T00:00:00Z",
-            "description": "This is an example machine learning model for classification and segmentation tasks.",
-            "mlm:name": "Example ML Model",
-            "mlm:architecture": "Swin Transformer V2 + RandomForestClassifier",
-            "mlm:framework": "pytorch",
-            "mlm:framework_version": "2.3.0",
-            "mlm:tasks": [
-              "classification",
-              "semantic-segmentation"
-            ],
-            "mlm:input": [
-              {
-                "name": "Sentinel-2 EO Data",
-                "bands": [
-                  "B01", "B02", "B03", "B04", "B08", "B11", "B12", "NDVI", "NDWI1"
-                ],
-                "input": {
-                  "shape": [-1, 9, 1024, 1024],
-                  "dim_order": ["batch", "channel", "height", "width"],
-                  "data_type": "float32"
-                },
-                "norm_type": "z-score",
-                "statistics": [
-                  {
-                    "mean": 1354.0,
-                    "stddev": 245.7
-                  },
-                  {
-                    "mean": 1118.2,
-                    "stddev": 333.0
-                  }
-                ]
-              }
-            ],
-            "mlm:output": [
-              {
-                "name": "Segmentation Output",
-                "tasks": ["semantic-segmentation"],
-                "result": {
-                  "shape": [-1, 1, 1024, 1024],
-                  "dim_order": ["batch", "height", "width"],
-                  "data_type": "uint8"
-                },
-                "classification:classes": [
-                  {
-                    "value": 0,
-                    "name": "Non-Water",
-                    "description": "Pixels without water",
-                    "color_hint": "000000"
-                  },
-                  {
-                    "value": 1,
-                    "name": "Water",
-                    "description": "Pixels with water",
-                    "color_hint": "0000FF"
-                  }
-                ]
-              }
-            ],
-            "mlm:total_parameters": 89748193,
-            "mlm:pretrained": true,
-            "mlm:pretrained_source": "Sentinel-2 data and Satlas annotations",
-            "mlm:memory_size": 1000000000,
-            "mlm:batch_size_suggestion": 10,
-            "mlm:accelerator": "cuda",
-            "mlm:accelerator_constrained": true,
-            "mlm:accelerator_summary": "Requires NVIDIA Ampere GPUs or newer for optimal performance."
-          },
-          "geometry": {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                [-121.8768, 36.9306],
-                [-121.8768, 38.8433],
-                [-120.0653, 38.8433],
-                [-120.0653, 36.9306],
-                [-121.8768, 36.9306]
-              ]
-            ]
-          },
-          "bbox": [-121.8768, 36.9306, -120.0653, 38.8433],
-          "links": [
-            {
-              "rel": "derived_from",
-              "href": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l1c",
-              "type": "application/json"
-            },
-            {
-              "rel": "self",
-              "href": "https://example.com/model-metadata/example-ml-model.json",
-              "type": "application/json"
-            }
-          ],
-          "assets": {
-            "model": {
-              "href": "https://example.com/models/example-model.onnx",
-              "type": "application/octet-stream; framework=onnx",
-              "title": "ONNX Model",
-              "description": "ONNX format of the example model.",
-              "roles": ["mlm:model"],
-              "mlm_artifact_type": "onnx"
-            },
-            "source_code": {
-              "href": "https://github.com/example/ml-model-code",
-              "type": "text/x-python",
-              "title": "Model Implementation Source Code",
-              "description": "Source code for model training and inference.",
-              "roles": ["code"]
-            }
-          },
-          "stac_extensions": [
-            "https://stac-extensions.github.io/file/v2.1.0/schema.json",
-            "https://stac-extensions.github.io/ml-model/v1.0.0/schema.json",
-            "https://stac-extensions.github.io/eo/v1.1.0/schema.json"
-          ]
-        }        
-      </pre>
-    </details>
-  </div>
-</div>
-</section>
+                <!-- Example Item Section -->
+                <div class="example-card">
+                  <h3><i class="fas fa-file-code"></i> Example STAC Item</h3>
+                  <p class="description-text">This example shows how a STAC-compliant ML model Item can be structured:</p>
+                  <div class="button-group">
+                    <button class="btn-copy" onclick="copyToClipboard('item-json')">
+                      <i class="fas fa-copy"></i> Copy
+                    </button>
+                    <button class="btn-download" onclick="downloadJSON('item.json', 'item-json')">
+                      <i class="fas fa-download"></i> Download
+                    </button>
+                  </div>
+                  <details>
+                    <summary class="details-summary"><strong>View Example Item</strong></summary>
+                    <pre id="item-json" class="sample-json">
+                    {
+                      "type": "Feature",
+                      "stac_version": "1.0.0",
+                      "id": "example-ml-model-item",
+                      "collection": "ml-model-examples",
+                      "properties": {
+                        "start_datetime": "2023-01-01T00:00:00Z",
+                        "end_datetime": "2024-01-01T00:00:00Z",
+                        "description": "This is an example machine learning model for classification and segmentation tasks.",
+                        "mlm:name": "Example ML Model",
+                        "mlm:architecture": "Swin Transformer V2 + RandomForestClassifier",
+                        "mlm:framework": "pytorch",
+                        "mlm:framework_version": "2.3.0",
+                        "mlm:tasks": [
+                          "classification",
+                          "semantic-segmentation"
+                        ],
+                        "mlm:input": [
+                          {
+                            "name": "Sentinel-2 EO Data",
+                            "bands": [
+                              "B01", "B02", "B03", "B04", "B08", "B11", "B12", "NDVI", "NDWI1"
+                            ],
+                            "input": {
+                              "shape": [-1, 9, 1024, 1024],
+                              "dim_order": ["batch", "channel", "height", "width"],
+                              "data_type": "float32"
+                            },
+                            "norm_type": "z-score",
+                            "statistics": [
+                              {
+                                "mean": 1354.0,
+                                "stddev": 245.7
+                              },
+                              {
+                                "mean": 1118.2,
+                                "stddev": 333.0
+                              }
+                            ]
+                          }
+                        ],
+                        "mlm:output": [
+                          {
+                            "name": "Segmentation Output",
+                            "tasks": ["semantic-segmentation"],
+                            "result": {
+                              "shape": [-1, 1, 1024, 1024],
+                              "dim_order": ["batch", "height", "width"],
+                              "data_type": "uint8"
+                            },
+                            "classification:classes": [
+                              {
+                                "value": 0,
+                                "name": "Non-Water",
+                                "description": "Pixels without water",
+                                "color_hint": "000000"
+                              },
+                              {
+                                "value": 1,
+                                "name": "Water",
+                                "description": "Pixels with water",
+                                "color_hint": "0000FF"
+                              }
+                            ]
+                          }
+                        ],
+                        "mlm:total_parameters": 89748193,
+                        "mlm:pretrained": true,
+                        "mlm:pretrained_source": "Sentinel-2 data and Satlas annotations",
+                        "mlm:memory_size": 1000000000,
+                        "mlm:batch_size_suggestion": 10,
+                        "mlm:accelerator": "cuda",
+                        "mlm:accelerator_constrained": true,
+                        "mlm:accelerator_summary": "Requires NVIDIA Ampere GPUs or newer for optimal performance."
+                      },
+                      "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                          [
+                            [-121.8768, 36.9306],
+                            [-121.8768, 38.8433],
+                            [-120.0653, 38.8433],
+                            [-120.0653, 36.9306],
+                            [-121.8768, 36.9306]
+                          ]
+                        ]
+                      },
+                      "bbox": [-121.8768, 36.9306, -120.0653, 38.8433],
+                      "links": [
+                        {
+                          "rel": "derived_from",
+                          "href": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l1c",
+                          "type": "application/json"
+                        },
+                        {
+                          "rel": "self",
+                          "href": "https://example.com/model-metadata/example-ml-model.json",
+                          "type": "application/json"
+                        }
+                      ],
+                      "assets": {
+                        "model": {
+                          "href": "https://example.com/models/example-model.onnx",
+                          "type": "application/octet-stream; framework=onnx",
+                          "title": "ONNX Model",
+                          "description": "ONNX format of the example model.",
+                          "roles": ["mlm:model"],
+                          "mlm_artifact_type": "onnx"
+                        },
+                        "source_code": {
+                          "href": "https://github.com/example/ml-model-code",
+                          "type": "text/x-python",
+                          "title": "Model Implementation Source Code",
+                          "description": "Source code for model training and inference.",
+                          "roles": ["code"]
+                        }
+                      },
+                      "stac_extensions": [
+                        "https://stac-extensions.github.io/file/v2.1.0/schema.json",
+                        "https://stac-extensions.github.io/ml-model/v1.0.0/schema.json",
+                        "https://stac-extensions.github.io/eo/v1.1.0/schema.json"
+                      ]
+                    }        
+                  </pre>
+                </details>
+              </div>
+            </div>
+            </section>
           </div>
         </div>
       </div>
 
-<!-- Download -->
-<div
-  id="download"
-  class="content-section section-margin"
-  style="border: 1px solid #ccc; padding: 20px; margin-left: 20px; margin-right: 20px"
->
-  <h2 class="section-title">Downloading Models: A Quick Guide</h2>
-  <p class="custom-paragraph">
-    Follow this guide to find, download, and integrate machine learning models from the catalog effortlessly. Ensure you check the model’s metadata for compatibility with your workflow.
-  </p>
-  <div class="list-container">
-    <ol class="custom-paragraph">
-      <li>
-        <strong>Search for a model:</strong> Visit the
-        <a href="catalog.html" target="_blank"><em>model catalog</em></a> and use the search bar or filters to narrow down models that fit your requirements.
-      </li>
-      <li>
-        <strong>Review the model details:</strong> Click on the desired model to view detailed metadata.
-      </li>
-      <li>
-        <strong>Access the model repository:</strong> On the model's detail page, follow the provided links to the model's official repository (e.g., GitHub) to download the model files.
-      </li>
-    </ol>
-  </div>
-</div>
+      <!-- Download -->
+      <div
+        id="download"
+        class="content-section section-margin"
+        style="border: 1px solid #ccc; padding: 20px; margin-left: 20px; margin-right: 20px"
+      >
+        <h2 class="section-title">Downloading Models: A Quick Guide</h2>
+        <p class="custom-paragraph">
+          Follow this guide to find, download, and integrate machine learning models from the catalog effortlessly. Ensure you check the model’s metadata for compatibility with your workflow.
+        </p>
+        <div class="list-container">
+          <ol class="custom-paragraph">
+            <li>
+              <strong>Search for a model:</strong> Visit the
+              <a href="catalog.html" target="_blank"><em>model catalog</em></a> and use the search bar or filters to narrow down models that fit your requirements.
+            </li>
+            <li>
+              <strong>Review the model details:</strong> Click on the desired model to view detailed metadata.
+            </li>
+            <li>
+              <strong>Access the model repository:</strong> On the model's detail page, follow the provided links to the model's official repository (e.g., GitHub) to download the model files.
+            </li>
+          </ol>
+        </div>
+      </div>
 
+      <!-- API Documentation Section -->
+      <div
+        id="api"
+        class="content-section section-margin"
+        style="border: 1px solid #ccc; padding: 20px; margin-left: 20px; margin-right: 20px"
+      >
+        <h2 class="section-title">STAC CORE API Documentation</h2>
+        <p class="custom-paragraph">
+          This API implements the <strong>SpatioTemporal Asset Catalog (STAC) Core API</strong>, adhering to the official 
+          <a href="https://github.com/radiantearth/stac-api-spec" target="_blank">STAC API Specification</a>. Below you will find an overview of the available routes, their descriptions, and usage examples.
+        </p>
+        <div class="list-container">
+          <h3 class="mt-4">Available Endpoints</h3>
+          <ol class="custom-paragraph">
+            <li class="mb-3">
+              <strong>Root Endpoint:</strong>
+              <pre class="bg-dark text-white p-2 rounded"><code>GET /</code></pre>
+              <p>Returns the STAC API root with supported conformance classes and links.</p>
+            </li>
+            <li class="mb-3">
+              <strong>Conformance:</strong>
+              <pre class="bg-dark text-white p-2 rounded"><code>GET /conformance</code></pre>
+              <p>Returns the supported conformance classes.</p>
+            </li>
+            <li class="mb-3">
+              <strong>Collections:</strong>
+              <pre class="bg-dark text-white p-2 rounded"><code>GET /collections</code></pre>
+              <p>Fetches all available STAC collections.</p>
+            </li>
+            <li class="mb-3">
+              <strong>Collection by ID:</strong>
+              <pre class="bg-dark text-white p-2 rounded"><code>GET /collections/:collection_id</code></pre>
+              <p>Fetches a specific collection by its ID.</p>
+              <ul class="ml-4">
+                <li><code>collection_id</code>: Unique identifier of the collection</li>
+              </ul>
+            </li>
+            <li class="mb-3">
+              <strong>Items in a Collection:</strong>
+              <pre class="bg-dark text-white p-2 rounded"><code>GET /collections/:collection_id/items</code></pre>
+              <p>Fetches all items within a specified collection.</p>
+            </li>
+            <li class="mb-3">
+              <strong>Item by ID:</strong>
+              <pre class="bg-dark text-white p-2 rounded"><code>GET /collections/:collection_id/items/:item_id</code></pre>
+              <p>Fetches a specific item within a collection by its ID.</p>
+              <ul class="ml-4">
+                <li><code>collection_id</code>: Unique identifier of the collection</li>
+                <li><code>item_id</code>: Unique identifier of the item</li>
+              </ul>
+            </li>
+            <li class="mb-3">
+              <strong>Search:</strong>
+              <pre class="bg-dark text-white p-2 rounded"><code>GET /search</code></pre>
+              <pre class="bg-dark text-white p-2 rounded"><code>POST /search</code></pre>
+              <p>The <code>/search</code> endpoint allows filtering and querying STAC items based on spatial, temporal, and collection-specific criteria. It returns a STAC-compliant <code>FeatureCollection</code>.</p>
+              <div class="bg-light border p-3 rounded">
+                <strong>Supported Query Parameters:</strong>
+                <ul>
+                  <li>
+                    <strong><code>bbox</code> (optional):</strong> Bounding box coordinates specified as <code>[minX, minY, maxX, maxY]</code>. Example: <code>?bbox=10.0,20.0,30.0,40.0</code>
+                  </li>
+                  <li>
+                    <strong><code>datetime</code> (optional):</strong> Temporal range in ISO 8601 format. Example: <code>?datetime=2023-01-01T00:00:00Z/2023-12-31T23:59:59Z</code>
+                  </li>
+                  <li>
+                    <strong><code>collections</code> (optional):</strong> Comma-separated list of collection IDs to limit the search. Example: <code>?collections=collection1,collection2</code>
+                  </li>
+                  <li>
+                    <strong><code>limit</code> (optional):</strong> The maximum number of results to return. Default: <code>10</code>
+                  </li>
+                  <li>
+                    <strong><code>geoFilter</code> (optional, POST only):</strong> A GeoJSON geometry object for precise spatial filtering.
+                  </li>
+                </ul>
+              </div>
+              <p class="mt-3"><strong>Example Request (GET):</strong></p>
+              <pre class="bg-dark text-white p-2 rounded"><code>GET /search?bbox=10.0,20.0,30.0,40.0&datetime=2023-01-01T00:00:00Z/2023-12-31T23:59:59Z&limit=5</code></pre>
+              <p><strong>Example Request (POST):</strong></p>
+              <pre class="bg-dark text-white p-2 rounded"><code>
+      POST /search
+      Content-Type: application/json
+      {
+        "bbox": [10.0, 20.0, 30.0, 40.0],
+        "datetime": "2023-01-01T00:00:00Z/2023-12-31T23:59:59Z",
+        "geoFilter": {
+          "type": "Polygon",
+          "coordinates": [[[10.0, 20.0], [30.0, 20.0], [30.0, 40.0], [10.0, 40.0], [10.0, 20.0]]]
+        },
+        "limit": 5
+      }
+              </code></pre>
+              <p class="text-muted">The response includes metadata for each item, such as geometry, properties, and collection links.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
 
       <!-- Python -->
       <div
@@ -1041,6 +1143,7 @@
         </div>
       </div>
 
+      <!-- R -->
       <div
         id="r"
         class="content-section section-margin"
@@ -1075,6 +1178,7 @@
         </div>
       </div>
 
+      <!-- FAQ -->
       <div id="q-and-a" class="content-section">
         <div
           class="faq-grid"
