@@ -211,82 +211,501 @@
           </ol>
         </div>
 
-          <div class="info-sections">
-            <div class="dropdown">
-              <h3 onclick="toggleDropdown('key-fields-dropdown')">
-                Explanation of the Key Fields:
-              </h3>
-              <div id="key-fields-dropdown" class="dropdown-content">
-                <ul>
-                  <li>
-                    <strong>stac_version</strong>: The version of the STAC specification, here
-                    "1.0.0".
-                  </li>
-                  <li>
-                    <strong>stac_extensions</strong>: A list of STAC extensions that are relevant to
-                    the model (e.g., EO for Earth Observation, ML for Machine Learning, etc.).
-                  </li>
-                  <li>
-                    <strong>type</strong>: The type of the STAC resource, in this case, a "Feature".
-                  </li>
-                  <li><strong>id</strong>: A unique ID for the model.</li>
-                  <li>
-                    <strong>properties</strong>: A collection of key-value pairs for metadata about
-                    the model:
-                    <ul>
-                      <li>
-                        <strong>title</strong> and <strong>description</strong> describe the model.
-                      </li>
-                      <li>
-                        <strong>start_datetime</strong> and <strong>end_datetime</strong> define the
-                        period during which the model is trained or available.
-                      </li>
-                      <li>
-                        <strong>model_task</strong> specifies the task of the model (e.g.,
-                        classification, regression).
-                      </li>
-                      <li>
-                        <strong>input_data_type</strong>, <strong>output_data_type</strong>,
-                        <strong>input_bands</strong>, and <strong>output_classes</strong> specify
-                        the types of input and output data, as well as the input bands and output
-                        classes of the model.
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>geometry</strong>: The spatial extent of the model, here specified as a
-                    Polygon.
-                  </li>
-                  <li>
-                    <strong>links</strong>: URLs that link to other resources or references related
-                    to the model (e.g., the model itself, thumbnails, etc.).
-                  </li>
-                  <li>
-                    <strong>assets</strong>: Files associated with the model, such as the model file
-                    itself and metadata files.
-                  </li>
-                </ul>
+        <div class="full-width-container">
+          <details class="stac-details">
+            <summary class="stac-summary"><strong>STAC Files Structure and Requirements</strong></summary>
+            <div class="stac-content mt-4">
+              <p>This section describes the required and optional fields in the STAC <strong>Collection</strong> and <strong>Item</strong> files, including the validation rules and allowed values.</p>
+        
+              <!-- Collection Section -->
+              <h2>Collection Structure</h2>
+              <p>A <strong>Collection</strong> groups ...</p>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Field</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Required</th>
+                      <th scope="col">Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>type</code></td>
+                      <td>Must be set to <code>"Collection"</code> to validate as a STAC Collection.</td>
+                      <td>Yes</td>
+                      <td>Fixed value "Collection".</td>
+                    </tr>
+                    <tr>
+                      <td><code>stac_version</code></td>
+                      <td>The STAC version this collection implements.</td>
+                      <td>Yes</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td><code>stac_extensions</code></td>
+                      <td>List of extension identifiers implemented by the collection.</td>
+                      <td>No</td>
+                      <td>Must be an array of strings.</td>
+                    </tr>
+                    <tr>
+                      <td><code>id</code></td>
+                      <td>Unique identifier for the collection.</td>
+                      <td>Yes</td>
+                      <td>Must be unique across all collections.</td>
+                    </tr>
+                    <tr>
+                      <td><code>title</code></td>
+                      <td>A short descriptive one-line title for the Collection.</td>
+                      <td>No</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td><code>description</code></td>
+                      <td>Detailed description of the collection.</td>
+                      <td>Yes</td>
+                      <td>Supports CommonMark syntax for rich text.</td>
+                    </tr>
+                    <tr>
+                      <td><code>keywords</code></td>
+                      <td>List of keywords describing the collection.</td>
+                      <td>No</td>
+                      <td>Optional, array of descriptive keywords.</td>
+                    </tr>
+                    <tr>
+                      <td><code>license</code></td>
+                      <td>License of the collection's data.</td>
+                      <td>Yes</td>
+                      <td>
+                        Must be a valid <a href="https://spdx.org/licenses/" target="_blank">SPDX License identifier: </a>
+                        <ul>
+                          <li>"CC-BY-4.0" - Creative Commons Attribution 4.0 International</li>
+                          <li>"CC-BY-SA-4.0" - Creative Commons Attribution-ShareAlike 4.0 International</li>
+                          <li>"MIT" - MIT License</li>
+                          <li>"Apache-2.0" - Apache License 2.0</li>
+                          <li>"GPL-3.0-or-later" - GNU General Public License 3.0 or later</li>
+                          <li>"BSD-3-Clause" - BSD 3-Clause License</li>
+                          <li>"CC0-1.0" - Creative Commons Zero v1.0 Universal</li>
+                          <li>"EUPL-1.2" - European Union Public License v1.2</li>
+                          <li>"other" - Use this if none of the official SPDX licenses apply. Consider adding a link to the custom license text or a description for clarity.</li>
+                        </ul>
+                        If "other" is used, a warning will appear recommending additional details for transparency.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code>providers</code></td>
+                      <td>List of organizations contributing to the data, such as those capturing, processing, or hosting the data.</td>
+                      <td>No</td>
+                      <td>
+                        Must be an array of provider objects. Each provider must follow these rules:
+                        <ul>
+                          <li><strong>name (required)</strong>: The organization's name. Must be a non-empty string.</li>
+                          <li><strong>description (optional)</strong>: A description of the provider. Must be a string if provided.</li>
+                          <li><strong>roles (optional)</strong>: An array of roles. Valid roles are:
+                            <ul>
+                              <li><code>licensor</code>: The entity responsible for licensing the data.</li>
+                              <li><code>producer</code>: The organization that produced the original data.</li>
+                              <li><code>processor</code>: The organization that processed or modified the data.</li>
+                              <li><code>host</code>: The entity hosting the data. There must be no more than one <code>host</code> role, and it must be the last entry in the list if present.</li>
+                            </ul>
+                          </li>
+                          <li><strong>url (optional)</strong>: A URL pointing to the provider's homepage or additional information. Must be a valid URL starting with <code>http://</code> or <code>https://</code>.</li>
+                        </ul>
+                        If the <code>providers</code> array is not <code>null</code>, all entries must follow the specified format.
+                      </td>
+                    </tr>                                       
+                    <tr>
+                      <td><code>extent</code></td>
+                      <td>Spatial and temporal extents of the collection, defining the geographical bounds and time periods covered.</td>
+                      <td>Yes</td>
+                      <td>
+                        Must be an object containing the following properties:
+                        <ul>
+                          <li><strong>spatial.bbox (required)</strong>: An array of bounding boxes, where each bounding box is an array of 4 or 6 numbers representing:
+                            <ul>
+                              <li><strong>2D Bounding Box</strong>: <code>[minLon, minLat, maxLon, maxLat]</code></li>
+                              <li><strong>3D Bounding Box</strong>: <code>[minLon, minLat, minElevation, maxLon, maxLat, maxElevation]</code></li>
+                            </ul>
+                            Validation rules:
+                            <ul>
+                              <li>Coordinates must adhere to WGS 84 bounds:
+                                <ul>
+                                  <li>Longitude (<code>minLon</code>, <code>maxLon</code>) must be between <code>-180</code> and <code>180</code>.</li>
+                                  <li>Latitude (<code>minLat</code>, <code>maxLat</code>) must be between <code>-90</code> and <code>90</code>.</li>
+                                </ul>
+                              </li>
+                              <li>If 3D, the elevation values (<code>minElevation</code>, <code>maxElevation</code>) must be valid, and <code>minElevation</code> must be less than <code>maxElevation</code>.</li>
+                            </ul>
+                          </li>
+                          <li><strong>temporal.interval (required)</strong>: An array of time intervals, where each interval is an array of two elements <code>[start, end]</code>:
+                            <ul>
+                              <li><strong>start</strong>: The start time of the interval in <a href="https://datatracker.ietf.org/doc/html/rfc3339" target="_blank">RFC 3339</a> format (e.g., <code>2023-01-01T00:00:00Z</code>) or <code>null</code>.</li>
+                              <li><strong>end</strong>: The end time of the interval in RFC 3339 format or <code>null</code>.</li>
+                            </ul>
+                            Validation rules:
+                            <ul>
+                              <li>Both <code>start</code> and <code>end</code> must be valid timestamps or <code>null</code>.</li>
+                              <li>If both <code>start</code> and <code>end</code> are provided, <code>start</code> must be less than or equal to <code>end</code>.</li>
+                            </ul>
+                          </li>
+                        </ul>
+                        This field is mandatory for all collections and must follow the specified format.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code>summaries</code></td>
+                      <td>
+                        <p>A map of property summaries, providing either a set of values, a range of values, or a JSON Schema.</p>
+                        <p>This field is <strong>strongly recommended</strong> but optional and can include:</p>
+                        <ul>
+                          <li>
+                            <strong>Range Summary:</strong> Specifies a <code>minimum</code> and <code>maximum</code> value for numeric or string properties.
+                            <ul>
+                              <li><code>minimum</code> and <code>maximum</code> must be numbers or strings.</li>
+                              <li><code>minimum</code> must not exceed <code>maximum</code>.</li>
+                            </ul>
+                          </li>
+                          <li>
+                            <strong>JSON Schema Summary:</strong> A JSON Schema that defines the expected structure of the property values.
+                            <ul>
+                              <li>Must be a valid object containing the <code>$schema</code> keyword.</li>
+                              <li>The <code>$schema</code> keyword should point to a recognized schema version (e.g., <code>http://json-schema.org/draft-07/schema#</code>).</li>
+                              <li>A warning will be issued if a non-standard schema version is used.</li>
+                            </ul>
+                          </li>
+                          <li>
+                            <strong>Value Set:</strong> Can include specific values (e.g., an array of possible values for categorical properties).
+                          </li>
+                        </ul>
+                      </td>
+                      <td>No</td>
+                      <td>
+                        <ul>
+                          <li>Must be an object if provided, not an array.</li>
+                          <li>Each key in the map represents a property, and its value defines the summary.</li>
+                          <li>Examples:
+                            <ul>
+                              <li><code>{ "datetime": { "minimum": "2022-01-01T00:00:00Z", "maximum": "2022-12-31T23:59:59Z" } }</code> (Range summary)</li>
+                              <li><code>{ "classification": { "$schema": "http://json-schema.org/draft-07/schema#", "type": "string" } }</code> (JSON Schema summary)</li>
+                              <li><code>{ "bands": ["B1", "B2", "NDVI"] }</code> (Value set summary)</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>                                        
+                    <tr>
+                      <td><code>links</code></td>
+                      <td>
+                        <p>A list of references to related documents or resources.</p>
+                        <p>This field is <strong>required</strong> and each link must be a valid object that may contain the following keys:</p>
+                        <ul>
+                          <li><strong><code>href</code> (Required):</strong> The URL or path to the referenced document. Must be a non-empty string.</li>
+                          <li><strong><code>rel</code> (Required):</strong> The relation type (e.g., <code>self</code>, <code>item</code>). Must be a non-empty string.</li>
+                          <li><strong><code>type</code> (Optional):</strong> The media type of the referenced document (e.g., <code>application/json</code>). Must be a string if provided.</li>
+                          <li><strong><code>title</code> (Optional):</strong> A human-readable title for the link. Must be a string if provided.</li>
+                          <li><strong><code>method</code> (Optional):</strong> The HTTP method (e.g., <code>GET</code>, <code>POST</code>). Must be one of <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code>, <code>OPTIONS</code>, or <code>HEAD</code> if provided.</li>
+                          <li><strong><code>headers</code> (Optional):</strong> A set of HTTP headers for the request. Must be an object, where each key is a header name and the value is a string or an array of strings.</li>
+                          <li><strong><code>body</code> (Optional):</strong> The body of the request. Must be an object if provided.</li>
+                        </ul>
+                      </td>
+                      <td>Yes</td>
+                      <td>
+                        <ul>
+                          <li>The <code>links</code> field must be an array of link objects.</li>
+                          <li>Each link object must contain the <code>href</code> and <code>rel</code> keys as non-empty strings.</li>
+                          <li>The <code>type</code>, <code>title</code>, <code>method</code>, <code>headers</code>, and <code>body</code> keys are optional.</li>
+                          <li>Valid HTTP methods for <code>method</code> are <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code>, <code>OPTIONS</code>, and <code>HEAD</code>.</li>
+                          <li>Each header value in <code>headers</code> must be a string or an array of strings.</li>
+                          <li>Examples:
+                            <ul>
+                              <li><code>{ "href": "https://example.com/resource", "rel": "self" }</code></li>
+                              <li><code>{ "href": "https://example.com/resource", "rel": "item", "method": "GET", "headers": { "Accept": "application/json" } }</code></li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>                    
+                    <tr>
+                      <td><code>item_assets</code></td>
+                      <td>
+                        <p>A dictionary describing the available assets in the member items.</p>
+                        <p>This field is <strong>optional</strong> but must conform to the following structure if provided:</p>
+                        <ul>
+                          <li><strong>Key:</strong> Must be a non-empty string representing the asset key.</li>
+                          <li><strong>Value (Item Asset Object):</strong> Must be a valid object containing:
+                            <ul>
+                              <li><strong><code>title</code> (Optional):</strong> Human-readable name of the asset. Must be a string if provided.</li>
+                              <li><strong><code>description</code> (Optional):</strong> A detailed description of the asset. Must be a string if provided.</li>
+                              <li><strong><code>type</code> (Optional):</strong> Media type of the asset (e.g., <code>image/png</code>, <code>application/json</code>). Must be a string if provided.</li>
+                              <li><strong><code>roles</code> (Optional):</strong> Array of roles describing the use of the asset (e.g., <code>thumbnail</code>, <code>data</code>). Each role must be a string.</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                      <td>No</td>
+                      <td>
+                        <ul>
+                          <li>The <code>item_assets</code> field must be an object (dictionary).</li>
+                          <li>Each key must be a non-empty string, representing the name of the asset.</li>
+                          <li>Each asset must contain at least one of the following fields: <code>title</code> or <code>type</code>.</li>
+                          <li>The <code>roles</code> field must be an array of strings if provided.</li>
+                          <li>Examples:
+                            <ul>
+                              <li><code>{ "thumbnail": { "title": "Preview Image", "type": "image/png", "roles": ["thumbnail"] } }</code></li>
+                              <li><code>{ "metadata": { "title": "Metadata File", "type": "application/json" } }</code></li>
+                            </ul>
+                          </li>
+                          <li>If <code>roles</code> is provided, each role must be a string (e.g., <code>"data"</code>, <code>"overview"</code>).</li>
+                        </ul>
+                      </td>
+                    </tr>                    
+                  </tbody>
+                </table>
+              </div>
+        
+              <!-- Item Section -->
+              <h2>Item Structure</h2>
+              <p>An <strong>Item</strong> represents ...</p>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Field</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Required</th>
+                      <th scope="col">Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>type</code></td>
+                      <td>Must be set to <code>"Feature"</code> to validate as a STAC Item.</td>
+                      <td>Yes</td>
+                      <td>Fixed value "Feature".</td>
+                    </tr>
+                    <tr>
+                      <td><code>stac_version</code></td>
+                      <td>The STAC version this item implements.</td>
+                      <td>Yes</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td><code>stac_extensions</code></td>
+                      <td>List of extension identifiers implemented by the item.</td>
+                      <td>No</td>
+                      <td>Must be an array of strings.</td>
+                    </tr>
+                    <tr>
+                      <td><code>id</code></td>
+                      <td>Unique identifier for the item within its collection.</td>
+                      <td>Yes</td>
+                      <td>Must be unique within the collection.</td>
+                    </tr>
+                    <tr>
+                      <td><code>collection</code></td>
+                      <td>
+                        The ID of the STAC Collection this Item references. 
+                        This field is <strong>required</strong> if a link with a "collection" relation type is present; otherwise, it must be <code>null</code>.
+                      </td>
+                      <td>No</td>
+                      <td>
+                        - Must reference a valid <code>id</code> of a <code>Collection</code>.<br>
+                        - Uploading items is currently only possible if the referenced collection is already uploaded.
+                      </td>
+                    </tr>                    
+                    <tr>
+                      <td><code>geometry</code></td>
+                      <td>
+                        <p>
+                          The full footprint of the asset represented by this item, formatted as a GeoJSON object. 
+                          Must follow the <a href="https://datatracker.ietf.org/doc/html/rfc7946#section-3.1" target="_blank">RFC 7946, section 3.1</a> format if a geometry is provided, or 
+                          <a href="https://datatracker.ietf.org/doc/html/rfc7946#section-3.2" target="_blank">section 3.2</a> if no geometry is provided.
+                        </p>
+                      </td>
+                      <td>Yes, if <code>bbox</code> is provided</td>
+                      <td>
+                        - Must conform to GeoJSON standards.<br>
+                        - Supported geometry types: <code>Point</code>, <code>MultiPoint</code>, <code>LineString</code>, <code>MultiLineString</code>, <code>Polygon</code>, <code>MultiPolygon</code>, and <code>GeometryCollection</code>.<br>
+                        - If <code>null</code>, the item's bounding box (<code>bbox</code>) must still be valid.
+                      </td>
+                    </tr>                    
+                    <tr>
+                      <td><code>bbox</code></td>
+                      <td>
+                        <p>
+                          The bounding box of the asset represented by this item. Must be formatted according to 
+                          <a href="https://datatracker.ietf.org/doc/html/rfc7946#section-5" target="_blank">RFC 7946, section 5</a>.
+                        </p>
+                      </td>
+                      <td>Yes, if <code>geometry</code> is provided</td>
+                      <td>
+                        - Must be an array with exactly 4 or 6 numeric elements.<br>
+                        - Format for 2D bounding box: <code>[minLon, minLat, maxLon, maxLat]</code>.<br>
+                        - Format for 3D bounding box: <code>[minLon, minLat, minElevation, maxLon, maxLat, maxElevation]</code>.<br>
+                        - Longitude (<code>minLon</code>, <code>maxLon</code>) must be between <code>-180</code> and <code>180</code>.<br>
+                        - Latitude (<code>minLat</code>, <code>maxLat</code>) must be between <code>-90</code> and <code>90</code>.<br>
+                        - Elevation (<code>minElevation</code>, <code>maxElevation</code>) must be valid if provided, and <code>minElevation</code> must not exceed <code>maxElevation</code>.<br>
+                        - This field is required if <code>geometry</code> is not <code>null</code> and prohibited if <code>geometry</code> is <code>null</code>.
+                      </td>
+                    </tr>                    
+                    <tr>
+                      <td><code>properties</code></td>
+                      <td>
+                        <p>A dictionary of additional metadata for the Item. This field must include a valid <code>datetime</code> field formatted according to 
+                          <a href="https://datatracker.ietf.org/doc/html/rfc3339" target="_blank">RFC 3339</a> or be <code>null</code>.</p>
+                        <p>Additionally, this field includes machine learning model-specific metadata described below:</p>
+                        <ul>
+                          <li><strong><code>mlm:name</code> (Required)</strong>: Name of the machine learning model. Must be a non-empty string.</li>
+                          <li><strong><code>mlm:architecture</code> (Required)</strong>: The architecture of the model (e.g., ResNet, RandomForestClassifier).</li>
+                          <li><strong><code>mlm:tasks</code> (Required)</strong>: List of tasks (e.g., "segmentation", "classification").</li>
+                          <li><strong><code>mlm:framework</code> (Optional)</strong>: Framework used for training (e.g., "PyTorch", "scikit-learn").</li>
+                          <li><strong><code>mlm:framework_version</code> (Optional)</strong>: Version of the framework used.</li>
+                          <li><strong><code>mlm:memory_size</code> (Optional)</strong>: Memory size required during inference, in bytes. Must be a positive integer.</li>
+                          <li><strong><code>mlm:total_parameters</code> (Optional)</strong>: Total number of parameters (trainable + non-trainable).</li>
+                          <li><strong><code>mlm:pretrained</code> (Optional)</strong>: Boolean indicating if the model is pretrained.</li>
+                          <li><strong><code>mlm:pretrained_source</code> (Required if <code>mlm:pretrained</code> is true)</strong>: The dataset or description of the pretraining source.</li>
+                          <li><strong><code>mlm:batch_size_suggestion</code> (Optional)</strong>: Suggested batch size for inference. Must be a positive integer.</li>
+                          <li><strong><code>mlm:accelerator</code> (Optional)</strong>: Specifies the intended hardware accelerator (e.g., "cuda", "amd64").</li>
+                          <li><strong><code>mlm:accelerator_constrained</code> (Optional)</strong>: Boolean indicating if the model can only run on the specified accelerator. Defaults to <code>false</code>.</li>
+                          <li><strong><code>mlm:accelerator_summary</code> (Optional)</strong>: Description of the required accelerator (e.g., GPU generation).</li>
+                          <li><strong><code>mlm:accelerator_count</code> (Optional)</strong>: Minimum number of accelerator instances required.</li>
+                          <li><strong><code>mlm:input</code> (Required)</strong>: Description of the model input:
+                            <ul>
+                              <li><strong>name</strong>: Describes the input data source (e.g., "Sentinel-2 EO Data").</li>
+                              <li><strong>bands</strong>: Array of bands (e.g., "B01", "B02").</li>
+                              <li><strong>shape</strong>: Array describing input dimensions (e.g., [-1, 12, 512, 512]).</li>
+                              <li><strong>dim_order</strong>: Array defining the order of dimensions (e.g., ["batch", "channel", "height", "width"]).</li>
+                              <li><strong>data_type</strong>: Data type (e.g., "float32").</li>
+                            </ul>
+                          </li>
+                          <li><strong><code>mlm:output</code> (Required)</strong>: Description of the model output:
+                            <ul>
+                              <li><strong>name</strong>: Describes the output (e.g., "Segmentation Map").</li>
+                              <li><strong>tasks</strong>: List of output-related tasks (e.g., "semantic-segmentation").</li>
+                              <li><strong>result.shape</strong>: Array describing the output shape (e.g., [-1, 512, 512]).</li>
+                              <li><strong>result.dim_order</strong>: Order of output dimensions (e.g., ["batch", "height", "width"]).</li>
+                              <li><strong>result.data_type</strong>: Output data type (e.g., "uint8").</li>
+                            </ul>
+                          </li>
+                          <li><strong><code>mlm:hyperparameters</code> (Optional)</strong>: JSON object with training or inference hyperparameters (e.g., {"learning_rate": 0.001}).</li>
+                        </ul>
+                      </td>
+                      <td>Yes</td>
+                      <td>
+                        <ul>
+                          <li>Must be a non-empty JSON object.</li>
+                          <li>If <code>datetime</code> is not provided or invalid, it will be set to <code>null</code>.</li>
+                          <li>Format for <code>datetime</code>: <code>YYYY-MM-DDTHH:MM:SSZ</code> (e.g., <code>2023-01-01T00:00:00Z</code>).</li>
+                          <li>If <code>datetime</code> is <code>null</code>, the following fields must be provided:
+                            <ul>
+                              <li><code>start_datetime</code>: The start time in RFC 3339 format or <code>null</code>.</li>
+                              <li><code>end_datetime</code>: The end time in RFC 3339 format or <code>null</code>.</li>
+                            </ul>
+                          </li>
+                          <li>If both <code>start_datetime</code> and <code>end_datetime</code> are provided, <code>start_datetime</code> must be less than or equal to <code>end_datetime</code>.</li>
+                          <li>Examples:
+                            <ul>
+                              <li><code>{ "datetime": "2023-01-01T00:00:00Z" }</code> (Valid single timestamp)</li>
+                              <li><code>{ "start_datetime": "2023-01-01T00:00:00Z", "end_datetime": "2023-12-31T23:59:59Z" }</code> (Valid time range)</li>
+                              <li><code>{ "datetime": null, "start_datetime": null, "end_datetime": null }</code> (No specific time period)</li>
+                            </ul>
+                          </li>
+                          <li>If <code>start_datetime</code> or <code>end_datetime</code> are invalid, they will be set to <code>null</code>.</li>
+                        </ul>
+                      </td>
+                    </tr>                                      
+                    <tr>
+                      <td><code>links</code></td>
+                      <td>
+                        <p>A list of link objects pointing to related resources and URLs. This field is <strong>required</strong> and must be an array of valid link objects.</p>
+                        <p>Each link object must follow these rules:</p>
+                        <ul>
+                          <li><strong><code>href</code> (Required):</strong> The URL or path to the resource. Must be a non-empty string.</li>
+                          <li><strong><code>rel</code> (Required):</strong> The relation type (e.g., <code>self</code>, <code>item</code>, <code>collection</code>). Must be a non-empty string.</li>
+                          <li><strong><code>type</code> (Optional):</strong> The media type of the resource (e.g., <code>application/json</code>). Must be a string if provided.</li>
+                          <li><strong><code>title</code> (Optional):</strong> A human-readable title for the link. Must be a string if provided.</li>
+                          <li><strong><code>method</code> (Optional):</strong> The HTTP method to be used (e.g., <code>GET</code>, <code>POST</code>). Must be one of:
+                            <ul>
+                              <li><code>GET</code></li>
+                              <li><code>POST</code></li>
+                              <li><code>PUT</code></li>
+                              <li><code>DELETE</code></li>
+                              <li><code>PATCH</code></li>
+                              <li><code>OPTIONS</code></li>
+                              <li><code>HEAD</code></li>
+                            </ul>
+                          </li>
+                          <li><strong><code>headers</code> (Optional):</strong> HTTP headers for the request. Must be an object where each key is a header name and the value is a string or an array of strings.</li>
+                          <li><strong><code>body</code> (Optional):</strong> The request body. Must be a valid object if provided.</li>
+                        </ul>
+                      </td>
+                      <td>Yes</td>
+                      <td>
+                        <ul>
+                          <li>The <code>links</code> field must be an array of link objects.</li>
+                          <li>Each link object must contain <code>href</code> and <code>rel</code> as non-empty strings.</li>
+                          <li>The <code>type</code>, <code>title</code>, <code>method</code>, <code>headers</code>, and <code>body</code> fields are optional.</li>
+                          <li>Valid HTTP methods for <code>method</code> are <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code>, <code>OPTIONS</code>, and <code>HEAD</code>.</li>
+                          <li>Each header value in <code>headers</code> must be a string or an array of strings.</li>
+                        </ul>
+                        <p><strong>Examples:</strong></p>
+                        <ul>
+                          <li><code>{ "href": "https://example.com/resource", "rel": "self" }</code> (Basic example)</li>
+                          <li><code>{ "href": "https://example.com/resource", "rel": "item", "method": "GET", "headers": { "Accept": "application/json" } }</code> (With method and headers)</li>
+                        </ul>
+                      </td>
+                      <tr>
+                        <td><code>assets</code></td>
+                        <td>
+                          <p>The <code>assets</code> field provides metadata and access information for downloadable or streamable data associated with an Item. It contains a dictionary where the keys represent asset names and the values describe the assets themselves.</p>
+                          <p>Each asset entry must follow these rules:</p>
+                          <ul>
+                            <li><strong><code>href</code> (Required):</strong> URI to the asset object. Must start with <code>http://</code>, <code>https://</code>, or <code>s3://</code>. Trailing slashes are significant.</li>
+                            <li><strong><code>title</code> (Optional):</strong> A user-friendly title for the asset. Must be a string.</li>
+                            <li><strong><code>description</code> (Optional):</strong> Additional details about the asset, such as processing information. CommonMark 0.29 syntax may be used for rich text. Must be a string.</li>
+                            <li><strong><code>type</code> (Optional):</strong> Media type of the asset (e.g., <code>application/json</code>, <code>image/png</code>). Commonly used media types include:
+                              <ul>
+                                <li><code>image/tiff; application=geotiff</code></li>
+                                <li><code>image/jpeg</code></li>
+                                <li><code>application/geo+json</code></li>
+                                <li><code>application/vnd.laszip+copc</code></li>
+                                <li><code>text/plain</code></li>
+                              </ul>
+                              If the type is not a common STAC media type, a warning may be issued.
+                            </li>
+                            <li><strong><code>roles</code> (Optional):</strong> An array of semantic roles that describe the asset (e.g., <code>thumbnail</code>, <code>overview</code>, <code>data</code>). Each role must be a string.</li>
+                            <li><strong>Links to Models, Collections, or Items:</strong> Depending on the type of resource:
+                              <ul>
+                                <li><code>item_id</code> (Optional): A reference to the related STAC Item's ID. The <code>onDelete</code> behavior for this foreign key is set to <code>CASCADE</code>, meaning associated assets will be deleted if the related Item is deleted.</li>
+                                <li><code>model_id</code> (Optional, commented in code): Can reference an ML model resource (if present).</li>
+                                <li><code>collection_id</code> (Optional, commented in code): Can reference a STAC Collection (if needed).</li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </td>
+                        <td>Yes</td>
+                        <td>
+                          <p>The <code>assets</code> field must be a dictionary where keys represent asset names, and values describe the assets.</p>
+                          <p><strong>Examples:</strong></p>
+                          <ul>
+                            <li><code>{ "thumbnail": { "href": "https://example.com/thumbnail.png", "type": "image/png", "roles": ["thumbnail"] } }</code></li>
+                            <li><code>{ "metadata": { "href": "https://example.com/metadata.json", "type": "application/json", "title": "Metadata File" } }</code></li>
+                            <li><code>{ "data": { "href": "s3://bucket/data.tif", "type": "image/tiff; application=geotiff", "description": "High-resolution GeoTIFF" } }</code></li>
+                          </ul>
+                        </td>
+                      </tr>
+                       
+                    </tr>
+                    
+                  </tbody>
+                </table>
               </div>
             </div>
-
-            <div class="dropdown">
-              <h3 onclick="toggleDropdown('customization-dropdown')">Customization:</h3>
-              <div id="customization-dropdown" class="dropdown-content">
-                <ul>
-                  <li><strong>id</strong>: Customize the model ID.</li>
-                  <li>
-                    <strong>title</strong>, <strong>description</strong>,
-                    <strong>model_task</strong>, etc.: These fields should be adjusted to reflect
-                    the actual model.
-                  </li>
-                  <li>
-                    <strong>assets</strong>: The links to model files and metadata should point to
-                    the actual files on your server or in your repository.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          </details>
+        </div>
+        
+        
 
       <!-- Example Collection and Example Item side-by-side with Copy and Download -->
       <section class="bottom-examples-container" style="margin-top: 50px;">
@@ -602,8 +1021,7 @@
       <div id="q-and-a" class="content-section">
         <div
           class="faq-grid"
-          style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px"
-        >
+          style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px">
           <!-- den style des faq-grids bitte NICHT ENTFERNEN oder auslagern, sonst läufts nicht mehr-->
 
           <!-- General Questions -->

@@ -500,3 +500,23 @@ strong {
     gap: 20px;
     margin-top: 20px;
   }
+
+
+
+/***** STAC Files Structure and Requirements Design *****/
+  .full-width-container {
+    width: 100%; /* Full width of the page */
+    padding: 0 20px; /* Padding on the sides */
+    margin: 0 auto; /* Center the container */
+  }
+
+  .stac-details {
+    background-color: #f8f9fa; /* Background color for better contrast */
+    padding: 20px; /* Padding inside */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  }
+
+  .table-responsive {
+    overflow-x: auto; /* Allow horizontal scrolling for tables on small screens */
+  }
