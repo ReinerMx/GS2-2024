@@ -211,98 +211,6 @@
           </ol>
         </div>
 
-        <h3>Example STAC Collection</h3>
-        <p>This example shows how a STAC-compliant ML model collection can be structured:</p>
-
-        <section class="sample-section">
-          <pre class="sample-json">
-{
-  "stac_version": "1.0.0",
-  "stac_extensions": [
-    "https://stac-extensions.github.io/item-assets/v1.0.0/schema.json"
-  ],
-  "type": "Collection",
-  "id": "ml-model-examples",
-  "title": "Machine Learning Model examples",
-  "description": "Collection of items contained in the Machine Learning Model examples.",
-  "license": "Apache-2.0",
-  "extent": {
-    "spatial": {
-      "bbox": [
-        [
-          -7.882190080512502,
-          37.13739173208318,
-          27.911651652899923,
-          58.21798141355221
-        ]
-      ]
-    },
-    "temporal": {
-      "interval": [
-        [
-          "1900-01-01T00:00:00Z",
-          "9999-12-31T23:59:59Z"
-        ]
-      ]
-    }
-  },
-  "item_assets": {
-    "weights": {
-      "title": "model weights",
-      "roles": [
-        "mlm:model",
-        "mlm:weights"
-      ]
-    }
-  },
-  "summaries": {
-    "datetime": {
-      "minimum": "1900-01-01T00:00:00Z",
-      "maximum": "9999-12-31T23:59:59Z"
-    }
-  },
-  "links": [
-    {
-      "href": "collection.json",
-      "rel": "self"
-    },
-    {
-      "href": "item_basic.json",
-      "rel": "item"
-    },
-    {
-      "href": "item_bands_expression.json",
-      "rel": "item"
-    },
-    {
-      "href": "item_eo_bands.json",
-      "rel": "item"
-    },
-    {
-      "href": "item_eo_and_raster_bands.json",
-      "rel": "item"
-    },
-    {
-      "href": "item_eo_bands_summarized.json",
-      "rel": "item"
-    },
-    {
-      "href": "item_raster_bands.json",
-      "rel": "item"
-    },
-    {
-      "href": "item_multi_io.json",
-      "rel": "item"
-    }
-  ]
-}
-</pre
-          >
-        </section>
-
-        <!-- Container for layout -->
-        <div class="flex-container">
-          <!-- Left Section: Explanation and Customization -->
           <div class="info-sections">
             <div class="dropdown">
               <h3 onclick="toggleDropdown('key-fields-dropdown')">
@@ -380,12 +288,116 @@
             </div>
           </div>
 
-          <!-- Right Section: JSON Template -->
-          <div id="json-template" class="template-section">
-            <h2 class="upload-title">STAC-Conform JSON-Template:</h2>
-            <p>Ensure your JSON file follows this structure:</p>
-            <section class="sample-section">
-              <pre class="sample-json">
+      <!-- Example Collection and Example Item side-by-side with Copy and Download -->
+      <section class="bottom-examples-container" style="margin-top: 50px;">
+        <h2 class="text-center mb-4">STAC JSON Examples</h2>
+        <div class="d-flex justify-content-around flex-wrap">
+          <!-- Example Collection Section -->
+          <div class="example-collection p-3 border" style="flex: 1; min-width: 45%; margin: 10px;">
+            <h3>Example STAC Collection</h3>
+            <p>This example shows how a STAC-compliant ML model collection can be structured:</p>
+            <div class="button-group mb-2">
+              <button class="btn btn-secondary" onclick="copyToClipboard('collection-json')">Copy</button>
+              <button class="btn btn-primary" onclick="downloadJSON('collection.json', 'collection-json')">Download</button>
+            </div>
+            <details>
+              <summary><strong>View Example Collection</strong></summary>
+              <pre id="collection-json" class="sample-json">
+                    {
+                      "stac_version": "1.0.0",
+                      "stac_extensions": [
+                        "https://stac-extensions.github.io/item-assets/v1.0.0/schema.json"
+                      ],
+                      "type": "Collection",
+                      "id": "ml-model-examples",
+                      "title": "Machine Learning Model examples",
+                      "description": "Collection of items contained in the Machine Learning Model examples.",
+                      "license": "Apache-2.0",
+                      "extent": {
+                        "spatial": {
+                          "bbox": [
+                            [
+                              -7.882190080512502,
+                              37.13739173208318,
+                              27.911651652899923,
+                              58.21798141355221
+                            ]
+                          ]
+                        },
+                        "temporal": {
+                          "interval": [
+                            [
+                              "1900-01-01T00:00:00Z",
+                              "9999-12-31T23:59:59Z"
+                            ]
+                          ]
+                        }
+                      },
+                      "item_assets": {
+                        "weights": {
+                          "title": "model weights",
+                          "roles": [
+                            "mlm:model",
+                            "mlm:weights"
+                          ]
+                        }
+                      },
+                      "summaries": {
+                        "datetime": {
+                          "minimum": "1900-01-01T00:00:00Z",
+                          "maximum": "9999-12-31T23:59:59Z"
+                        }
+                      },
+                      "links": [
+                        {
+                          "href": "collection.json",
+                          "rel": "self"
+                        },
+                        {
+                          "href": "item_basic.json",
+                          "rel": "item"
+                        },
+                        {
+                          "href": "item_bands_expression.json",
+                          "rel": "item"
+                        },
+                        {
+                          "href": "item_eo_bands.json",
+                          "rel": "item"
+                        },
+                        {
+                          "href": "item_eo_and_raster_bands.json",
+                          "rel": "item"
+                        },
+                        {
+                          "href": "item_eo_bands_summarized.json",
+                          "rel": "item"
+                        },
+                        {
+                          "href": "item_raster_bands.json",
+                          "rel": "item"
+                        },
+                        {
+                          "href": "item_multi_io.json",
+                          "rel": "item"
+                        }
+                      ]
+                    }
+                    </pre>
+                  </details>
+                </div>
+
+    <!-- Example Item Section -->
+    <div class="example-item p-3 border" style="flex: 1; min-width: 45%; margin: 10px;">
+      <h3>Example STAC Item</h3>
+      <p>This example shows how a STAC-compliant ML model Item can be structured:</p>
+      <div class="button-group mb-2">
+        <button class="btn btn-secondary" onclick="copyToClipboard('item-json')">Copy</button>
+        <button class="btn btn-primary" onclick="downloadJSON('item.json', 'item-json')">Download</button>
+      </div>
+      <details>
+        <summary><strong>View Example Item</strong></summary>
+        <pre id="item-json" class="sample-json">
         {
           "type": "Feature",
           "stac_version": "1.0.0",
@@ -509,9 +521,11 @@
             "https://stac-extensions.github.io/eo/v1.1.0/schema.json"
           ]
         }        
-      </pre
-              >
-            </section>
+      </pre>
+    </details>
+  </div>
+</div>
+</section>
           </div>
         </div>
       </div>
@@ -722,7 +736,7 @@
                 required
               ></textarea>
             </div>
-            <!-- Versteckte Felder für zusätzliche Daten -->
+            <!-- Hidden fields for additional data -->
             <input type="hidden" id="from_name" name="from_name" />
             <input type="hidden" id="to_name" name="to_name" value="HuggingEarth" />
             <button type="submit" class="btn-submit">Send Message</button>

@@ -1,6 +1,11 @@
 ////////////////////////////////////////////
 // Q&A Toggle Animation
+////////////////////////////////////////////
+
 document.addEventListener("DOMContentLoaded", () => {
+  /**
+   * Toggles the FAQ answers when clicking on questions.
+   */
   const faqItems = document.querySelectorAll(".faq-item");
 
   faqItems.forEach((item) => {
@@ -10,43 +15,50 @@ document.addEventListener("DOMContentLoaded", () => {
     question.addEventListener("click", () => {
       const isOpen = item.classList.contains("open");
 
-      // Schließe alle offenen FAQ-Einträge
+      // Close all open FAQ items.
       faqItems.forEach((i) => {
         i.classList.remove("open");
         i.querySelector(".faq-answer").style.maxHeight = null;
       });
 
-      // Öffne den aktuellen Eintrag, falls er nicht bereits geöffnet ist
+      // Open the clicked item if it was not already open.
       if (!isOpen) {
         item.classList.add("open");
-        answer.style.maxHeight = answer.scrollHeight + "px"; // Setze die maximale Höhe auf den Inhalt
+        answer.style.maxHeight = answer.scrollHeight + "px"; // Set max height to the scrollable height.
       }
     });
   });
 });
 
 ////////////////////////////////////////////
-// EmailJS initialisieren
-emailjs.init("IVnkcCqedyLZPnBOn"); // Ersetze "IVnkcCqedyLZPnBOn" mit deinem Public Key
+// EmailJS Initialization
+////////////////////////////////////////////
 
-// Formular-Handler
+/**
+ * Initializes EmailJS with the public key.
+ */
+emailjs.init("IVnkcCqedyLZPnBOn"); // Replace "IVnkcCqedyLZPnBOn" with your actual public key.
+
+/**
+ * Handles form submission for sending messages via EmailJS.
+ */
 document.getElementById("contact-form").addEventListener("submit", function (event) {
-  event.preventDefault(); // Verhindert Standardverhalten des Formulars (Seiten-Reload)
+  event.preventDefault(); // Prevents the default form submission behavior.
 
-  const status = document.getElementById("form-status"); // Statusnachricht
-  const form = this; // Das aktuelle Formular
+  const status = document.getElementById("form-status"); // Status message element.
+  const form = this; // Reference to the form element.
 
-  // Setze das Feld from_name mit der E-Mail-Adresse aus dem Formular
+  // Set the from_name field with the email address from the form.
   document.getElementById("from_name").value = document.getElementById("from_email").value;
 
-  // EmailJS sendet die Daten
+  // Send the form data using EmailJS.
   emailjs
-    .sendForm("service_v29cusi", "template_yyg0558", form) // Ersetze service_xxx123 und template_abc456
+    .sendForm("service_v29cusi", "template_yyg0558", form) // Replace "service_v29cusi" and "template_yyg0558" with your actual service and template IDs.
     .then(
       function () {
         status.textContent = "Message sent successfully!";
         status.style.color = "green";
-        form.reset(); // Formular zurücksetzen
+        form.reset(); // Reset the form fields.
       },
       function (error) {
         status.textContent = "Failed to send message. Please try again.";
@@ -58,26 +70,36 @@ document.getElementById("contact-form").addEventListener("submit", function (eve
 
 ////////////////////////////////////////////
 // Tutorial Navbar Tab Switching
+////////////////////////////////////////////
+
 document.addEventListener("DOMContentLoaded", function () {
+  /**
+   * Handles tab switching in the tutorial navigation.
+   */
   const navLinks = document.querySelectorAll(".product-navbar nav ul li a");
   const tabContents = document.querySelectorAll(".content-section");
 
-  // Funktion, um alle Tab-Inhalte auszublenden
+  /**
+   * Hides all tab content sections.
+   */
   function hideAllTabs() {
     tabContents.forEach((content) => {
-      content.style.display = "none"; // Alle Inhalte verstecken
+      content.style.display = "none"; // Hide all tab contents.
     });
   }
 
-  // Funktion, um den entsprechenden Tab-Inhalt anzuzeigen
+  /**
+   * Shows the content of the specified tab.
+   * @param {string} tabId - The ID of the tab to show.
+   */
   function showTabContent(tabId) {
     const contentToShow = document.querySelector(`#${tabId}`);
     if (contentToShow) {
-      contentToShow.style.display = "block"; // Gewünschten Inhalt anzeigen
+      contentToShow.style.display = "block"; // Display the requested tab content.
     }
   }
 
-  // Standardmäßig den ersten Tab aktivieren und seinen Inhalt anzeigen
+  // Activate the first tab and show its content by default.
   const defaultTab = document.querySelector(".product-navbar nav ul li a");
   if (defaultTab) {
     defaultTab.classList.add("active");
@@ -85,18 +107,18 @@ document.addEventListener("DOMContentLoaded", function () {
     showTabContent(defaultTabId);
   }
 
-  // Ereignis-Listener für Klicks auf die Navigationslinks
+  // Add click event listeners to the navigation links.
   navLinks.forEach((link) => {
     link.addEventListener("click", function (event) {
-      event.preventDefault(); // Verhindert das Standardverhalten des Links
+      event.preventDefault(); // Prevent default anchor behavior.
 
-      // Entfernt die Klasse "active" von allen Links
+      // Remove the "active" class from all links.
       navLinks.forEach((nav) => nav.classList.remove("active"));
 
-      // Fügt die Klasse "active" zum angeklickten Link hinzu
+      // Add the "active" class to the clicked link.
       this.classList.add("active");
 
-      // Tab-Inhalte umschalten
+      // Switch tab content.
       hideAllTabs();
       const targetTab = this.getAttribute("id").replace("tab-", "");
       showTabContent(targetTab);
@@ -105,73 +127,94 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 ////////////////////////////////////////////
-/////////////////TEST///////////////////////
+// JSON Examples - Copy and Download
 ////////////////////////////////////////////
-/*
-console.error = function () {}; // Nichts tun: Unterdrückt alle Fehler
-console.log = function () {};
-console.warn = function () {}; 
+
+/**
+ * Copies JSON content to the clipboard.
+ * @param {string} elementId - The ID of the element containing the JSON content.
  */
+function copyToClipboard(elementId) {
+  const text = document.getElementById(elementId).innerText.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Copied to clipboard!");
+  }).catch(err => {
+    alert("Failed to copy: " + err);
+  });
+}
 
-// const originalConsoleError = console.error;
-
-/*
-console.error = function (...args) {
-  if (args[0]?.includes("runtime.lastError")) {
-    // Ignoriere nur Fehlermeldungen mit "runtime.lastError"
+/**
+ * Downloads JSON content as a file.
+ * @param {string} filename - The name of the file to be downloaded.
+ * @param {string} elementId - The ID of the element containing the JSON content.
+ */
+function downloadJSON(filename, elementId) {
+  const preElement = document.getElementById(elementId);
+  if (!preElement) {
+    alert("Element not found.");
     return;
   }
-  //originalConsoleError.apply(console, args); // Alle anderen Fehler weiterhin ausgeben
-};
+  
+  // Extract the raw text content.
+  const text = preElement.textContent.trim();
+  
+  try {
+    // Validate and parse JSON content.
+    const jsonData = JSON.parse(text);
+    const formattedJSON = JSON.stringify(jsonData, null, 2); // Format JSON with indentation.
 
-Object.defineProperty(window, "console", {
-  value: {
-    log: () => {},
-    warn: () => {},
-    error: () => {},
-    info: () => {},
-    debug: () => {},
-  },
-  configurable: false,
-  writable: false,
-});
-*/
+    const blob = new Blob([formattedJSON], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (error) {
+    alert("Invalid JSON format. Please check your content.");
+    console.error("JSON Parse Error:", error);
+  }
+}
 
-//////////////////////////////////////////////////////////////////
-/////////////////////SCROLL///////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-// Füge einen Event-Listener nur für den "Contact Us"-Link hinzu
+////////////////////////////////////////////
+// Smooth Scroll for "Contact Us" Link
+////////////////////////////////////////////
+
 document.getElementById("contact-link").addEventListener("click", function (event) {
-  event.preventDefault(); // Verhindert das Standardverhalten des Links
+  event.preventDefault(); // Prevent default link behavior.
 
-  // Aktiviere den Tab "q-and-a"
+  // Activate the "Q&A" tab.
   document.getElementById("tab-q-and-a").classList.add("active");
   document.getElementById("q-and-a").style.display = "block";
 
-  // Deaktiviere andere Tabs
+  // Deactivate other tabs.
   document.querySelectorAll(".content-section").forEach((section) => {
     if (section.id !== "q-and-a") {
       section.style.display = "none";
     }
   });
 
-  // Scroll zur gewünschten Stelle
+  // Scroll to the "More Questions" section smoothly.
   const target = document.getElementById("more-questions");
   if (target) {
     setTimeout(() => {
       target.scrollIntoView({ behavior: "smooth" });
-    }, 200); // Leichte Verzögerung für ein besseres Scroll-Erlebnis
+    }, 200); // Slight delay for better scroll experience.
   }
 });
 
-// Event Listener für externe Links
+////////////////////////////////////////////
+// External Link Handling for Tabs
+////////////////////////////////////////////
+
 document.querySelectorAll('a[href^="tutorials.html#"]').forEach((link) => {
   link.addEventListener("click", function (event) {
-    const hash = this.href.split("#")[1]; // Extrahiere die ID aus dem Link
+    const hash = this.href.split("#")[1]; // Extract the ID from the link.
     const targetTab = document.getElementById(hash);
 
     if (targetTab) {
-      // Entferne "active" von allen Tabs und Sektionen
+      // Remove "active" class from all tabs and sections.
       document.querySelectorAll(".tutorial-nav-link").forEach((tab) => {
         tab.classList.remove("active");
       });
@@ -180,7 +223,7 @@ document.querySelectorAll('a[href^="tutorials.html#"]').forEach((link) => {
         section.style.display = "none";
       });
 
-      // Setze den aktuellen Tab und die zugehörige Sektion auf "active"
+      // Set the clicked tab and its corresponding section to "active".
       targetTab.classList.add("active");
       const targetSection = document.getElementById(hash.replace("tab-", ""));
       if (targetSection) {
@@ -190,10 +233,14 @@ document.querySelectorAll('a[href^="tutorials.html#"]').forEach((link) => {
   });
 });
 
+////////////////////////////////////////////
+// Scroll to JSON Example Section
+////////////////////////////////////////////
+
 document.getElementById("scroll-to-json").addEventListener("click", function (e) {
-  e.preventDefault(); // Standardverhalten verhindern
+  e.preventDefault(); // Prevent default anchor behavior.
   const target = document.getElementById("json-template");
   if (target) {
-    target.scrollIntoView({ behavior: "smooth" }); // Sanftes Scrollen
+    target.scrollIntoView({ behavior: "smooth" }); // Smooth scroll to the element.
   }
 });
