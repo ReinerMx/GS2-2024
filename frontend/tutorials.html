@@ -108,7 +108,7 @@
             </li>
             <li>
               <a href="#upload" id="tab-upload" class="tutorial-nav-link"
-                >Uploading Your Own Models</a
+                >Upload Your Own Models</a
               >
             </li>
             <li>
@@ -351,7 +351,7 @@
                           <li><strong>temporal.interval (required)</strong>: An array of time intervals, where each interval is an array of two elements <code>[start, end]</code>:
                             <ul>
                               <li><strong>start</strong>: The start time of the interval in <a href="https://datatracker.ietf.org/doc/html/rfc3339" target="_blank">RFC 3339</a> format (e.g., <code>2023-01-01T00:00:00Z</code>) or <code>null</code>.</li>
-                              <li><strong>end</strong>: The end time of the interval in RFC 3339 format or <code>null</code>.</li>
+                              <li><strong>end</strong>: The end time of the interval in <a href="https://datatracker.ietf.org/doc/html/rfc3339" target="_blank">RFC 3339</a> format or <code>null</code>.</li>
                             </ul>
                             Validation rules:
                             <ul>
@@ -619,8 +619,8 @@
                           <li>Format for <code>datetime</code>: <code>YYYY-MM-DDTHH:MM:SSZ</code> (e.g., <code>2023-01-01T00:00:00Z</code>).</li>
                           <li>If <code>datetime</code> is <code>null</code>, the following fields must be provided:
                             <ul>
-                              <li><code>start_datetime</code>: The start time in RFC 3339 format or <code>null</code>.</li>
-                              <li><code>end_datetime</code>: The end time in RFC 3339 format or <code>null</code>.</li>
+                              <li><code>start_datetime</code>: The start time in <a href="https://datatracker.ietf.org/doc/html/rfc3339" target="_blank">RFC 3339</a> format or <code>null</code>.</li>
+                              <li><code>end_datetime</code>: The end time in <a href="https://datatracker.ietf.org/doc/html/rfc3339" target="_blank">RFC 3339</a> format or <code>null</code>.</li>
                             </ul>
                           </li>
                           <li>If both <code>start_datetime</code> and <code>end_datetime</code> are provided, <code>start_datetime</code> must be less than or equal to <code>end_datetime</code>.</li>
