@@ -1108,47 +1108,55 @@
       </div>
 
       <!-- Python -->
-      <div
-        id="python"
-        class="content-section section-margin"
-        style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px"
-      >
+      <div id="python" class="content-section section-margin" style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px">
         <h2 class="section-title">Integrating with Python: A Step-by-Step Guide</h2>
         <p class="custom-paragraph">
-          Easily integrate machine learning models into your Python workflows by following these
-          steps:
+          Easily integrate machine learning models into your Python workflows by following these steps:
         </p>
         <div class="list-container">
           <ol class="custom-paragraph">
             <li>
-              <strong>Install Python:</strong> Ensure you have Python installed on your system. You
-              can download the latest version of
-              <a href="https://www.python.org/downloads/" target="_blank"><em>Python here</em></a
-              >.
+              <strong>Install Python:</strong> Ensure you have Python installed on your system. You can
+              download the latest version of <a href="https://www.python.org/downloads/" target="_blank"><em>Python here</em></a>.
             </li>
             <li>
-              <strong>Install the required STAC client:</strong> Use
-              <code>pip install pystac</code> for Python to set up the necessary tools.
+              <strong>Install the required Python libraries:</strong> Install `pystac` and `pystac-client`:
+              <pre><code>pip install pystac pystac-client</code></pre>
             </li>
             <li>
-              <strong>Download model metadata:</strong> Navigate to the
-              <a href="catalog.html"><em>Catalog page</em></a> to select and download the required
-              metadata.
+              <strong>Import the required libraries:</strong>
+              <pre><code>
+      import pystac
+      import requests
+      from pystac_client import Client
+              </code></pre>
             </li>
             <li>
-              <strong>Integrate the model:</strong> Use <code>pystac.Item()</code> to load and
-              manipulate the downloaded metadata for your workflows.
+              <strong>Connect to a STAC:</strong> Use the link to the STAC-model-data to connect to the catalog:
+              <pre><code>
+      catalog_url = "LINK"
+      client = Client.open(catalog_url)
+              </code></pre>
+            </li>
+            <li>
+              <strong>Filter and search the catalog:</strong> Search the catalog for relevant data:
+              <pre><code>
+      search = client.search(
+          collections=["collection-id"],
+          bbox=[-180, -90, 180, 90],
+          datetime="2023-01-01/2023-12-31"
+      )
+      items = list(search.get_items())
+      for item in items:
+          print(item.id, item.properties)
+              </code></pre>
             </li>
           </ol>
         </div>
       </div>
 
       <!-- R -->
-      <div
-        id="r"
-        class="content-section section-margin"
-        style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px"
-      >
+      <div id="r" class="content-section section-margin" style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px">
         <h2 class="section-title">Integrating with R: A Step-by-Step Guide</h2>
         <p class="custom-paragraph">
           Easily integrate machine learning models into your R workflows by following these steps:
@@ -1157,22 +1165,28 @@
           <ol class="custom-paragraph">
             <li>
               <strong>Install R:</strong> Ensure you have R installed on your system. You can
-              download the latest version of
-              <a href="https://cran.r-project.org/" target="_blank"><em>R here</em></a
-              >.
+              download the latest version of <a href="https://cran.r-project.org/" target="_blank"><em>R here</em></a>.
             </li>
             <li>
-              <strong>Install the required STAC client:</strong> Use
-              <code>install.packages('rstac')</code> for R to set up the necessary tools.
+              <strong>Install the required STAC client:</strong> Use the following command:
+              <pre><code>install.packages("rstac")</code></pre>
+              Then load the package:
+              <pre><code>library(rstac)</code></pre>
             </li>
             <li>
-              <strong>Download model metadata:</strong> Navigate to the
-              <a href="catalog.html"><em>Catalog page</em></a> to select and download the required
-              metadata.
+              <strong>Connect to a STAC:</strong> Use the link to the STAC-model-data to connect to the catalog:
+              <pre><code>
+      stac <- stac("LINK")
+              </code></pre>
             </li>
             <li>
-              <strong>Integrate the model:</strong> Use <code>stac_read()</code> to load and
-              manipulate the downloaded metadata for your workflows.
+              <strong>Filter and search the catalog:</strong> Query the catalog for relevant data:
+              <pre><code>
+      results <- stac %>%
+        stac_search(collections = "collection-id", bbox = c(-180, -90, 180, 90)) %>%
+        get_request()
+      print(results$features)
+              </code></pre>
             </li>
           </ol>
         </div>
