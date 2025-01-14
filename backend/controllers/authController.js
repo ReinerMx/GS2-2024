@@ -1,113 +1,113 @@
-const User = require('../models/User'); // Importiere das User-Modell
-const bcrypt = require('bcryptjs'); // Für Passwort-Hashing
-const jwt = require('jsonwebtoken'); // Für Token-Generierung
+const User = require('../models/User'); // Import the User model
+const bcrypt = require('bcryptjs'); // For password hashing
+const jwt = require('jsonwebtoken'); // For token generation
 
-// Registrierung eines neuen Benutzers
+// Register a new user
 exports.register = async (req, res) => {
   try {
-    console.log("Registrierungsdaten empfangen:", req.body);
+    console.log("Registration data received:", req.body);
 
     const { username, email, password } = req.body;
 
-    // Eingabedaten validieren
+    // Validate input data
     if (!username || !email || !password) {
-      console.error("Fehlende Eingabedaten:", { username, email, password });
-      return res.status(400).json({ message: 'Alle Felder sind erforderlich.' });
+      console.error("Missing input data:", { username, email, password });
+      return res.status(400).json({ message: 'All fields are required.' });
     }
 
-    // Überprüfen, ob die E-Mail bereits existiert
+    // Check if the email already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      console.error("Benutzer existiert bereits:", existingUser);
-      return res.status(400).json({ message: 'E-Mail bereits registriert.' });
+      console.error("User already exists:", existingUser);
+      return res.status(400).json({ message: 'Email is already registered.' });
     }
 
-    // Passwort hashen
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("Gehashtes Passwort:", hashedPassword);
+    console.log("Hashed password:", hashedPassword);
 
-    // Benutzer erstellen
+    // Create a new user
     const newUser = await User.create({ username, email, password: hashedPassword });
-    console.log("Benutzer erfolgreich erstellt:", newUser);
+    console.log("User successfully created:", newUser);
 
-    res.status(201).json({ message: 'Benutzer erfolgreich registriert.' });
+    res.status(201).json({ message: 'User successfully registered.' });
   } catch (error) {
-    console.error("Fehler bei der Registrierung:", error);
-    res.status(500).json({ error: 'Interner Serverfehler.' });
+    console.error("Error during registration:", error);
+    res.status(500).json({ error: 'Internal server error.' });
   }
 };
 
-// Benutzer-Login
+// User login
 exports.login = async (req, res) => {
   try {
-    console.log("Login-Daten empfangen:", req.body);
+    console.log("Login data received:", req.body);
 
     const { email, password } = req.body;
 
-    // Eingabedaten validieren
+    // Validate input data
     if (!email || !password) {
-      console.error("Fehlende Eingabedaten:", { email, password });
-      return res.status(400).json({ message: 'E-Mail und Passwort sind erforderlich.' });
+      console.error("Missing input data:", { email, password });
+      return res.status(400).json({ message: 'Email and password are required.' });
     }
 
-    // Benutzer finden
+    // Find the user by email
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      console.error("Benutzer nicht gefunden:", email);
-      return res.status(401).json({ message: 'Ungültige Anmeldedaten.' });
+      console.error("User not found:", email);
+      return res.status(401).json({ message: 'Invalid login credentials.' });
     }
 
-    console.log("Benutzer gefunden:", user);
+    console.log("User found:", user);
 
-    // Passwort vergleichen
+    // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log("Passwortvergleich erfolgreich:", isMatch);
+    console.log("Password comparison successful:", isMatch);
 
     if (!isMatch) {
-      return res.status(401).json({ message: 'Ungültige Anmeldedaten.' });
+      return res.status(401).json({ message: 'Invalid login credentials.' });
     }
 
-    // JWT-Token generieren
+    // Generate a JWT token
     if (!process.env.JWT_SECRET) {
-      console.error("JWT_SECRET fehlt in der .env-Datei");
-      throw new Error('JWT_SECRET ist nicht definiert.');
+      console.error("JWT_SECRET is missing in the .env file");
+      throw new Error('JWT_SECRET is not defined.');
     }
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    console.log("Token erfolgreich generiert:", token);
+    console.log("Token successfully generated:", token);
 
     res.json({ token });
   } catch (error) {
-    console.error("Fehler beim Login:", error);
-    res.status(500).json({ error: 'Interner Serverfehler.' });
+    console.error("Error during login:", error);
+    res.status(500).json({ error: 'Internal server error.' });
   }
 };
 
-// Benutzerüberprüfung 
+// Verify user token 
 exports.verifyToken = async (req, res) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '');
 
     if (!token) {
-      return res.status(401).json({ message: 'Kein Token bereitgestellt.' });
+      return res.status(401).json({ message: 'No token provided.' });
     }
 
     if (!process.env.JWT_SECRET) {
-      console.error("JWT_SECRET fehlt in der .env-Datei");
-      throw new Error('JWT_SECRET ist nicht definiert.');
+      console.error("JWT_SECRET is missing in the .env file");
+      throw new Error('JWT_SECRET is not defined.');
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Token erfolgreich verifiziert:", decoded);
+    console.log("Token successfully verified:", decoded);
 
     const user = await User.findByPk(decoded.userId);
     if (!user) {
-      return res.status(404).json({ message: 'Benutzer nicht gefunden.' });
+      return res.status(404).json({ message: 'User not found.' });
     }
 
-    res.status(200).json({ message: 'Token ist gültig.', user });
+    res.status(200).json({ message: 'Token is valid.', user });
   } catch (error) {
-    console.error("Fehler bei der Token-Verifizierung:", error);
-    res.status(401).json({ message: 'Ungültiger Token.' });
+    console.error("Error during token verification:", error);
+    res.status(401).json({ message: 'Invalid token.' });
   }
 };
