@@ -158,9 +158,9 @@ body.dark-mode .slider-section {
 }
 
 body.dark-mode .filter-section label {
-    color: #d1e1e8; /* Helle Schrift für Labels */
+    color: #2d828e; /* Helle Schrift für Labels */
 }
 
 body.dark-mode .filter-section span {
-    color: #f8f9fa; /* Helle Schrift für zusätzliche Beschreibungen */
+    color: #555; /* Helle Schrift für zusätzliche Beschreibungen */
 }

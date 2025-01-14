@@ -31,7 +31,7 @@ function enableDarkMode(body, nav, footer) {
 
   document
     .querySelectorAll(
-      "h1, h2, h3, p, .content-section, .faq-grid, .grid-item, .license-section, .upload-title"
+      "h1, h2, h3, p, .content-section, .faq-grid, .grid-item, .license-section, .upload-title, .stac-details, .example-card, .bg-light, .editor-toolbar"
     )
     .forEach((el) => {
       el.classList.add("dark-mode");
@@ -50,7 +50,7 @@ function disableDarkMode(body, nav, footer) {
 
   document
     .querySelectorAll(
-      "h1, h2, h3, p, .content-section, .faq-grid, .grid-item, .license-section, .upload-title"
+      "h1, h2, h3, p, .content-section, .faq-grid, .grid-item, .license-section, .upload-title, .stac-details, .example-card, .bg-light, .editor-toolbar"
     )
     .forEach((el) => {
       el.classList.remove("dark-mode");

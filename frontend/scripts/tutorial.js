@@ -136,11 +136,14 @@ document.addEventListener("DOMContentLoaded", function () {
  */
 function copyToClipboard(elementId) {
   const text = document.getElementById(elementId).innerText.trim();
-  navigator.clipboard.writeText(text).then(() => {
-    alert("Copied to clipboard!");
-  }).catch(err => {
-    alert("Failed to copy: " + err);
-  });
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      alert("Copied to clipboard!");
+    })
+    .catch((err) => {
+      alert("Failed to copy: " + err);
+    });
 }
 
 /**
@@ -154,10 +157,10 @@ function downloadJSON(filename, elementId) {
     alert("Element not found.");
     return;
   }
-  
+
   // Extract the raw text content.
   const text = preElement.textContent.trim();
-  
+
   try {
     // Validate and parse JSON content.
     const jsonData = JSON.parse(text);
@@ -233,3 +236,48 @@ document.querySelectorAll('a[href^="tutorials.html#"]').forEach((link) => {
   });
 });
 
+////////////////////////////////////////////
+// Responsive Tutorial Navigation (zusammenfalten)
+////////////////////////////////////////////
+document.addEventListener("DOMContentLoaded", () => {
+  const navLinks = document.querySelectorAll(".tutorial-nav-link");
+  const tabContents = document.querySelectorAll(".content-section");
+
+  // Verstecke alle Inhalte
+  function hideAllTabs() {
+    tabContents.forEach((content) => {
+      content.style.display = "none";
+    });
+  }
+
+  // Zeige spezifischen Tab-Inhalt
+  function showTab(tabId) {
+    const tabContent = document.querySelector(`#${tabId}`);
+    if (tabContent) tabContent.style.display = "block";
+  }
+
+  // Event Listener für alle Links
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      const tabId = link.getAttribute("href").replace("#", ""); // Extrahiere ID
+
+      // Entferne "active" von allen Links
+      navLinks.forEach((nav) => nav.classList.remove("active"));
+
+      // Setze aktuellen Link aktiv
+      link.classList.add("active");
+
+      // Steuerung der Inhalte
+      hideAllTabs();
+      showTab(tabId);
+    });
+  });
+
+  // Standard: Erster Tab aktiv
+  if (navLinks.length > 0) {
+    navLinks[0].classList.add("active");
+    showTab(navLinks[0].getAttribute("href").replace("#", ""));
+  }
+});

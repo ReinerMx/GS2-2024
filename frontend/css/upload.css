@@ -102,3 +102,23 @@
     color: #155724;
   }
   
+  /* Dark Mode */
+  /* Drag-and-Drop Zone */
+  .dark-mode .drop-zone p {
+    color: #f8f9fa; /* Helle Farbe für den Text im Dark Mode */
+  }
+  
+/* Dark Mode für Markdown-Editor */
+.dark-mode .editor-toolbar a {
+  color: #f8f9fa !important; /* Weiße Farbe für Symbole */
+  background-color: transparent !important; /* Transparenter Hintergrund */
+}
+
+.dark-mode .editor-toolbar a:hover {
+  color: #d1e1e8 !important; /* Helleres Grau für Hover */
+  background-color: #495057 !important; /* Dunkler Hintergrund bei Hover */
+}
+
+.dark-mode .editor-toolbar i.separator {
+  color: #6c757d !important; /* Mittelgrau für Trenner */
+}

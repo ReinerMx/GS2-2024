@@ -118,6 +118,111 @@ p {
     margin-bottom: 1rem; /* Abstand unterhalb des Absatzes */
 }
 
+.section-margin {
+    margin: 30px 0; /* 30px margin above and below, 0 on the sides */
+}
+
+.tutorials-page {
+    padding: 40px 20px; /* Padding inside the page */
+    background-color: #f1f1f1; /* Light gray background */
+}
+
+.tutorials-page .main-section {
+    text-align: center; /* Center-align text */
+    padding: 40px 20px; /* Padding inside the section */
+    background-color: #e9ecef; /* Slightly darker gray for the main section */
+    color: #212529; /* Dark gray for text */
+}
+
+.tutorials-page h1 {
+    font-size: 2.8rem; /* Font size for the main heading */
+    font-weight: 700; /* Bold font weight */
+    margin-bottom: 20px; /* Space below the heading */
+    color: #212529; /* Dark gray for the heading */
+    text-shadow: none; /* Remove text shadow */
+}
+
+.tutorials-page p.lead {
+    font-size: 1.25rem; /* Font size for lead paragraph */
+    margin-bottom: 5px; /* Space below the paragraph */
+    color: #495057; /* Medium gray for the lead text */
+}
+
+.tutorials-page .custom-paragraph {
+    font-size: 1rem; /* Font size for paragraphs */
+    line-height: 1.6; /* Line height for readability */
+    color: #495057; /* Medium gray for paragraphs */
+    margin-bottom: 1rem; /* Space below paragraphs */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.tutorials-page .faq-container {
+    border: none; /* Remove border */
+    margin-top: 1rem; /* Maintain vertical spacing */
+    background-color: transparent; /* Optional: Remove background color */
+    box-shadow: none; /* Optional: Remove shadow */
+}
+
+.tutorials-page .faq-item {
+    background-color: #fff; /* White background for each FAQ item */
+    margin-bottom: 1rem; /* Space below each FAQ item */
+    padding: 1rem; /* Padding inside each FAQ item */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.tutorials-page .faq-question {
+    font-size: 1.1rem; /* Font size for questions */
+    color: #007bff; /* Blue color for questions */
+    background: none; /* No background */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor on hover */
+    width: 100%; /* Full width */
+    text-align: left; /* Left-align text */
+}
+
+.tutorials-page .faq-answer {
+    padding-left: 1rem; /* Padding on the left */
+    font-size: 1rem; /* Font size for answers */
+    color: #212529; /* Dark gray for answers */
+    display: none; /* Initially hidden */
+}
+
+.tutorials-page .faq-item button:focus + .faq-answer {
+    display: block; /* Show answer when question is focused */
+}
+
+.tutorials-page .faq-item button:focus {
+    outline: none; /* Remove outline */
+}
+
+.tutorial-description {
+    font-size: 16px;
+    color: #6c757d; /* Medium gray for text */
+    margin: 30px; /* Margin around the element */
+    text-align: center;
+    background-color: #f8f9fa; /* Light gray background */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Padding inside the element */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for 3D effect */
+}
+
+.tutorials-page .btn {
+    background-color: #343a40; /* Dark gray for button background */
+    color: #fff; /* White text for button */
+    font-size: 0.95rem; /* Font size for button */
+    border-radius: 20px; /* Rounded corners */
+    padding: 8px 20px; /* Padding inside the button */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+.tutorials-page .btn:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    box-shadow: 0 0 10px rgba(52, 58, 64, 0.3); /* Darker shadow on hover */
+}
+
+
+
 /* General FAQ Elements */
 .faq-item {
     margin-bottom: 15px; /* Space below each FAQ item */
@@ -247,48 +352,174 @@ p {
     color: #495057; /* Hellgrau für den Text der Beschreibung */
 }
 
+.dark-mode .tutorial-description strong {
+    color: #495057; /* Gold für hervorgehobenen Text */
+}
+
+
+.dark-mode .stac-details {
+    background-color: #2d2d2d; /* Dunkler Hintergrund */
+    color: #f8f9fa; /* Helles Grau für Text */
+    border: 1px solid #444; /* Dunkler Rahmen */
+    border-radius: 8px; /* Abgerundete Ecken */
+    padding: 20px; /* Innenabstand */
+}
+
+.dark-mode .stac-details h2.stac-main-summary {
+    color: #e8e8e8; /* Helles Grau für Hauptüberschrift */
+}
+
+.dark-mode .stac-details p.stac-intro-text {
+    color: #d1d1d1; /* Etwas dunkleres Grau für Text */
+}
+
+.dark-mode .example-card {
+    background-color: #343a40; /* Dunklerer Hintergrund */
+    color: #e8e8e8; /* Helles Grau für Text */
+    border: 1px solid #555; /* Mittelgrauer Rahmen */
+    border-radius: 8px; /* Abgerundete Ecken */
+    padding: 20px; /* Innenabstand */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtiler Schatten */
+}
+
+
+.dark-mode .bg-light strong {
+    color: #343a40; /* Helle Farbe für Hervorhebungen */
+}
+
+.dark-mode .bg-light ul {
+    padding-left: 20px; /* Optional: Linke Einrückung für die Liste */
+}
+
+.dark-mode .bg-light li {
+    color: #555; /* Helle Schriftfarbe für Listenelemente */
+}
+
+.dark-mode .bg-light code {
+    background-color: #f8f9fa; /* Dunkler Hintergrund für Inline-Code */
+    color: #e83e8c; /* Helle Schriftfarbe für Code */
+    padding: 2px 4px; /* Innenabstand für besseren Kontrast */
+    border-radius: 4px; /* Abgerundete Ecken */
+}
+.dark-mode .product-navbar nav ul li a.active {
+    color: #f8f9fa; /* Helle Farbe für aktiven Link */
+    border-bottom: 2px solid #2d828e; /* Helle Unterstreichung für aktiven Link */
+}
+
+.dark-mode .table-responsive p {
+    color: #f8f9fa; /* Helle Farbe für Text */
+}
+
+.dark-mode .table {
+    background-color: #343a40; /* Dunkler Hintergrund für Tabelle */
+    color: #f8f9fa; /* Helle Farbe für Tabellentext */
+    border-color: #495057; /* Mittelgrau für Rahmen */
+}
+
+.dark-mode .table-bordered {
+    border: 1px solid #495057; /* Mittelgrauer Rahmen für Tabelle */
+}
+
+.dark-mode .table-hover tbody tr:hover {
+    background-color: #495057; /* Mittelgrauer Hover-Effekt für Tabellenzeilen */
+    color: #f8f9fa; /* Helle Schriftfarbe bleibt erhalten */
+    border-color: #6c757d; /* Sichtbare Rahmenfarbe */
+}
+
+.dark-mode .table-hover tbody tr:hover td,
+.dark-mode .table-hover tbody tr:hover th {
+    color: #f8f9fa; /* Helle Farbe für Zellen bei Hover */
+    border-color: #6c757d; /* Rahmenfarbe für Zellen */
+}
+
+.dark-mode .table-hover {
+    border-collapse: collapse; /* Zusammenhängende Rahmen */
+}
+
+.dark-mode .table-hover tbody tr {
+    border: 1px solid #6c757d; /* Standard Rahmenfarbe */
+}
+
+
+.dark-mode .thead-light th {
+    background-color: #495057; /* Dunkler Hintergrund für Tabellenüberschrift */
+    color: #f8f9fa; /* Helle Farbe für Tabellenüberschrift */
+}
+
+.dark-mode td, 
+.dark-mode th {
+    border-color: #495057; /* Mittelgrau für Tabellenrahmen */
+}
+
+.dark-mode ul li {
+    color: #f8f9fa; /* Helle Farbe für Listenpunkte */
+}
+
+.dark-mode strong {
+    color: #f8f9fa; /* Helle Farbe für hervorgehobenen Text */
+}
+
 
 /**************++++++++++++++++++**************/
 /************** Tutorial Navbar **************/
 /**************++++++++++++++++++**************/
 
+/* Hauptlayout der Navbar */
 .product-navbar nav ul {
-    list-style: none; /* Remove list styling */
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
-    display: inline-flex; /* Inline flexbox for alignment */
-    gap: 20px; /* Space between items */
+    list-style: none; /* Entferne Listensymbole */
+    padding: 0; /* Entferne Padding */
+    margin: 0; /* Entferne Margin */
+    display: flex; /* Flexbox für horizontale Ausrichtung */
+    gap: 10px; /* Abstand zwischen den Elementen */
+    justify-content: center; /* Zentriere die Elemente */
+    flex-wrap: wrap; /* Zeilenumbruch bei schmalen Bildschirmen */
 }
 
+/* Navbar-Elemente */
 .product-navbar nav ul li {
-    display: inline; /* Inline display for list items */
+    display: inline-block; /* Inline-Block-Elemente */
 }
 
+/* Links in der Navbar */
 .product-navbar nav ul li a {
-    text-decoration: none; /* Remove underline */
-    font-weight: bold; /* Bold font weight */
-    font-size: 18px; /* Font size */
-    padding: 10px 15px; /* Padding inside the links */
-    color: #6c757d; /* Standard gray color */
-    transition: color 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
-    border-bottom: 2px solid transparent; /* Transparent bottom border */
+    text-decoration: none; /* Entferne Unterstreichung */
+    font-weight: bold; /* Fette Schrift */
+    font-size: 18px; /* Schriftgröße */
+    padding: 10px 15px; /* Innenabstand */
+    color: #6c757d; /* Standardfarbe */
+    border-bottom: 2px solid transparent; /* Transparente Unterstreichung */
+    transition: color 0.3s ease, border-color 0.3s ease; /* Sanfte Übergänge */
 }
 
-/* Active Tab */
+/* Aktiver Tab */
 .product-navbar nav ul li a.active {
-    color: #212529; /* Dark gray/black for active link */
-    border-bottom: 2px solid #212529; /* Dark bottom border for active link */
+    color: #212529; /* Dunkelgrau für aktiven Link */
+    border-bottom: 2px solid #212529; /* Dunkle Unterstreichung für aktiven Link */
 }
 
-/* Hover Effect */
+/* Hover-Effekt */
 .product-navbar nav ul li a:hover {
-    color: #495057; /* Medium gray on hover */
-    border-bottom: 2px solid #495057; /* Matching hover underline */
+    color: #495057; /* Mittelgrau beim Hover */
+    border-bottom: 2px solid #495057; /* Unterstreichung beim Hover */
 }
+
+/* ********** Responsivität ********** */
+@media (max-width: 768px) {
+    .product-navbar nav ul {
+        flex-direction: column; /* Ändere Ausrichtung auf vertikal */
+        align-items: center; /* Zentriere die Links */
+    }
+
+    .product-navbar nav ul li {
+        display: block; /* Blockelemente für vertikale Anordnung */
+        margin-bottom: 10px; /* Abstand zwischen den Links */
+    }
+}
+
 /* Standardmäßige Tab-Inhalte */
 .content-section {
     display: none; /* Standardmäßig unsichtbar */
-        border: 1px solid #ccc; /* Rahmen */
+    border: 1px solid #ccc; /* Rahmen */
     border-radius: 10px; /* Abgerundete Ecken */
     padding: 15px; /* Innenabstand */
     margin: 20px; /* Außenabstand */
@@ -299,184 +530,6 @@ p {
 /* Aktiver Tab-Inhalt wird angezeigt */
 .content-section:target {
     display: block; /* Zeigt den aktiven Tab */
-}
-
-
-.content-section h2 {
-    margin-bottom: 10px; /* Space below the heading */
-    font-size: 24px; /* Font size for the heading */
-}
-
-.section-margin {
-    margin: 30px 0; /* 30px margin above and below, 0 on the sides */
-}
-
-/* ********** Tutorials Page Styles ********** */
-/* New class for the tutorials page */
-.tutorials-page {
-    padding: 40px 20px; /* Padding inside the page */
-    background-color: #f1f1f1; /* Light gray background */
-}
-
-/* Overridden background color for the tutorials page */
-.tutorials-page .main-section {
-    background-color: #f8f9fa; /* Light gray background */
-}
-
-/* Main Section for Tutorials */
-.tutorials-page .main-section {
-    text-align: center; /* Center-align text */
-    padding: 40px 20px; /* Padding inside the section */
-    background-color: #e9ecef; /* Slightly darker gray for the main section */
-    color: #212529; /* Dark gray for text */
-}
-
-.tutorials-page h1 {
-    font-size: 2.8rem; /* Font size for the main heading */
-    font-weight: 700; /* Bold font weight */
-    margin-bottom: 20px; /* Space below the heading */
-    color: #212529; /* Dark gray for the heading */
-    text-shadow: none; /* Remove text shadow */
-}
-
-.tutorials-page p.lead {
-    font-size: 1.25rem; /* Font size for lead paragraph */
-    margin-bottom: 5px; /* Space below the paragraph */
-    color: #495057; /* Medium gray for the lead text */
-}
-
-/* Navbar in the Tutorials Page */
-.tutorials-page .product-navbar {
-    text-align: center; /* Center-align the navbar */
-    margin-bottom: 2rem; /* Space below the navbar */
-}
-
-.tutorials-page .product-navbar nav ul {
-    list-style: none; /* Remove list styling */
-    padding: 0; /* Remove padding */
-}
-
-.tutorials-page .product-navbar nav ul li {
-    display: inline; /* Inline display for list items */
-    margin: 0 10px; /* Horizontal margin between items */
-}
-
-.tutorials-page .product-navbar nav ul li a {
-    text-decoration: none; /* Remove underline */
-    color: #212529; /* Dark gray for navbar links */
-    font-weight: bold; /* Bold font weight */
-}
-
-.tutorials-page .product-navbar nav ul li a:hover {
-    text-decoration: underline; /* Underline on hover */
-}
-
-/* Der erste Tab wird standardmäßig angezeigt */
-#getting-started {
-    display: block; /* Standardinhalt anzeigen */
-}
-
-
-/* Content Section for Tutorials */
-.tutorials-page .content-section {
-    background-color: #fff; /* White background for sections */
-    padding: 2rem; /* Padding inside the section */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-    margin-bottom: 2rem; /* Space below the section */
-    color: #212529; /* Dark gray for text */
-}
-
-
-.tutorials-page .custom-paragraph {
-    font-size: 1rem; /* Font size for paragraphs */
-    line-height: 1.6; /* Line height for readability */
-    color: #495057; /* Medium gray for paragraphs */
-    margin-bottom: 1rem; /* Space below paragraphs */
-    border-radius: 5px; /* Rounded corners */
-}
-
-.tutorials-page .faq-container {
-    border: none; /* Entfernt den Rahmen */
-    margin-top: 1rem; /* Beibehaltung des vertikalen Abstands */
-    background-color: transparent; /* Optional: Entfernt Hintergrundfarbe */
-    box-shadow: none; /* Optional: Entfernt Schatten */
-}
-
-
-.tutorials-page .faq-item {
-    background-color: #fff; /* White background for each FAQ item */
-    margin-bottom: 1rem; /* Space below each FAQ item */
-    padding: 1rem; /* Padding inside each FAQ item */
-    border-radius: 5px; /* Rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-}
-
-.tutorials-page .faq-question {
-    font-size: 1.1rem; /* Font size for questions */
-    color: #007bff; /* Blue color for questions */
-    background: none; /* No background */
-    border: none; /* No border */
-    cursor: pointer; /* Pointer cursor on hover */
-    width: 100%; /* Full width */
-    text-align: left; /* Left-align text */
-}
-
-.tutorials-page .faq-answer {
-    padding-left: 1rem; /* Padding on the left */
-    font-size: 1rem; /* Font size for answers */
-    color: #212529; /* Dark gray for answers */
-    display: none; /* Initially hidden */
-}
-
-
-.tutorials-page .faq-item button:focus + .faq-answer {
-    display: block; /* Show answer when question is focused */
-}
-
-.tutorials-page .faq-item button:focus {
-    outline: none; /* Remove outline */
-}
-
-
-.tutorial-description {
-    font-size: 16px;
-    color: #6c757d;
-    margin: 30px; /* Abstand um das Element */
-    text-align: center;
-    background-color: #f8f9fa; /* Leichter Grauton */
-    border-radius: 10px; /* Abgerundete Ecken */
-    padding: 20px; /* Innenabstand */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Leichter Schatten für 3D-Effekt */
-}
-  
-/* Buttons */
-.tutorials-page .btn {
-    background-color: #343a40; /* Dark gray for button background */
-    color: #fff; /* White text for button */
-    font-size: 0.95rem; /* Font size for button */
-    border-radius: 20px; /* Rounded corners */
-    padding: 8px 20px; /* Padding inside the button */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
-}
-
-.tutorials-page .btn:hover {
-    transform: scale(1.05); /* Slightly enlarge on hover */
-    box-shadow: 0 0 10px rgba(52, 58, 64, 0.3); /* Darker shadow on hover */
-}
-
-/* ********** Responsiveness ********** */
-@media (max-width: 768px) {
-    .tutorials-page .content-section {
-        padding: 1rem; /* Reduced padding on smaller screens */
-    }
-
-    .tutorials-page .product-navbar nav ul li {
-        display: block; /* Block display for list items */
-        margin-bottom: 10px; /* Space below each item */
-    }
-        
-
 }
 
 
@@ -544,7 +597,7 @@ strong {
   }
   
   .example-card h3 {
-    color: #212529; /* Dark text for contrast */
+    color: #f8f9fa; /* Dark text for contrast */
     margin-bottom: 20px;
   }
   
