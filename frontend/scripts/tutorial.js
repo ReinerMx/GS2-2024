@@ -15,6 +15,14 @@ document.addEventListener("DOMContentLoaded", () => {
     question.addEventListener("click", () => {
       const isOpen = item.classList.contains("open");
 
+      // Add the clicked effect
+      question.classList.add("clicked");
+
+      // Remove the clicked effect after 1 second
+      setTimeout(() => {
+        question.classList.remove("clicked");
+      }, 100);
+
       // Close all open FAQ items.
       faqItems.forEach((i) => {
         i.classList.remove("open");
@@ -235,47 +243,46 @@ document.querySelectorAll('a[href^="tutorials.html#"]').forEach((link) => {
     }
   });
 });
-
 ////////////////////////////////////////////
-// Responsive Tutorial Navigation (zusammenfalten)
+// Responsive Tutorial Navigation (collapsible)
 ////////////////////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelectorAll(".tutorial-nav-link");
   const tabContents = document.querySelectorAll(".content-section");
 
-  // Verstecke alle Inhalte
+  // Hide all tab contents
   function hideAllTabs() {
     tabContents.forEach((content) => {
       content.style.display = "none";
     });
   }
 
-  // Zeige spezifischen Tab-Inhalt
+  // Show specific tab content
   function showTab(tabId) {
     const tabContent = document.querySelector(`#${tabId}`);
     if (tabContent) tabContent.style.display = "block";
   }
 
-  // Event Listener für alle Links
+  // Event listener for all links
   navLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
 
-      const tabId = link.getAttribute("href").replace("#", ""); // Extrahiere ID
+      const tabId = link.getAttribute("href").replace("#", ""); // Extract ID
 
-      // Entferne "active" von allen Links
+      // Remove "active" from all links
       navLinks.forEach((nav) => nav.classList.remove("active"));
 
-      // Setze aktuellen Link aktiv
+      // Set current link as active
       link.classList.add("active");
 
-      // Steuerung der Inhalte
+      // Control the contents
       hideAllTabs();
       showTab(tabId);
     });
   });
 
-  // Standard: Erster Tab aktiv
+  // Default: First tab active
   if (navLinks.length > 0) {
     navLinks[0].classList.add("active");
     showTab(navLinks[0].getAttribute("href").replace("#", ""));

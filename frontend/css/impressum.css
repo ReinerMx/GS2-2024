@@ -1,157 +1,142 @@
-/* ********** Impressum Section ********** */
-
-/* Email Icon in Impressum */
+/* Email Icon */
 .email-icon {
-    width: 20px; /* Set the width of the email icon */
-    vertical-align: middle; /* Align the icon vertically in the middle */
+    width: 20px;
+    vertical-align: middle;
 }
 
-/* GitHub Icon in Impressum */
+/* GitHub Icon */
 .github-icon {
-    width: 25px; /* Set the width of the github icon */
-    vertical-align: middle; /* Align the icon vertically in the middle */
-  }
-  
-
+    width: 25px;
+    vertical-align: middle;
+}
 
 .project-section {
-    display: flex; /* Place contents side by side */
-    justify-content: space-between; /* Space between the two columns */
-    gap: 2rem; /* Gap between the columns */
-    max-width: 1200px; /* Maximum width for the entire section */
-    margin: 0 auto; /* Center the section horizontally */
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .project-section .left-column {
-    flex: 1; /* Left column takes up available space */
+    flex: 1;
 }
 
 .project-section .right-column {
-    flex: 1; /* Right column takes up available space */
+    flex: 1;
     display: flex;
-    flex-direction: column; /* Arrange contents vertically */
-    justify-content: flex-end; /* Align elements to the bottom */
-    align-items: center; /* Center elements horizontally */
-    height: 100%; /* Full height of the right column */
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
 }
 
-/* Grid-Container für das GIF */
 .gif-container {
-    display: flex; /* Aktiviert Flexbox */
-    justify-content: center; /* Zentriert horizontal */
-    align-items: center; /* Zentriert vertikal */
-    height: 100%; /* Passt sich der gesamten Höhe des Grid-Elements an */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
-/* Stil für das GIF */
 .gif-style {
-    max-width: 100%; /* Passt die Breite an */
-    max-height: 300px; /* Begrenzt die maximale Höhe */
-    width: auto; /* Beibehaltung des Seitenverhältnisses */
-    height: auto; /* Anpassung der Höhe */
-    border-radius: 8px; /* Abgerundete Ecken */
+    max-width: 100%;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
 }
 
-
-
-
-/* Bei kleineren Bildschirmen */
+/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
     .project-section {
-        grid-template-columns: 1fr; /* Nur eine Spalte */
+        grid-template-columns: 1fr;
     }
 }
-/* Standard Grid Layout (Desktop) */
+
 .grid-section {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Zwei Spalten */
-    gap: 20px; /* Abstand zwischen den Elementen */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 }
 
-/* Responsive Grid Layout (Mobile) */
+/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
     .grid-section {
-        grid-template-columns: 1fr; /* Nur eine Spalte */
-        gap: 10px; /* Optional: Geringerer Abstand für mobile Geräte */
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
 }
 
-  
-  .grid-item {
-    background-color: #f8f9fa; /* Light gray background */
-    padding: 20px; /* Innenabstand */
-    border: 1px solid #ccc; /* Rahmen */
-    border-radius: 8px; /* Abgerundete Ecken */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Schatten */
-  }
-  
-  .grid-item img {
-    max-width: 100%; /* Responsive Bildgröße */
+.grid-item {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item img {
+    max-width: 100%;
     height: auto;
-  }
-  .license-section {
-    font-family: "Menlo", monospace; /* Schriftart für die Lizenz */
-    font-size: 0.65rem; /* Kleinere Schriftgröße */
-    line-height: 1.1; /* Kompakte Zeilenhöhe */
-    background-color: transparent; /* Kein Hintergrund */
+}
+
+.license-section {
+    font-family: "Menlo", monospace;
+    font-size: 0.65rem;
+    line-height: 1.1;
+    background-color: transparent;
 }
 
 .license-section h3 {
-    margin-bottom: 6px; /* Geringer Abstand zum Text darunter */
-    font-size: 0.8rem; /* Kleinere Schriftgröße für die Überschrift */
+    margin-bottom: 6px;
+    font-size: 0.8rem;
     font-weight: bold;
-    text-align: center; 
+    text-align: center;
 }
 
 .license-section p {
-    margin-bottom: 6px; /* Weniger Abstand zwischen Absätzen */
+    margin-bottom: 6px;
 }
 
-
-
-
-
-/*/////////////////////////////////////////////////////
-///////////////////////DARKMODE////////////////////////
-/////////////////////////////////////////////////////*/
+/* Dark mode styles */
 .dark-mode h1 {
-    color: #2d828e; /* Blauton passend zu Projektfarben */
+    color: #2d828e;
 }
 
 .dark-mode h3 {
-    color: #f8f9fa; /* Hellgrau für kleinere Überschriften */
+    color: #f8f9fa;
 }
 
 .dark-mode p {
-    color: #d1e1e8; /* Hellgrau für Absätze */
+    color: #d1e1e8;
 }
 
 .dark-mode .grid-item {
-    background-color: #343a40; /* Dunkleres Grau für Boxen */
-    border: 1px solid #495057; /* Mittelgrauer Rahmen */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtiler Schatten */
+    background-color: #343a40;
+    border: 1px solid #495057;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .dark-mode .license-section {
-    color: #d1e1e8; /* Hellgrau für Text */
-    background-color: #343a40; /* Dunkler Hintergrund */
+    color: #d1e1e8;
+    background-color: #343a40;
 }
 
 .dark-mode .license-section h3 {
-    color: #f8f9fa; /* Helles Grau für Überschrift */
+    color: #f8f9fa;
 }
 
 body.dark-mode {
-    background-color: #121212; /* Sehr dunkler Hintergrund */
-    color: #f8f9fa; /* Standardtextfarbe */
+    background-color: #121212;
+    color: #f8f9fa;
 }
 
 .content-section.dark-mode {
-    background-color: #2d2d2d; /* Hintergrund für Content Sections */
-    color: #d1e1e8; /* Textfarbe */
-  }
-  
+    background-color: #2d2d2d;
+    color: #d1e1e8;
+}
+
 .faq-grid.dark-mode {
-    background-color: #2d2d2d; /* Hintergrund für die FAQ-Grid */
-    border: 1px solid #444; /* Dunkler Rahmen */
-  }
+    background-color: #2d2d2d;
+    border: 1px solid #444;
+}

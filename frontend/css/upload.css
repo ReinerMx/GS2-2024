@@ -1,124 +1,120 @@
-/* ********** Upload page ********** */
+/* Upload page */
 
-/* General Styling */
-  
-  /* Heading */
-  .upload-title {
-    font-size: 30px;
-    font-weight: 500; /* Reduced boldness */
-    margin-bottom: 20px;
-    text-align: center;
-    color: #212529;
-  }
-  .dark-mode .upload-title {
-    color: #f8f9fa; /* Hellgrau für kleinere Überschriften */
+/* Heading */
+.upload-title {
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #212529;
 }
-  
-  /* Instructions */
-  .upload-instructions {
-    font-size: 16px;
-    color: #6c757d;
-    margin-bottom: 30px;
-    text-align: center;
-  }
-  
-  /* Drag-and-Drop Zone */
-  .drop-zone {
-    border: 2px solid #007bff; /* Dark blue border */
-    border-radius: 8px;
-    background-color: rgba(0, 123, 255, 0.1); /* Light blue transparent background */
-    padding: 30px;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-    margin-bottom: 15px;
-  }
-  
-  .drop-zone:hover {
-    background-color: rgba(0, 123, 255, 0.15); /* Slightly darker on hover */
-  }
-  
-  .drop-zone.dragging {
-    background-color: rgba(0, 123, 255, 0.2);
-    border-color: #0056b3; /* Darker blue on drag */
-  }
-  
-  .drop-zone p {
-    margin: 0;
-    font-size: 16px;
-    color: #343a40;
-  }
-  
-  .drop-zone .click-trigger,
-  .drop-zone .drag-label {
-    font-weight: 600; /* Slightly bold for consistency */
-    color: #0056b3; /* Dark blue */
-  }
-  
-  /* Text Input */
-  textarea {
-    border-radius: 4px; /* Slight rounding */
-    border: 1px solid #ced4da;
-    padding: 10px;
-    font-size: 14px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  textarea:focus {
-    border-color: #007bff;
-    box-shadow: 0px 2px 4px rgba(0, 123, 255, 0.2);
-    outline: none;
-  }
-  
-  /* Submit Button */
-  button {
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-    transform: scale(1.02);
-  }
-  
 
-  #statusMessage {
-    white-space: pre-line; 
-    font-size: 16px;
-    padding: 15px;
-    border-radius: 5px;
-  }
-  
-  .alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-  }
-  
-  .alert-success {
-    background-color: #d4edda;
-    color: #155724;
-  }
-  
-  /* Dark Mode */
-  /* Drag-and-Drop Zone */
-  .dark-mode .drop-zone p {
-    color: #f8f9fa; /* Helle Farbe für den Text im Dark Mode */
-  }
-  
-/* Dark Mode für Markdown-Editor */
+.dark-mode .upload-title {
+  color: #f8f9fa;
+}
+
+/* Instructions */
+.upload-instructions {
+  font-size: 16px;
+  color: #6c757d;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Drag-and-Drop Zone */
+.drop-zone {
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  background-color: rgba(0, 123, 255, 0.1);
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.drop-zone:hover {
+  background-color: rgba(0, 123, 255, 0.15);
+}
+
+.drop-zone.dragging {
+  background-color: rgba(0, 123, 255, 0.2);
+  border-color: #0056b3;
+}
+
+.drop-zone p {
+  margin: 0;
+  font-size: 16px;
+  color: #343a40;
+}
+
+.drop-zone .click-trigger,
+.drop-zone .drag-label {
+  font-weight: 600;
+  color: #0056b3;
+}
+
+/* Text Input */
+textarea {
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  padding: 10px;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0px 2px 4px rgba(0, 123, 255, 0.2);
+  outline: none;
+}
+
+/* Submit Button */
+button {
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.02);
+}
+
+#statusMessage {
+  white-space: pre-line;
+  font-size: 16px;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Dark Mode */
+.dark-mode .drop-zone p {
+  color: #f8f9fa;
+}
+
 .dark-mode .editor-toolbar a {
-  color: #f8f9fa !important; /* Weiße Farbe für Symbole */
-  background-color: transparent !important; /* Transparenter Hintergrund */
+  color: #f8f9fa !important;
+  background-color: transparent !important;
 }
 
 .dark-mode .editor-toolbar a:hover {
-  color: #d1e1e8 !important; /* Helleres Grau für Hover */
-  background-color: #495057 !important; /* Dunkler Hintergrund bei Hover */
+  color: #d1e1e8 !important;
+  background-color: #495057 !important;
 }
 
 .dark-mode .editor-toolbar i.separator {
-  color: #6c757d !important; /* Mittelgrau für Trenner */
+  color: #6c757d !important;
 }
