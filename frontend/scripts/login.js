@@ -1,28 +1,28 @@
 document.getElementById("loginForm").addEventListener("submit", async (event) => {
-  event.preventDefault(); // Verhindert das Standard-Formularverhalten
+  event.preventDefault(); // Prevent the default form submission behavior
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   try {
-    const response = await fetch('/api/users/login', { // Verwende die relative Route
+    const response = await fetch('/api/users/login', { // Use the relative route
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // JSON-Header für POST-Daten
+        "Content-Type": "application/json", // JSON header for POST data
       },
-      body: JSON.stringify({ email, password }), // Sende die Formulardaten als JSON
+      body: JSON.stringify({ email, password }), // Send the form data as JSON
     });
 
-    const result = await response.json(); // Verarbeite die Antwort
+    const result = await response.json(); // Process the response
     if (response.ok) {
-      localStorage.setItem("token", result.token); // Speichere das JWT-Token im Local Storage
-      alert(result.message || "Login erfolgreich!");
-      window.location.href = "account.html"; // Weiterleitung zur Account-Seite
+      localStorage.setItem("token", result.token); // Save the JWT token in local storage
+      alert(result.message || "Login successful!");
+      window.location.href = "account.html"; // Redirect to the account page
     } else {
-      alert(result.message || "Fehler beim Login. Bitte versuchen Sie es erneut.");
+      alert(result.message || "Login failed. Please try again.");
     }
   } catch (error) {
-    console.error(error); // Zeige Fehler in der Konsole
-    alert("Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.");
+    console.error(error); // Log the error in the console
+    alert("An error occurred. Please try again later.");
   }
 });

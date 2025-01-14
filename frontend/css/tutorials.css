@@ -557,10 +557,9 @@ strong {
     min-width: 350px;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.example-card h3 {
-    color: #f8f9fa;
+  }
+  
+  .example-card h3 {
     margin-bottom: 20px;
 }
 
