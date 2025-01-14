@@ -1,4 +1,1 @@
-Noch zu erstellende Seiten:
-(x) validation.html – Tutorial zur Validierung von Metadaten und JSON-Dateien
-(x) example-json.html – Seite mit JSON-Beispieldateien und Downloadoption
-( ) example-notebooks.html – Sammlung von Beispielnotebooks für Python und R zur Integration
+TODOS:
