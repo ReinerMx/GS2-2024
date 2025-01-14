@@ -30,7 +30,7 @@ console.log('Available sequelize methods:', Object.keys(sequelize));
  * @property {string|null} collection - The ID of the Collection this Item belongs to, if applicable.
  * @property {text|null} user_description - The user-provided description of the Item.
  * 
- * @see https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md#links
+ * @see https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md
  */
 const Item = sequelize.define('Item', {
   /**
@@ -154,7 +154,7 @@ const Item = sequelize.define('Item', {
           throw new Error("'properties' must be a non-empty JSON object.");
         }
   
-        // Prüfen, ob 'datetime' vorhanden ist, sonst setzen
+        // Check if 'datetime' exists; if not, set it to null
         if (!value.hasOwnProperty('datetime')) {
           console.warn("'properties' is missing 'datetime'. Setting it to null.");
           value.datetime = null;
@@ -162,7 +162,7 @@ const Item = sequelize.define('Item', {
   
         const datetime = value.datetime;
   
-        // Prüfen, ob 'datetime' null oder ein gültiges RFC 3339-Format ist
+        // Check if 'datetime' is null or a valid RFC 3339 format
         const rfc3339Regex = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?Z$/;
         const isValidTimestamp = (ts) =>
           ts === null || rfc3339Regex.test(ts);
@@ -172,7 +172,7 @@ const Item = sequelize.define('Item', {
           value.datetime = null;
         }
   
-        // Falls 'datetime' null ist, sicherstellen, dass 'start_datetime' und 'end_datetime' korrekt sind
+        // If 'datetime' is null, ensure 'start_datetime' and 'end_datetime' are valid
         if (datetime === null) {
           if (!value.start_datetime || !value.end_datetime) {
             console.warn(
@@ -182,7 +182,7 @@ const Item = sequelize.define('Item', {
             value.end_datetime = null;
           }
   
-          // Prüfen und korrigieren von 'start_datetime' und 'end_datetime'
+          // Validate and correct 'start_datetime' and 'end_datetime'
           if (!isValidTimestamp(value.start_datetime)) {
             console.warn(
               `'properties.start_datetime' is invalid. Setting it to null. Received: ${value.start_datetime}`
@@ -197,7 +197,7 @@ const Item = sequelize.define('Item', {
             value.end_datetime = null;
           }
   
-          // Validierung der Reihenfolge
+          // Validate that 'start_datetime' is not later than 'end_datetime'
           if (
             value.start_datetime &&
             value.end_datetime &&

@@ -30,7 +30,7 @@ const User = require('./User'); // Import the User model
  * @property {number|null} [user_id] - Optional. References the user ID of the creator or owner of the Collection.
  * @property {text|null} [user_description] - Optional. A user-provided description of the Collection.
  * 
- * @see https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#item-asset-definition-object
+ * @see https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md
  */
 const Collection = sequelize.define('Collection', {
     /**
