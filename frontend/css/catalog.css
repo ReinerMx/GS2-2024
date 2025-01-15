@@ -13,38 +13,43 @@
     color: #007bff;
     font-weight: 600;
     margin-bottom: 12px;
-    font-size: 18px; /* Larger font size for headings */
+    font-size: 18px;
 }
 
+/* Label Styling */
 .filter-section label {
     color: #555;
     font-weight: 400;
 }
 
+/* Additional Filters Container Styling */
 .additional-filters-container {
     background-color: #f7f7f7;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
     width: 100%;
-    margin-bottom: 30px; /* Larger space to the results */
+    margin-bottom: 30px;
 }
 
+/* Card Body Styling */
 .card-body {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Two equal columns */
-    gap: 20px; /* Space between columns */
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
     padding: 20px;
     background-color: #f7f7f7;
     border-radius: 8px;
 }
 
+/* Column Styling */
 .left-column, .right-column {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Space between categories */
+    gap: 15px;
 }
 
+/* Filter Category Styling */
 .filter-category {
     background-color: #ffffff;
     padding: 10px;
@@ -55,16 +60,17 @@
 
 .filter-category h6 {
     margin-bottom: 10px;
-    font-size: 16px; /* Larger font size for categories */
+    font-size: 16px;
     font-weight: 600;
 }
 
+/* Filter Item Styling */
 .filter-item {
     background-color: #f1f1f1;
     padding: 6px 12px;
     border-radius: 6px;
     border: 1px solid #ddd;
-    font-size: 14px; /* Slightly larger font size for filter items */
+    font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     display: inline-block;
@@ -73,12 +79,13 @@
 }
 
 .filter-item:hover {
-    background-color: #007bff; /* Light blue on hover */
-    color: white; /* White text on hover */
+    background-color: #007bff;
+    color: white;
 }
 
+/* Slider Section Styling */
 .slider-section {
-    grid-column: 1 / -1; /* Slider spans both columns */
+    grid-column: 1 / -1;
     padding-top: 15px;
     border-top: 1px solid #ddd;
     margin-top: 20px;
@@ -96,71 +103,70 @@
     font-weight: 500;
 }
 
+/* Responsive Styling */
 @media (max-width: 768px) {
     .card-body {
-        grid-template-columns: 1fr; /* Single column layout for small screens */
+        grid-template-columns: 1fr;
     }
 }
 
 .search-catalog-container {
     padding-top: 10px;
-    margin-top: 20px; /* Space below for clarity */
+    margin-top: 20px;
 }
 
-
-/* DARKMODE */
 /* Dark Mode Styles */
 body.dark-mode .filter-sidebar {
-    background-color: #2d2d2d; /* Dark background */
-    color: #f8f9fa; /* Light text */
-    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1); /* Adjusted shadow */
+    background-color: #2d2d2d;
+    color: #f8f9fa;
+    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
 }
 
 body.dark-mode .filter-sidebar h4, 
 body.dark-mode .filter-section h5 {
-    color: #d1e1e8; /* Light text for headings */
+    color: #d1e1e8;
 }
 
 body.dark-mode .additional-filters-container {
-    background-color: #343a40; /* Dark background */
-    border: 1px solid #444; /* Dark border */
-    color: #f8f9fa; /* Light text */
+    background-color: #343a40;
+    border: 1px solid #444;
+    color: #f8f9fa;
 }
 
 body.dark-mode .card-body {
-    background-color: #2d2d2d; /* Dark background */
-    color: #d1e1e8; /* Light text */
+    background-color: #2d2d2d;
+    color: #d1e1e8;
 }
 
 body.dark-mode .filter-category {
-    background-color: #3c3c3c; /* Dark background for categories */
-    border: 1px solid #555; /* Dark border */
-    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1); /* Subtle shadow */
+    background-color: #3c3c3c;
+    border: 1px solid #555;
+    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
 }
 
 body.dark-mode .filter-category h6 {
-    color: #f8f9fa; /* Light text for category names */
+    color: #f8f9fa;
 }
 
 body.dark-mode .filter-item {
-    background-color: #4c4c4c; /* Medium gray background for filter items */
-    border: 1px solid #666; /* Darker border */
-    color: #f8f9fa; /* Light text */
+    background-color: #4c4c4c;
+    border: 1px solid #666;
+    color: #f8f9fa;
 }
 
 body.dark-mode .filter-item:hover {
-    background-color: #007bff; /* Blue on hover */
-    color: #ffffff; /* White text on hover */
+    background-color: #007bff;
+    color: #ffffff;
 }
 
 body.dark-mode .slider-section {
-    border-top: 1px solid #555; /* Dark border */
+    border-top: 1px solid #555;
 }
 
 body.dark-mode .filter-section label {
-    color: #2d828e; /* Light text for labels */
+    color: #2d828e;
 }
 
 body.dark-mode .filter-section span {
-    color: #555; /* Light text for additional descriptions */
+    color: #555;
 }

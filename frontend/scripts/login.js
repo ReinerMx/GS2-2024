@@ -1,28 +1,35 @@
-document.getElementById("loginForm").addEventListener("submit", async (event) => {
-  event.preventDefault(); // Prevent the default form submission behavior
+/**
+ * Handles the login form submission by sending user credentials to the server.
+ *
+ * @event submit
+ * @async
+ * @param {Event} event - The form submission event, prevented from its default behavior.
+ */
+document
+  .getElementById("loginForm")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault(); // Prevent page reload on form submission.
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-  try {
-    const response = await fetch('/api/users/login', { // Use the relative route
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // JSON header for POST data
-      },
-      body: JSON.stringify({ email, password }), // Send the form data as JSON
-    });
+    try {
+      const response = await fetch("/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }), // Send login credentials as JSON.
+      });
 
-    const result = await response.json(); // Process the response
-    if (response.ok) {
-      localStorage.setItem("token", result.token); // Save the JWT token in local storage
-      alert(result.message || "Login successful!");
-      window.location.href = "account.html"; // Redirect to the account page
-    } else {
-      alert(result.message || "Login failed. Please try again.");
+      const result = await response.json();
+      if (response.ok) {
+        localStorage.setItem("token", result.token); // Store the authentication token.
+        alert(result.message || "Login successful!");
+        window.location.href = "account.html"; // Redirect to the account page.
+      } else {
+        alert(result.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error(error); // Log any errors during the process.
+      alert("An error occurred. Please try again later.");
     }
-  } catch (error) {
-    console.error(error); // Log the error in the console
-    alert("An error occurred. Please try again later.");
-  }
-});
+  });

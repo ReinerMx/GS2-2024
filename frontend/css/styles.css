@@ -1,5 +1,4 @@
-/* ********** Global Styles ********** */
-/* General font and layout settings */
+/* Global Styles */
 body {
     font-family: Arial, sans-serif;
 }
@@ -9,13 +8,12 @@ body {
     margin: auto;
 }
 
-/* List Container */
 .list-container {
-    margin-left: 20px; /* Indent the list container */
-    margin-right: 20px; /* Optional: right margin */
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
-/* ********** Buttons ********** */
+/* Buttons */
 .btn-primary {
     background-color: #007bff; 
     border-color: #007bff;
@@ -27,79 +25,72 @@ body {
     border-color: #0056b3;
 }
 
-/* ********** Autocomplete Styles ********** */
-/* Autocomplete List */
+/* Autocomplete Styles */
 .autocomplete {
-    display: none; /* Hidden by default */
-    position: absolute; /* Positioned relative to the input field */
-    z-index: 1000; /* Ensure visibility above other elements */
+    display: none;
+    position: absolute;
+    z-index: 1000;
     list-style-type: none;
     padding: 0;
     margin: 0;
     border: 1px solid #ddd;
     border-radius: 4px;
-    max-height: 200px; /* Limit the height for scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
-    width: 100%; /* Match the width of the input field */
-    top: 100%; /* Position directly below the input */
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+    top: 100%;
     left: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-    background-color: #f9f9f9; /* Light background color */
-    color: #333; /* Default text color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    color: #333;
 }
 
-/* Autocomplete Item */
 .autocomplete li {
-    padding: 10px; /* Padding for click area */
+    padding: 10px;
     cursor: pointer;
-    font-size: 14px; /* Consistent font size */
-    border-bottom: 1px solid #f0f0f0; /* Separator for items */
-    transition: background-color 0.2s ease, color 0.2s ease; /* Smooth hover effects */
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Hover Effect for Autocomplete Items */
 .autocomplete li:hover {
-    background-color: #cee5ff; /* Highlight on hover */
+    background-color: #cee5ff;
     color: black;
 }
 
-/* Show Autocomplete Dropdown When Input Is Focused or Has Text */
 #search-bar:focus + .autocomplete,
 #search-bar:not(:placeholder-shown) + .autocomplete {
-    display: block; /* Make the dropdown visible */
+    display: block;
 }
 
-/* Enhanced Autocomplete Item Layout */
 .autocomplete-item {
     display: flex;
-    flex-direction: column; /* Stack content vertically */
+    flex-direction: column;
     padding: 10px;
     cursor: pointer;
-    border-bottom: 1px solid #ddd; /* Divider for items */
+    border-bottom: 1px solid #ddd;
 }
 
 .autocomplete-item strong {
-    font-size: 14px; /* Highlighted text size */
-    margin-bottom: 5px; /* Spacing below title */
+    font-size: 14px;
+    margin-bottom: 5px;
 }
 
 .autocomplete-item small {
-    color: #666; /* Subdued color for additional info */
-    font-size: 12px; /* Smaller font for metadata */
+    color: #666;
+    font-size: 12px;
 }
 
-/* Hover Effect for Enhanced Autocomplete Items */
 .autocomplete-item:hover {
-    background-color: #f0f0f0; /* Subtle background change on hover */
+    background-color: #f0f0f0;
 }
 
-/* Highlighted Text */
 mark {
-    background-color: lightblue; /* Highlight color */
-    color: black; /* Ensure readable contrast */
+    background-color: lightblue;
+    color: black;
 }
 
-/* ********** Filters Below Search Bar ********** */
+/* Filters Below Search Bar */
 .filter-container {
     display: flex;
     flex-wrap: wrap;
@@ -134,51 +125,43 @@ mark {
     color: black;
 }
 
-/* ********** Dark Mode Styles ********** */
+/* Dark Mode Styles */
 body.dark-mode .autocomplete {
-    background-color: #333; /* Dark mode background */
-    color: #f9f9f9; /* Light text for dark mode */
-    border-color: #555; /* Darker border for dark mode */
+    background-color: #333;
+    color: #f9f9f9;
+    border-color: #555;
 }
 
 body.dark-mode .autocomplete li:hover {
-    background-color: #cee5ff; /* Adjusted hover background for dark mode */
-    color: white; /* Ensure text remains readable */
-}
-
-/* Individual autocomplete item hover in dark mode */
-body.dark-mode .autocomplete-item:hover {
-    background-color: #444; /* Slightly lighter than the dark mode background */
+    background-color: #cee5ff;
     color: white;
 }
 
-/* ********** Responsive Adjustments ********** */
+body.dark-mode .autocomplete-item:hover {
+    background-color: #444;
+    color: white;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
     .autocomplete {
-        max-width: calc(100vw - 20px); /* Prevent overflow on mobile */
-        left: 10px; /* Add padding for smaller screens */
+        max-width: calc(100vw - 20px);
+        left: 10px;
         right: 10px;
     }
 
     .model-item {
         padding: 10px;
-        font-size: 14px; /* Adjust font size for smaller screens */
+        font-size: 14px;
     }
 }
 
-/* ********** Debugging Helper Styles ********** */
-/* Use during debugging to visualize autocomplete */
+/* Debugging Helper Styles */
 .autocomplete {
-    outline: 1px solid rgba(0, 123, 255, 0.2); /* Light blue outline for debugging */
+    outline: 1px solid rgba(0, 123, 255, 0.2);
 }
 
-/* Hide the autocomplete dropdown by default */
-.autocomplete {
-    display: none; /* Ensures visibility only when triggered */
-}
-
-/* ********** Feature Section ********** */
-/* Styles for individual features */
+/* Feature Section */
 .feature {
     margin: 0 15px;
     padding: 20px;
@@ -186,9 +169,9 @@ body.dark-mode .autocomplete-item:hover {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
-    overflow: hidden; /* Ensures content doesn’t overflow */
-    max-width: 100%; /* Ensures the container doesn’t get too large */
-    text-align: center; /* Centers content */
+    overflow: hidden;
+    max-width: 100%;
+    text-align: center;
 }
 
 .feature:hover {
@@ -223,70 +206,69 @@ body.dark-mode .autocomplete-item:hover {
 
 /* Custom Paragraph */
 .custom-paragraph {
-    font-family: Arial, sans-serif;  /* Example font */
-    font-size: 16px;  /* Example font size */
-    line-height: 1.5;  /* Line height for better readability */
-    color: #666;  /* Text color */
-    margin: 0 0 1em 0;  /* Bottom spacing */
-    padding: 0;  /* No inner spacing */
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #666;
+    margin: 0 0 1em 0;
+    padding: 0;
 }
 
-/* ********** Button Styles ********** */
-/* General button styling */
+/* Button Styles */
 .btn {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn:hover {
-    transform: scale(1.05); /* Reduced scaling */
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); /* Subtle shadow */
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
 }
 
-/* ********** General Card Styling ********** */
+/* General Card Styling */
 .card-box, .collection-item, .item-box, .model-card, .model-item {
-    background-color: #ffffff; /* White background */
-    border: 1px solid #ddd; /* Thin gray border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 20px; /* Inner padding */
-    margin-bottom: 20px; /* Bottom spacing */
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
     margin-left: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s;
-    text-align: center; /* Center content */
+    text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
 .card-box:hover, .collection-item:hover, .item-box:hover, .model-card:hover, .model-item:hover {
-    transform: translateY(-5px); /* Lift effect */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Deeper shadow */
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* ********** Titles and Paragraphs ********** */
+/* Titles and Paragraphs */
 .card-box h4, .card-box h5, 
 .collection-item h4, .item-box h5, 
 .model-card h5, .model-item h5 {
-    font-size: 1.2rem; /* Uniform title size */
-    color: #007bff; /* Blue for titles */
+    font-size: 1.2rem;
+    color: #007bff;
     margin-bottom: 10px;
-    word-wrap: break-word; /* Ensure long text wraps */
+    word-wrap: break-word;
 }
 
 .card-box p, .collection-item p, 
 .item-box p, .model-card p, .model-item p {
     font-size: 0.95rem;
-    color: #555; /* Gray for descriptions */
+    color: #555;
     margin-bottom: 10px;
     word-wrap: break-word;
 }
 
-/* ********** Buttons ********** */
+/* Buttons */
 .card-box .btn, .collection-item .btn, 
 .item-box .btn, .model-card .btn, .model-item .btn {
     display: inline-block;
     margin-top: auto;
-    background-color: #007bff; /* Primary blue */
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
@@ -297,26 +279,26 @@ body.dark-mode .autocomplete-item:hover {
 
 .card-box .btn:hover, .collection-item .btn:hover, 
 .item-box .btn:hover, .model-card .btn:hover, .model-item .btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
     text-decoration: none;
 }
 
-/* ********** Filter Summary ********** */
+/* Filter Summary */
 .filter-summary, .filtered-results-header {
-    background-color: #f8f9fa; /* Light gray background */
-    border: 1px solid #ddd; /* Thin border */
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
     border-radius: 5px;
     padding: 10px 15px;
     margin-bottom: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Ensure full width */
-    flex: 0 0 100%; /* Prevent shrinking and occupy full row */
+    width: 100%;
+    flex: 0 0 100%;
 }
 
 .filtered-results-header h4 {
     margin: 0;
     font-size: 1.1rem;
-    color: #007bff; /* Blue header */
+    color: #007bff;
 }
 
 .filtered-results-header p, .filter-summary h5 {
@@ -325,7 +307,7 @@ body.dark-mode .autocomplete-item:hover {
     margin: 5px 0;
 }
 
-/* ********** Grid Container ********** */
+/* Grid Container */
 #resultsContainer, #modelGrid {
     display: flex;
     flex-wrap: wrap;
@@ -333,7 +315,7 @@ body.dark-mode .autocomplete-item:hover {
 }
 
 .model-item {
-    flex: 1 1 calc(50% - 20px); /* Two columns on large screens */
+    flex: 1 1 calc(50% - 20px);
     max-width: calc(50% - 20px);
     transition: transform 0.2s;
 }
@@ -354,32 +336,32 @@ body.dark-mode .autocomplete-item:hover {
     margin: auto;
 }
 
-/* ********** Keyword Styling ********** */
+/* Keyword Styling */
 .collection-keywords {
     display: center;
     flex-wrap: wrap;
-    gap: 10px; /* Spacing between keywords */
+    gap: 10px;
     margin-bottom: 15px;
 }
 
 .collection-keywords span {
-    background-color: #e7f1ff; /* Light blue */
-    color: #007bff; /* Blue text */
+    background-color: #e7f1ff;
+    color: #007bff;
     padding: 5px 10px;
     border-radius: 5px;
     font-weight: 500;
     white-space: nowrap;
 }
 
-/* ********** Map and Result Highlight ********** */
+/* Map and Result Highlight */
 .map-container {
     height: 250px;
 }
 
 .result-highlight {
-    border-left: 5px solid #007bff; /* Highlight border */
+    border-left: 5px solid #007bff;
     padding: 10px;
-    background: #f9f9f9; /* Light gray */
+    background: #f9f9f9;
     margin-bottom: 10px;
     border-radius: 4px;
 }
@@ -390,8 +372,7 @@ body.dark-mode .autocomplete-item:hover {
     color: #004085;
 }
 
-/* ********** Form Styling ********** */
-/* Styling for form components */
+/* Form Styling */
 .upload-form, #missingFieldsForm {
     background-color: #fdfdfd;
     padding: 20px;
@@ -412,15 +393,13 @@ body.dark-mode .autocomplete-item:hover {
     border-radius: 4px;
 }
 
-/* ********** Status Message ********** */
-/* Success message styling */
+/* Status Message */
 .status-message {
     margin-top: 15px;
     color: #28a745;
 }
 
-/* ********** Responsive Design ********** */
-/* Adjust layout for different screen sizes */
+/* Responsive Design */
 @media (max-width: 992px) {
     .container-fluid {
         display: block;
@@ -448,8 +427,7 @@ body.dark-mode .autocomplete-item:hover {
     }
 }
 
-/* ********** Sample JSON Section ********** */
-/* Sample section styling for JSON display */
+/* Sample JSON Section */
 .sample-section {
     background-color: #f8f9fa;
     padding: 20px;
@@ -471,7 +449,7 @@ body.dark-mode .autocomplete-item:hover {
     font-family: monospace;
 }
 
-/* ********** Dark Mode ********** */
+/* Dark Mode */
 body.dark-mode {
     background-color: #121212;
     color: #ffffff;
@@ -498,28 +476,25 @@ footer.dark-mode {
     margin-left: 1rem;
 }
 
-/* ********** UI (Design) ********** */
-/* The switch - the box around the slider */
+/* UI (Design) */
 .switch {
     display: block;
     --width-of-switch: 2.8em;
     --height-of-switch: 1.6em;
-    --size-of-icon: 1.12em; /* Size of sliding icon -- sun and moon */
-    --slider-offset: 0.24em; /* Inline-padding of switch */
+    --size-of-icon: 1.12em;
+    --slider-offset: 0.24em;
     position: relative;
     width: var(--width-of-switch);
     height: var(--height-of-switch);
-    margin-top: 7px; /* Added margin to move the switch lower */
+    margin-top: 7px;
 }
 
-/* Hide default HTML checkbox */
 .switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-/* The slider */
 .slider {
     position: absolute;
     cursor: pointer;
@@ -530,7 +505,7 @@ footer.dark-mode {
     background-color: #f4f4f5;
     transition: .4s;
     border-radius: 20px;
-    outline: 1px solid #ccc; /* Added outline */
+    outline: 1px solid #ccc;
 }
 
 .slider:before {
@@ -553,5 +528,5 @@ input:checked + .slider {
 input:checked + .slider:before {
     left: calc(100% - (var(--size-of-icon,1em) + var(--slider-offset,0.2em)));
     background: #303136;
-    box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb; /* Moon effect */
+    box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
 }

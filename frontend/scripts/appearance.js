@@ -2,6 +2,10 @@
 ///////////////////////DARKMODE////////////////////////
 //////////////////////////////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
+  /**
+   * Toggles dark mode based on user preference stored in localStorage or toggle state.
+   * @event DOMContentLoaded - Ensures the script runs after the DOM is fully loaded.
+   */
   const toggle = document.getElementById("appearanceToggle");
   const body = document.body;
   const nav = document.querySelector("nav");
@@ -26,6 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+/**
+ * Enables dark mode by adding relevant CSS classes to elements.
+ * @param {HTMLElement} body - The body element of the page.
+ * @param {HTMLElement} nav - The navigation element.
+ * @param {HTMLElement} footer - The footer element.
+ */
 function enableDarkMode(body, nav, footer) {
   body.classList.add("dark-mode");
 
@@ -45,6 +55,12 @@ function enableDarkMode(body, nav, footer) {
   if (footer) footer.classList.add("dark-mode");
 }
 
+/**
+ * Disables dark mode by removing relevant CSS classes from elements.
+ * @param {HTMLElement} body - The body element of the page.
+ * @param {HTMLElement} nav - The navigation element.
+ * @param {HTMLElement} footer - The footer element.
+ */
 function disableDarkMode(body, nav, footer) {
   body.classList.remove("dark-mode");
 
@@ -65,18 +81,40 @@ function disableDarkMode(body, nav, footer) {
 }
 
 //////////////////////////////////////////////////////
-///////////////////////SEARCHBAR////////////////////////
+///////////////////////SEARCHBAR///////////////////////
 //////////////////////////////////////////////////////
+/**
+ * Initializes the search bar with autocomplete functionality and navigation.
+ * @event DOMContentLoaded - Ensures the script runs after the DOM is fully loaded.
+ */
 document.addEventListener("DOMContentLoaded", () => {
-  // Autocomplete logic
+  /**
+   * Reference to the search bar input field.
+   * @type {HTMLInputElement}
+   */
   const input = document.getElementById("search-bar");
+
+  /**
+   * Reference to the autocomplete suggestion list element.
+   * @type {HTMLElement}
+   */
   const autocompleteList = document.getElementById("autocomplete-list");
 
+  /**
+   * List of available pages with their names, links, and search aliases.
+   * @type {Array<{name: string, link: string, aliases: string[]}>}
+   */
   const pages = [
     {
       name: "Account",
       link: "account.html",
-      aliases: ["profile", "user", "account settings", "my account", "dashboard"],
+      aliases: [
+        "profile",
+        "user",
+        "account settings",
+        "my account",
+        "dashboard",
+      ],
     },
     {
       name: "Catalog",
@@ -101,7 +139,13 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       name: "Model Details",
       link: "modelDetails.html",
-      aliases: ["details", "info", "model info", "specifications", "view model"],
+      aliases: [
+        "details",
+        "info",
+        "model info",
+        "specifications",
+        "view model",
+      ],
     },
     {
       name: "Register",
@@ -121,40 +165,60 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   if (input) {
+    /**
+     * Handles the input event on the search bar to provide autocomplete suggestions.
+     * @event input
+     */
     input.addEventListener("input", function () {
       const query = input.value.trim().toLowerCase();
-      autocompleteList.innerHTML = "";
+      autocompleteList.innerHTML = ""; // Clear previous suggestions
 
       if (query) {
+        // Filter matching pages based on query
         const suggestions = pages.filter(
           (page) =>
             page.name.toLowerCase().includes(query) ||
             page.aliases.some((alias) => alias.includes(query))
         );
 
+        // Populate the autocomplete list with suggestions
         suggestions.forEach((page) => {
           const listItem = document.createElement("li");
           listItem.textContent = page.name;
+
+          /**
+           * Navigate to the selected page when a suggestion is clicked.
+           * @event click
+           */
           listItem.addEventListener("click", () => {
             window.location.href = page.link;
           });
+
           autocompleteList.appendChild(listItem);
         });
       }
     });
 
-    // Navigate on Enter key
+    /**
+     * Handles the keydown event to navigate on pressing the Enter key.
+     * @event keydown
+     * @param {KeyboardEvent} event - The keyboard event.
+     */
     input.addEventListener("keydown", function (event) {
       if (event.key === "Enter") {
         const query = input.value.trim().toLowerCase();
+
+        // Find an exact match for the query
         const match = pages.find(
           (page) =>
-            page.name.toLowerCase() === query || page.aliases.some((alias) => alias === query)
+            page.name.toLowerCase() === query ||
+            page.aliases.some((alias) => alias === query)
         );
+
         if (match) {
           window.location.href = match.link;
         } else {
-          alert("Page not found!");
+          alert("Page not found!"); // Alert if no match is found
         }
       }
     });
