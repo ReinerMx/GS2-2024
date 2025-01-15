@@ -1,3 +1,168 @@
+**The German version of the README is available below.**
+
+
+# Geosoftware II - TerraLink
+
+---
+
+## Important Links:
+
+- **Repository:** [GS2-2024 Repository](https://github.com/ReinerMx/GS2-2024)
+- **Project Documentation (Overleaf):** [Project Documentation](https://www.overleaf.com/project/67121d8286e37093f88de455)
+- **Presentation:** [Google Slides](https://docs.google.com/presentation/d/1VwPwdpmAnKLgP32q3Nw64L7xUm2H4YQJQVxEfDnQM30/edit?usp=sharing)
+- **Similar Catalog:** [Hugging Face](https://huggingface.co/)
+
+---
+
+## Project Description
+
+**Web Catalog for ML Models for EO Data**
+
+This project, developed as part of the Geosoftware II course (WiSe 2024/25), aims to create a web-based catalog for the user-friendly search and retrieval of machine learning models specifically designed for Earth Observation (EO) Datacubes.
+
+### Key Features:
+
+- **Model Search & Retrieval:** Search and filter ML models for EO analysis using the STAC MLM extension.
+- **Seamless Integration:** Easily integrate models into Python and R workflows through STAC clients (e.g., PySTAC, RSTAC).
+- **Metadata Management:** Upload and download spatiotemporal metadata for efficient model access.
+- **Community-Driven:** Users can upload their own models and contribute to the catalog.
+
+---
+
+## Installation Guide
+
+### Prerequisites
+
+- Node.js (Version 14 or higher)
+- npm or yarn
+- Docker and Docker Compose
+- PostgreSQL (optional for local deployment without Docker)
+
+### Installation Steps
+
+#### 1. Clone the Repository
+
+```bash
+git clone https://github.com/ReinerMx/GS2-2024.git
+cd GS2-2024
+```
+
+#### 2. Backend Installation
+
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file and define environment variables:
+   ```env
+   POSTGRES_USER=yourusername
+   POSTGRES_PASSWORD=yourpassword
+   POSTGRES_DB=huggingearth
+   ```
+4. Initialize the database:
+   ```bash
+   npm run migrate
+   ```
+5. Start the backend:
+   ```bash
+   npm start
+   ```
+
+#### 3. Frontend Installation
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd ../frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the frontend:
+   ```bash
+   npm start
+   ```
+
+#### 4. Deployment with Docker
+
+1. Ensure Docker and Docker Compose are installed.
+2. Run the Docker Compose file:
+   ```bash
+   docker-compose up --build
+   ```
+
+---
+
+## Project Structure
+
+```
+TerraLink/
+├── backend/      # Backend code and API implementations
+├── frontend/     # Frontend code
+├── docker-compose.yml  # Docker configuration file
+├── README.md     # Project overview
+├── .env.example  # Example environment variables
+└── docs/         # Documentation
+```
+
+---
+
+## Usage
+
+### Model Upload
+
+1. Log in or register through the user interface.
+2. Navigate to the upload page.
+3. Upload:
+   - The model (JSON metadata in STAC format).
+   - An optional description.
+
+### Model Search and Download
+
+1. Use the search bar and filter options to browse models.
+2. Click on a specific model for detailed information.
+3. Use the provided link to access the related GitHub repository for further use.
+4. Integrate models and metadata into workflows using PySTAC or RSTAC.
+
+---
+
+## Continuous Integration (CI/CD)
+
+The platform uses **GitHub Actions** for CI/CD.
+
+- **Automated Testing:** Tests are executed for every pull request.
+- **Docker Builds:** Docker images are automatically built and published to Docker Hub.
+
+**Configuration:**
+
+- `.github/workflows/ci.yml`
+
+---
+
+## License
+
+This project is released under the MIT License. See [LICENSE](LICENSE) for more details.
+
+---
+
+**Developed by:** Amelie Julia Luschnig, Jakub Zahwe, Lukas Ahlert, Maximilian Reiner, and Lara Sieksmeier
+
+**Instructors:** Brian Pondi, Christian Knoth
+
+---
+<!-- ![Repository Logo](Dokumente/Logo-Ideen/TerraLink1.png) -->
+
+
+---
+---
+# GERMAN VERSION
+---
+---
+
 # Geosoftware II - TerraLink 
 
 ---
@@ -157,4 +322,4 @@ Dieses Projekt wird unter der MIT-Lizenz veröffentlicht. Siehe [LICENSE](LICENS
 **Dozenten:** Brian Pondi, Christian Knoth
 
 ---
-![Repository Logo](Dokumente/Logo-Ideen/TerraLink1.png)
+<!-- ![Repository Logo](Dokumente/Logo-Ideen/TerraLink1.png) -->
