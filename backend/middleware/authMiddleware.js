@@ -6,6 +6,7 @@ exports.authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded token:", decoded); //Lara
     req.user = decoded;
     next();
   } catch (error) {

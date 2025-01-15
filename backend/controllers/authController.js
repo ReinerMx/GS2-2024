@@ -26,6 +26,7 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log("Hashed password:", hashedPassword);
 
+
     // Create a new user
     const newUser = await User.create({ username, email, password: hashedPassword });
     console.log("User successfully created:", newUser);
@@ -44,53 +45,70 @@ exports.login = async (req, res) => {
 
     const { email, password } = req.body;
 
-    // Validate input data
+    // 1. Überprüfung: E-Mail und Passwort vorhanden?
     if (!email || !password) {
       console.error("Missing input data:", { email, password });
       return res.status(400).json({ message: 'Email and password are required.' });
     }
 
-    // Find the user by email
-    const user = await User.findOne({ where: { email } });
+    // 2. Benutzer anhand der E-Mail suchen
+    const user = await User.findOne({ where: { email: email.toLowerCase() } });
+    console.log("Database query for email:", email);
     if (!user) {
-      console.error("User not found:", email);
-      return res.status(401).json({ message: 'Invalid login credentials.' });
+      console.error("User not found for email:", email);
+      return res.status(401).json({ message: 'Invalid login credentials A.' });
     }
-
     console.log("User found:", user);
 
-    // Compare passwords
+
+
+
+    // Manual bcrypt comparison for debugging
+    const inputPassword = password; // Password entered by the user
+    const storedHash = user.password; // Hash from the database
+
+    bcrypt.compare(inputPassword, storedHash, (err, result) => {
+      if (err) {
+        console.error("Error during manual password comparison:", err);
+      } else {
+        console.log("Manual password comparison result:", result); // Should log true or false
+      }
+    });
+
+    // Existing password comparison
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log("Password comparison successful:", isMatch);
-
+    console.log("Password comparison result:", isMatch);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid login credentials.' });
+      console.error("Password mismatch for user:", email);
+      return res.status(401).json({ message: 'Invalid login credentials BB.' });
     }
 
-    // Generate a JWT token
-    if (!process.env.JWT_SECRET) {
-      console.error("JWT_SECRET is missing in the .env file");
-      throw new Error('JWT_SECRET is not defined.');
-    }
 
+    
+
+
+
+    // 4. JWT-Token generieren
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     console.log("Token successfully generated:", token);
 
-    res.json({ token });
+    res.json({ token, message: "Login successful!" });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: 'Internal server error.' });
   }
 };
 
-// Verify user token 
+
+// Verify user token
 exports.verifyToken = async (req, res) => {
   try {
-    const token = req.header('Authorization').replace('Bearer ', '');
-
-    if (!token) {
+    const authHeader = req.header('Authorization');
+    if (!authHeader) {
       return res.status(401).json({ message: 'No token provided.' });
     }
+
+    const token = authHeader.replace('Bearer ', '');
 
     if (!process.env.JWT_SECRET) {
       console.error("JWT_SECRET is missing in the .env file");
