@@ -290,7 +290,7 @@ p {
 }
 
 .dark-mode .faq-answer {
-    background-color: #555;
+    background-color: #202020;
     color: #f8f9fa;
 }
 
@@ -304,6 +304,9 @@ p {
 .dark-mode p,
 .dark-mode .custom-paragraph {
     color: #f8f9fa;
+}
+.dark-mode .custom-paragraph code {
+    color: #e83e8c; 
 }
 
 .dark-mode .content-section {
@@ -329,6 +332,9 @@ p {
 }
 
 .dark-mode .more-questions-container p {
+    color: #d1e1e8;
+}
+.dark-mode .more-questions-container label {
     color: #d1e1e8;
 }
 
