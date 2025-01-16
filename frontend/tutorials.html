@@ -107,9 +107,9 @@
               >
             </li>
             <li>
-              <a href="#upload" id="tab-upload" class="tutorial-nav-link"
-                >Upload Your Own Models</a
-              >
+              <li>
+                <a href="#upload" id="tab-upload" class="tutorial-nav-link">Upload Your Own Models</a>
+              </li>              
             </li>
             <li>
               <a href="#download" id="tab-download" class="tutorial-nav-link"
@@ -1271,11 +1271,10 @@
               </div>
             </div>
             <div class="faq-item">
-              <button class="faq-question">How do I upload large models?</button>
+              <button class="faq-question">Can I edit my Models after uploading?</button>
               <div class="faq-answer">
                 <p>
-                  For large models, ensure your internet connection is stable. If the upload fails,
-                  try compressing your model into a ZIP file before uploading.
+                  No, currently, you can only edit your data offline. After making the changes, upload the updated version and delete the old one if necessary. Ensure that the metadata complies with the STAC MLM specification during the editing process.
                 </p>
               </div>
             </div>
@@ -1285,23 +1284,27 @@
           <div class="faq-container">
             <h3>Technical</h3>
             <div class="faq-item">
-              <button class="faq-question">How do I integrate the platform into Python?</button>
+             <!-- Combined FAQ -->
+              <button class="faq-question">How do I integrate the platform into Python or R?</button>
               <div class="faq-answer">
                 <p>
-                  Install the `pystac` library and use it to integrate data directly from the
-                  platform into your workflows. Example codes can be found in our
-                  <a href="tutorials.html#tab-geometrie">PySTAC tutorial</a>.
+                  To integrate the platform into your workflows, you can use the `pystac` library for Python or the `rstac` package for R. 
+                  Example code snippets and detailed guidance are available in our tutorials:
+                  <a href="tutorials.html#tab-python">Python Tutorial</a> and 
+                  <a href="tutorials.html#tab-r">R Tutorial</a>.
                 </p>
               </div>
             </div>
             <div class="faq-item">
-              <button class="faq-question">How do I validate my metadata?</button>
+              <button class="faq-question">How do I validate my Data?</button>
               <div class="faq-answer">
                 <p>
-                  Use our metadata validation tool on the <a href="upload.html">Upload page</a>.
-                  Ensure your file is in STAC-compliant JSON format.
+                  Follow the steps provided on the 
+                  <a href="http://localhost:5555/upload.html">Upload</a> page and refer to the detailed guides under the 
+                "Upload Your Own Models" section. 
+                  During the upload process, if your metadata is not valid, a detailed error message will help you identify and resolve the issue.
                 </p>
-              </div>
+              </div>                        
             </div>
           </div>
         </div>
