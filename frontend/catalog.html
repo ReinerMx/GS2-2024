@@ -7,22 +7,22 @@
     <title>HuggingEarth - Model Catalog</title>
     <link
       rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <link 
-      rel="stylesheet" 
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link 
-      rel="stylesheet" 
-      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
-    <link 
-      rel="stylesheet" 
-      href="css/styles.css" />
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/footer.css" />
     <link rel="stylesheet" href="css/catalog.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-
   </head>
   <body>
     <!-- Navigation Bar -->
@@ -86,13 +86,16 @@
                 class="user-icon"
               />
             </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+            <div
+              class="dropdown-menu dropdown-menu-right"
+              aria-labelledby="userDropdown"
+            >
               <a class="dropdown-item" href="account.html">Account</a>
               <a class="dropdown-item" href="login.html">Login</a>
               <a class="dropdown-item" href="register.html">Register</a>
             </div>
           </li>
-          
+
           <label class="switch">
             <input type="checkbox" id="appearanceToggle" />
             <span class="slider"></span>
@@ -104,7 +107,10 @@
     <div class="container-fluid mt-4">
       <div id="mainContainer" class="row">
         <!-- Sidebar für Filter -->
-        <aside class="col-md-3 filter-sidebar">
+        <aside
+          class="col-12 col-md-3 filter-sidebar"
+          style="margin-bottom: 50px !important"
+        >
           <h4>Filters</h4>
           <!-- Temporal Filter -->
           <div class="filter-section mt-4">
@@ -121,28 +127,50 @@
           <!-- Geographic Filter -->
           <div class="filter-section mt-4">
             <h5>Geographic Filter</h5>
-            <p>Draw a region on the map to filter models by geographic location.</p>
-            <div id="map" class="map-container"></div>
-            <button id="applyGeoFilter" class="btn btn-primary mt-3 apply-filter-btn">Apply Filter</button>
+            <p>
+              Draw a region on the map to filter models by geographic location.
+            </p>
+            <div
+              id="map"
+              class="map-container"
+              style="margin-bottom: 250px !important"
+            ></div>
+            <button
+              id="applyGeoFilter"
+              class="btn btn-primary mt-3 apply-filter-btn"
+              style="position: relative; top: -260px !important"
+            >
+              Apply Filter
+            </button>
           </div>
         </aside>
-    
+
         <!-- Main Content -->
-        <section class="col-md-9 search-catalog-container">
+        <section class="col-12 col-md-9 search-catalog-container">
           <div class="search-bar-container">
             <h2>Model Catalog</h2>
-            <p>Explore available Earth Observation Machine Learning models. Use the search below to find models that match your needs.</p>
+            <p>
+              Explore available Earth Observation Machine Learning models. Use
+              the search below to find models that match your needs.
+            </p>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" id="searchInput" placeholder="Search collections and items (name, description, keywords, tasks, framework, architecture)" autocomplete="off"/>
+              <input
+                type="text"
+                class="form-control"
+                id="searchInput"
+                placeholder="Search collections and items (name, description, keywords, tasks, framework, architecture)"
+                autocomplete="off"
+              />
               <ul id="autocomplete-list" class="autocomplete"></ul>
               <div class="input-group-append">
-                <button class="btn btn-primary" id="searchButton" type="button">Search</button>
+                <button class="btn btn-primary" id="searchButton" type="button">
+                  Search
+                </button>
               </div>
             </div>
             <div id="filterContainer" class="filter-container">
               <!-- Dynamic filters are added here -->
-          </div>       
-          
+            </div>
           </div>
           <div id="resultsContainer">
             <div class="filtered-results-header">Filtered Models</div>
@@ -151,7 +179,6 @@
         </section>
       </div>
     </div>
-    
 
     <!-- Footer -->
     <footer class="footer text-center">
