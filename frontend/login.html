@@ -107,39 +107,25 @@
             required
           />
         </div>
-        <!DOCTYPE html>
-        <html lang="en">
-          <head>
-            <meta charset="UTF-8" />
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1.0"
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <div style="position: relative">
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              placeholder="Enter your password"
+              required
             />
-            <title>Password Toggle Example</title>
-            <link rel="stylesheet" href="styles.css" />
-          </head>
-          <body>
-            <div class="form-group">
-              <label for="password">Password:</label>
-              <div style="position: relative">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  placeholder="Enter your password"
-                  required
-                />
-                <span
-                  class="toggle-password"
-                  aria-label="Toggle password visibility"
-                >
-                  🔒
-                </span>
-              </div>
-            </div>
-            <script src="script.js"></script>
-          </body>
-        </html>
+            <span
+              class="toggle-password"
+              aria-label="Toggle password visibility"
+            >
+              🔒
+            </span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
       </form>
       <p class="text-center mt-3">
         Don't have an account? <a href="register.html">Register here</a>
