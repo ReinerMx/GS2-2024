@@ -1125,11 +1125,13 @@
             </li>
             <li>
               <strong>Install the required Python libraries:</strong> Install <code>pystac</code> and <code>pystac-client</code>:
-              <pre class="bg-dark text-white p-2 rounded">pip install pystac pystac-client</pre>
+              <pre class="bg-dark text-white p-2 rounded"># Install the required libraries
+pip install pystac pystac-client</pre>
             </li>
             <li>
               <strong>Import the required libraries:</strong>
               <pre class="bg-dark text-white p-2 rounded">
+# Import necessary libraries
 import pystac
 import requests
 from pystac_client import Client</pre>
@@ -1137,18 +1139,25 @@ from pystac_client import Client</pre>
             <li>
               <strong>Connect to a STAC:</strong> Use the link to the STAC-model-data to connect to the catalog:
               <pre class="bg-dark text-white p-2 rounded">
+# Define the URL of the STAC API endpoint
 catalog_url = "LINK"
+
+# Open the STAC API client
 client = Client.open(catalog_url)</pre>
             </li>
             <li>
               <strong>Filter and search the catalog:</strong> Search the catalog for relevant data:
               <pre class="bg-dark text-white p-2 rounded">
+# Search the STAC catalog with specific filters
 search = client.search(
     collections=["collection-id"],
-    bbox=[-180, -90, 180, 90],
-    datetime="2023-01-01/2023-12-31"
-)
+    bbox=[-180, -90, 180, 90]"
+    )
+
+# Retrieve the search results
 items = list(search.get_items())
+
+# Retrieve and print item properties
 for item in items:
     print(item.id, item.properties)</pre>
 
