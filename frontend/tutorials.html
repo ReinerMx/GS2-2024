@@ -1112,8 +1112,8 @@
       </div>
 
       <!-- Python -->
-      <div id="python" class="content-section section-margin" style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px">
-        <h2 class="section-title">Integrating with Python: A Step-by-Step Guide</h2>
+      <div id="python" class="content-section section-margin">
+        <h2 class="section-title">Integrating with Python</h2>
         <p class="custom-paragraph">
           Easily integrate machine learning models into your Python workflows by following these steps:
         </p>
@@ -1121,47 +1121,52 @@
           <ol class="custom-paragraph">
             <li>
               <strong>Install Python:</strong> Ensure you have Python installed on your system. You can
-              download the latest version of <a href="https://www.python.org/downloads/" target="_blank"><em>Python here</em></a>.
+              download the latest version of <a href="https://www.python.org/downloads/" target="_blank">Python here</a>.
             </li>
             <li>
-              <strong>Install the required Python libraries:</strong> Install `pystac` and `pystac-client`:
-              <pre><code>pip install pystac pystac-client</code></pre>
+              <strong>Install the required Python libraries:</strong> Install <code>pystac</code> and <code>pystac-client</code>:
+              <pre class="bg-dark text-white p-2 rounded">pip install pystac pystac-client</pre>
             </li>
             <li>
               <strong>Import the required libraries:</strong>
-              <pre><code>
-      import pystac
-      import requests
-      from pystac_client import Client
-              </code></pre>
+              <pre class="bg-dark text-white p-2 rounded">
+import pystac
+import requests
+from pystac_client import Client</pre>
             </li>
             <li>
               <strong>Connect to a STAC:</strong> Use the link to the STAC-model-data to connect to the catalog:
-              <pre><code>
-      catalog_url = "LINK"
-      client = Client.open(catalog_url)
-              </code></pre>
+              <pre class="bg-dark text-white p-2 rounded">
+catalog_url = "LINK"
+client = Client.open(catalog_url)</pre>
             </li>
             <li>
               <strong>Filter and search the catalog:</strong> Search the catalog for relevant data:
-              <pre><code>
-      search = client.search(
-          collections=["collection-id"],
-          bbox=[-180, -90, 180, 90],
-          datetime="2023-01-01/2023-12-31"
-      )
-      items = list(search.get_items())
-      for item in items:
-          print(item.id, item.properties)
-              </code></pre>
+              <pre class="bg-dark text-white p-2 rounded">
+search = client.search(
+    collections=["collection-id"],
+    bbox=[-180, -90, 180, 90],
+    datetime="2023-01-01/2023-12-31"
+)
+items = list(search.get_items())
+for item in items:
+    print(item.id, item.properties)</pre>
+
             </li>
           </ol>
         </div>
+        <div class="button-group">
+          <button class="btn-copy" onclick="copyToClipboard('python-code')">
+            <i class="fas fa-copy"></i> Copy Python Code
+          </button>
+          <button class="btn-download" onclick="downloadCode('python-code', 'python_integration.py')">
+            <i class="fas fa-download"></i> Download Python Code
+          </button>
+        </div>
       </div>
-
-      <!-- R -->
-      <div id="r" class="content-section section-margin" style="border: 1px solid #ccc; padding: 15px; margin-left: 20px; margin-right: 20px">
-        <h2 class="section-title">Integrating with R: A Step-by-Step Guide</h2>
+      
+      <div id="r" class="content-section section-margin">
+        <h2 class="section-title">Integrating with R</h2>
         <p class="custom-paragraph">
           Easily integrate machine learning models into your R workflows by following these steps:
         </p>
@@ -1169,32 +1174,39 @@
           <ol class="custom-paragraph">
             <li>
               <strong>Install R:</strong> Ensure you have R installed on your system. You can
-              download the latest version of <a href="https://cran.r-project.org/" target="_blank"><em>R here</em></a>.
+              download the latest version of <a href="https://cran.r-project.org/" target="_blank">R here</a>.
             </li>
             <li>
               <strong>Install the required STAC client:</strong> Use the following command:
-              <pre><code>install.packages("rstac")</code></pre>
+              <pre class="bg-dark text-white p-2 rounded">install.packages("rstac")</pre>
               Then load the package:
-              <pre><code>library(rstac)</code></pre>
+              <pre class="bg-dark text-white p-2 rounded">library(rstac)</pre>
             </li>
             <li>
               <strong>Connect to a STAC:</strong> Use the link to the STAC-model-data to connect to the catalog:
-              <pre><code>
-      stac <- stac("LINK")
-              </code></pre>
+              <pre class="bg-dark text-white p-2 rounded">
+stac <- stac("LINK")</pre>
             </li>
             <li>
               <strong>Filter and search the catalog:</strong> Query the catalog for relevant data:
-              <pre><code>
-      results <- stac %>%
-        stac_search(collections = "collection-id", bbox = c(-180, -90, 180, 90)) %>%
-        get_request()
-      print(results$features)
-              </code></pre>
+              <pre class="bg-dark text-white p-2 rounded">
+results <- stac %>%
+stac_search(collections = "collection-id", bbox = c(-180, -90, 180, 90)) %>%
+get_request()
+print(results$features)</pre>
             </li>
           </ol>
         </div>
+        <div class="button-group">
+          <button class="btn-copy" onclick="copyToClipboard('r-code')">
+            <i class="fas fa-copy"></i> Copy R Code
+          </button>
+          <button class="btn-download" onclick="downloadCode('r-code', 'r_integration.R')">
+            <i class="fas fa-download"></i> Download R Code
+          </button>
+        </div>
       </div>
+      
 
       <!-- FAQ -->
       <div id="q-and-a" class="content-section">
