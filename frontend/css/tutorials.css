@@ -620,3 +620,8 @@ strong {
         width: 100%;
     }
 }
+
+/* Hiding Python and R Code for Download */
+.hidden {
+    display: none;
+  }

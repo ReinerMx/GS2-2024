@@ -1164,10 +1164,43 @@ for item in items:
             </li>
           </ol>
         </div>
+
+<!-- Hidden Code for Copy/Download -->
+        <pre class="bg-dark text-white p-2 rounded hidden" id="python-code">
+# Install the required libraries
+pip install pystac pystac-client
+
+# Import necessary libraries
+import pystac
+import requests
+from pystac_client import Client
+
+# Define the URL of the STAC API endpoint
+catalog_url = "LINK"
+
+# Open the STAC API client
+client = Client.open(catalog_url)
+
+# Search the STAC catalog with specific filters
+search = client.search(
+    collections=["collection-id"],
+    bbox=[-180, -90, 180, 90]"
+    )
+
+# Retrieve the search results
+items = list(search.get_items())
+
+# Retrieve and print item properties
+for item in items:
+    print(item.id, item.properties)
+                  </pre>
+
+        <!-- Copy and Download Python -->
         <div class="button-group">
           <button class="btn-copy" onclick="copyToClipboard('python-code')">
             <i class="fas fa-copy"></i> Copy
           </button>
+          
           <button class="btn-download" onclick="downloadCode('python-code', 'python_integration.py')">
             <i class="fas fa-download"></i> Download
           </button>
@@ -1233,6 +1266,41 @@ rstac::assets_download(items = items, asset_names = "water-bodies-model-pystac",
             </li>
           </ol>
         </div>
+
+<!-- Hidden Code for Copy/Download-->
+        <pre class="bg-dark text-white p-2 rounded hidden" id="r-code">
+# Load the rstac library
+library(rstac)
+          
+# Define the STAC API URL
+url <- "http://localhost:5555/"
+          
+# Create an rstac catalog object
+catalog <- stac(url)
+          
+# Specify search parameters
+bbox <- c(-180, -90, 180, 90)
+collection <- "ml-models-rs"
+          
+# Perform the search
+search <- stac(url) %>%
+  stac_search(collections = collection,
+              bbox = bbox) %>%
+  get_request()
+                    
+# Retrieve items
+ items <- items_fetch(search)
+          
+# Print the results
+print(items)
+          
+# Download assets
+rstac::assets_url(items)
+          
+ rstac::assets_download(items = items, asset_names = "water-bodies-model-pystac", output_dir = "~/Desktop/")
+                  </pre>
+
+        <!-- Copy and Download R -->
         <div class="button-group">
           <button class="btn-copy" onclick="copyToClipboard('r-code')">
             <i class="fas fa-copy"></i> Copy

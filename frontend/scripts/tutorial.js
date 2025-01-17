@@ -223,6 +223,26 @@ function downloadJSON(filename, elementId) {
 }
 
 ////////////////////////////////////////////
+// R/Python - Copy and Download
+////////////////////////////////////////////
+
+// Copy works with JSON Copy
+
+ /**
+   * Downloads the content of a specified element as a text file.
+   * @param {string} elementId - The ID of the element containing the code to download.
+   * @param {string} fileName - The name of the file to be downloaded.
+   */
+function downloadCode(elementId, fileName) {
+  const code = document.getElementById(elementId).innerText;
+  const blob = new Blob([code], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+}
+
+////////////////////////////////////////////
 // Smooth Scroll for "Contact Us" Link
 ////////////////////////////////////////////
 /**
