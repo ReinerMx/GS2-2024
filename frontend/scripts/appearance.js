@@ -83,146 +83,111 @@ function disableDarkMode(body, nav, footer) {
 //////////////////////////////////////////////////////
 ///////////////////////SEARCHBAR///////////////////////
 //////////////////////////////////////////////////////
-/**
- * Initializes the search bar with autocomplete functionality and navigation.
- * @event DOMContentLoaded - Ensures the script runs after the DOM is fully loaded.
- */
 document.addEventListener("DOMContentLoaded", () => {
-  /**
-   * Reference to the search bar input field.
-   * @type {HTMLInputElement}
-   */
   const input = document.getElementById("search-bar");
-
-  /**
-   * Reference to the autocomplete suggestion list element.
-   * @type {HTMLElement}
-   */
   const autocompleteList = document.getElementById("autocomplete-list");
 
-  /**
-   * List of available pages with their names, links, and search aliases.
-   * @type {Array<{name: string, link: string, aliases: string[]}>}
-   */
+  // Data for the first function (local pages)
   const pages = [
     {
       name: "Account",
       link: "account.html",
-      aliases: [
-        "profile",
-        "user",
-        "account settings",
-        "my account",
-        "dashboard",
-      ],
+      aliases: ["profile", "dashboard"],
     },
-    {
-      name: "Catalog",
-      link: "catalog.html",
-      aliases: ["models", "search", "items", "products", "store"],
-    },
-    {
-      name: "Impressum",
-      link: "impressum.html",
-      aliases: ["legal", "contact", "about", "terms", "privacy policy"],
-    },
-    {
-      name: "Home",
-      link: "index.html",
-      aliases: ["main", "welcome", "dashboard", "homepage", "start"],
-    },
-    {
-      name: "Login",
-      link: "login.html",
-      aliases: ["signin", "access", "sign in", "log in", "authentication"],
-    },
-    {
-      name: "Model Details",
-      link: "modelDetails.html",
-      aliases: [
-        "details",
-        "info",
-        "model info",
-        "specifications",
-        "view model",
-      ],
-    },
-    {
-      name: "Register",
-      link: "register.html",
-      aliases: ["signup", "join", "create account", "sign up", "new account"],
-    },
-    {
-      name: "Tutorials",
-      link: "tutorials.html",
-      aliases: ["guides", "help", "how-to", "manuals", "instructions"],
-    },
-    {
-      name: "Upload",
-      link: "upload.html",
-      aliases: ["add", "new", "submit", "post", "upload model"],
-    },
+    { name: "Catalog", link: "catalog.html", aliases: ["models", "store"] },
+    { name: "Home", link: "index.html", aliases: ["main", "welcome"] },
+    { name: "Tutorials", link: "tutorials.html", aliases: ["guides", "help"] },
+    { name: "Login", link: "login.html", aliases: ["signin", "access"] },
+    { name: "Register", link: "register.html", aliases: ["signup", "join"] },
   ];
 
-  if (input) {
-    /**
-     * Handles the input event on the search bar to provide autocomplete suggestions.
-     * @event input
-     */
-    input.addEventListener("input", function () {
-      const query = input.value.trim().toLowerCase();
-      autocompleteList.innerHTML = ""; // Clear previous suggestions
+  // Positions the autocomplete list relative to the input field
+  const positionAutocomplete = () => {
+    const rect = input.getBoundingClientRect();
+    autocompleteList.style.position = "absolute";
+    autocompleteList.style.top = `${rect.bottom + window.scrollY}px`;
+    autocompleteList.style.left = `${rect.left + window.scrollX}px`;
+    autocompleteList.style.width = `${rect.width}px`;
+  };
 
-      if (query) {
-        // Filter matching pages based on query
-        const suggestions = pages.filter(
-          (page) =>
-            page.name.toLowerCase().includes(query) ||
-            page.aliases.some((alias) => alias.includes(query))
-        );
+  // Function to fetch suggestions from the server
+  const fetchServerSuggestions = async (query) => {
+    if (!query.trim()) return [];
+    try {
+      const response = await fetch(
+        `/searchbar?keyword=${encodeURIComponent(query)}`
+      );
+      if (!response.ok) throw new Error("Error fetching server suggestions");
+      const data = await response.json();
+      return data.suggestions || [];
+    } catch (error) {
+      console.error("Error fetching server suggestions:", error);
+      return [];
+    }
+  };
 
-        // Populate the autocomplete list with suggestions
-        suggestions.forEach((page) => {
-          const listItem = document.createElement("li");
-          listItem.textContent = page.name;
+  // Function to render autocomplete suggestions
+  const renderSuggestions = (suggestions) => {
+    autocompleteList.innerHTML = ""; // Clear previous suggestions
+    suggestions.forEach((suggestion) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = suggestion.name || suggestion.title || "Unnamed";
 
-          /**
-           * Navigate to the selected page when a suggestion is clicked.
-           * @event click
-           */
-          listItem.addEventListener("click", () => {
-            window.location.href = page.link;
-          });
-
-          autocompleteList.appendChild(listItem);
-        });
-      }
-    });
-
-    /**
-     * Handles the keydown event to navigate on pressing the Enter key.
-     * @event keydown
-     * @param {KeyboardEvent} event - The keyboard event.
-     */
-    input.addEventListener("keydown", function (event) {
-      if (event.key === "Enter") {
-        const query = input.value.trim().toLowerCase();
-
-        // Find an exact match for the query
-        const match = pages.find(
-          (page) =>
-            page.name.toLowerCase() === query ||
-            page.aliases.some((alias) => alias === query)
-        );
-
-        if (match) {
-          window.location.href = match.link;
-        } else {
-          alert("Page not found!"); // Alert if no match is found
+      listItem.addEventListener("click", () => {
+        if (suggestion.link) {
+          // Local pages: Navigate directly to the specific page
+          window.location.href = suggestion.link;
+        } else if (suggestion.title) {
+          // Server data: Redirect to the catalog page with query parameters
+          window.location.href = `catalog.html?search=${encodeURIComponent(
+            suggestion.title
+          )}`;
         }
-      }
+        autocompleteList.innerHTML = ""; // Clear the autocomplete list
+      });
+
+      autocompleteList.appendChild(listItem);
     });
-  }
+
+    autocompleteList.style.display = "block"; // Show the autocomplete list
+  };
+
+  // Event: Handle user input
+  input.addEventListener("input", async () => {
+    const query = input.value.trim().toLowerCase();
+    if (!query) {
+      autocompleteList.innerHTML = "";
+      return;
+    }
+
+    // Filter local page data based on query
+    const pageSuggestions = pages.filter(
+      (page) =>
+        page.name.toLowerCase().includes(query) ||
+        page.aliases.some((alias) => alias.includes(query))
+    );
+
+    // Fetch suggestions from the server
+    const serverSuggestions = await fetchServerSuggestions(query);
+
+    // Combine results from local data and server
+    const combinedSuggestions = [
+      ...pageSuggestions,
+      ...serverSuggestions.map((s) => ({ name: s.title || "Unnamed Item" })),
+    ];
+
+    renderSuggestions(combinedSuggestions);
+  });
+
+  // Hide autocomplete when clicking outside the input field or the suggestion list
+  document.addEventListener("click", (event) => {
+    if (!autocompleteList.contains(event.target) && event.target !== input) {
+      autocompleteList.innerHTML = "";
+    }
+  });
+
+  // Reposition autocomplete list on window resize
+  window.addEventListener("resize", positionAutocomplete);
 });
 
 //////////////////////////////////////////////////////
