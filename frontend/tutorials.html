@@ -1125,11 +1125,13 @@
             </li>
             <li>
               <strong>Install the required Python libraries:</strong> Install <code>pystac</code> and <code>pystac-client</code>:
-              <pre class="bg-dark text-white p-2 rounded">pip install pystac pystac-client</pre>
+              <pre class="bg-dark text-white p-2 rounded"># Install the required libraries
+pip install pystac pystac-client</pre>
             </li>
             <li>
               <strong>Import the required libraries:</strong>
               <pre class="bg-dark text-white p-2 rounded">
+# Import necessary libraries
 import pystac
 import requests
 from pystac_client import Client</pre>
@@ -1137,18 +1139,25 @@ from pystac_client import Client</pre>
             <li>
               <strong>Connect to a STAC:</strong> Use the link to the STAC-model-data to connect to the catalog:
               <pre class="bg-dark text-white p-2 rounded">
+# Define the URL of the STAC API endpoint
 catalog_url = "LINK"
+
+# Open the STAC API client
 client = Client.open(catalog_url)</pre>
             </li>
             <li>
               <strong>Filter and search the catalog:</strong> Search the catalog for relevant data:
               <pre class="bg-dark text-white p-2 rounded">
+# Search the STAC catalog with specific filters
 search = client.search(
     collections=["collection-id"],
-    bbox=[-180, -90, 180, 90],
-    datetime="2023-01-01/2023-12-31"
-)
+    bbox=[-180, -90, 180, 90]"
+    )
+
+# Retrieve the search results
 items = list(search.get_items())
+
+# Retrieve and print item properties
 for item in items:
     print(item.id, item.properties)</pre>
 
@@ -1157,14 +1166,16 @@ for item in items:
         </div>
         <div class="button-group">
           <button class="btn-copy" onclick="copyToClipboard('python-code')">
-            <i class="fas fa-copy"></i> Copy Python Code
+            <i class="fas fa-copy"></i> Copy
           </button>
           <button class="btn-download" onclick="downloadCode('python-code', 'python_integration.py')">
-            <i class="fas fa-download"></i> Download Python Code
+            <i class="fas fa-download"></i> Download
           </button>
         </div>
       </div>
-      
+
+
+      <!-- R --> 
       <div id="r" class="content-section section-margin">
         <h2 class="section-title">Integrating with R</h2>
         <p class="custom-paragraph">
@@ -1178,31 +1189,56 @@ for item in items:
             </li>
             <li>
               <strong>Install the required STAC client:</strong> Use the following command:
-              <pre class="bg-dark text-white p-2 rounded">install.packages("rstac")</pre>
+              <pre class="bg-dark text-white p-2 rounded"># Install the rstac package
+install.packages("rstac")</pre>
               Then load the package:
-              <pre class="bg-dark text-white p-2 rounded">library(rstac)</pre>
+              <pre class="bg-dark text-white p-2 rounded"># Load the rstac library
+library(rstac)</pre>
             </li>
             <li>
-              <strong>Connect to a STAC:</strong> Use the link to the STAC-model-data to connect to the catalog:
+              <strong>Connect to a STAC:</strong> Use the link to the STAC-model-data to define a STAC API-URL and create a catalog:
               <pre class="bg-dark text-white p-2 rounded">
-stac <- stac("LINK")</pre>
+# Define the STAC API URL
+url <- "LINK"
+                
+# Create an rstac catalog object
+catalog <- stac(url)</pre>
             </li>
             <li>
-              <strong>Filter and search the catalog:</strong> Query the catalog for relevant data:
+              <strong>Filter and search the catalog:</strong> Query the catalog for relevant data by defining search parameters:
               <pre class="bg-dark text-white p-2 rounded">
-results <- stac %>%
-stac_search(collections = "collection-id", bbox = c(-180, -90, 180, 90)) %>%
-get_request()
-print(results$features)</pre>
+# Specify search parameters
+bbox <- c(-180, -90, 180, 90)
+collection <- "ml-models-rs"
+                
+# Perform the search
+search <- stac(url) %>%
+  stac_search(collections = collection,
+              bbox = bbox) %>%
+  get_request()</pre>
+            </li>
+            <li>
+              <strong>Downloading data:</strong> Fetch the search results and download the assets:
+              <pre class="bg-dark text-white p-2 rounded">
+# Retrieve items
+items <- items_fetch(search)
+                
+# Print the results
+print(items)
+                
+# Download assets
+rstac::assets_url(items)
+                
+rstac::assets_download(items = items, asset_names = "water-bodies-model-pystac", output_dir = "~/Desktop/")</pre>
             </li>
           </ol>
         </div>
         <div class="button-group">
           <button class="btn-copy" onclick="copyToClipboard('r-code')">
-            <i class="fas fa-copy"></i> Copy R Code
+            <i class="fas fa-copy"></i> Copy
           </button>
           <button class="btn-download" onclick="downloadCode('r-code', 'r_integration.R')">
-            <i class="fas fa-download"></i> Download R Code
+            <i class="fas fa-download"></i> Download
           </button>
         </div>
       </div>

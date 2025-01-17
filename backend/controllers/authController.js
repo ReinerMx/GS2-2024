@@ -56,7 +56,7 @@ exports.login = async (req, res) => {
     console.log("Database query for email:", email);
     if (!user) {
       console.error("User not found for email:", email);
-      return res.status(401).json({ message: 'Invalid login credentials A.' });
+      return res.status(401).json({ message: 'Invalid login credentials. The e-mail is incorrect' });
     }
     console.log("User found:", user);
 
@@ -80,13 +80,8 @@ exports.login = async (req, res) => {
     console.log("Password comparison result:", isMatch);
     if (!isMatch) {
       console.error("Password mismatch for user:", email);
-      return res.status(401).json({ message: 'Invalid login credentials BB.' });
+      return res.status(401).json({ message: 'Invalid login credentials. The passwort is incorrect.' });
     }
-
-
-    
-
-
 
     // 4. JWT-Token generieren
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -95,7 +90,7 @@ exports.login = async (req, res) => {
     res.json({ token, message: "Login successful!" });
   } catch (error) {
     console.error("Error during login:", error);
-    res.status(500).json({ error: 'Internal server error.' });
+    res.status(500).json({ error: 'Internal server error. Login failed.' });
   }
 };
 
