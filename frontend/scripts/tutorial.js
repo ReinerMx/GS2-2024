@@ -300,6 +300,7 @@ document.querySelectorAll('a[href^="tutorials.html#"]').forEach((link) => {
 ////////////////////////////////////////////
 
 document.addEventListener("DOMContentLoaded", () => {
+  const navLinks = document.querySelectorAll(".product-navbar nav ul li a");
   /**
    * Hides all tab contents by setting their display to "none".
    */
