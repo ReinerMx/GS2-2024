@@ -497,22 +497,10 @@ router.post('/upload', authMiddleware, upload.single('modelFile'), async (req, r
 
                 const newCollection = await Collection.create(collectionData, { transaction });
 
-                const user = await User.findByPk(req.user.userId);
-                if (!user) {
-                    console.error(`User with ID ${req.user.userId} not found.`);
-                    return res.status(404).json({ message: 'User not found.' });
-                }
-
-                if (!req.user || !req.user.userId) {
-                    return res.status(401).json({ message: 'Access denied. Please log in.' });
-                  }
-                  
-                console.log("Authenticated user ID:", req.user.userId);                
-            
-                if (!user.saved_collections.includes(newCollection.collection_id)) {
-                    user.saved_collections.push(newCollection.collection_id);
-                    await user.save();
-                }
+                // add collection to `saved_collections` in user table
+                const updatedCollections = [...(user.saved_collections || []), newCollection.collection_id];
+                user.saved_collections = updatedCollections;
+                await user.save({ transaction }); // save to database
             
                 res.status(200).json({ message: 'Collection uploaded successfully!', newCollection });
             }

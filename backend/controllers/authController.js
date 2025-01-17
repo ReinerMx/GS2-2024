@@ -2,7 +2,13 @@ const User = require('../models/User'); // Import the User model
 const bcrypt = require('bcryptjs'); // For password hashing
 const jwt = require('jsonwebtoken'); // For token generation
 
-// Register a new user
+/**
+ * @function register
+ * @description Registers a new user
+ * @access Public
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 exports.register = async (req, res) => {
   try {
     console.log("Registration data received:", req.body);
@@ -15,20 +21,19 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required.' });
     }
 
-    // Check if the email already exists
+    // Check if the email already exists in the database
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       console.error("User already exists:", existingUser);
       return res.status(400).json({ message: 'Email is already registered.' });
     }
 
-    // Hash the password
+    // Hash the password before storing it in the database
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log("Hashed password:", hashedPassword);
 
-
     // Create a new user
-    const newUser = await User.create({ username, email, password});
+    const newUser = await User.create({ username, email, password: hashedPassword });
     console.log("User successfully created:", newUser);
 
     res.status(201).json({ message: 'User successfully registered.' });
@@ -38,52 +43,43 @@ exports.register = async (req, res) => {
   }
 };
 
-// User login
+/**
+ * @function login
+ * @description Logs in a user and generates a JWT token
+ * @access Public
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 exports.login = async (req, res) => {
   try {
     console.log("Login data received:", req.body);
 
     const { email, password } = req.body;
 
-    // 1. Überprüfung: E-Mail und Passwort vorhanden?
+    // Validate input data
     if (!email || !password) {
       console.error("Missing input data:", { email, password });
       return res.status(400).json({ message: 'Email and password are required.' });
     }
 
-    // 2. Benutzer anhand der E-Mail suchen
+    // Find user by email
     const user = await User.findOne({ where: { email: email.toLowerCase() } });
     console.log("Database query for email:", email);
     if (!user) {
       console.error("User not found for email:", email);
-      return res.status(401).json({ message: 'Invalid login credentials. The e-mail is incorrect' });
+      return res.status(401).json({ message: 'Invalid login credentials. The email is incorrect.' });
     }
     console.log("User found:", user);
 
-
-
-
-    // Manual bcrypt comparison for debugging
-    const inputPassword = password; // Password entered by the user
-    const storedHash = user.password; // Hash from the database
-
-    bcrypt.compare(inputPassword, storedHash, (err, result) => {
-      if (err) {
-        console.error("Error during manual password comparison:", err);
-      } else {
-        console.log("Manual password comparison result:", result); // Should log true or false
-      }
-    });
-
-    // Existing password comparison
+    // Compare the input password with the hashed password in the database
     const isMatch = await bcrypt.compare(password, user.password);
     console.log("Password comparison result:", isMatch);
     if (!isMatch) {
       console.error("Password mismatch for user:", email);
-      return res.status(401).json({ message: 'Invalid login credentials. The passwort is incorrect.' });
+      return res.status(401).json({ message: 'Invalid login credentials. The password is incorrect.' });
     }
 
-    // 4. JWT-Token generieren
+    // Generate a JWT token
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     console.log("Token successfully generated:", token);
 
@@ -94,8 +90,13 @@ exports.login = async (req, res) => {
   }
 };
 
-
-// Verify user token
+/**
+ * @function verifyToken
+ * @description Verifies a user's JWT token
+ * @access Public
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 exports.verifyToken = async (req, res) => {
   try {
     const authHeader = req.header('Authorization');
@@ -105,14 +106,17 @@ exports.verifyToken = async (req, res) => {
 
     const token = authHeader.replace('Bearer ', '');
 
+    // Ensure JWT_SECRET is defined
     if (!process.env.JWT_SECRET) {
       console.error("JWT_SECRET is missing in the .env file");
       throw new Error('JWT_SECRET is not defined.');
     }
 
+    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Token successfully verified:", decoded);
 
+    // Find the user associated with the token
     const user = await User.findByPk(decoded.userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
