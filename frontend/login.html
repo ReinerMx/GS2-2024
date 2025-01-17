@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
     <title>Login</title>
     <link
@@ -59,28 +59,33 @@
             <a class="nav-link" href="tutorials.html" aria-label="Tutorials"
               >Tutorials</a
             >
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="userDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
+          </li>
+
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="userDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
               <img
-              src="images/user-icon.png"
-              alt="User Icon"
-              class="user-icon"
-            />            
-              </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="account.html">Account</a>
-                <a class="dropdown-item" href="login.html">Login</a>
-                <a class="dropdown-item" href="register.html">Register</a>
-              </div>
-            </li>            
+                src="images/user-icon.png"
+                alt="User Icon"
+                class="user-icon"
+              />
+            </a>
+            <div
+              class="dropdown-menu dropdown-menu-right"
+              aria-labelledby="userDropdown"
+            >
+              <a class="dropdown-item" href="account.html">Account</a>
+              <a class="dropdown-item" href="login.html">Login</a>
+              <a class="dropdown-item" href="register.html">Register</a>
+            </div>
+          </li>
           <label class="switch">
             <input type="checkbox" id="appearanceToggle" />
             <span class="slider"></span>
@@ -101,6 +106,7 @@
             placeholder="Enter your email"
             required
           />
+          <span id="togglePassword" class="toggle-password-icon"> 🔒 </span>
         </div>
         <div class="form-group">
           <label for="password">Password:</label>

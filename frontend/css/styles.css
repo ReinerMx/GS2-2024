@@ -475,7 +475,19 @@ footer.dark-mode {
     font-size: 1rem;
     margin-left: 1rem;
 }
-
+/* Password Visibility*/
+.password-wrapper {
+    position: relative;
+  }
+  
+.toggle-password-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+}
 /* UI (Design) */
 .switch {
     display: block;
