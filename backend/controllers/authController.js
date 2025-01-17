@@ -33,7 +33,7 @@ exports.register = async (req, res) => {
     console.log("Hashed password:", hashedPassword);
 
     // Create a new user
-    const newUser = await User.create({ username, email, password: hashedPassword });
+    const newUser = await User.create({ username, email, password });
     console.log("User successfully created:", newUser);
 
     res.status(201).json({ message: 'User successfully registered.' });
