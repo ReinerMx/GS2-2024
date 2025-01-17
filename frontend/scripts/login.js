@@ -41,22 +41,3 @@ document
       alert("An error occurred. Please try again later.");
     }
   });
-
-/* Password visibility toggle */
-document
-  .getElementById("togglePassword")
-  .addEventListener("click", function () {
-    const passwordField = document.getElementById("password");
-    /**
-     * Determines the type of the password field.
-     * If the current type is "password", it changes to "text" to show the password.
-     * Otherwise, it changes to "password" to hide the password.
-     *
-     * @type {string} The new type of the password field, either "text" or "password".
-     */
-    const passwordFieldType =
-      passwordField.getAttribute("type") === "password" ? "text" : "password";
-    passwordField.setAttribute("type", passwordFieldType);
-
-    this.textContent = passwordFieldType === "password" ? "🔒" : "🔓";
-  });
