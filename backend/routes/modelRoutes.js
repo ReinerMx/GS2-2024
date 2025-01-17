@@ -2,9 +2,10 @@
 const express = require('express');
 const fs = require('fs');
 const sequelize = require('../config/db');
-const { MlmModel, Asset, Collection, Item } = require('../models');
+const { User, MlmModel, Asset, Collection, Item } = require('../models');
 const { Op } = require("sequelize"); // Sequelize operators for database queries
 const upload = require('../middleware/uploadMiddleware');
+const { authMiddleware } = require('../middleware/authMiddleware');
 
 
 // Initialize the router
@@ -444,10 +445,23 @@ router.get('/filters', async (req, res) => {
  * @description Handles file uploads and processes STAC data into collections or items.
  * @access Public
  */
-router.post('/upload', upload.single('modelFile'), async (req, res) => {
+router.post('/upload', authMiddleware, upload.single('modelFile'), async (req, res) => {
     const { userDescription } = req.body;
 
     try {
+        // make sure a user is logged in
+        if (!req.user || !req.user.userId) {
+            console.error("Unauthorized access attempt detected.");
+            return res.status(401).json({ message: 'Access denied. Please log in.' });
+        }
+    
+        const user = await User.findByPk(req.user.userId);
+        if (!user) {
+            console.error(`User with ID ${req.user.userId} not found.`);
+            return res.status(404).json({ message: 'User not found.' });
+        }
+        console.log("Uploading collection for user ID:", req.user.userId);
+        
         // Parse the uploaded STAC JSON file
         const stacData = JSON.parse(fs.readFileSync(req.file.path, 'utf8'));
 
@@ -478,11 +492,29 @@ router.post('/upload', upload.single('modelFile'), async (req, res) => {
                     links: stacData.links || [],
                     item_assets: stacData.item_assets || null,
                     user_description: userDescription || null,
+                    user_id: req.user.userId,
                 };
 
-                await Collection.create(collectionData, { transaction });
-                console.log('Collection uploaded successfully:', collectionData);
-                return res.status(200).json({ message: 'Collection uploaded successfully!' });
+                const newCollection = await Collection.create(collectionData, { transaction });
+
+                const user = await User.findByPk(req.user.userId);
+                if (!user) {
+                    console.error(`User with ID ${req.user.userId} not found.`);
+                    return res.status(404).json({ message: 'User not found.' });
+                }
+
+                if (!req.user || !req.user.userId) {
+                    return res.status(401).json({ message: 'Access denied. Please log in.' });
+                  }
+                  
+                console.log("Authenticated user ID:", req.user.userId);                
+            
+                if (!user.saved_collections.includes(newCollection.collection_id)) {
+                    user.saved_collections.push(newCollection.collection_id);
+                    await user.save();
+                }
+            
+                res.status(200).json({ message: 'Collection uploaded successfully!', newCollection });
             }
 
             if (isFeature) {

@@ -108,32 +108,48 @@ document.addEventListener("DOMContentLoaded", () => {
     // Include the rendered Markdown content as part of the form submission
     formData.set("userDescription", simplemde.value());
 
+    const token = localStorage.getItem("token");
+    if (!token) {
+      displayStatusMessage("Please log in to upload.", true);
+      submitButton.disabled = true;
+    }
+
     try {
       submitButton.disabled = true;
       submitButton.textContent = "Uploading...";
 
       const response = await fetch("/upload", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, // add token
+        },
         body: formData,
       });
 
       const result = await response.json();
 
       if (response.ok) {
+        // successful upload
         displayStatusMessage(result.message || "Upload successful!");
-
         // Reset the form and editor
         uploadForm.reset();
         simplemde.value(""); // Clear SimpleMDE content
         dropZone.innerHTML = `<p>Drag & drop your file here, or <span class="text-primary click-trigger">click to select</span>.</p>`;
-      } else {
-        let errorMessage = result.error || "An error occurred.";
+      } else if (response.status === 404) {
+        displayStatusMessage(result.message || "Please log in before uploading.", true);
+      } else if (response.status === 401) {
+        // user not logged in
+        displayStatusMessage("Access denied. Please log in before uploading.", true);
+      } else if (response.status === 400) {
+        // incorrect entries
+        let errorMessage = result.error || "Invalid input data.";
         if (result.details && Array.isArray(result.details)) {
-          errorMessage +=
-            "\nDetails:\n" +
-            result.details.map((detail) => `• ${detail}`).join("\n");
+          errorMessage += "\nDetails:\n" + result.details.map((detail) => `• ${detail}`).join("\n");
         }
         displayStatusMessage(errorMessage, true);
+      } else {
+        // unexpected error
+        displayStatusMessage("An unexpected error occurred. Please try again.", true);
       }
     } catch (error) {
       console.error("Upload failed:", error);

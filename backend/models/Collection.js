@@ -467,7 +467,7 @@ const Collection = sequelize.define('Collection', {
      */
     user_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
             model: User,
             key: 'id',
