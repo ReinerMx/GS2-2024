@@ -475,19 +475,36 @@ footer.dark-mode {
     font-size: 1rem;
     margin-left: 1rem;
 }
-/* Password Visibility*/
-.password-wrapper {
-    position: relative;
-  }
+/* Password Visibility */
+.password-container {
+    display: flex;
+    align-items: center;
+}
+
+.form-control {
+    width: 100%;
+    padding-right: 40px; /* Platz für Icon */
+    font-size: 1rem;
+    padding: 10px;
+}
   
-.toggle-password-icon {
+.toggle-password {
     position: absolute;
-    right: 10px;
     top: 50%;
+    right: 10px;
     transform: translateY(-50%);
     cursor: pointer;
-    font-size: 18px;
+    font-size: 1.2rem;
+    user-select: none;
 }
+
+.toggle-password:hover {
+    color: #007bff;
+}
+
+
+
+
 /* UI (Design) */
 .switch {
     display: block;
