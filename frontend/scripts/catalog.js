@@ -8,6 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
   autocompleteList.setAttribute("class", "autocomplete");
   document.body.appendChild(autocompleteList);
 
+  const handleSearch = (event) => {
+    if (event.key === "Enter") {
+      const query = event.target.value.trim();
+      if (query) {
+        console.log(`Search triggered with query: ${query}`);
+        fetchSearchResults(query);
+      }
+    }
+  };
+
+  searchInput.addEventListener("keypress", handleSearch);
+
   // Adjust the position of the autocomplete list
   const positionAutocomplete = () => {
     const rect = searchInput.getBoundingClientRect();
@@ -152,19 +164,15 @@ document.addEventListener("DOMContentLoaded", () => {
         architectures,
         keywords,
         dataTypes,
-        ioRequirements,
-        bandCounts,
       } = await response.json();
 
-      // Pass all filters, including bandCounts, to renderFilters
+      // Pass all filters to renderFilters
       renderFilters({
         tasks,
         frameworks,
         architectures,
         keywords,
         dataTypes,
-        ioRequirements,
-        bandCounts,
       });
     } catch (error) {
       console.error("Error loading filters:", error);
@@ -548,7 +556,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const searchQuery = params.get("search");
 
@@ -688,4 +695,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
     attachViewDetailsListeners();
   };
-});
