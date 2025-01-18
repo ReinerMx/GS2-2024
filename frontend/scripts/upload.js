@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const result = await response.json();
-
+      
       if (response.ok) {
         // successful upload
         displayStatusMessage(result.message || "Upload successful!");

@@ -542,6 +542,11 @@ router.post('/upload', authMiddleware, upload.single('modelFile'), async (req, r
                     return res.status(400).json({ error: "Referenced collection does not exist." });
                 }
 
+                // Ensure the collection belongs to the logged-in user
+                if (collection.user_id !== req.user.userId) {
+                    return res.status(403).json({ error: "You do not have permission to upload items to this collection." });
+                  }
+
                 // Extract and save Item data
                 const itemData = {
                     type: stacData.type,
