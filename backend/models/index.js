@@ -12,7 +12,7 @@ const models = { User, Collection, Item, MlmModel, Asset };
 const defineRelationships = () => {
     // User -> Collections (1:n)
     models.User.hasMany(models.Collection, { foreignKey: 'user_id', as: 'collections', onDelete: 'SET NULL' });
-    models.Collection.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });  
+    models.Collection.belongsTo(models.User, { foreignKey: 'user_id', as: 'uploader' }); // Updated alias
 
     // Collection -> Items (1:n)
     models.Collection.hasMany(models.Item, { foreignKey: 'collection_id', as: 'items', onDelete: 'CASCADE' });

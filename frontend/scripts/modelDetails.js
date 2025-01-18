@@ -37,7 +37,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // Populate Model Name and User Description
       modelNameElement.textContent =
-        model.properties["mlm:name"] || "Unknown Model";
+        model.properties["mlm:name"];
+
+      // Add uploader's username to the top section
+      const uploaderElement = document.createElement("p");
+      uploaderElement.className = "uploader-info";
+      uploaderElement.innerHTML = `<strong>Uploaded by:</strong> ${
+        model.uploader || "Unknown"
+      }`;
+      modelNameElement.parentElement.insertBefore(
+        uploaderElement,
+        modelNameElement.nextSibling
+      );
+
       userDescriptionElement.innerHTML = model.user_description
         ? marked.parse(model.user_description)
         : "<em>No description provided.</em>";

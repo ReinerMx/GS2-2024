@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const collectionDiv = document.createElement("div");
       collectionDiv.classList.add("model-item", "mb-4");
 
-      // Keywords als einzelne Span-Elemente rendern (für Arrays)
+      // render keyords as single span elements (for arrays)
       const keywordsHTML =
         Array.isArray(collection.keywords) && collection.keywords.length > 0
           ? collection.keywords
@@ -421,9 +421,13 @@ document.addEventListener("DOMContentLoaded", () => {
               .join(" ")
           : "";
 
+      // username from uploader
+      const uploader = collection.uploader
+
       collectionDiv.innerHTML = `
                 <h4>${collection.title}</h4>
                 <p>${collection.description}</p>
+                <p><strong>Uploaded by:</strong> ${uploader}</p>
                 <div class="collection-keywords">${keywordsHTML}</div>
                 <button class="btn btn-primary view-items-btn" data-id="${collection.collection_id}">View Items</button>
             `;

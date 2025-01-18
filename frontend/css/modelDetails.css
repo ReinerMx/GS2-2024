@@ -21,6 +21,12 @@
     align-items: start;
 }
 
+.uploader-info {
+    font-size: 1.1rem;
+    color: #555;
+    margin-top: 0.5rem;
+  }  
+
 /* Left Section: Model Details */
 .info-section {
     background-color: #ffffff;

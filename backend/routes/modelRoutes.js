@@ -72,9 +72,27 @@ router.get('/conformance', (req, res) => {
  */
 router.get('/collections', async (req, res) => {
     try {
-        const collections = await Collection.findAll();
-        res.json({ collections });
+        // Fetch all collections, including the uploader's username
+        const collections = await Collection.findAll({
+            include: [
+                {
+                    model: User,
+                    as: 'uploader', // Must match the alias defined in the Sequelize association
+                    attributes: ['username'], // Select only relevant fields
+                },
+            ],
+        });
+
+        // Format the collections to include uploader information
+        const formattedCollections = collections.map(collection => ({
+            ...collection.toJSON(),
+            uploader: collection.uploader?.username || "Unknown", // Use the username or default to "Unknown"
+        }));
+
+        // Send the formatted collections as a JSON response
+        res.json({ collections: formattedCollections });
     } catch (error) {
+        // Log the error and send a 500 response
         console.error('Error fetching collections:', error);
         res.status(500).json({ error: 'Error fetching collections' });
     }
@@ -114,7 +132,7 @@ router.get('/collections/:collection_id/items', async (req, res) => {
         const items = await Item.findAll({ where: { collection_id } });
 
         if (!items || items.length === 0) {
-            return res.json({ items: [] }); // Rückgabe eines leeren Arrays
+            return res.json({ items: [] }); // return empty array
         }        
 
         res.json({ items });
@@ -133,48 +151,53 @@ router.get('/collections/:collection_id/items', async (req, res) => {
  */
 router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
     const { collection_id, item_id } = req.params;
-
+  
     try {
-        // Fetch the item along with its parent collection, mlm_model, and assets
-        const item = await Item.findOne({
-            where: { collection_id, item_id },
+      // Fetch the item along with its parent collection, uploader, mlm_model, and assets
+      const item = await Item.findOne({
+        where: { collection_id, item_id },
+        include: [
+          {
+            model: Collection,
+            as: 'parentCollection',
             include: [
-                {
-                    model: Collection,
-                    as: 'parentCollection', 
-                },
-                {
-                    model: MlmModel,
-                    as: 'mlmModels',
-                },
-                {
-                    model: Asset,
-                    as: 'assets',
-                },
+              {
+                model: User,
+                as: 'uploader', // Ensure this matches your Sequelize alias
+                attributes: ['username'], // Fetch only the username
+              },
             ],
-        });
-
-        // If no item is found, return a 404 error
-        if (!item) {
-            return res.status(404).json({ error: 'Item not found' });
-        }
-
-        // Format the response to include related data
-        const response = {
-            ...item.dataValues,
-            parentCollection: item.parentCollection, // Include parentCollection
-            user_description: item.user_description,
-            mlm_model: item.mlmModels,
-            assets: item.assets,
-        };
-
-        res.json(response);
+          },
+          {
+            model: MlmModel,
+            as: 'mlmModels',
+          },
+          {
+            model: Asset,
+            as: 'assets',
+          },
+        ],
+      });
+  
+      if (!item) {
+        return res.status(404).json({ error: 'Item not found' });
+      }
+  
+      const response = {
+        ...item.dataValues,
+        parentCollection: item.parentCollection, // Include parent collection
+        uploader: item.parentCollection?.uploader?.username || "Unknown", // Extract uploader username
+        user_description: item.user_description,
+        mlm_model: item.mlmModels,
+        assets: item.assets,
+      };
+  
+      res.json(response);
     } catch (error) {
-        console.error('Error fetching item:', error);
-        res.status(500).json({ error: 'Error fetching item' });
+      console.error('Error fetching item:', error);
+      res.status(500).json({ error: 'Error fetching item' });
     }
-});
-
+  });  
 
 /**
  * @route ALL /search
@@ -322,8 +345,6 @@ router.get('/searchbar', async (req, res) => {
                 { 'properties.mlm:tasks': { [Op.iLike]: `%${keyword}%` } },
                 { 'properties.mlm:framework': { [Op.iLike]: `%${keyword}%` } },
                 { 'properties.mlm:architecture': { [Op.iLike]: `%${keyword}%` } },
-                sequelize.literal(`properties->>'mlm:data_type' ILIKE '%${keyword}%'`), // Match data types
-                sequelize.literal(`properties->>'mlm:io_requirements' ILIKE '%${keyword}%'`), // Match IO requirements
             ],
         };
 

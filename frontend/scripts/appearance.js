@@ -152,6 +152,11 @@ document.addEventListener("DOMContentLoaded", () => {
     autocompleteList.style.display = "block"; // Show the autocomplete list
   };
 
+  if (!input || !autocompleteList) {
+    console.warn("Search input (search-bar) or autocomplete list not found.");
+    return;
+  }
+
   // Event: Handle user input
   input.addEventListener("input", async () => {
     const query = input.value.trim().toLowerCase();
