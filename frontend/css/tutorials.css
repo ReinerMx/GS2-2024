@@ -280,12 +280,12 @@ p {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.dark-mode .faq-container h1 {
-    color: #2d828e;
+.dark-mode .faq-container h1 {  
+    color: white /*Lara*/
 }
 
 .dark-mode .faq-question {
-    background-color: #2d828e;
+    background-color: white; /*Lara*/
     color: #fff;
 }
 
@@ -396,7 +396,7 @@ p {
 
 .dark-mode .product-navbar nav ul li a.active {
     color: #f8f9fa;
-    border-bottom: 2px solid #2d828e;
+    border-bottom: 2px solid white; /*Lara*/
 }
 
 .dark-mode .table-responsive p {

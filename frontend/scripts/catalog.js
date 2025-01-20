@@ -563,6 +563,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const searchQuery = params.get("search");
 
+
     if (searchQuery) {
       const searchInput = document.getElementById("searchInput");
       searchInput.value = searchQuery;
@@ -572,12 +573,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /**
-   *
+   * Function to initialize the map
    * @param {*} mapId
    * @param {*} bbox
    * @returns
    */
-  const initializeMap = (mapId, bbox) => {
+  const initializeMap = (mapId, bbox) => { 
     if (!bbox || bbox.length !== 4) {
       console.warn(`Invalid BBOX for map ${mapId}:`, bbox);
       return null; // Return null if bbox is invalid
