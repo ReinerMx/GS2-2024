@@ -1,3 +1,20 @@
+let drawnGeometry = null;
+
+  // Attach click listeners to "View Details" buttons
+  const attachViewDetailsListeners = () => {
+    console.log('Attaching event listeners to "View Details" buttons.');
+    document.querySelectorAll(".view-details-btn").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const collectionId = event.target.getAttribute("data-collection-id");
+        const itemId = event.target.getAttribute("data-item-id");
+        console.log(
+          `"View Details" button clicked for Collection ID: ${collectionId}, Item ID: ${itemId}`
+        );
+        window.location.href = `modelDetails.html?collection_id=${collectionId}&item_id=${itemId}`;
+      });
+    });
+  };
+
 document.addEventListener("DOMContentLoaded", () => {
   const resultsContainer = document.getElementById("resultsContainer");
   const searchInput = document.getElementById("searchInput");
@@ -228,9 +245,6 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     const keywordsContainer = document.getElementById("keywordsContainer");
     const dataTypesContainer = document.getElementById("dataTypesContainer");
-    const ioRequirementsContainer = document.getElementById(
-      "ioRequirementsContainer"
-    );
 
     // Helper function to populate filters
     const populateFilterCategory = (container, items) => {
@@ -254,7 +268,6 @@ document.addEventListener("DOMContentLoaded", () => {
     populateFilterCategory(architecturesContainer, filters.architectures);
     populateFilterCategory(keywordsContainer, filters.keywords);
     populateFilterCategory(dataTypesContainer, filters.dataTypes);
-    populateFilterCategory(ioRequirementsContainer, filters.ioRequirements);
   };
 
   loadFilters(); // Initialize filters on page load
@@ -277,8 +290,6 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   });
   map.addControl(drawControl);
-
-  let drawnGeometry = null;
 
   // Save geometry after drawing
   map.on(L.Draw.Event.CREATED, (event) => {
@@ -480,21 +491,6 @@ document.addEventListener("DOMContentLoaded", () => {
           `"View Items" button clicked for collection ID: ${collectionId}`
         );
         loadItemsInCollection(collectionId);
-      });
-    });
-  };
-
-  // Attach click listeners to "View Details" buttons
-  const attachViewDetailsListeners = () => {
-    console.log('Attaching event listeners to "View Details" buttons.');
-    document.querySelectorAll(".view-details-btn").forEach((button) => {
-      button.addEventListener("click", (event) => {
-        const collectionId = event.target.getAttribute("data-collection-id");
-        const itemId = event.target.getAttribute("data-item-id");
-        console.log(
-          `"View Details" button clicked for Collection ID: ${collectionId}, Item ID: ${itemId}`
-        );
-        window.location.href = `modelDetails.html?collection_id=${collectionId}&item_id=${itemId}`;
       });
     });
   };
