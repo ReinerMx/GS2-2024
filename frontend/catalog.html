@@ -46,11 +46,10 @@
         <div class="search-container">
           <div class="search-bar">
             <input
-            id="search-bar"
-            type="text"
-            placeholder="Search models, users..."
-            
-          />                             
+              id="search-bar"
+              type="text"
+              placeholder="Search models, users..."
+            />
             <ul id="autocomplete-list" class="autocomplete"></ul>
           </div>
         </div>
@@ -107,10 +106,7 @@
     <div class="container-fluid mt-4">
       <div id="mainContainer" class="row">
         <!-- Sidebar für Filter -->
-        <aside
-          class="col-12 col-md-3 filter-sidebar"
-          style="margin-bottom: 50px !important"
-        >
+        <aside class="col-md-3 filter-sidebar">
           <h4>Filters</h4>
           <!-- Temporal Filter -->
           <div class="filter-section mt-4">
@@ -130,15 +126,10 @@
             <p>
               Draw a region on the map to filter models by geographic location.
             </p>
-            <div
-              id="map"
-              class="map-container"
-              style="margin-bottom: 250px !important"
-            ></div>
+            <div id="map" class="map-container"></div>
             <button
               id="applyGeoFilter"
               class="btn btn-primary mt-3 apply-filter-btn"
-              style="position: relative; top: -260px !important"
             >
               Apply Filter
             </button>
@@ -146,7 +137,7 @@
         </aside>
 
         <!-- Main Content -->
-        <section class="col-12 col-md-9 search-catalog-container">
+        <section class="col-md-9 search-catalog-container">
           <div class="search-bar-container">
             <h2>Model Catalog</h2>
             <p>
