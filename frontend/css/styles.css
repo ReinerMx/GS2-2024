@@ -475,6 +475,21 @@ footer.dark-mode {
     font-size: 1rem;
     margin-left: 1rem;
 }
+
+body.dark-mode .model-item {
+    background-color: #444;
+    color: #f9f9f9;
+}
+body.dark-mode #resultsContainer .model-item p {
+    color: #d1d1d1; 
+}
+
+body.dark-mode #resultsContainer .model-item p strong {
+    color: #f8f9fa; 
+    font-weight: bold;
+}
+
+
 /* Password Visibility */
 .password-container {
     display: flex;
