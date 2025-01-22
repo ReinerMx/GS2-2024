@@ -104,9 +104,14 @@
     </nav>
 
     <div class="container-fluid mt-4">
-      <div id="mainContainer" class="row">
-        <!-- Sidebar für Filter -->
-        <aside class="col-md-3 filter-sidebar">
+      <div id="mainContainer" class="d-flex">
+        <!-- Sidebar for Filter -->
+        <aside class="filter-sidebar">
+          <!-- Toggle-Button -->
+          <button class="toggle-sidebar-btn" aria-label="Toggle Sidebar">
+            ☰
+          </button>
+
           <h4>Filters</h4>
           <!-- Temporal Filter -->
           <div class="filter-section mt-4">
@@ -137,7 +142,7 @@
         </aside>
 
         <!-- Main Content -->
-        <section class="col-md-9 search-catalog-container">
+        <section class="search-catalog-container">
           <div class="search-bar-container">
             <h2>Model Catalog</h2>
             <p>

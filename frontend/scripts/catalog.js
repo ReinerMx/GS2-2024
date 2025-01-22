@@ -1,19 +1,28 @@
 let drawnGeometry = null;
 
-  // Attach click listeners to "View Details" buttons
-  const attachViewDetailsListeners = () => {
-    console.log('Attaching event listeners to "View Details" buttons.');
-    document.querySelectorAll(".view-details-btn").forEach((button) => {
-      button.addEventListener("click", (event) => {
-        const collectionId = event.target.getAttribute("data-collection-id");
-        const itemId = event.target.getAttribute("data-item-id");
-        console.log(
-          `"View Details" button clicked for Collection ID: ${collectionId}, Item ID: ${itemId}`
-        );
-        window.location.href = `modelDetails.html?collection_id=${collectionId}&item_id=${itemId}`;
-      });
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.querySelector(".filter-sidebar");
+  const toggleButton = document.querySelector(".toggle-sidebar-btn");
+
+  toggleButton.addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+  });
+});
+
+// Attach click listeners to "View Details" buttons
+const attachViewDetailsListeners = () => {
+  console.log('Attaching event listeners to "View Details" buttons.');
+  document.querySelectorAll(".view-details-btn").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const collectionId = event.target.getAttribute("data-collection-id");
+      const itemId = event.target.getAttribute("data-item-id");
+      console.log(
+        `"View Details" button clicked for Collection ID: ${collectionId}, Item ID: ${itemId}`
+      );
+      window.location.href = `modelDetails.html?collection_id=${collectionId}&item_id=${itemId}`;
     });
-  };
+  });
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   const resultsContainer = document.getElementById("resultsContainer");
@@ -175,13 +184,8 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch("/filters");
       if (!response.ok) throw new Error("Error fetching filters");
-      const {
-        tasks,
-        frameworks,
-        architectures,
-        keywords,
-        dataTypes,
-      } = await response.json();
+      const { tasks, frameworks, architectures, keywords, dataTypes } =
+        await response.json();
 
       // Pass all filters to renderFilters
       renderFilters({
@@ -433,7 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
           : "";
 
       // username from uploader
-      const uploader = collection.uploader
+      const uploader = collection.uploader;
 
       collectionDiv.innerHTML = `
                 <h4>${collection.title}</h4>
@@ -556,75 +560,73 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-    const params = new URLSearchParams(window.location.search);
-    const searchQuery = params.get("search");
+  const params = new URLSearchParams(window.location.search);
+  const searchQuery = params.get("search");
 
+  if (searchQuery) {
+    const searchInput = document.getElementById("searchInput");
+    searchInput.value = searchQuery;
 
-    if (searchQuery) {
-      const searchInput = document.getElementById("searchInput");
-      searchInput.value = searchQuery;
+    fetchSearchResults(searchQuery);
+  }
+});
 
-      fetchSearchResults(searchQuery);
+/**
+ * Function to initialize the map
+ * @param {*} mapId
+ * @param {*} bbox
+ * @returns
+ */
+const initializeMap = (mapId, bbox) => {
+  if (!bbox || bbox.length !== 4) {
+    console.warn(`Invalid BBOX for map ${mapId}:`, bbox);
+    return null; // Return null if bbox is invalid
+  }
+
+  const [minX, minY, maxX, maxY] = bbox;
+
+  // Initialize the Leaflet map
+  const map = L.map(mapId).setView([(minY + maxY) / 2, (minX + maxX) / 2], 5);
+
+  // Add OpenStreetMap tiles
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 18,
+    attribution: "© OpenStreetMap contributors",
+  }).addTo(map);
+
+  // Add a rectangle for the BBOX
+  const bounds = [
+    [minY, minX],
+    [maxY, maxX],
+  ];
+  L.rectangle(bounds, { color: "#3388ff", weight: 1 }).addTo(map);
+
+  // Fit the map to the BBOX
+  map.fitBounds(bounds);
+
+  return map; // Return the map object
+};
+
+// Function to display models for geographic filter
+const displayModels = (models, filters) => {
+  resultsContainer.innerHTML = ""; // Clear previous content
+
+  let filtersSummary = [];
+  if (filters.geoFilter) {
+    filtersSummary.push("Geographic Filter Applied");
+    if (filters.bbox) {
+      const [minX, minY, maxX, maxY] = filters.bbox;
+      filtersSummary.push(
+        `Bounding Box: [${minX.toFixed(2)}, ${minY.toFixed(2)}, ${maxX.toFixed(
+          2
+        )}, ${maxY.toFixed(2)}]`
+      );
     }
-  });
+  }
+  if (filters.datetime) filtersSummary.push(`Time Range: ${filters.datetime}`);
+  if (filtersSummary.length === 0) filtersSummary = "None";
 
-  /**
-   * Function to initialize the map
-   * @param {*} mapId
-   * @param {*} bbox
-   * @returns
-   */
-  const initializeMap = (mapId, bbox) => { 
-    if (!bbox || bbox.length !== 4) {
-      console.warn(`Invalid BBOX for map ${mapId}:`, bbox);
-      return null; // Return null if bbox is invalid
-    }
-
-    const [minX, minY, maxX, maxY] = bbox;
-
-    // Initialize the Leaflet map
-    const map = L.map(mapId).setView([(minY + maxY) / 2, (minX + maxX) / 2], 5);
-
-    // Add OpenStreetMap tiles
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 18,
-      attribution: "© OpenStreetMap contributors",
-    }).addTo(map);
-
-    // Add a rectangle for the BBOX
-    const bounds = [
-      [minY, minX],
-      [maxY, maxX],
-    ];
-    L.rectangle(bounds, { color: "#3388ff", weight: 1 }).addTo(map);
-
-    // Fit the map to the BBOX
-    map.fitBounds(bounds);
-
-    return map; // Return the map object
-  };
-
-  // Function to display models for geographic filter
-  const displayModels = (models, filters) => {
-    resultsContainer.innerHTML = ""; // Clear previous content
-
-    let filtersSummary = [];
-    if (filters.geoFilter) {
-      filtersSummary.push("Geographic Filter Applied");
-      if (filters.bbox) {
-        const [minX, minY, maxX, maxY] = filters.bbox;
-        filtersSummary.push(
-          `Bounding Box: [${minX.toFixed(2)}, ${minY.toFixed(
-            2
-          )}, ${maxX.toFixed(2)}, ${maxY.toFixed(2)}]`
-        );
-      }
-    }
-    if (filters.datetime)
-      filtersSummary.push(`Time Range: ${filters.datetime}`);
-    if (filtersSummary.length === 0) filtersSummary = "None";
-
-    resultsContainer.innerHTML = `
+  resultsContainer.innerHTML = `
         <div class="filtered-results-header">
             <h4>Filtered Models</h4>
             <p><strong>Filters used:</strong> ${filtersSummary.join(" | ")}</p>
@@ -633,35 +635,32 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="row" id="modelGrid"></div>
     `;
 
-    const grid = document.getElementById("modelGrid");
+  const grid = document.getElementById("modelGrid");
 
-    models.forEach((model, index) => {
-      const overlap = model.properties.overlap_percentage
-        ? parseFloat(model.properties.overlap_percentage).toFixed(2) + "%"
-        : "No spatial filter applied."; // Fallback if overlap_percentage is null or undefined
+  models.forEach((model, index) => {
+    const overlap = model.properties.overlap_percentage
+      ? parseFloat(model.properties.overlap_percentage).toFixed(2) + "%"
+      : "No spatial filter applied."; // Fallback if overlap_percentage is null or undefined
 
-      // Extract and format temporal coverage
-      const startDatetime = model.properties?.start_datetime
-        ? new Date(model.properties.start_datetime).toLocaleDateString(
-            "en-US",
-            {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }
-          )
-        : "N/A";
-      const endDatetime = model.properties?.end_datetime
-        ? new Date(model.properties.end_datetime).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })
-        : "N/A";
+    // Extract and format temporal coverage
+    const startDatetime = model.properties?.start_datetime
+      ? new Date(model.properties.start_datetime).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "N/A";
+    const endDatetime = model.properties?.end_datetime
+      ? new Date(model.properties.end_datetime).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "N/A";
 
-      const modelDiv = document.createElement("div");
-      modelDiv.classList.add("model-item");
-      modelDiv.innerHTML = `
+    const modelDiv = document.createElement("div");
+    modelDiv.classList.add("model-item");
+    modelDiv.innerHTML = `
             <h5>${model.properties["mlm:name"]}</h5>
             <p>${model.properties.description}</p>
             <p><strong>Collection:</strong> ${model.collection}</p>
@@ -679,20 +678,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 View Details
             </button>
         `;
-      grid.appendChild(modelDiv);
+    grid.appendChild(modelDiv);
 
-      // Initialize the map for this item's bbox
-      const map = initializeMap(`map-${index}`, model.bbox);
+    // Initialize the map for this item's bbox
+    const map = initializeMap(`map-${index}`, model.bbox);
 
-      if (map && drawnGeometry) {
-        // Ensure the map and drawnGeometry exist
-        const filterLayer = L.geoJSON(drawnGeometry.toGeoJSON(), {
-          style: { color: "#ff7800", weight: 2, fillOpacity: 0.2 },
-        }).addTo(map);
+    if (map && drawnGeometry) {
+      // Ensure the map and drawnGeometry exist
+      const filterLayer = L.geoJSON(drawnGeometry.toGeoJSON(), {
+        style: { color: "#ff7800", weight: 2, fillOpacity: 0.2 },
+      }).addTo(map);
 
-        map.fitBounds(filterLayer.getBounds());
-      }
-    });
+      map.fitBounds(filterLayer.getBounds());
+    }
+  });
 
-    attachViewDetailsListeners();
-  };
+  attachViewDetailsListeners();
+};

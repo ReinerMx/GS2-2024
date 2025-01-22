@@ -1,20 +1,92 @@
-/* Sidebar Styling */
-.filter-sidebar {
+/* Main container */
+#mainContainer {
+    display: flex; /* Flexbox layout */
+    width: 100%; /* Full width for layout */
+  }
+  
+  /* Sidebar Styling */
+  .filter-sidebar {
+    width: 20%; /* Expanded width */
     background-color: #f8f9fa;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 0;
-    height: fit-content;
-}
-
-.filter-sidebar h4, .filter-section h5 {
+    height: 100vh; /* Full height */
+    transition: width 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+    overflow: hidden; /* Prevent content overflow */
+    flex-shrink: 0; /* Prevent shrinking */
+  }
+  
+  /* Eingeklappte Sidebar */
+  .filter-sidebar.collapsed {
+    width: 50px; /* Reduced width */
+  }
+  
+  /* Inhalte der eingeklappten Sidebar ausblenden */
+  .filter-sidebar.collapsed h4,
+  .filter-sidebar.collapsed .filter-section h5,
+  .filter-sidebar.collapsed .form-group,
+  .filter-sidebar.collapsed p,
+  .filter-sidebar.collapsed .map-container,
+  .filter-sidebar.collapsed #applyGeoFilter {
+    display: none; /* Hide these elements */
+  }
+  
+  /* Der Toggle-Button bleibt sichtbar */
+  .filter-sidebar.collapsed .toggle-sidebar-btn {
+    display: block;
+  }
+  
+/* Toggle-Button Styling */
+.toggle-sidebar-btn {
+    background: none;
+    border: none;
     color: #007bff;
-    font-weight: 600;
-    margin-bottom: 12px;
-    font-size: 18px;
+    font-size: 23px;
+    cursor: pointer;
+    display: block;
+    text-align: left;
+    transition: color 0.3s ease;
+    padding: 1px;
 }
+  
+  .toggle-sidebar-btn:hover {
+    color: #0056b3;
+  }
+  
+  /* Hauptinhalt Styling */
+  .content {
+    flex-grow: 1; /* Take remaining space */
+    padding: 20px;
+    background-color: #ffffff;
+    transition: margin-left 0.3s ease; /* Smooth transition for content */
+  }
+  
+  /* Dynamische Anpassung des Inhalts */
+  .filter-sidebar.collapsed ~ .content {
+    margin-left: 50px; /* Adjust content margin when sidebar is collapsed */
+  }
+  
+  /* Responsive Styling */
+  @media (max-width: 768px) {
+    #mainContainer {
+      flex-direction: column; /* Stack sidebar and content vertically */
+    }
+  
+    .filter-sidebar {
+      width: 100%; /* Full width for smaller screens */
+      height: auto; /* Adjust height for mobile */
+    }
+  
+    .filter-sidebar.collapsed {
+      width: 100%; /* Full width for collapsed state on small screens */
+    }
+  
+    .content {
+      margin-left: 0; /* No margin adjustment needed */
+    }
+  }
+  
 
 /* Label Styling */
 .filter-section label {
@@ -111,9 +183,14 @@
 }
 
 .search-catalog-container {
+    width: 70%; /* Entspricht etwa 9 von 12 Spalten */
     padding-top: 10px;
     margin-top: 20px;
+    margin-left: auto; /* Zentriere den Container innerhalb des Layouts */
+    margin-right: auto;
+    box-sizing: border-box; /* Sorgt dafür, dass Padding und Border einbezogen werden */
 }
+
 
 /* Dark Mode Styles */
 body.dark-mode .filter-sidebar {
