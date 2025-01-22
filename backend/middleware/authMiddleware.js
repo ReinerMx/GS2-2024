@@ -9,19 +9,27 @@ exports.authMiddleware = async (req, res, next) => {
   }
 
   try {
+    // Verify the JWT token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Decoded token:", decoded);
 
+    // Check if the user exists in the database
     const user = await User.findByPk(decoded.userId);
     if (!user) {
       console.error(`User with ID ${decoded.userId} not found.`);
       return res.status(404).json({ message: 'User not found.' });
     }
 
+    // Attach the user information to the request object
     req.user = decoded;
     next();
   } catch (error) {
-    console.error("Token validation failed:", error);
-    res.status(400).json({ message: 'Invalid Token' });
+    if (error.name === 'TokenExpiredError') {
+      console.error("Token expired at:", error.expiredAt);
+      return res.status(401).json({ message: 'Session expired. Please log in again.' });
+    }
+
+    console.error("Token validation failed:", error.message);
+    return res.status(400).json({ message: 'Invalid token. Access denied.' });
   }
 };

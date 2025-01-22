@@ -19,6 +19,28 @@ router.post('/register', register);
 router.post('/login', login);
 
 /**
+ * 
+ */
+router.post('/refresh', (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+      return res.status(400).json({ message: 'Refresh token is required' });
+  }
+
+  // Validate refresh token and issue new access token
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+      if (err) {
+          return res.status(403).json({ message: 'Invalid refresh token' });
+      }
+
+      const newToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      res.json({ token: newToken });
+  });
+});
+
+
+/**
  * @route GET /me
  * @description Fetches the currently logged-in user's details
  * @access Private
