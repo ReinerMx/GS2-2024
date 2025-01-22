@@ -52,9 +52,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       <section>
         <h2>Account Details</h2>
+        <p>Username: ${userData.username}</p> 
         <p>Email: ${userData.email}</p>
         <p>Saved Collections: ${userData.saved_collections.length || 0}</p>
-        <button id="logoutButton" class="btn btn-danger">Logout</button>
       </section>
 
     <section>
@@ -76,6 +76,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       </ul>
     </section>
     `;
+     // Add the logout button at the end of the page
+     const footer = document.createElement("footer");
+     footer.style.textAlign = "center";
+     footer.innerHTML = `
+       <button id="logoutButton" class="btn btn-danger" style="margin-top: 20px;">Logout</button>
+     `;
+     accountContainer.appendChild(footer);
 
     // View items in a collection
     document.querySelectorAll(".view-items").forEach((button) => {
@@ -147,7 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
         } catch (error) {
           console.error("Error fetching items:", error);
-          itemList.innerHTML = "<li>Error loading items.</li>";
+          itemList.innerHTML = "<li>No items are uploaded in this collection and can thus not be viewed.</li>";
         }
       });
     });
