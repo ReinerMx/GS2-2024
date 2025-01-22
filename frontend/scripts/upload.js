@@ -144,6 +144,12 @@ document.addEventListener("DOMContentLoaded", () => {
         uploadForm.reset();
         simplemde.value(""); // Clear SimpleMDE content
         dropZone.innerHTML = `<p>Drag & drop your file here, or <span class="text-primary click-trigger">click to select</span>.</p>`;
+      } else if (response.status === 403) {
+        // User doesn't own the collection
+        displayStatusMessage(
+          result.message || "Access denied. You don't have permission to upload to this collection.",
+          true
+        );
       } else if (response.status === 404) {
         displayStatusMessage(result.message || "Please <a href=\"login.html\">log in</a> to upload files.", true);
       } else if (response.status === 401) {
