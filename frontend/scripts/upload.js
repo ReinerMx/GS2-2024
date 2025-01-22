@@ -99,6 +99,16 @@ document.addEventListener("DOMContentLoaded", () => {
   uploadForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Priority check: user is not logged in
+      displayStatusMessage(
+        `Access denied. Please <a href="login.html">log in</a> to upload files.`,
+        true
+      );
+      return;
+    }
+
     if (!fileInput.files.length) {
       displayStatusMessage("Please select a file before uploading.", true);
       return;
@@ -108,7 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Include the rendered Markdown content as part of the form submission
     formData.set("userDescription", simplemde.value());
 
-    const token = localStorage.getItem("token");
     if (!token) {
       displayStatusMessage("Please log in to upload.", true);
       submitButton.disabled = true;
