@@ -23,7 +23,6 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 /**
  * Define API routes.
  * - User routes: /api/users
@@ -35,7 +34,6 @@ app.use("/api/users", userRoutes);
 // Serve static files from the 'frontend' directory
 const path = require("path");
 app.use(express.static(path.join(__dirname, "../frontend")));
-
 
 /**
  * Middleware configuration.
@@ -56,7 +54,7 @@ app.use(
           "https://cdn.jsdelivr.net",
           "https://stackpath.bootstrapcdn.com",
           "https://cdnjs.cloudflare.com",
-          "https://unpkg.com"
+          "https://unpkg.com",
         ],
         styleSrc: [
           "'self'",
@@ -64,14 +62,14 @@ app.use(
           "https://cdnjs.cloudflare.com",
           "https://unpkg.com",
           "https://cdn.jsdelivr.net", // Allow SimpleMDE styles
-          "https://maxcdn.bootstrapcdn.com" // Allow Font Awesome styles
+          "https://maxcdn.bootstrapcdn.com", // Allow Font Awesome styles
         ],
         imgSrc: [
           "'self'",
           "data:",
           "https://*.tile.openstreetmap.org",
           "https://cdnjs.cloudflare.com",
-          "https://via.placeholder.com" // Allow Placeholder images
+          "https://via.placeholder.com", // Allow Placeholder images
         ],
         connectSrc: ["'self'", "https://*.tile.openstreetmap.org"], // Ensure OSM tiles load correctly
       },
@@ -79,7 +77,6 @@ app.use(
     crossOriginEmbedderPolicy: false, // Optional for external resources
   })
 );
-
 
 // Error handling middleware to catch and handle any errors during request processing
 app.use(errorHandler);

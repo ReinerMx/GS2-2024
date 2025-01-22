@@ -9,10 +9,12 @@ document.addEventListener("DOMContentLoaded", async () => {
    * @param {boolean} [isError=true] - Whether the message is an error or a success message.
    */
   const displayMessage = (message, isError = true) => {
+    const statusMessage = document.getElementById("statusMessage");
     statusMessage.innerHTML = `<div class="alert ${
       isError ? "alert-danger" : "alert-success"
     }" role="alert">${message}</div>`;
     statusMessage.classList.remove("d-none");
+
     if (!isError) {
       setTimeout(() => {
         statusMessage.classList.add("d-none");
@@ -64,6 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       </p>
 
       <div id="statusMessage" class="status-message d-none"></div>
+
 
       <div id="dropZone" class="drop-zone">
         <p>Drag & drop your file here or <span class="click-trigger">click to select</span>.</p>
@@ -177,19 +180,27 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const result = await response.json();
 
+        // Handle different response statuses
         if (response.ok) {
-          displayMessage(result.message || "Upload successful!");
+          displayMessage(result.message || "Upload successful!", false); // isError explizit auf false setzen
           uploadForm.reset();
           simplemde.value("");
           dropZone.innerHTML = `<p>Drag & drop your file here, or <span class="text-primary click-trigger">click to select</span>.</p>`;
-        } else {
+        } else if (response.status === 400) {
           displayMessage(
-            result.message || "An error occurred during upload.",
+            result.message || "Bad Request: Invalid data provided.",
             true
           );
+        } else if (response.status === 401) {
+          displayMessage("Unauthorized: Please log in.", true);
+        } else if (response.status === 500) {
+          displayMessage("Server error: Please try again later.", true);
+        } else {
+          displayMessage("An unknown error occurred.", true);
         }
       } catch (error) {
-        displayMessage(error.message, true);
+        console.error("Error during upload:", error);
+        displayMessage("An unexpected error occurred. Please try again.", true);
       } finally {
         submitButton.disabled = false;
         submitButton.textContent = "Upload Model";
