@@ -1,6 +1,6 @@
 const express = require('express');
 const { register, login } = require('../controllers/authController'); // Import auth functions
-const { User, Collection } = require('../models');
+const { User, Collection, Item } = require('../models');
 const { authMiddleware } = require('../middleware/authMiddleware');
 const router = express.Router();
 
@@ -152,6 +152,76 @@ router.get('/:userId/savedCollections', async (req, res) => {
   } catch (error) {
     console.error('Error fetching saved collections:', error);
     res.status(500).json({ error: 'Error fetching saved collections' });
+  }
+});
+
+/**
+ * @route GET /:userId/savedCollections/:collection_id/items
+ * @description Fetches all items in a specific collection.
+ * @param {string} collection_id - The ID of the collection.
+ * @access Public
+ */
+router.get('/:userId/savedCollections/:collection_id/items', async (req, res) => {
+  const { collection_id } = req.params;
+  try {
+      const items = await Item.findAll({ where: { collection_id } });
+
+      if (!items || items.length === 0) {
+          return res.status(404).json({ error: 'No items found in this collection' });
+      }
+
+      res.json({ items });
+  } catch (error) {
+      console.error('Error fetching items:', error);
+      res.status(500).json({ error: 'Error fetching items' });
+  }
+});
+
+/**
+ * @route GET /:userId/savedCollections/:collection_id/items/:item_id
+ * @description Fetches a specific item in a collection by its ID.
+ * @param {string} collection_id - The ID of the collection.
+ * @param {string} item_id - The ID of the item.
+ * @access Public
+ */
+router.get('/:userId/savedCollections/:collection_id/items/:item_id', async (req, res) => {
+  const { collection_id, item_id } = req.params;
+  try {
+    const item = await Item.findOne({ where: { collection_id, item_id } });
+
+    if (!item) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
+
+    res.json(item);
+  } catch (error) {
+    console.error('Error fetching item:', error);
+    res.status(500).json({ error: 'Error fetching item' });
+  }
+});
+
+/**
+ * @route DELETE /:userId/savedCollections/:collection_id/items/:item_id
+ * @description Deletes a specific item in a collection by its ID.
+ * @param {string} collection_id - The ID of the collection.
+ * @param {string} item_id - The ID of the item.
+ * @access Private
+ */
+router.delete('/:userId/savedCollections/:collection_id/items/:item_id', async (req, res) => {
+  const { collection_id, item_id } = req.params;
+  try {
+    const item = await Item.findOne({ where: { collection_id, item_id } });
+
+    if (!item) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
+
+    await item.destroy(); // Deletes the item from the database
+
+    res.status(200).json({ message: 'Item deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    res.status(500).json({ error: 'Error deleting item' });
   }
 });
 
