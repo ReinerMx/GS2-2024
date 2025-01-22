@@ -145,10 +145,10 @@ document.addEventListener("DOMContentLoaded", () => {
         simplemde.value(""); // Clear SimpleMDE content
         dropZone.innerHTML = `<p>Drag & drop your file here, or <span class="text-primary click-trigger">click to select</span>.</p>`;
       } else if (response.status === 404) {
-        displayStatusMessage(result.message || "Please log in before uploading.", true);
+        displayStatusMessage(result.message || "Please <a href=\"login.html\">log in</a> to upload files.", true);
       } else if (response.status === 401) {
         // user not logged in
-        displayStatusMessage("Access denied. Please log in before uploading.", true);
+        displayStatusMessage("Access denied. Please <a href=\"login.html\">log in</a> to upload files.", true);
       } else if (response.status === 400) {
         // incorrect entries
         let errorMessage = result.error || "Invalid input data.";

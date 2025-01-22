@@ -470,17 +470,6 @@ router.post('/upload', authMiddleware, upload.single('modelFile'), async (req, r
     const { userDescription } = req.body;
 
     try {
-        // make sure a user is logged in
-        if (!req.user || !req.user.userId) {
-            console.error("Unauthorized access attempt detected.");
-            return res.status(401).json({ message: 'Access denied. Please log in.' });
-        }
-    
-        const user = await User.findByPk(req.user.userId);
-        if (!user) {
-            console.error(`User with ID ${req.user.userId} not found.`);
-            return res.status(404).json({ message: 'User not found.' });
-        }
         console.log("Uploading collection for user ID:", req.user.userId);
         
         // Parse the uploaded STAC JSON file
@@ -650,8 +639,7 @@ router.post('/upload', authMiddleware, upload.single('modelFile'), async (req, r
                 error: "Validation Error",
                 details: [error.message],
             });
-        }
-                
+        }  
     
         // Handle other errors
         res.status(500).json({ error: 'An unexpected error occurred while saving data.' });

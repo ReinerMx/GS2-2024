@@ -3,6 +3,7 @@ const { User } = require('../models');
 
 exports.authMiddleware = async (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
+  
   if (!token) {
     console.error("No token provided.");
     return res.status(401).json({ message: 'Access denied. Please log in.' });
@@ -13,11 +14,13 @@ exports.authMiddleware = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Decoded token:", decoded);
 
-    // Check if the user exists in the database
+    // Find the user in the database
     const user = await User.findByPk(decoded.userId);
     if (!user) {
       console.error(`User with ID ${decoded.userId} not found.`);
-      return res.status(404).json({ message: 'User not found.' });
+      return res.status(401).json({
+        message: 'Access denied. Please log in to upload files.',
+      });
     }
 
     // Attach the user information to the request object
