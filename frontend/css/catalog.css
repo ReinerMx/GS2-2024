@@ -1,40 +1,45 @@
 /* Main container */
 #mainContainer {
-  display: flex; /* Flexbox layout */
-  width: 100%; /* Full width */
-  height: 100vh; /* Full viewport height */
+  flex: 1;
+  display: flex;
+  overflow: auto;
 }
 
-/* Sidebar Styling */
+/* Container for the main content */
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Sidebar */
 .filter-sidebar {
-  width: 20%; /* Sidebar width */
+  width: 20%;
   background-color: #f8f9fa;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  height: 100%; /* Full height */
-  transition: width 0.3s ease, opacity 0.3s ease;
-  overflow-y: auto; /* Enable scrolling for overflow */
-  flex-shrink: 0; /* Prevent shrinking */
+  overflow-y: auto;
 }
 
 /* Collapsed Sidebar */
 .filter-sidebar.collapsed {
-  width: 70px; /* Narrow width */
+  width: 70px;
 }
 
-/* Inhalte der eingeklappten Sidebar ausblenden */
+/* Hide elements in collapsed sidebar */
 .filter-sidebar.collapsed h4,
 .filter-sidebar.collapsed .filter-section h5,
 .filter-sidebar.collapsed .form-group,
 .filter-sidebar.collapsed p,
 .filter-sidebar.collapsed .map-container,
 .filter-sidebar.collapsed #applyGeoFilter {
-  display: none; /* Hide these elements */
+  display: none;
 }
+
 /* Date Input Styling */
 .date-input {
-  width: 100%; /* Full width */
+  width: 100%;
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -60,19 +65,20 @@
 /* Responsive Styling */
 @media (max-width: 768px) {
   #mainContainer {
-    flex-direction: column; /* Stack sidebar and content vertically */
+    flex-direction: column;
   }
 
   .filter-sidebar {
-    width: 100%; /* Full width for small screens */
-    height: auto; /* Adjust height for small screens */
+    width: 100%;
+    height: auto;
   }
 
   .filter-sidebar.collapsed {
-    width: 100%; /* Full width when collapsed on small screens */
+    width: 100%;
   }
 }
 
+/* Toggle Sidebar Button */
 .toggle-sidebar-btn {
   background: none;
   border: 1px solid gray;
@@ -83,174 +89,173 @@
   text-align: left;
   transition: color 0.3s ease, box-shadow 0.3s ease;
   padding: 0 7px;
-  margin-bottom: 20px; /* Set margin-bottom to 20 */
-  border-radius: 100%; /* Make the button fully rounded */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow */
+  margin-bottom: 20px;
+  border-radius: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .toggle-sidebar-btn:hover {
-  color: black; /* Darker blue on hover */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Slightly deeper shadow on hover */
+  color: black;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   border: 1px solid black;
 }
 
-
 /* Label Styling */
 .filter-section label {
-    color: #555;
-    font-weight: 400;
+  color: #555;
+  font-weight: 400;
 }
 
 /* Additional Filters Container Styling */
 .additional-filters-container {
-    background-color: #f7f7f7;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    width: 100%;
-    margin-bottom: 30px;
+  background-color: #f7f7f7;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  width: 100%;
+  margin-bottom: 30px;
 }
 
 /* Card Body Styling */
 .card-body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    padding: 20px;
-    background-color: #f7f7f7;
-    border-radius: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
 }
 
 /* Column Styling */
 .left-column, .right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 /* Filter Category Styling */
 .filter-category {
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .filter-category h6 {
-    margin-bottom: 10px;
-    font-size: 16px;
-    font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 /* Filter Item Styling */
 .filter-item {
-    background-color: #f1f1f1;
-    padding: 6px 12px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: inline-block;
-    margin-right: 8px;
-    margin-bottom: 8px;
+  background-color: #f1f1f1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  margin-right: 8px;
+  margin-bottom: 8px;
 }
 
 .filter-item:hover {
-    background-color: #007bff;
-    color: white;
+  background-color: #007bff;
+  color: white;
 }
 
 /* Slider Section Styling */
 .slider-section {
-    grid-column: 1 / -1;
-    padding-top: 15px;
-    border-top: 1px solid #ddd;
-    margin-top: 20px;
+  grid-column: 1 / -1;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
 }
 
 .filter-section input[type="range"] {
-    width: 100%;
-    margin-top: 10px;
+  width: 100%;
+  margin-top: 10px;
 }
 
 .filter-section span {
-    display: block;
-    margin-top: 0px;
-    font-size: 14px;
-    font-weight: 500;
+  display: block;
+  margin-top: 0px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 /* Responsive Styling */
 @media (max-width: 768px) {
-    .card-body {
-        grid-template-columns: 1fr;
-    }
+  .card-body {
+    grid-template-columns: 1fr;
+  }
 }
 
+/* Search Catalog Container */
 .search-catalog-container {
-    width: 70%; /* Entspricht etwa 9 von 12 Spalten */
-    padding-top: 10px;
-    margin-top: 20px;
-    margin-left: auto; /* Zentriere den Container innerhalb des Layouts */
-    margin-right: auto;
-    box-sizing: border-box; /* Sorgt dafür, dass Padding und Border einbezogen werden */
+  width: 70%;
+  padding-top: 10px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
-
 
 /* Dark Mode Styles */
 body.dark-mode .filter-sidebar {
-    background-color: #2d2d2d;
-    color: #f8f9fa;
-    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  background-color: #2d2d2d;
+  color: #f8f9fa;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
 }
 
 body.dark-mode .filter-sidebar h4, 
 body.dark-mode .filter-section h5 {
-    color: #d1e1e8;
+  color: #d1e1e8;
 }
 
 body.dark-mode .additional-filters-container {
-    background-color: #343a40;
-    border: 1px solid #444;
-    color: #f8f9fa;
+  background-color: #343a40;
+  border: 1px solid #444;
+  color: #f8f9fa;
 }
 
 body.dark-mode .card-body {
-    background-color: #2d2d2d;
-    color: #d1e1e8;
+  background-color: #2d2d2d;
+  color: #d1e1e8;
 }
 
 body.dark-mode .filter-category {
-    background-color: #3c3c3c;
-    border: 1px solid #555;
-    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  background-color: #3c3c3c;
+  border: 1px solid #555;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
 }
 
 body.dark-mode .filter-category h6 {
-    color: #f8f9fa;
+  color: #f8f9fa;
 }
 
 body.dark-mode .filter-item {
-    background-color: #4c4c4c;
-    border: 1px solid #666;
-    color: #f8f9fa;
+  background-color: #4c4c4c;
+  border: 1px solid #666;
+  color: #f8f9fa;
 }
 
 body.dark-mode .filter-item:hover {
-    background-color: #007bff;
-    color: #ffffff;
+  background-color: #007bff;
+  color: #ffffff;
 }
 
 body.dark-mode .slider-section {
-    border-top: 1px solid #555;
+  border-top: 1px solid #555;
 }
 
 body.dark-mode .filter-section label {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 body.dark-mode .filter-section span {
-    color: #555;
+  color: #555;
 }
