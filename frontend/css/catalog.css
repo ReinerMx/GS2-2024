@@ -1,92 +1,99 @@
 /* Main container */
 #mainContainer {
-    display: flex; /* Flexbox layout */
-    width: 100%; /* Full width for layout */
-  }
-  
-  /* Sidebar Styling */
-  .filter-sidebar {
-    width: 20%; /* Expanded width */
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    height: 100vh; /* Full height */
-    transition: width 0.3s ease, opacity 0.3s ease; /* Smooth transition */
-    overflow: hidden; /* Prevent content overflow */
-    flex-shrink: 0; /* Prevent shrinking */
-  }
-  
-  /* Eingeklappte Sidebar */
-  .filter-sidebar.collapsed {
-    width: 50px; /* Reduced width */
-  }
-  
-  /* Inhalte der eingeklappten Sidebar ausblenden */
-  .filter-sidebar.collapsed h4,
-  .filter-sidebar.collapsed .filter-section h5,
-  .filter-sidebar.collapsed .form-group,
-  .filter-sidebar.collapsed p,
-  .filter-sidebar.collapsed .map-container,
-  .filter-sidebar.collapsed #applyGeoFilter {
-    display: none; /* Hide these elements */
-  }
-  
-  /* Der Toggle-Button bleibt sichtbar */
-  .filter-sidebar.collapsed .toggle-sidebar-btn {
-    display: block;
-  }
-  
-/* Toggle-Button Styling */
-.toggle-sidebar-btn {
-    background: none;
-    border: none;
-    color: #007bff;
-    font-size: 23px;
-    cursor: pointer;
-    display: block;
-    text-align: left;
-    transition: color 0.3s ease;
-    padding: 1px;
+  display: flex; /* Flexbox layout */
+  width: 100%; /* Full width */
+  height: 100vh; /* Full viewport height */
 }
-  
-  .toggle-sidebar-btn:hover {
-    color: #0056b3;
+
+/* Sidebar Styling */
+.filter-sidebar {
+  width: 20%; /* Sidebar width */
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  height: 100%; /* Full height */
+  transition: width 0.3s ease, opacity 0.3s ease;
+  overflow-y: auto; /* Enable scrolling for overflow */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+/* Collapsed Sidebar */
+.filter-sidebar.collapsed {
+  width: 70px; /* Narrow width */
+}
+
+/* Inhalte der eingeklappten Sidebar ausblenden */
+.filter-sidebar.collapsed h4,
+.filter-sidebar.collapsed .filter-section h5,
+.filter-sidebar.collapsed .form-group,
+.filter-sidebar.collapsed p,
+.filter-sidebar.collapsed .map-container,
+.filter-sidebar.collapsed #applyGeoFilter {
+  display: none; /* Hide these elements */
+}
+/* Date Input Styling */
+.date-input {
+  width: 100%; /* Full width */
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Apply Filter Button */
+.apply-filter-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.apply-filter-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  #mainContainer {
+    flex-direction: column; /* Stack sidebar and content vertically */
   }
-  
-  /* Hauptinhalt Styling */
-  .content {
-    flex-grow: 1; /* Take remaining space */
-    padding: 20px;
-    background-color: #ffffff;
-    transition: margin-left 0.3s ease; /* Smooth transition for content */
+
+  .filter-sidebar {
+    width: 100%; /* Full width for small screens */
+    height: auto; /* Adjust height for small screens */
   }
-  
-  /* Dynamische Anpassung des Inhalts */
-  .filter-sidebar.collapsed ~ .content {
-    margin-left: 50px; /* Adjust content margin when sidebar is collapsed */
+
+  .filter-sidebar.collapsed {
+    width: 100%; /* Full width when collapsed on small screens */
   }
-  
-  /* Responsive Styling */
-  @media (max-width: 768px) {
-    #mainContainer {
-      flex-direction: column; /* Stack sidebar and content vertically */
-    }
-  
-    .filter-sidebar {
-      width: 100%; /* Full width for smaller screens */
-      height: auto; /* Adjust height for mobile */
-    }
-  
-    .filter-sidebar.collapsed {
-      width: 100%; /* Full width for collapsed state on small screens */
-    }
-  
-    .content {
-      margin-left: 0; /* No margin adjustment needed */
-    }
-  }
-  
+}
+
+.toggle-sidebar-btn {
+  background: none;
+  border: 1px solid gray;
+  color: gray;
+  font-size: 23px;
+  cursor: pointer;
+  display: block;
+  text-align: left;
+  transition: color 0.3s ease, box-shadow 0.3s ease;
+  padding: 0 7px;
+  margin-bottom: 20px; /* Set margin-bottom to 20 */
+  border-radius: 100%; /* Make the button fully rounded */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow */
+}
+
+.toggle-sidebar-btn:hover {
+  color: black; /* Darker blue on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Slightly deeper shadow on hover */
+  border: 1px solid black;
+}
+
 
 /* Label Styling */
 .filter-section label {

@@ -104,7 +104,7 @@
     </nav>
 
     <div class="container-fluid mt-4">
-      <div id="mainContainer" class="d-flex">
+      <div id="mainContainer">
         <!-- Sidebar for Filter -->
         <aside class="filter-sidebar">
           <!-- Toggle-Button -->
@@ -114,28 +114,26 @@
 
           <h4>Filters</h4>
           <!-- Temporal Filter -->
-          <div class="filter-section mt-4">
+          <div class="filter-section">
             <h5>Temporal Coverage</h5>
             <div class="form-group">
               <label for="startDate">Start Date:</label>
-              <input type="date" id="startDate" class="form-control" />
+              <input type="date" id="startDate" class="date-input" />
             </div>
             <div class="form-group">
               <label for="endDate">End Date:</label>
-              <input type="date" id="endDate" class="form-control" />
+              <input type="date" id="endDate" class="date-input" />
             </div>
           </div>
+
           <!-- Geographic Filter -->
-          <div class="filter-section mt-4">
+          <div class="filter-section">
             <h5>Geographic Filter</h5>
             <p>
               Draw a region on the map to filter models by geographic location.
             </p>
             <div id="map" class="map-container"></div>
-            <button
-              id="applyGeoFilter"
-              class="btn btn-primary mt-3 apply-filter-btn"
-            >
+            <button id="applyGeoFilter" class="apply-filter-btn">
               Apply Filter
             </button>
           </div>
