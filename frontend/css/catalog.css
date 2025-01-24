@@ -1,8 +1,9 @@
 /* Main container */
 #mainContainer {
   flex: 1;
-  display: flex;
+  display: flex;  
   overflow: auto;
+
 }
 
 /* Container for the main content */
@@ -19,7 +20,7 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  overflow-y: auto;
+  overflow-y: auto; 
 }
 
 /* Collapsed Sidebar */
@@ -202,6 +203,7 @@
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 /* Dark Mode Styles */
