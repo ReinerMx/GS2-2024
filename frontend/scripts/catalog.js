@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return text.replace(regex, (match) => `<mark>${match}</mark>`);
       };
 
-      // Aktualisieren Sie die Darstellung in der Autocomplete-Liste:
+      // Update autocomplete list
       suggestions.forEach((suggestion) => {
         const li = document.createElement("li");
         li.classList.add("autocomplete-item");
