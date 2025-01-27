@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </ul>
                   </li>`
               )
-              .join("") || "<li style='color: #6c757d;'>No saved collections yet.</li>"
+              .join("") || "<li style='color: #6c757d;'>No saved collections yet. <a href='upload.html' class='btn btn-secondary'>Upload</a></li>"
           }
         </ul>
       </section>
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
         } catch (error) {
           console.error("Error fetching items:", error);
-          itemList.innerHTML = "<li>No items are uploaded in this collection and can thus not be viewed.</li>";
+          itemList.innerHTML = "<li>No items are uploaded in this collection and can thus not be viewed.  <a href='upload.html' class='btn btn-secondary'>Upload</a></li>";
         }
       });
     });
