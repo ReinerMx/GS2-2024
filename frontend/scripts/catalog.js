@@ -48,12 +48,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Adjust the position of the autocomplete list
   const positionAutocomplete = () => {
-    const rect = searchInput.getBoundingClientRect();
-    autocompleteList.style.position = "absolute";
-    autocompleteList.style.top = `${rect.bottom + window.scrollY}px`;
-    autocompleteList.style.left = `${rect.left + window.scrollX}px`;
-    autocompleteList.style.width = `${rect.width}px`;
-    autocompleteList.style.display = "block";
+    if (autocompleteList.style.display === "block") {
+      const rect = searchInput.getBoundingClientRect();
+      autocompleteList.style.position = "absolute";
+      autocompleteList.style.top = `${rect.bottom + window.scrollY}px`;
+      autocompleteList.style.left = `${rect.left + window.scrollX}px`;
+      autocompleteList.style.width = `${rect.width}px`;
+    }
   };
 
   // Event listener for updating autocomplete position on resize
@@ -63,8 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const fetchAutocompleteSuggestions = async (query) => {
     console.log("Fetching suggestions for:", query);
 
+    // Wenn der Input leer ist
     if (!query.trim()) {
-      autocompleteList.innerHTML = ""; // Clear suggestions
+      autocompleteList.innerHTML = ""; // Vorschläge leeren
+      autocompleteList.style.display = "none"; // Liste ausblenden
       return;
     }
 
@@ -79,63 +82,63 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Autocomplete Suggestions:", suggestions); // Debug log
       autocompleteList.innerHTML = ""; // Clear previous suggestions
 
+      // Zeige die Liste nur, wenn Vorschläge existieren
+      if (suggestions.length > 0) {
+        autocompleteList.style.display = "block"; // Liste anzeigen
+      } else {
+        autocompleteList.style.display = "none"; // Liste verbergen, wenn leer
+      }
+
       const highlight = (text, query) => {
         const regex = new RegExp(query, "gi");
         return text.replace(regex, (match) => `<mark>${match}</mark>`);
       };
 
-      // Aktualisieren Sie die Darstellung in der Autocomplete-Liste:
       suggestions.forEach((suggestion) => {
         const li = document.createElement("li");
         li.classList.add("autocomplete-item");
 
         if (suggestion.type === "collection") {
           li.innerHTML = `
-                        <strong>${highlight(
-                          suggestion.title || "Unnamed Collection",
-                          query
-                        )}</strong>
-                        <small>Keywords: ${
-                          suggestion.keywords
-                            ? suggestion.keywords
-                                .map((k) => highlight(k, query))
-                                .join(", ")
-                            : "None"
-                        }</small>
-                    `;
+            <strong>${highlight(
+              suggestion.title || "Unnamed Collection",
+              query
+            )}</strong>
+            <small>Keywords: ${
+              suggestion.keywords
+                ? suggestion.keywords.map((k) => highlight(k, query)).join(", ")
+                : "None"
+            }</small>
+          `;
         } else if (suggestion.type === "item") {
           li.innerHTML = `
-                        <strong>${highlight(
-                          suggestion.title || "Unnamed Item",
-                          query
-                        )}</strong>
-                        <small>Tasks: ${
-                          suggestion.tasks
-                            ? suggestion.tasks
-                                .map((t) => highlight(t, query))
-                                .join(", ")
-                            : "None"
-                        }</small>
-                        <small>Architecture: ${highlight(
-                          suggestion.architecture,
-                          query
-                        )}</small>
-                        <small>Framework: ${highlight(
-                          suggestion.framework,
-                          query
-                        )}</small>
-                    `;
+            <strong>${highlight(
+              suggestion.title || "Unnamed Item",
+              query
+            )}</strong>
+            <small>Tasks: ${
+              suggestion.tasks
+                ? suggestion.tasks.map((t) => highlight(t, query)).join(", ")
+                : "None"
+            }</small>
+            <small>Architecture: ${highlight(
+              suggestion.architecture,
+              query
+            )}</small>
+            <small>Framework: ${highlight(suggestion.framework, query)}</small>
+          `;
         }
 
         li.addEventListener("click", () => handleSuggestionClick(suggestion));
         autocompleteList.appendChild(li);
       });
 
-      positionAutocomplete(); // Ensure the list is positioned correctly
+      positionAutocomplete(); // Positioniere die Liste korrekt
     } catch (error) {
       console.error("Error fetching autocomplete suggestions:", error);
     }
   };
+  positionAutocomplete;
 
   // Function to handle suggestion click
   const handleSuggestionClick = (suggestion) => {
