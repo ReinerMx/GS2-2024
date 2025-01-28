@@ -64,10 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const fetchAutocompleteSuggestions = async (query) => {
     console.log("Fetching suggestions for:", query);
 
-    // Wenn der Input leer ist
+    // if input is empty
     if (!query.trim()) {
-      autocompleteList.innerHTML = ""; // Vorschläge leeren
-      autocompleteList.style.display = "none"; // Liste ausblenden
+      autocompleteList.innerHTML = "";
+      autocompleteList.style.display = "none"; // dont show empty list
       return;
     }
 
@@ -82,11 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Autocomplete Suggestions:", suggestions); // Debug log
       autocompleteList.innerHTML = ""; // Clear previous suggestions
 
-      // Zeige die Liste nur, wenn Vorschläge existieren
+      // Only shows list if items are there
       if (suggestions.length > 0) {
-        autocompleteList.style.display = "block"; // Liste anzeigen
+        autocompleteList.style.display = "block";
       } else {
-        autocompleteList.style.display = "none"; // Liste verbergen, wenn leer
+        autocompleteList.style.display = "none";
       }
 
       const highlight = (text, query) => {
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         autocompleteList.appendChild(li);
       });
 
-      positionAutocomplete(); // Positioniere die Liste korrekt
+      positionAutocomplete();
     } catch (error) {
       console.error("Error fetching autocomplete suggestions:", error);
     }
@@ -167,6 +167,17 @@ document.addEventListener("DOMContentLoaded", () => {
   searchInput.addEventListener("input", (e) => {
     console.log("Input event triggered:", e.target.value);
     fetchAutocompleteSuggestions(e.target.value.trim());
+  });
+
+  // Clear input and autocomplete list when focus is lost
+  searchInput.addEventListener("blur", (event) => {
+    setTimeout(() => {
+      if (!autocompleteList.contains(document.activeElement)) {
+        searchInput.value = "";
+        autocompleteList.innerHTML = "";
+        autocompleteList.style.display = "none";
+      }
+    }, 100);
   });
 
   // Close the autocomplete list if the user clicks outside
@@ -325,7 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
         filters.geoFilter = geoJSON.geometry;
         console.log("Received GeoJSON:", JSON.stringify(geoJSON)); // Log only when geoJSON exists
 
-        // Berechne Bounding Box
+        // Calculate Bounding Box
         const bbox = turf.bbox(geoJSON); // Requires turf.js
         filters.bbox = bbox; // Speichere die Bounding Box
         console.log("Bounding Box:", bbox);
