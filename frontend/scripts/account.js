@@ -59,14 +59,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       <p style="color: #555;">Manage your account settings, view your uploaded models, and track your activity.</p>
       
       <section style="margin-top: 20px;">
-        <h2 style="font-size: 1.5rem; color: #007bff; font-weight: bold;">Account Details</h2>
+        <h2 style="font-size: 1.5rem; color: #007bff;">Account Details</h2>
         <p>Username: <strong>${userData.username}</strong></p>
         <p>Email: <strong>${userData.email}</strong></p>
         <p>Saved Collections: <strong>${userData.saved_collections.length || 0}</strong></p>
       </section>
 
       <section style="margin-top: 30px;">
-        <h2 style="font-size: 1.5rem; color: #007bff; font-weight: bold;">Saved Collections</h2>
+        <h2 style="font-size: 1.5rem; color: #007bff;">Saved Collections</h2>
         <ul id="collectionsList" style="list-style: none; padding: 0;">
     
           ${
