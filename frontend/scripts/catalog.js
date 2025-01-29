@@ -660,7 +660,7 @@ document.addEventListener("DOMContentLoaded", () => {
         : "N/A";
 
       const modelDiv = document.createElement("div");
-      modelDiv.classList.add("model-item");
+      modelDiv.classList.add("model-item-result");
       modelDiv.innerHTML = `
             <h5>${model.properties["mlm:name"]}</h5>
             <p>${model.properties.description}</p>

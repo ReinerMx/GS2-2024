@@ -90,14 +90,6 @@ mark {
     color: black;
 }
 
-/* Filters Below Search Bar */
-.filter-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
-}
-
 .filter-category {
     margin-bottom: 20px;
 }
@@ -150,7 +142,7 @@ body.dark-mode .autocomplete-item:hover {
         right: 10px;
     }
 
-    .model-item {
+    .model-item .model-item-result {
         padding: 10px;
         font-size: 14px;
     }
@@ -186,7 +178,6 @@ body.dark-mode .autocomplete-item:hover {
 
 .feature h3 {
     font-size: 1.2rem;
-    font-weight: 600;
     color: #007bff;
 }
 
@@ -225,7 +216,7 @@ body.dark-mode .autocomplete-item:hover {
 }
 
 /* General Card Styling */
-.card-box, .collection-item, .item-box, .model-card, .model-item {
+.card-box, .collection-item, .item-box, .model-card, .model-item, .model-item-result {
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -240,7 +231,7 @@ body.dark-mode .autocomplete-item:hover {
     justify-content: space-between;
 }
 
-.card-box:hover, .collection-item:hover, .item-box:hover, .model-card:hover, .model-item:hover {
+.card-box:hover, .collection-item:hover, .item-box:hover, .model-card:hover, .model-item:hover .model-item-result:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
@@ -248,7 +239,7 @@ body.dark-mode .autocomplete-item:hover {
 /* Titles and Paragraphs */
 .card-box h4, .card-box h5, 
 .collection-item h4, .item-box h5, 
-.model-card h5, .model-item h5 {
+.model-card h5, .model-item h5, .model-item-result h5 {
     font-size: 1.2rem;
     color: #007bff;
     margin-bottom: 10px;
@@ -256,7 +247,7 @@ body.dark-mode .autocomplete-item:hover {
 }
 
 .card-box p, .collection-item p, 
-.item-box p, .model-card p, .model-item p {
+.item-box p, .model-card p, .model-item p, .model-item-result p{
     font-size: 0.95rem;
     color: #555;
     margin-bottom: 10px;
@@ -265,7 +256,7 @@ body.dark-mode .autocomplete-item:hover {
 
 /* Buttons */
 .card-box .btn, .collection-item .btn, 
-.item-box .btn, .model-card .btn, .model-item .btn {
+.item-box .btn, .model-card .btn, .model-item .btn, model-item-result .btn {
     display: inline-block;
     margin-top: auto;
     background-color: #007bff;
@@ -278,7 +269,7 @@ body.dark-mode .autocomplete-item:hover {
 }
 
 .card-box .btn:hover, .collection-item .btn:hover, 
-.item-box .btn:hover, .model-card .btn:hover, .model-item .btn:hover {
+.item-box .btn:hover, .model-card .btn:hover, .model-item .btn:hover, .model-item-result .btn:hover {
     background-color: #0056b3;
     text-decoration: none;
 }
@@ -320,18 +311,23 @@ body.dark-mode .autocomplete-item:hover {
     transition: transform 0.2s;
 }
 
-.model-item h5 {
+.model-item-result {
+    flex: 1 1 calc(50% - 20px);
+    transition: transform 0.2s;
+}
+
+.model-item h5, .model-item-result h5{
     font-size: 1.2rem;
     margin-bottom: 10px;
 }
 
-.model-item p {
+.model-item p, .model-item-result p {
     font-size: 0.95rem;
     color: #555;
     margin-bottom: 15px;
 }
 
-.model-item .btn {
+.model-item .btn, .model-item-result .btn {
     display: block;
     margin: auto;
 }
