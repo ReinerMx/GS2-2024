@@ -225,4 +225,56 @@ router.delete('/:userId/savedCollections/:collection_id/items/:item_id', async (
   }
 });
 
+/**
+ * @route GET /api/users/:id/public
+ * @description Get public user data (username, collections, items)
+ * @access Public
+ */
+router.get("/:id/public", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    // Fetch the user with their collections and items
+    const user = await User.findByPk(userId, {
+      attributes: ["username"], // Include only the username
+      include: [
+        {
+          model: Collection,
+          as: "collections",
+          attributes: ["name", "collection_id"], // Include only necessary fields
+          include: [
+            {
+              model: Item,
+              as: "items",
+              attributes: ["item_id", "properties"], // Include specific fields for items
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Format the response
+    const formattedData = {
+      username: user.username,
+      collections: user.collections.map((collection) => ({
+        name: collection.name,
+        collection_id: collection.collection_id,
+        items: collection.items.map((item) => ({
+          item_id: item.item_id,
+          name: item.properties["mlm:name"] || "Unnamed Item",
+        })),
+      })),
+    };
+
+    res.status(200).json(formattedData);
+  } catch (error) {
+    console.error("Error fetching public user data:", error);
+    res.status(500).json({ error: "Error fetching user data" });
+  }
+});
+
 module.exports = router;

@@ -94,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return text.replace(regex, (match) => `<mark>${match}</mark>`);
       };
 
+      // Update autocomplete list
       suggestions.forEach((suggestion) => {
         const li = document.createElement("li");
         li.classList.add("autocomplete-item");
@@ -672,9 +673,9 @@ const displayModels = (models, filters) => {
         })
       : "N/A";
 
-    const modelDiv = document.createElement("div");
-    modelDiv.classList.add("model-item");
-    modelDiv.innerHTML = `
+      const modelDiv = document.createElement("div");
+      modelDiv.classList.add("model-item-result");
+      modelDiv.innerHTML = `
             <h5>${model.properties["mlm:name"]}</h5>
             <p>${model.properties.description}</p>
             <p><strong>Collection:</strong> ${model.collection}</p>

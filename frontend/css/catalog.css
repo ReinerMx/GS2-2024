@@ -193,10 +193,10 @@
 }
 
 .filter-section span {
-  display: block;
-  margin-top: 0px;
-  font-size: 14px;
-  font-weight: 500;
+    display: block;
+    margin-top: 0px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 /* Responsive Styling */

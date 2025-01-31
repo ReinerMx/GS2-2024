@@ -47,35 +47,56 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Render user account details
     accountContainer.innerHTML = `
-      <h1>Welcome, ${userData.username}</h1>
-      <p>Manage your account settings, view your uploaded models, and track your activity.</p>
-
-      <section>
-        <h2>Account Details</h2>
-        <p>Email: ${userData.email}</p>
-        <p>Saved Collections: ${userData.saved_collections.length || 0}</p>
-        <button id="logoutButton" class="btn btn-danger">Logout</button>
+    <div style="
+      font-family: Arial, sans-serif; 
+      padding: 20px; 
+      background-color: #f8f9fa; 
+      border-radius: 8px; 
+      text-align: center; 
+      margin: 0 auto; 
+      max-width: 800px;">
+      <h1 style="font-size: 2rem; color: #000;">Welcome, ${userData.username}</h1>
+      <p style="color: #555;">Manage your account settings, view your uploaded models, and track your activity.</p>
+      
+      <section style="margin-top: 20px;">
+        <h2 style="font-size: 1.5rem; color: #007bff;">Account Details</h2>
+        <p>Username: <strong>${userData.username}</strong></p>
+        <p>Email: <strong>${userData.email}</strong></p>
+        <p>Saved Collections: <strong>${userData.saved_collections.length || 0}</strong></p>
       </section>
 
-    <section>
-      <h2>Saved Collections</h2>
-      <ul id="collectionsList">
-        ${
-          userData.saved_collections
-            .map(
-              (collection) =>
-                `<li>
-                  ${collection} 
-                  <button class="btn btn-sm btn-outline-danger delete-collection" data-id="${collection}">Remove</button>
-                  <button class="btn btn-sm btn-outline-info view-items" data-id="${collection}">View Items</button>
-                  <ul class="item-list" id="items-${collection}" style="display: none;"></ul>
-                </li>`
-            )
-            .join("") || "<li>No saved collections yet.</li>"
-        }
-      </ul>
-    </section>
+      <section style="margin-top: 30px;">
+        <h2 style="font-size: 1.5rem; color: #007bff;">Saved Collections</h2>
+        <ul id="collectionsList" style="list-style: none; padding: 0;">
+    
+          ${
+            userData.saved_collections
+              .map(
+                (collection) => `
+                  <li style="margin: 10px 0; padding: 15px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+                    <strong style="color: #212529;">${collection}</strong>
+                    <div style="margin-top: 10px;">
+                      <button class="btn btn-sm btn-outline-danger delete-collection" data-id="${collection}" style="margin-right: 10px;">Remove</button>
+                      <button class="btn btn-sm btn-outline-info view-items" data-id="${collection}">View Items</button>
+                    </div>
+                    <ul class="item-list" id="items-${collection}" style="display: none; margin-top: 10px; padding-left: 20px;">
+                    </ul>
+                  </li>`
+              )
+              .join("") || "<li style='color: #6c757d;'>No saved collections yet. <a href='upload.html' class='btn btn-secondary'>Upload</a></li>"
+          }
+        </ul>
+      </section>
+    </div>
     `;
+
+     // Add the logout button at the end of the page
+     const footer = document.createElement("footer");
+     footer.style.textAlign = "center";
+     footer.innerHTML = `
+       <button id="logoutButton" class="btn btn-danger" style="margin-top: 20px;">Logout</button>
+     `;
+     accountContainer.appendChild(footer);
 
     // View items in a collection
     document.querySelectorAll(".view-items").forEach((button) => {
@@ -147,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
         } catch (error) {
           console.error("Error fetching items:", error);
-          itemList.innerHTML = "<li>Error loading items.</li>";
+          itemList.innerHTML = "<li>No items are uploaded in this collection and can thus not be viewed.  <a href='upload.html' class='btn btn-secondary'>Upload</a></li>";
         }
       });
     });

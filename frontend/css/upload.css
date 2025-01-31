@@ -2,11 +2,7 @@
 
 /* Heading */
 .upload-title {
-  font-size: 30px;
-  font-weight: 500;
-  margin-bottom: 20px;
   text-align: center;
-  color: #212529;
 }
 
 .dark-mode .upload-title {
@@ -15,10 +11,8 @@
 
 /* Instructions */
 .upload-instructions {
-  font-size: 16px;
-  color: #6c757d;
-  margin-bottom: 30px;
   text-align: center;
+  color: #495057
 }
 
 /* Drag-and-Drop Zone */
