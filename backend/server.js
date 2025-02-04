@@ -7,6 +7,7 @@ const dotenv = require("dotenv"); // Environment variable manager
 const userRoutes = require("./routes/userRoutes"); // User-related routes
 const modelRoutes = require("./routes/modelRoutes"); // Model-related routes (e.g., uploading, fetching metadata)
 const errorHandler = require("./middleware/errorHandler"); // Middleware for handling errors
+const initDB = require("./initDB"); //Populate db with data on server start
 
 // Load environment variables from .env file
 dotenv.config();
@@ -90,24 +91,36 @@ app.use(errorHandler);
  */
 const PORT = process.env.PORT || 5555;
 
-// Start the server
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`http://localhost:${PORT}`);
-});
+// Start the server and populate the database
+async function startServer() {
+  try {
+    console.log("🔄 Starting database initialization...");
+    await initDB();
+    console.log("✅ Database initialization complete.");
 
-/**
+    const server = app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
+
+ /**
  * Handle server errors.
  * If the port is in use, try a random available port.
  */
-server.on("error", (error) => {
-  if (error.code === "EADDRINUSE") {
-    console.error(`Port ${PORT} is already in use. Trying another port...`);
-    setTimeout(() => {
-      server.close();
-      server.listen(0); // 0 means a random available port
-    }, 1000);
-  } else {
-    console.error("Server error:", error);
+    server.on("error", (error) => {
+      if (error.code === "EADDRINUSE") {
+        console.error(`Port ${PORT} is already in use. Trying another port...`);
+        setTimeout(() => {
+          server.close();
+          server.listen(0); // 0 means a random available port
+        }, 1000);
+      } else {
+        console.error("Server error:", error);
+      }
+    });
+  } catch (error) {
+    console.error("❌ Server error:", error);
+    process.exit(1); // Exit process if critical error occurs
   }
-});
+}
+
+startServer();
