@@ -2,7 +2,9 @@ const { Sequelize } = require("sequelize");
 const User = require("./models/User");
 const Collection = require("./models/Collection");
 const Item = require("./models/Item");
-const Asset = require("./models/Asset");
+const Asset1 = require("./models/Asset");
+const Asset2 = require("./models/Asset");
+const Asset3 = require("./models/Asset");
 const MlmModel = require("./models/MlmModel")
 const sequelize = require("./config/db");
 
@@ -21,20 +23,23 @@ async function initDB() {
                 username: "default_user",
                 email: "default@example.com",
                 password: "defaultpassword",
-                saved_collections: ["ml-models-rs"]
+                saved_collections: ["default"]
             });
             console.log("✅ User created:", user.id);
         }
 
         // Add Collection
-        const existingCollection = await Collection.findByPk("ml-models-rs");
+        const existingCollection = await Collection.findByPk("default");
         if (!existingCollection) {
             console.log("➕ Adding collection...");
 
             await Collection.create({
                 type: "Collection",
                 stac_version: "1.0.0",
-                collection_id: "ml-models-rs",
+                stac_extensions: [ "https://stac-extensions.github.io/item-assets/v1.0.0/schema.json",
+                                   "https://stac-extensions.github.io/mlm/v1.2.0/schema.json"
+                                 ],
+                collection_id: "default",
                 title: "ML Models for Remote Sensing",
                 description: "ML Models for various remote sensing tasks",
                 license: "proprietary",
@@ -67,57 +72,68 @@ async function initDB() {
         }
 
         // Adding Item
-        let item = await Item.findByPk("item_solar_satlas_sentinel2");
+        let item = await Item.findByPk("default_item");
         if (!item) {
             console.log("➕ Adding Item...");
 
             await Item.create({
                 type: "Feature",
+                stac_extensions:[ "https://stac-extensions.github.io/eo/v1.1.0/schema.json",
+                                  "https://stac-extensions.github.io/ml-model/v1.0.0/schema.json",
+                                  "https://crim-ca.github.io/mlm-extension/v1.2.0/schema.json",
+                                  "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
+                                  "https://stac-extensions.github.io/file/v2.1.0/schema.json"
+                                ],
                 stac_version: "1.0.0",
-                item_id: "item_solar_satlas_sentinel2",
-                collection_id: "ml-models-rs",
+                item_id: "default_item",
+                collection_id: "default",
                 properties: {
-                    start_datetime: "2022-01-01T00:00:00Z",
-                    end_datetime: "2024-01-01T00:00:00Z",
-                    description: "Sourced from satlas source code released by Allen AI under Apache 2.0",
-                    "mlm:framework": "pytorch",
-                    "mlm:framework_version": "2.3.0+cu121",
-                    "file:size": 333000000,
-                    "mlm:memory_size": 1,
-                    "mlm:batch_size_suggestion": 10,
-                    "mlm:accelerator": "cuda",
+                    datetime: "2024-07-26T07:53:09.308573Z",
+                    end_datetime:"2023-06-18T23:59:59Z",
+                    start_datetime:"2023-06-13T00:00:00Z",
+                    "mlm:name": "Water-Bodies-S6_Scikit-Learn-RandomForestClassifier",
+                    "mlm:tasks": ["segmentation", "semantic-segmentation"],
+                    "mlm:compiled": false,
+                    "mlm:framework": "scikit-learn",
+                    "mlm:framework_version": "1.4.2",
+                    "mlm:architecture": "RandomForestClassifier",
+                    "mlm:accelerator": "amd64",
                     "mlm:accelerator_constrained": true,
-                    "mlm:accelerator_summary": "It is necessary to use GPU since it was compiled for NVIDIA Ampere and newer architectures with AOTInductor and the computational demands of the model.",
-                    "mlm:name": "Satlas Solar Farm Segmentation",
-                    "mlm:architecture": "Swin Transformer V2 with U-Net head",
-                    "mlm:tasks": ["semantic-segmentation", "segmentation"],
-                    "mlm:pretrained": true,
-                    "mlm:pretrained_source": "Sentinel-2 imagery and SATLAS labels"
+                    "mlm:hyperparameters": {
+                        "n_jobs": -1,
+                        "verbose": 0,
+                        "bootstrap": true,
+                        "ccp_alpha": 0,
+                        "criterion": "gini",
+                        "oob_score": false,
+                        "warm_start": true,
+                        "max_features": "sqrt",
+                        "n_estimators": 200,
+                        "random_state": 19,
+                        "min_samples_leaf": 1,
+                        "min_samples_split": 2,
+                        "min_impurity_decrease": 0,
+                        "min_weight_fraction_leaf": 0
+                    }
                 },
+                bbox: [-121.87680832296513, 36.93063805399626, -120.06532070709298, 38.84330548198025],
                 geometry: {
                     type: "Polygon",
                     coordinates: [
                         [
-                            [-7.882190080512502, 37.13739173208318],
-                            [-7.882190080512502, 58.21798141355221],
-                            [27.911651652899923, 58.21798141355221],
-                            [27.911651652899923, 37.13739173208318],
-                            [-7.882190080512502, 37.13739173208318]
+                            [-121.87680832296513, 36.93063805399626],
+                            [-120.06532070709298, 36.93063805399626],
+                            [-120.06532070709298, 38.84330548198025],
+                            [-121.87680832296513, 38.84330548198025],
+                            [-121.87680832296513, 36.93063805399626]
                         ]
                     ]
                 },
-                bbox: [-7.882190080512502, 37.13739173208318, 27.911651652899923, 58.21798141355221],
                 links: [
-                    {
-                        rel: "derived_from",
-                        href: "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l1c",
-                        type: "application/json"
-                    },
-                    {
-                        rel: "self",
-                        href: "s3://wherobots-modelhub-prod/professional/semantic-segmentation/solar-satlas-sentinel2/model-metadata.json/item_solar_satlas_sentinel2.json",
-                        type: "application/json"
-                    }
+                    { rel: "collection", type: "application/json", href: "https://ai-extensions-stac.terradue.com/collections/ML-Models" },
+                    { rel: "parent", type: "application/json", href: "https://ai-extensions-stac.terradue.com/collections/ML-Models" },
+                    { rel: "root", type: "application/json", href: "https://ai-extensions-stac.terradue.com/" },
+                    { rel: "self", type: "application/geo+json", href: "https://ai-extensions-stac.terradue.com/collections/ML-Models/items/water-bodies-model-pystac" }
                 ]
             });
 
@@ -126,18 +142,51 @@ async function initDB() {
             console.log("ℹ️ Item already exists.");
         }
 
-        // Adding Asset
-        let asset = await Asset.findOne({ where: { href: "s3://wherobots-modelhub-prod/professional/semantic-segmentation/solar-satlas-sentinel2/inductor/gpu/aot_inductor_gpu_tensor_cores.zip" } });
-        if (!asset) {
+        // Adding Assets
+        let asset1 = await Asset1.findOne({ where: { href: "https://github.com/ai-extensions/notebooks/raw/main/scenario-7/model/best_model.onnx" } });
+        if (!asset1) {
              console.log("➕ Adding Asset...");
  
-             await Asset.create({
-                 href: "s3://wherobots-modelhub-prod/professional/semantic-segmentation/solar-satlas-sentinel2/inductor/gpu/aot_inductor_gpu_tensor_cores.zip",
-                 title: "AOTInductor model exported from private, edited, hard fork of Satlas github repo.",
-                 description: "A Swin Transformer backbone with a U-net head trained on the 9-band Sentinel-2 Top of Atmosphere product.",
-                 type: "application/zip; application=pytorch",
-                 roles: ["mlm:model", "data"],
-                 item_id: "item_solar_satlas_sentinel2"
+             await Asset1.create({
+                 href: "https://github.com/ai-extensions/notebooks/raw/main/scenario-7/model/best_model.onnx",
+                 title: "ONNX Model",
+                 type: "application/octet-stream; framework=onnx; profile=onnx",
+                 roles: ["mlm:model"],
+                 item_id: "default_item"
+             });
+ 
+             console.log("✅ Asset added successfully.");
+         } else {
+             console.log("ℹ️ Asset already exists");
+         }
+
+        let asset2 = await Asset2.findOne({ where: { href: "https://github.com/ai-extensions/notebooks/releases/download/v1.0.8/water-bodies-app-training.1.0.8.cwl" } });
+        if (!asset2) {
+             console.log("➕ Adding Asset...");
+ 
+             await Asset2.create({
+                 href: "https://github.com/ai-extensions/notebooks/releases/download/v1.0.8/water-bodies-app-training.1.0.8.cwl",
+                 title: "Workflow for water bodies training",
+                 type: "application/cwl+yaml",
+                 roles: ["ml-model:training-runtime", "runtime", "mlm:training-runtime"],
+                 item_id: "default_item"
+             });
+ 
+             console.log("✅ Asset added successfully.");
+         } else {
+             console.log("ℹ️ Asset already exists");
+         }
+
+         let asset3 = await Asset3.findOne({ where: { href: "https://github.com/ai-extensions/notebooks/releases/download/v1.0.8/water-bodies-app-inference.1.0.8.cwl" } });
+        if (!asset3) {
+             console.log("➕ Adding Asset...");
+ 
+             await Asset3.create({
+                 href: "https://github.com/ai-extensions/notebooks/releases/download/v1.0.8/water-bodies-app-inference.1.0.8.cwl",
+                 title: "Workflow for water bodies inference",
+                 type: "application/cwl+yaml",
+                 roles: ["ml-model:training-runtime", "runtime", "mlm:training-runtime"],
+                 item_id: "default_item"
              });
  
              console.log("✅ Asset added successfully.");
@@ -146,68 +195,119 @@ async function initDB() {
          }
 
         // Adding MLM-Model
-        let mlmModel = await MlmModel.findOne({ where: { mlm_name: "Satlas Solar Farm Segmentation" } });
+        let mlmModel = await MlmModel.findOne({ where: { mlm_name: "Water-Bodies-S6_Scikit-Learn-RandomForestClassifier" } });
         if (!mlmModel) {
             console.log("➕ Adding Mlm-model...");
 
             await MlmModel.create({
-                mlm_name: "Satlas Solar Farm Segmentation",
-                mlm_architecture: "Swin Transformer V2 with U-Net head",
-                mlm_tasks: ["semantic-segmentation", "segmentation"],
-                mlm_framework: "pytorch",
-                mlm_framework_version: "2.3.0+cu121",
-                mlm_memory_size: 1,
-                mlm_total_parameters: 89748193,
-                mlm_pretrained: true,
-                mlm_pretrained_source: "Sentinel-2 imagery and SATLAS labels",
-                mlm_batch_size_suggestion: 10,
-                mlm_accelerator: "cuda",
+                item_id: "default_item",
+                mlm_name: "Water-Bodies-S6_Scikit-Learn-RandomForestClassifier",
+                mlm_tasks: ["segmentation", "semantic-segmentation"],
+                mlm_compiled: false,
+                mlm_framework: "scikit-learn",
+                mlm_framework_version: "1.4.2",
+                mlm_architecture: "RandomForestClassifier",
+                mlm_accelerator: "amd64",
                 mlm_accelerator_constrained: true,
-                mlm_accelerator_summary: "NVIDIA Ampere and newer architectures required",
+                mlm_hyperparameters: {
+                    n_jobs: -1,
+                    verbose: 0,
+                    bootstrap: true,
+                    ccp_alpha: 0,
+                    criterion: "gini",
+                    oob_score: false,
+                    warm_start: true,
+                    max_features: "sqrt",
+                    n_estimators: 200,
+                    random_state: 19,
+                    min_samples_leaf: 1,
+                    min_samples_split: 2,
+                    min_impurity_decrease: 0,
+                    min_weight_fraction_leaf: 0
+                },
+                mlm_pretrained_source: "Unknown",  
+                mlm_batch_size_suggestion: 10,      
+                mlm_accelerator_summary: "N/A",    
                 mlm_input: [
                     {
-                        name: "9 Band Sentinel-2 4 Time Step Series Batch",
-                        bands: [
-                            "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B11", "B12",
-                            "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B11", "B12",
-                            "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B11", "B12",
-                            "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B11", "B12"
+                        name:"EO Data",
+                        bands:[
+                           "B01",
+                           "B02",
+                           "B03",
+                           "B04",
+                           "B08",
+                           "B8A",
+                           "B09",
+                           "B11",
+                           "B12",
+                           "NDVI",
+                           "NDWI1",
+                           "NDWI2"
                         ],
-                        input: {
-                            shape: [-1, 36, 1024, 1024],
-                            dim_order: ["batch", "channel", "height", "width"],
-                            data_type: "float32"
-                        },
-                        norm_by_channel: true,
-                        norm_type: "min-max",
-                        resize_type: "crop",
-                        statistics: Array(36).fill({ minimum: 0, maximum: 255 }), // 36x gleiche Werte
-                        pre_processing_function: {
-                            format: "documentation-link",
-                            expression: "https://github.com/allenai/satlas/blob/main/CustomInference.md#sentinel-2-inference-example"
+                        input:{
+                           shape:[
+                              -1,
+                              12,
+                              10980,
+                              10980
+                           ],
+                           data_type:"float32",
+                           dim_order:[
+                              "batch",
+                              "channel",
+                              "height",
+                              "width"
+                           ]
                         }
-                    }
+                     }
                 ],
                 mlm_output: [
                     {
-                        name: "confidence array",
-                        tasks: ["semantic-segmentation"],
-                        result: {
-                            shape: [-1, 1, 1024, 1024],
-                            dim_order: ["batch", "height", "width"],
-                            data_type: "float32"
+                        name:"CLASSIFICATION",
+                        tasks:[
+                           "segmentation",
+                           "semantic-segmentation"
+                        ],
+                        result:{
+                           shape:[
+                              -1,
+                              10980,
+                              10980
+                           ],
+                           data_type:"uint8",
+                           dim_order:[
+                              "batch",
+                              "height",
+                              "width"
+                           ]
                         },
                         "classification:classes": [
-                            {
-                                value: 1,
-                                name: "Solar Farm",
-                                description: "Solar Farm"
-                            }
-                        ],
-                        post_processing_function: null
-                    }
+                           {
+                              name:"NON-WATER",
+                              value:0,
+                              nodata:false,
+                              color_hint:"000000",
+                              description:"pixels without water"
+                           },
+                           {
+                              name:"WATER",
+                              value:1,
+                              nodata:false,
+                              color_hint:"0000FF",
+                              description:"pixels with water"
+                           },
+                           {
+                              name:"CLOUD",
+                              value:2,
+                              nodata:false,
+                              color_hint:"FFFFFF",
+                              description:"pixels with cloud"
+                           }
+                        ]
+                     }
                 ],                
-                collection_id: "ml-models-rs"
+                collection_id: "default"
             });
 
             console.log("✅ MLM-Model added successfully.");
