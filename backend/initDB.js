@@ -3,6 +3,7 @@ const User = require("./models/User");
 const Collection = require("./models/Collection");
 const Item = require("./models/Item");
 const Asset = require("./models/Asset");
+const MlmModel = require("./models/MlmModel")
 const sequelize = require("./config/db");
 
 async function initDB() {
@@ -125,9 +126,9 @@ async function initDB() {
             console.log("ℹ️ Item already exists.");
         }
 
-         // Adding Asset
-         let asset = await Asset.findOne({ where: { href: "s3://wherobots-modelhub-prod/professional/semantic-segmentation/solar-satlas-sentinel2/inductor/gpu/aot_inductor_gpu_tensor_cores.zip" } });
-         if (!asset) {
+        // Adding Asset
+        let asset = await Asset.findOne({ where: { href: "s3://wherobots-modelhub-prod/professional/semantic-segmentation/solar-satlas-sentinel2/inductor/gpu/aot_inductor_gpu_tensor_cores.zip" } });
+        if (!asset) {
              console.log("➕ Adding Asset...");
  
              await Asset.create({
@@ -143,6 +144,76 @@ async function initDB() {
          } else {
              console.log("ℹ️ Asset already exists");
          }
+
+        // Adding MLM-Model
+        let mlmModel = await MlmModel.findOne({ where: { mlm_name: "Satlas Solar Farm Segmentation" } });
+        if (!mlmModel) {
+            console.log("➕ Adding Mlm-model...");
+
+            await MlmModel.create({
+                mlm_name: "Satlas Solar Farm Segmentation",
+                mlm_architecture: "Swin Transformer V2 with U-Net head",
+                mlm_tasks: ["semantic-segmentation", "segmentation"],
+                mlm_framework: "pytorch",
+                mlm_framework_version: "2.3.0+cu121",
+                mlm_memory_size: 1,
+                mlm_total_parameters: 89748193,
+                mlm_pretrained: true,
+                mlm_pretrained_source: "Sentinel-2 imagery and SATLAS labels",
+                mlm_batch_size_suggestion: 10,
+                mlm_accelerator: "cuda",
+                mlm_accelerator_constrained: true,
+                mlm_accelerator_summary: "NVIDIA Ampere and newer architectures required",
+                mlm_input: [
+                    {
+                        name: "9 Band Sentinel-2 4 Time Step Series Batch",
+                        bands: [
+                            "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B11", "B12",
+                            "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B11", "B12",
+                            "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B11", "B12",
+                            "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B11", "B12"
+                        ],
+                        input: {
+                            shape: [-1, 36, 1024, 1024],
+                            dim_order: ["batch", "channel", "height", "width"],
+                            data_type: "float32"
+                        },
+                        norm_by_channel: true,
+                        norm_type: "min-max",
+                        resize_type: "crop",
+                        statistics: Array(36).fill({ minimum: 0, maximum: 255 }), // 36x gleiche Werte
+                        pre_processing_function: {
+                            format: "documentation-link",
+                            expression: "https://github.com/allenai/satlas/blob/main/CustomInference.md#sentinel-2-inference-example"
+                        }
+                    }
+                ],
+                mlm_output: [
+                    {
+                        name: "confidence array",
+                        tasks: ["semantic-segmentation"],
+                        result: {
+                            shape: [-1, 1, 1024, 1024],
+                            dim_order: ["batch", "height", "width"],
+                            data_type: "float32"
+                        },
+                        "classification:classes": [
+                            {
+                                value: 1,
+                                name: "Solar Farm",
+                                description: "Solar Farm"
+                            }
+                        ],
+                        post_processing_function: null
+                    }
+                ],                
+                collection_id: "ml-models-rs"
+            });
+
+            console.log("✅ MLM-Model added successfully.");
+        } else {
+            console.log("ℹ️ MLM-Model already exists.");
+        }
 
     } catch (error) {
         console.error("❌ Database initialization error:", error);
