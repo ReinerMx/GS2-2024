@@ -236,12 +236,12 @@ router.get("/:id/public", async (req, res) => {
   try {
     // Fetch the user with their collections and items
     const user = await User.findByPk(userId, {
-      attributes: ["username"], // Include only the username
+      attributes: ["username", "email"], 
       include: [
         {
           model: Collection,
           as: "collections",
-          attributes: ["name", "collection_id"], // Include only necessary fields
+          attributes: ["title", "collection_id"], // Include only necessary fields
           include: [
             {
               model: Item,
@@ -260,8 +260,9 @@ router.get("/:id/public", async (req, res) => {
     // Format the response
     const formattedData = {
       username: user.username,
+      email: user.email,
       collections: user.collections.map((collection) => ({
-        name: collection.name,
+        name: collection.title,
         collection_id: collection.collection_id,
         items: collection.items.map((item) => ({
           item_id: item.item_id,

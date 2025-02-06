@@ -35,24 +35,31 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!response.ok) throw new Error("Failed to fetch model details");
       const model = await response.json();
 
-      // Populate Model Name and User Description
-      modelNameElement.textContent =
-        model.properties["mlm:name"];
 
-      // Add uploader's username to the top section
-      const uploaderElement = document.createElement("p");
-      uploaderElement.className = "uploader-info";
-      uploaderElement.innerHTML = `<strong>Uploaded by:</strong> ${
-        model.uploader || "Unknown"
-      }`;
-      modelNameElement.parentElement.insertBefore(
-        uploaderElement,
-        modelNameElement.nextSibling
-      );
+    // Populate Model Name
+    modelNameElement.textContent = model.properties["mlm:name"];
 
-      userDescriptionElement.innerHTML = model.user_description
-        ? marked.parse(model.user_description)
-        : "<em>No description provided.</em>";
+    // Ensure uploader_id and uploader name are available
+    const uploaderId = model.uploader_id;
+    const uploaderName = model.uploader;
+
+    // Create a clickable username link if uploader exists
+    const uploaderElement = document.createElement("p");
+    uploaderElement.className = "uploader-info";
+    uploaderElement.innerHTML = `
+      <strong>Uploaded by:</strong> 
+      <a href="viewAccount.html?id=${uploaderId}" class="user-link" style="text-decoration: none; color: #007bff;">
+        ${uploaderName}
+      </a>
+    `;
+
+    // Insert the uploader information below the model name
+    modelNameElement.parentElement.insertBefore(uploaderElement, modelNameElement.nextSibling);
+
+    // Populate Description
+    userDescriptionElement.innerHTML = model.user_description
+      ? marked.parse(model.user_description)
+      : "<em>No description provided.</em>";
 
       // Render Temporal Coverage Timeline
       if (model.properties.start_datetime && model.properties.end_datetime) {

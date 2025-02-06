@@ -433,16 +433,21 @@ document.addEventListener("DOMContentLoaded", () => {
           : "";
 
       // username from uploader
-      const uploader = collection.uploader
-
+      const uploaderId = collection.user_id; 
+      const uploaderName = collection.uploader || "Unknown";
+      
+      const uploader = uploaderId
+        ? `<a href="viewAccount.html?id=${uploaderId}" class="user-link">${uploaderName}</a>`
+        : uploaderName;
+      
       collectionDiv.innerHTML = `
-                <h4>${collection.title}</h4>
-                <p>${collection.description}</p>
-                <p><strong>Uploaded by:</strong> ${uploader}</p>
-                <div class="collection-keywords">${keywordsHTML}</div>
-                <button class="btn btn-primary view-items-btn" data-id="${collection.collection_id}">View Items</button>
-            `;
-
+        <h4>${collection.title}</h4>
+        <p>${collection.description}</p>
+        <p><strong>Uploaded by:</strong> ${uploader}</p>
+        <div class="collection-keywords">${keywordsHTML}</div>
+        <button class="btn btn-primary view-items-btn" data-id="${collection.collection_id}">View Items</button>
+      `;
+      
       resultsContainer.appendChild(collectionDiv);
     });
 

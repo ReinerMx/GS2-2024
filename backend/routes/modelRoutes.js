@@ -160,11 +160,12 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
           {
             model: Collection,
             as: 'parentCollection',
+            attributes: ['title', 'user_id'],
             include: [
               {
                 model: User,
-                as: 'uploader', // Ensure this matches your Sequelize alias
-                attributes: ['username'], // Fetch only the username
+                as: 'uploader', 
+                attributes: ['id', 'username'], // include user id and username
               },
             ],
           },
@@ -186,7 +187,8 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
       const response = {
         ...item.dataValues,
         parentCollection: item.parentCollection, // Include parent collection
-        uploader: item.parentCollection?.uploader?.username || "Unknown", // Extract uploader username
+        uploader_id: item.parentCollection?.uploader?.id, // Extract uploader id
+        uploader: item.parentCollection?.uploader?.username, // Extract uploader username
         user_description: item.user_description,
         mlm_model: item.mlmModels,
         assets: item.assets,
