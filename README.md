@@ -1,16 +1,7 @@
 **The German version of the README is available below.**
 
 
-# Geosoftware II - TerraLink
-
----
-
-## Important Links:
-
-- **Repository:** [GS2-2024 Repository](https://github.com/ReinerMx/GS2-2024)
-- **Project Documentation (Overleaf):** [Project Documentation](https://www.overleaf.com/project/67121d8286e37093f88de455)
-- **Presentation:** [Google Slides](https://docs.google.com/presentation/d/1VwPwdpmAnKLgP32q3Nw64L7xUm2H4YQJQVxEfDnQM30/edit?usp=sharing)
-- **Similar Catalog:** [Hugging Face](https://huggingface.co/)
+# HuggingEarth
 
 ---
 
@@ -110,6 +101,128 @@ TerraLink/
 ```
 
 ---
+## STAC CORE API Documentation
+
+This API implements the SpatioTemporal Asset Catalog (STAC) Core API, adhering to the official [STAC API Specification](https://github.com/radiantearth/stac-api-spec). Below you will find an overview of the available routes, their descriptions, and usage examples.
+
+### Available Endpoints
+
+#### Root Endpoint:
+- `GET /` - Returns the STAC API root with supported conformance classes and links.
+
+#### Conformance:
+- `GET /conformance` - Returns the supported conformance classes.
+
+#### Collections:
+- `GET /collections` - Fetches all available STAC collections.
+- `GET /collections/:collection_id` - Fetches a specific collection by its ID.
+  - `collection_id`: Unique identifier of the collection.
+
+#### Items in a Collection:
+- `GET /collections/:collection_id/items` - Fetches all items within a specified collection.
+
+#### Item by ID:
+- `GET /collections/:collection_id/items/:item_id` - Fetches a specific item within a collection by its ID.
+  - `collection_id`: Unique identifier of the collection.
+  - `item_id`: Unique identifier of the item.
+
+#### Search:
+- `GET /search` 
+- `POST /search`
+  - The `/search` endpoint allows filtering and querying STAC items based on spatial, temporal, and collection-specific criteria. It returns a STAC-compliant FeatureCollection.
+
+##### Supported Query Parameters:
+- `bbox` (optional): Bounding box coordinates specified as `[minX, minY, maxX, maxY]`.  
+  Example: `?bbox=10.0,20.0,30.0,40.0`
+- `datetime` (optional): Temporal range in ISO 8601 format.  
+  Example: `?datetime=2023-01-01T00:00:00Z/2023-12-31T23:59:59Z`
+- `collections` (optional): Comma-separated list of collection IDs to limit the search.  
+  Example: `?collections=collection1,collection2`
+- `limit` (optional): The maximum number of results to return. Default: `10`
+- `geoFilter` (optional, POST only): A GeoJSON geometry object for precise spatial filtering.
+
+##### Example Request (GET):
+```bash
+GET /search?bbox=10.0,20.0,30.0,40.0&datetime=2023-01-01T00:00:00Z/2023-12-31T23:59:59Z&limit=5
+```
+##### Example Request (POST):
+```bash
+POST /search
+Content-Type: application/json
+
+{
+  "bbox": [10.0, 20.0, 30.0, 40.0],
+  "datetime": "2023-01-01T00:00:00Z/2023-12-31T23:59:59Z",
+  "geoFilter": {
+    "type": "Polygon",
+    "coordinates": [[[10.0, 20.0], [30.0, 20.0], [30.0, 40.0], [10.0, 40.0], [10.0, 20.0]]]
+  },
+  "limit": 5
+}
+```
+The response includes metadata for each item, such as geometry, properties, and collection links.
+
+---
+
+### Database Model
+
+The following image illustrates the ER database structure used for STAC-compliant storage of machine learning model data:
+
+![Database Model](ER.png)
+
+This structure adheres to the specifications of [STAC Collections](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md), [STAC Items](https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md), and the [MLM STAC Extension](https://github.com/stac-extensions/mlm). These specifications provide a standardized framework for describing spatiotemporal data and machine learning models.
+
+### Table Summary
+For a detailed description, visit our [Tutorials Page](http://localhost:5555/tutorials.html)
+
+1. **Collection**:
+   - Follows the [STAC Collection Specification](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md).
+   - Stores metadata for a group of related STAC Items, including:
+     - `collection_id`: Unique identifier for the collection.
+     - `title` and `description`: Provide descriptive details about the collection.
+     - `extent`: Spatiotemporal boundaries of the collection.
+     - `providers`: List of contributors or data providers.
+     - `item_assets`: Definitions of common assets across items in the collection.
+
+2. **Item**:
+   - Follows the [STAC Item Specification](https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md).
+   - Represents a single spatiotemporal entity within a collection, including:
+     - `item_id`: Unique identifier for the item.
+     - `geometry` and `bbox`: Spatial extent of the item.
+     - `properties`: Metadata describing temporal coverage and additional details.
+     - `links`: Links to related resources or assets.
+
+3. **Asset**:
+   - Represents individual assets related to an `Item`.
+   - Includes details such as:
+     - `href`: URL or path to the asset.
+     - `type`: MIME type of the asset (e.g., GeoTIFF, JSON).
+     - `roles`: Roles defining the asset's purpose (e.g., data, thumbnail).
+
+4. **MLM Model**:
+   - Extends the STAC Item schema using the [MLM STAC Extension](https://github.com/stac-extensions/mlm).
+   - Captures metadata specific to machine learning models:
+     - `mlm_name`: Name of the model.
+     - `mlm_architecture`: Model architecture (e.g., ResNet, Transformer).
+     - `mlm_framework`: Framework used (e.g., PyTorch, TensorFlow).
+     - `mlm_pretrained`: Indicates if the model is pretrained.
+     - `mlm_input` and `mlm_output`: Expected input and output formats of the model.
+
+5. **Users**:
+   - Handles user information and preferences:
+     - `username`, `email`, and `password`: Basic user details.
+     - `saved_collections`: The collections a user uploaded and manages.
+
+### Learn More
+
+For a deeper understanding of the STAC standard and its extensions, refer to:
+- [STAC Tutorials on Radiant Earth](https://stacspec.org/)
+- [MLM STAC Extension Documentation](https://github.com/stac-extensions/mlm)
+
+and to our
+- [Tutorials Page](http://localhost:5555/tutorials.html)
+
+---
 
 ## Usage
 
@@ -163,22 +276,7 @@ This project is released under the MIT License. See [LICENSE](LICENSE) for more 
 ---
 ---
 
-# Geosoftware II - TerraLink 
-
----
-
-## Wichtige Links:
-
-- Repo: https://github.com/ReinerMx/GS2-2024
-- Pflichtenheft (Overleaf): https://www.overleaf.com/project/67121d8286e37093f88de455
-- Präsi: https://docs.google.com/presentation/d/1VwPwdpmAnKLgP32q3Nw64L7xUm2H4YQJQVxEfDnQM30/edit?usp=sharing
-- Ähnlicher Catalog: https://huggingface.co/
-
-## Wichtige Links
-
-- **Repository:** [GS2-2024 Repository](https://github.com/ReinerMx/GS2-2024)
-- **Pflichtenheft (Overleaf):** [Projekt-Dokumentation](https://www.overleaf.com/project/67121d8286e37093f88de455)
-- **Ähnlicher Katalog:** [Hugging Face](https://huggingface.co/)
+# HuggingEarth
 
 ---
 
@@ -279,6 +377,118 @@ HuggingEarth/
 
 ---
 
+## STAC CORE API Dokumentation
+
+Diese API implementiert die SpatioTemporal Asset Catalog (STAC) Core API und entspricht der offiziellen [STAC API-Spezifikation](https://github.com/radiantearth/stac-api-spec). Im Folgenden finden Sie eine Übersicht der verfügbaren Endpunkte, deren Beschreibungen und Anwendungsbeispiele.
+
+### Verfügbare Endpunkte
+
+#### Root Endpoint:
+- `GET /` - Gibt die STAC-API-Wurzel mit unterstützten Konformitätsklassen und Links zurück.
+
+#### Conformance:
+- `GET /conformance` - Gibt die unterstützten Konformitätsklassen zurück.
+
+#### Collections:
+- `GET /collections` - Ruft alle verfügbaren STAC-Collections ab.
+- `GET /collections/:collection_id` - Ruft eine bestimmte Collection anhand ihrer ID ab.
+  - `collection_id`: Eindeutige Kennung der Collection.
+
+#### Items in einer Collection:
+- `GET /collections/:collection_id/items` - Ruft alle Items innerhalb einer bestimmten Collection ab.
+
+#### Item anhand der ID:
+- `GET /collections/:collection_id/items/:item_id` - Ruft ein bestimmtes Item innerhalb einer Collection anhand seiner ID ab.
+  - `collection_id`: Eindeutige Kennung der Collection.
+  - `item_id`: Eindeutige Kennung des Items.
+
+#### Suche:
+- `GET /search` 
+- `POST /search`
+  - Der Endpunkt `/search` ermöglicht das Filtern und Abfragen von STAC-Items basierend auf räumlichen, zeitlichen und kollektionsspezifischen Kriterien. Die Antwort ist eine STAC-konforme `FeatureCollection`.
+
+##### Unterstützte Abfrageparameter:
+- `bbox` (optional): Bounding-Box-Koordinaten angegeben als `[minX, minY, maxX, maxY]`.  
+  Beispiel: `?bbox=10.0,20.0,30.0,40.0`
+- `datetime` (optional): Zeitbereich im ISO 8601-Format.  
+  Beispiel: `?datetime=2023-01-01T00:00:00Z/2023-12-31T23:59:59Z`
+- `collections` (optional): Kommagetrennte Liste von Collection-IDs zur Einschränkung der Suche.  
+  Beispiel: `?collections=collection1,collection2`
+- `limit` (optional): Maximale Anzahl der zurückzugebenden Ergebnisse. Standard: `10`
+- `geoFilter` (optional, nur POST): Ein GeoJSON-Objekt zur genauen räumlichen Filterung.
+
+##### Beispielanfrage (GET):
+```bash
+GET /search?bbox=10.0,20.0,30.0,40.0&datetime=2023-01-01T00:00:00Z/2023-12-31T23:59:59Z&limit=5
+```
+##### Beispielanfrage (POST):
+```bash
+POST /search
+Content-Type: application/json
+
+{
+  "bbox": [10.0, 20.0, 30.0, 40.0],
+  "datetime": "2023-01-01T00:00:00Z/2023-12-31T23:59:59Z",
+  "geoFilter": {
+    "type": "Polygon",
+    "coordinates": [[[10.0, 20.0], [30.0, 20.0], [30.0, 40.0], [10.0, 40.0], [10.0, 20.0]]]
+  },
+  "limit": 5
+}
+```
+Die Antwort enthält Metadaten für jedes Item, wie Geometrie, Eigenschaften und Links zur Collection.
+
+---
+### Datenbankmodell
+
+Das folgende Bild zeigt die ER-Datenbankstruktur, die für die STAC-konforme Speicherung von Machine-Learning-Modelldaten verwendet wird:
+
+![Datenbankmodell](ER.png)
+
+Diese Struktur basiert auf den Spezifikationen von [STAC Collections](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md), [STAC Items](https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md) und der [MLM STAC Extension](https://github.com/stac-extensions/mlm). Diese Spezifikationen bieten einen standardisierten Rahmen zur Beschreibung von räumlich-zeitlichen Daten und Machine-Learning-Modellen.
+
+### Tabellenübersicht
+Weitere Details finden Sie auf unserer [Tutorial-Seite](http://localhost:5555/tutorials.html).
+
+1. **Collection**:
+   - Basierend auf der [STAC Collection Spezifikation](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md).
+   - Speichert Metadaten für eine Gruppe verwandter STAC-Items, einschließlich:
+     - `collection_id`: Eindeutige Kennung der Collection.
+     - `title` und `description`: Beschreibende Details zur Collection.
+     - `extent`: Räumlich-zeitliche Grenzen der Collection.
+     - `providers`: Liste der Datenanbieter oder Mitwirkenden.
+     - `item_assets`: Definitionen von gemeinsamen Assets innerhalb der Collection.
+
+2. **Item**:
+   - Basierend auf der [STAC Item Spezifikation](https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md).
+   - Repräsentiert eine einzelne räumlich-zeitliche Entität innerhalb einer Collection, einschließlich:
+     - `item_id`: Eindeutige Kennung des Items.
+     - `geometry` und `bbox`: Räumliche Ausdehnung des Items.
+     - `properties`: Metadaten, die zeitliche Abdeckung und zusätzliche Details beschreiben.
+     - `links`: Links zu verwandten Ressourcen oder Assets.
+
+3. **Asset**:
+   - Repräsentiert einzelne Assets, die zu einem `Item` gehören.
+   - Enthält Details wie:
+     - `href`: URL oder Pfad zum Asset.
+     - `type`: MIME-Typ des Assets (z. B. GeoTIFF, JSON).
+     - `roles`: Rollen, die den Zweck des Assets definieren (z. B. `data`, `thumbnail`).
+
+4. **MLM Model**:
+   - Erweitert das STAC-Item-Schema mit der [MLM STAC Extension](https://github.com/stac-extensions/mlm).
+   - Erfasst spezifische Metadaten für Machine-Learning-Modelle:
+     - `mlm_name`: Name des Modells.
+     - `mlm_architecture`: Modellarchitektur (z. B. ResNet, Transformer).
+     - `mlm_framework`: Verwendetes Framework (z. B. PyTorch, TensorFlow).
+     - `mlm_pretrained`: Gibt an, ob das Modell vortrainiert ist.
+     - `mlm_input` und `mlm_output`: Erwartete Eingabe- und Ausgabeformate des Modells.
+
+5. **Users**:
+   - Verarbeitet Benutzerinformationen und -einstellungen:
+     - `username`, `email` und `password`: Grundlegende Benutzerdetails.
+     - `saved_collections`: Die Collections, die ein Benutzer hochgeladen hat.
+---
+
 ## Nutzung
 
 ### Modell-Upload
@@ -286,14 +496,14 @@ HuggingEarth/
 1. Melden Sie sich an oder registrieren Sie sich über die Benutzeroberfläche.
 2. Navigieren Sie zur Upload-Seite.
 3. Laden Sie:
-   - Das Modell (JSON-Metadaten im STAC-Format) hoch
+   - Das Modell (JSON-Metadaten im STAC-Format) hoch.
    - Eine optionale Beschreibung hoch.
 
 ### Modell-Suche und -Download
 
 1. Verwenden Sie die Suchleiste und Filteroptionen, um Modelle zu durchsuchen.
-2. Klicken sie auf ein spezifisches Modell um mehr Details zu erfahren
-3. Gelangen Sie über den bereitgestellten Link zum zugehörige GitHub Repository, um somit das Modell nutzen zu können
+2. Klicken sie auf ein spezifisches Modell um mehr Details zu erfahren.
+3. Gelangen Sie über den bereitgestellten Link zum zugehörige GitHub Repository, um somit das Modell nutzen zu können.
 4. Nutzen Sie PySTAC oder RSTAC, um Modelle und Metadaten in Ihren Workflow zu integrieren.
 
 ---
