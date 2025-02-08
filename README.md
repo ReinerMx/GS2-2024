@@ -38,7 +38,15 @@ git clone https://github.com/ReinerMx/GS2-2024.git
 cd GS2-2024
 ```
 
-#### 2. Backend Installation
+#### 2. a) Deployment with Docker
+
+1. Ensure Docker and Docker Compose are installed.
+2. Run the Docker Compose file:
+   ```bash
+   docker-compose up --build
+   ```
+#### 2. b) Local Deployment
+#### Backend Installation
 
 1. Navigate to the backend directory:
    ```bash
@@ -50,9 +58,12 @@ cd GS2-2024
    ```
 3. Create a `.env` file and define environment variables:
    ```env
-   POSTGRES_USER=yourusername
-   POSTGRES_PASSWORD=yourpassword
-   POSTGRES_DB=huggingearth
+   POSTGRES_DB=gs2_database
+   POSTGRES_USER=postgres
+   POSTGRES_PASSWORD=mysecretpassword
+   POSTGRES_HOST=pgstac
+   POSTGRES_PORT=5432
+   JWT_SECRET=Geosoftware
    ```
 4. Initialize the database:
    ```bash
@@ -63,7 +74,7 @@ cd GS2-2024
    npm start
    ```
 
-#### 3. Frontend Installation
+#### Frontend Installation
 
 1. Navigate to the frontend directory:
    ```bash
@@ -77,14 +88,17 @@ cd GS2-2024
    ```bash
    npm start
    ```
+---
 
-#### 4. Deployment with Docker
-
-1. Ensure Docker and Docker Compose are installed.
-2. Run the Docker Compose file:
-   ```bash
-   docker-compose up --build
-   ```
+#### DBeaver Connection Details
+1.	Open DBeaver → Create a new connection → Select PostgreSQL
+2.	Set the connection parameters:
+   - Host: localhost
+   - Port: 5432
+   - Username: postgres
+   - Password: mysecretpassword
+   - Database: gs2_database
+3.	Test the connection and finish.
 
 ---
 
@@ -241,7 +255,40 @@ and to our
 3. Use the provided link to access the related GitHub repository for further use.
 4. Integrate models and metadata into workflows using PySTAC or RSTAC.
 
+### Using PySTAC and RSTAC
+
+To integrate STAC data into Python or R workflows, PySTAC (for Python) and RSTAC (for R) can be used. These libraries allow searching, retrieving, and processing STAC-compliant metadata for machine learning models.
+
+Example using PySTAC:
+```bash
+import pystac_client
+
+catalog = pystac_client.Client.open("http://localhost:5555")
+collections = catalog.get_collections()
+print([col.id for col in collections])
+```
+
+Example using RSTAC:
+```bash
+library(rstac)
+
+stac_url <- "http://localhost:5555"
+catalog <- stac(stac_url) %>% collections()
+print(catalog)
+```
+For detailed guides and more examples, visit our [Tutorials Page](http://localhost:5555/tutorials.html).
+
 ---
+
+## Access Rights for Different User Roles
+
+| Role         | API Access | Upload  | Edit             | Delete           |
+|-------------|------------|---------|------------------|------------------|
+| **Guest**   | ✅ Read   | ❌ No  | ❌ No           | ❌ No           |
+| **Registered** | ✅ Read | ✅ Yes | ❌ No           | ❌ No           |
+| **Model Owner** | ✅ Read | ✅ Yes | ✅ Own models  | ✅ Own models  |
+
+--- 
 
 ## Continuous Integration (CI/CD)
 
@@ -313,7 +360,16 @@ git clone https://github.com/ReinerMx/GS2-2024.git
 cd GS2-2024
 ```
 
-#### 2. Backend-Installation
+#### 2. a) Deployment mit Docker
+
+1. Stellen Sie sicher, dass Docker und Docker Compose installiert sind.
+2. Docker-Compose-Datei ausführen:
+   ```bash
+   docker-compose up --build
+   ```
+
+#### 2. b) Lokales Deployment
+#### Backend-Installation
 
 1. Wechseln Sie ins Backend-Verzeichnis:
    ```bash
@@ -325,9 +381,12 @@ cd GS2-2024
    ```
 3. `.env`-Datei erstellen und Umgebungsvariablen definieren:
    ```env
-   POSTGRES_USER=yourusername
-   POSTGRES_PASSWORD=yourpassword
-   POSTGRES_DB=huggingearth
+   POSTGRES_DB=gs2_database
+   POSTGRES_USER=postgres
+   POSTGRES_PASSWORD=mysecretpassword
+   POSTGRES_HOST=pgstac
+   POSTGRES_PORT=5432
+   JWT_SECRET=Geosoftware
    ```
 4. Datenbank initialisieren:
    ```bash
@@ -338,7 +397,7 @@ cd GS2-2024
    npm start
    ```
 
-#### 3. Frontend-Installation
+#### Frontend-Installation
 
 1. Wechseln Sie ins Frontend-Verzeichnis:
    ```bash
@@ -352,16 +411,19 @@ cd GS2-2024
    ```bash
    npm start
    ```
-
-#### 4. Deployment mit Docker
-
-1. Stellen Sie sicher, dass Docker und Docker Compose installiert sind.
-2. Docker-Compose-Datei ausführen:
-   ```bash
-   docker-compose up --build
-   ```
-
 ---
+
+#### DBeaver Verbindungsdetails
+1.	DBeaver öffnen → Neue Verbindung erstellen → PostgreSQL auswählen
+2.	Verbindungsparameter setzen:
+   - Host: localhost
+   - Port: 5432
+   - Benutzername: postgres
+   - Passwort: mysecretpassword
+   - Datenbank: gs2_database
+3.	Verbindung testen und abschließen.
+
+ ---
 
 ## Projektstruktur
 
@@ -505,6 +567,39 @@ Weitere Details finden Sie auf unserer [Tutorial-Seite](http://localhost:5555/tu
 2. Klicken sie auf ein spezifisches Modell um mehr Details zu erfahren.
 3. Gelangen Sie über den bereitgestellten Link zum zugehörige GitHub Repository, um somit das Modell nutzen zu können.
 4. Nutzen Sie PySTAC oder RSTAC, um Modelle und Metadaten in Ihren Workflow zu integrieren.
+
+### Using PySTAC and RSTAC
+
+Zur Integration von STAC-Daten in Python- oder R-Workflows können PySTAC (für Python) und RSTAC (für R) verwendet werden. Diese Bibliotheken ermöglichen das Durchsuchen, Abrufen und Verarbeiten von STAC-konformen Metadaten für Machine-Learning-Modelle.
+
+Beispiel für PySTAC:
+```bash
+import pystac_client
+
+catalog = pystac_client.Client.open("http://localhost:5555")
+collections = catalog.get_collections()
+print([col.id for col in collections])
+```
+
+Beispiel für RSTAC:
+```bash
+library(rstac)
+
+stac_url <- "http://localhost:5555"
+catalog <- stac(stac_url) %>% collections()
+print(catalog)
+```
+Für detaillierte Anleitungen und weitere Beispiele besuchen Sie unsere [Tutorials Page](http://localhost:5555/tutorials.html).
+
+---
+
+## Zugriffsrechte für verschiedene Nutzer Rollen
+
+| Rolle         | API-Zugriff | Hochladen | Bearbeiten         | Löschen           |
+|--------------|------------|-----------|---------------------|--------------------|
+| **Gast**     | ✅ Lesen   | ❌ Nein   | ❌ Nein            | ❌ Nein           |
+| **Registriert** | ✅ Lesen | ✅ Ja    | ❌ Nein            | ❌ Nein           |
+| **Modell-Eigentümer** | ✅ Lesen | ✅ Ja | ✅ Eigene Modelle | ✅ Eigene Modelle |
 
 ---
 
