@@ -186,12 +186,12 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // function to render additional filters
   const renderFilters = (filters) => {
-    // Add the collapsible structure
+    // Add collapsible structure
     filterContainer.innerHTML = `
         <div class="additional-filters-container mt-3">
-            <h5 id="additionalFiltersToggle" class="collapsible-title">
-                ▶ Additional Filters
-            </h5>
+            <h6 id="additionalFiltersToggle" class="collapsible-title">
+                ▶ Refine Your Results
+            </h6>
             <div id="additionalFiltersContent" class="collapsible-content" style="display: none;">
                 <div id="tasksContainer" class="filter-category"></div>
                 <div id="frameworksContainer" class="filter-category"></div>
@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleTitle.addEventListener("click", () => {
         const isCollapsed = toggleContent.style.display === "none";
         toggleContent.style.display = isCollapsed ? "block" : "none";
-        toggleTitle.textContent = isCollapsed ? "▼ Additional Filters" : "▶ Additional Filters";
+        toggleTitle.textContent = isCollapsed ? "▼ Refine Your Results" : "▶ Refine Your Results";
     });
 
     // Attach event listener to the "Apply All Filters" button
@@ -301,6 +301,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const models = await response.json();
         displayModels(models.features || [], filters);
+        
+        // Close the additional filters section
+        const toggleContent = document.getElementById("additionalFiltersContent");
+        const toggleTitle = document.getElementById("additionalFiltersToggle");
+        if (toggleContent.style.display === "block") {
+            toggleContent.style.display = "none";
+            toggleTitle.textContent = "▶ Refine Your Results";
+        }
     } catch (error) {
         console.error("Error applying filters:", error);
         resultsContainer.innerHTML = "<p>Error fetching filtered models.</p>";
