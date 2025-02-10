@@ -160,12 +160,11 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
           {
             model: Collection,
             as: 'parentCollection',
-            attributes: ['title', 'user_id'],
             include: [
               {
                 model: User,
-                as: 'uploader', 
-                attributes: ['id', 'username'], // include user id and username
+                as: 'uploader', // Ensure this matches your Sequelize alias
+                attributes: ['username'], // Fetch only the username
               },
             ],
           },
@@ -187,8 +186,7 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
       const response = {
         ...item.dataValues,
         parentCollection: item.parentCollection, // Include parent collection
-        uploader_id: item.parentCollection?.uploader?.id, // Extract uploader id
-        uploader: item.parentCollection?.uploader?.username, // Extract uploader username
+        uploader: item.parentCollection?.uploader?.username || "Unknown", // Extract uploader username
         user_description: item.user_description,
         mlm_model: item.mlmModels,
         assets: item.assets,
@@ -209,16 +207,21 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
  * @access Public
  */
 router.all('/search', async (req, res) => {
+    // Determine if the request is POST or GET and extract parameters accordingly
     const isPost = req.method === 'POST';
     const params = isPost ? req.body : req.query;
-    const { bbox, datetime, collections, limit = 10, geoFilter } = params;
+    const { bbox, datetime, collections, limit = 10, geoFilter, tasks, frameworks, architectures } = params;
+
+    console.log("Received filters from frontend:", JSON.stringify(params, null, 2));
 
     try {
+        // Initialize query conditions and additional attributes for selection
         const where = [];
         const attributes = {
             include: []
         };
 
+        // Apply geographic filter if provided
         if (geoFilter) {
             const geoJSON = sequelize.escape(JSON.stringify(geoFilter));
             where.push(sequelize.literal(`
@@ -237,6 +240,7 @@ router.all('/search', async (req, res) => {
             ]);
         }
 
+        // Apply bounding box filter if provided
         if (bbox) {
             const [minX, minY, maxX, maxY] = typeof bbox === 'string'
                 ? bbox.split(',').map(Number)
@@ -249,6 +253,7 @@ router.all('/search', async (req, res) => {
             `));
         }
 
+        // Apply temporal coverage filter if provided
         if (datetime) {
             const [start, end] = datetime.split('/');
             if (!isNaN(Date.parse(start)) && !isNaN(Date.parse(end))) {
@@ -259,12 +264,38 @@ router.all('/search', async (req, res) => {
             }
         }
 
+        // Apply task filter if provided
+        if (tasks && tasks.length > 0) {
+            where.push(sequelize.literal(`properties->>'mlm:tasks' ILIKE ANY (ARRAY[${tasks.map(t => `'${t}'`).join(",")}])`));
+        }
+
+        // Apply framework filter if provided
+        if (frameworks && frameworks.length > 0) {
+            where.push({
+                "properties.mlm:framework": {
+                    [Op.in]: frameworks
+                }
+            });
+        }
+
+        // Apply architecture filter if provided
+        if (architectures && architectures.length > 0) {
+            where.push({
+                "properties.mlm:architecture": {
+                    [Op.in]: architectures
+                }
+            });
+        }
+
+        // Apply collection filter if provided
         if (collections) {
             where.push({ collection_id: { [Op.in]: Array.isArray(collections) ? collections : [collections] } });
         }
 
+        // Fetch items from the database based on the specified filters
         const items = await Item.findAll({ attributes, where: { [Op.and]: where }, limit });
 
+        // Construct a STAC-compliant FeatureCollection as the response
         const response = {
             type: "FeatureCollection",
             features: items.map(item => ({
@@ -280,7 +311,7 @@ router.all('/search', async (req, res) => {
                     ...item.properties,
                     overlap_percentage: item.dataValues.overlap_percentage
                     ? parseFloat(item.dataValues.overlap_percentage).toFixed(2)
-                    : null // Ensure it's either a number or null
+                    : null // Add overlap percentage if calculated
                 },
                 collection: item.collection_id,
                 links: [
@@ -297,14 +328,14 @@ router.all('/search', async (req, res) => {
                 ]
             })),
             links: [{ rel: "self", href: `http://localhost:5555/search`, type: "application/json" }],
-            context: { returned: items.length, limit }
+            context: { returned: items.length, limit } // Add context with returned count and limit
         };
 
         console.log("Response JSON:", JSON.stringify(response, null, 2));
-        res.json(response);
+        res.json(response); // Send the response to the client
     } catch (error) {
         console.error("Error in /search route:", error);
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error: error.message }); // Handle and log any errors
     }
 });
 
