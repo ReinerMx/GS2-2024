@@ -63,6 +63,19 @@
     font-weight: 600;
 }
 
+/* Additional filters styling */
+.collapsible-title {
+    cursor: pointer;
+}
+
+.collapsible-title:hover {
+    color: #007bff;
+}
+
+.filter-category input[type="checkbox"] {
+    margin-right: 8px; 
+}
+
 /* Filter Item Styling */
 .filter-item {
     background-color: #f1f1f1;

@@ -186,26 +186,42 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // function to render additional filters
   const renderFilters = (filters) => {
-      filterContainer.innerHTML = `
-          <div class="additional-filters-container mt-3">
-              <h5>Additional Filters</h5>
-              <div id="tasksContainer"></div>
-              <div id="frameworksContainer"></div>
-              <div id="architecturesContainer"></div>
-              <div id="keywordsContainer"></div>
-              <div id="dataTypesContainer"></div>
-              <button id="applyFilters" class="btn btn-primary mt-3">Apply All Filters</button>
-          </div>
-      `;
-  
-      populateFilterCategory(document.getElementById("tasksContainer"), filters.tasks, "Tasks");
-      populateFilterCategory(document.getElementById("frameworksContainer"), filters.frameworks, "Frameworks");
-      populateFilterCategory(document.getElementById("architecturesContainer"), filters.architectures, "Architectures");
-      populateFilterCategory(document.getElementById("keywordsContainer"), filters.keywords, "Keywords");
-      populateFilterCategory(document.getElementById("dataTypesContainer"), filters.dataTypes, "Data Types");
-  
-      document.getElementById("applyFilters").addEventListener("click", applyAllFilters);
-  };
+    // Add the collapsible structure
+    filterContainer.innerHTML = `
+        <div class="additional-filters-container mt-3">
+            <h5 id="additionalFiltersToggle" class="collapsible-title">
+                ▶ Additional Filters
+            </h5>
+            <div id="additionalFiltersContent" class="collapsible-content" style="display: none;">
+                <div id="tasksContainer" class="filter-category"></div>
+                <div id="frameworksContainer" class="filter-category"></div>
+                <div id="architecturesContainer" class="filter-category"></div>
+                <div id="keywordsContainer" class="filter-category"></div>
+                <div id="dataTypesContainer" class="filter-category"></div>
+                <button id="applyFilters" class="btn btn-primary mt-3">Apply All Filters</button>
+            </div>
+        </div>
+    `;
+
+    // Add the filters to their respective containers
+    populateFilterCategory(document.getElementById("tasksContainer"), filters.tasks, "Tasks");
+    populateFilterCategory(document.getElementById("frameworksContainer"), filters.frameworks, "Frameworks");
+    populateFilterCategory(document.getElementById("architecturesContainer"), filters.architectures, "Architectures");
+    populateFilterCategory(document.getElementById("keywordsContainer"), filters.keywords, "Keywords");
+    populateFilterCategory(document.getElementById("dataTypesContainer"), filters.dataTypes, "Data Types");
+
+    // Attach the toggle functionality
+    const toggleTitle = document.getElementById("additionalFiltersToggle");
+    const toggleContent = document.getElementById("additionalFiltersContent");
+    toggleTitle.addEventListener("click", () => {
+        const isCollapsed = toggleContent.style.display === "none";
+        toggleContent.style.display = isCollapsed ? "block" : "none";
+        toggleTitle.textContent = isCollapsed ? "▼ Additional Filters" : "▶ Additional Filters";
+    });
+
+    // Attach event listener to the "Apply All Filters" button
+    document.getElementById("applyFilters").addEventListener("click", applyAllFilters);
+};
   
   // helperfunction for creating filter options
   const populateFilterCategory = (container, items, category) => {
