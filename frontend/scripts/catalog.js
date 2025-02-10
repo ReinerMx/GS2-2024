@@ -18,8 +18,6 @@ let drawnGeometry = null;
 document.addEventListener("DOMContentLoaded", () => {
   const resultsContainer = document.getElementById("resultsContainer");
   const searchInput = document.getElementById("searchInput");
-  const startDateInput = document.getElementById("startDate");
-  const endDateInput = document.getElementById("endDate");
   const autocompleteList = document.createElement("ul");
   autocompleteList.setAttribute("id", "autocomplete-list");
   autocompleteList.setAttribute("class", "autocomplete");
@@ -169,6 +167,132 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  const filterContainer = document.getElementById("filterContainer");
+  const startDateInput = document.getElementById("startDate");
+  const endDateInput = document.getElementById("endDate");
+  
+  // function to load additional filters
+  const loadFilters = async () => {
+      try {
+          const response = await fetch("/filters");
+          if (!response.ok) throw new Error("Error fetching filters");
+          const { tasks, frameworks, architectures, keywords, dataTypes } = await response.json();
+  
+          renderFilters({ tasks, frameworks, architectures, keywords, dataTypes });
+      } catch (error) {
+          console.error("Error loading filters:", error);
+      }
+  };
+  
+  // function to render additional filters
+  const renderFilters = (filters) => {
+      filterContainer.innerHTML = `
+          <div class="additional-filters-container mt-3">
+              <h5>Additional Filters</h5>
+              <div id="tasksContainer"></div>
+              <div id="frameworksContainer"></div>
+              <div id="architecturesContainer"></div>
+              <div id="keywordsContainer"></div>
+              <div id="dataTypesContainer"></div>
+              <button id="applyFilters" class="btn btn-primary mt-3">Apply All Filters</button>
+          </div>
+      `;
+  
+      populateFilterCategory(document.getElementById("tasksContainer"), filters.tasks, "Tasks");
+      populateFilterCategory(document.getElementById("frameworksContainer"), filters.frameworks, "Frameworks");
+      populateFilterCategory(document.getElementById("architecturesContainer"), filters.architectures, "Architectures");
+      populateFilterCategory(document.getElementById("keywordsContainer"), filters.keywords, "Keywords");
+      populateFilterCategory(document.getElementById("dataTypesContainer"), filters.dataTypes, "Data Types");
+  
+      document.getElementById("applyFilters").addEventListener("click", applyAllFilters);
+  };
+  
+  // helperfunction for creating filter options
+  const populateFilterCategory = (container, items, category) => {
+    if (!items || !container) return;
+
+    container.innerHTML = `<h6>${category}</h6>`; // header for the category
+    items.forEach((item) => {
+        // create checkbox
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = item;
+        checkbox.classList.add("filter-checkbox");
+
+        // add name attribute based on category
+        checkbox.setAttribute("name", category.toLowerCase());
+
+        // create label
+        const label = document.createElement("label");
+        label.textContent = item;
+        label.prepend(checkbox);
+
+        // add checkbox and label to container
+        container.appendChild(label);
+        container.appendChild(document.createElement("br")); 
+    });
+};
+  
+  // function that combines all filters
+  const applyAllFilters = async () => {
+    // delete all previous filters
+    let filters = {};
+
+    // add time filter
+    if (startDateInput.value || endDateInput.value) {
+        filters.datetime = `${startDateInput.value || ".."}/${endDateInput.value || ".."}`;
+    }
+
+    // add geographic filter
+    if (drawnGeometry) {
+        const geoJSON = drawnGeometry.toGeoJSON();
+        filters.geoFilter = geoJSON.geometry;
+
+        // compute and save bounding box
+        const bbox = turf.bbox(geoJSON);
+        filters.bbox = bbox;
+    }
+
+    document.querySelectorAll(".filter-checkbox:checked").forEach((checkbox) => {
+        const category = checkbox.getAttribute("name");
+        if (!category) {
+            console.warn("Checkbox has no name attribute:", checkbox);
+            return;
+        }
+
+        if (!filters[category]) {
+            filters[category] = [];
+        }
+
+        if (!filters[category].includes(checkbox.value)) {
+            filters[category].push(checkbox.value);
+        }
+    });
+
+    // save filters in session storage
+    sessionStorage.setItem("appliedFilters", JSON.stringify(filters));
+
+    console.log("Filters sent to backend:", JSON.stringify(filters, null, 2));
+
+    try {
+        const response = await fetch("/search", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(filters),
+        });
+
+        if (!response.ok) throw new Error("Error fetching filtered models");
+
+        const models = await response.json();
+        displayModels(models.features || [], filters);
+    } catch (error) {
+        console.error("Error applying filters:", error);
+        resultsContainer.innerHTML = "<p>Error fetching filtered models.</p>";
+    }
+};
+  
+  loadFilters();
+
   // Initialize Leaflet map
   const map = L.map("map").setView([51.505, -0.09], 3);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -217,7 +341,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Berechne Bounding Box
         const bbox = turf.bbox(geoJSON); // Requires turf.js
-        filters.bbox = bbox; // Speichere die Bounding Box
+        filters.bbox = bbox; // save bbox
         console.log("Bounding Box:", bbox);
 
         if (drawnGeometry) {
@@ -511,29 +635,48 @@ document.addEventListener("DOMContentLoaded", () => {
     resultsContainer.innerHTML = ""; // Clear previous content
 
     let filtersSummary = [];
-    if (filters.geoFilter) {
-      filtersSummary.push("Geographic Filter Applied");
-      if (filters.bbox) {
+    if (filters.geoFilter && filters.bbox) {
         const [minX, minY, maxX, maxY] = filters.bbox;
         filtersSummary.push(
-          `Bounding Box: [${minX.toFixed(2)}, ${minY.toFixed(
-            2
-          )}, ${maxX.toFixed(2)}, ${maxY.toFixed(2)}]`
+            `Geographic Filter: Bounding Box [${minX.toFixed(2)}, ${minY.toFixed(
+                2
+            )}, ${maxX.toFixed(2)}, ${maxY.toFixed(2)}]`
         );
-      }
     }
-    if (filters.datetime)
-      filtersSummary.push(`Time Range: ${filters.datetime}`);
-    if (filtersSummary.length === 0) filtersSummary = "None";
+    if (filters.datetime) {
+        filtersSummary.push(`Time Range: ${filters.datetime}`);
+    }
 
-    resultsContainer.innerHTML = `
-        <div class="filtered-results-header">
-            <h4>Filtered Models</h4>
-            <p><strong>Filters used:</strong> ${filtersSummary.join(" | ")}</p>
-            <p>Displaying <strong>${models.length}</strong> models.</p>
-        </div>
-        <div class="row" id="modelGrid"></div>
-    `;
+    // list additional filters
+    const additionalFilterCategories = [
+        "tasks",
+        "frameworks",
+        "architectures",
+        "keywords",
+        "dataTypes",
+    ];
+
+    additionalFilterCategories.forEach((category) => {
+      if (filters[category] && filters[category].length > 0) {
+          filtersSummary.push(
+              `${category.charAt(0).toUpperCase() + category.slice(1)}: ${filters[category].join(", ")}`
+          );
+      }
+  });
+
+  if (filtersSummary.length === 0) {
+      filtersSummary.push("None");
+  }
+
+  resultsContainer.innerHTML = `
+      <div class="filtered-results-header">
+          <h4>Filtered Models</h4>
+          <p><strong>Filters used:</strong> ${filtersSummary.join(" | ")}</p>
+          <p>Displaying <strong>${models.length}</strong> models.</p>
+      </div>
+      <div class="row" id="modelGrid"></div>
+  `;
+
 
     const grid = document.getElementById("modelGrid");
 
