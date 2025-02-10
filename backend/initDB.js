@@ -87,6 +87,7 @@ async function initDB() {
                 stac_version: "1.0.0",
                 item_id: "default_item",
                 collection_id: "default",
+                user_description:"Water classifier using Scikit-Learn Random-Forest algorithm onto input imagery bands",
                 properties: {
                     datetime: "2024-07-26T07:53:09.308573Z",
                     end_datetime:"2023-06-18T23:59:59Z",
