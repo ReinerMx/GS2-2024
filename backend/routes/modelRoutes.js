@@ -266,7 +266,13 @@ router.all('/search', async (req, res) => {
 
         // Apply task filter if provided
         if (tasks && tasks.length > 0) {
-            where.push(sequelize.literal(`properties->>'mlm:tasks' ILIKE ANY (ARRAY[${tasks.map(t => `'${t}'`).join(",")}])`));
+            where.push(sequelize.literal(`
+                EXISTS (
+                    SELECT 1 
+                    FROM jsonb_array_elements_text(properties->'mlm:tasks') AS task 
+                    WHERE task ILIKE ANY (ARRAY[${tasks.map(t => `'${t}'`).join(",")}])
+                )
+            `));
         }
 
         // Apply framework filter if provided
