@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Populate Description
     userDescriptionElement.innerHTML = model.user_description
       ? marked.parse(model.user_description)
-      : "<em>No description provided.</em>";
+      : "";
 
       // Render Temporal Coverage Timeline
       if (model.properties.start_datetime && model.properties.end_datetime) {
@@ -137,159 +137,147 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
       };
 
-      const inputsHTML =
-        model.properties["mlm:input"]
-          ?.map(
-            (input) => `
-                <div>
-                    <h6><strong>Input:</strong> ${input.name}</h6>
-                    <p><strong>Bands: </strong>${input.bands.join(", ")}</p>
-                    <p><strong>Shape: </strong>${input.input.shape.join(
-                      " × "
-                    )}</p>
-                    <p><strong>Data Type: </strong>${input.input.data_type}</p>
-                    <p><strong>Dimensions Order: </strong>${input.input.dim_order.join(
-                      " > "
-                    )}</p>
-                </div>
-            `
-          )
-          .join("") || "<p>No input data available.</p>";
+    const mlmModel = model.mlm_model?.[0] || model.mlmModels?.[0];
 
-      const outputsHTML =
-        model.properties["mlm:output"]
-          ?.map(
-            (output) => `
-                <div>
-                    <h6><strong>Output: </strong>${output.name}</h6>
-                    <p><strong>Result Shape: </strong>${output.result.shape.join(
-                      " × "
-                    )}</p>
-                    <p><strong>Data Type: </strong>${
-                      output.result.data_type
-                    }</p>
-                    <p><strong>Dimensions Order: </strong>${output.result.dim_order.join(
-                      " > "
-                    )}</p>
-                    <h6><strong>Classification:</strong></h6>
-                    ${renderClassificationClasses(
-                      output["classification:classes"]
-                    )}
-                </div>
-            `
-          )
-          .join("") || "<p>No output data available.</p>";
+    const parsedInput = mlmModel?.mlm_input || [];
+    const parsedOutput = mlmModel?.mlm_output || [];
 
-      const renderHyperparameters = (hyperparameters) => {
-        if (
-          !hyperparameters ||
-          typeof hyperparameters !== "object" ||
-          Object.keys(hyperparameters).length === 0
-        ) {
-          return ""; // Skip rendering if hyperparameters are null, not an object, or empty
-        }
-        return `
-                    <div class="hyperparameters-section">
-                        <p><strong>Hyperparameters:</strong></p>
-                        <ul>
-                            ${Object.entries(hyperparameters)
-                              .map(
-                                ([key, value]) =>
-                                  `<li><strong>${key}:</strong> ${value}</li>`
-                              )
-                              .join("")}
-                        </ul>
-                    </div>
-                `;
-      };
+    const inputsHTML = parsedInput.length > 0
+      ? parsedInput.map(input => `
+          <div>
+              <h6><strong>Input:</strong> ${input.name}</h6>
+              <p><strong>Bands: </strong>${input.bands.join(", ")}</p>
+              <p><strong>Shape: </strong>${input.input.shape.join(" × ")}</p>
+              <p><strong>Data Type: </strong>${input.input.data_type}</p>
+              <p><strong>Dimensions Order: </strong>${input.input.dim_order.join(" > ")}</p>
+          </div>
+        `).join("")
+      : "<p>No input data available.</p>";
 
-      const createDetailRow = (label, value) => {
-        if (value == null || value === "N/A") return ""; // Skip rendering if value is null or 'N/A'
-        return `<p><strong>${label}:</strong> ${value}</p>`;
-      };
+    const outputsHTML = parsedOutput.length > 0
+      ? parsedOutput.map(output => `
+          <div>
+              <h6><strong>Output: </strong>${output.name}</h6>
+              <p><strong>Result Shape: </strong>${output.result.shape.join(" × ")}</p>
+              <p><strong>Data Type: </strong>${output.result.data_type}</p>
+              <p><strong>Dimensions Order: </strong>${output.result.dim_order.join(" > ")}</p>
+              <h6><strong>Classification:</strong></h6>
+              ${renderClassificationClasses(output["classification:classes"])}
+          </div>
+        `).join("")
+      : "<p>No output data available.</p>";
 
-      modelDetailsContainer.innerHTML = `
-                <div class="model-details-container">
-                    <div class="text-section">
-                        <h4>Overview</h4>
-                        ${createDetailRow(
-                          "Collection",
-                          model.parentCollection?.title
-                        )}
-                        ${createDetailRow("STAC Version", model.stac_version)}
-                        ${createDetailRow(
-                          "STAC Extensions",
-                          renderStacExtensions(model.stac_extensions)
-                        )}
-                        ${createDetailRow(
-                          "Architecture",
-                          model.properties["mlm:architecture"]
-                        )}
-                        ${createDetailRow(
-                          "Tasks",
-                          model.properties["mlm:tasks"]?.join(", ")
-                        )}
-                        ${createDetailRow(
-                          "Framework",
-                          `${model.properties["mlm:framework"] || ""} v${
-                            model.properties["mlm:framework_version"] || ""
-                          }`.trim()
-                        )}
-                        ${createDetailRow(
-                          "Memory Size",
-                          model.properties["mlm:memory_size"]
-                        )}
-                        ${createDetailRow(
-                          "Total Parameters",
-                          model.properties["mlm:total_parameters"]
-                        )}
-                        ${createDetailRow(
-                          "Pretrained",
-                          model.properties["mlm:pretrained"]
-                            ? `Yes (Source: ${
-                                model.properties["mlm:pretrained_source"] ||
-                                "N/A"
-                              })`
-                            : null
-                        )}
-                        ${createDetailRow(
-                          "Batch Size Suggestion",
-                          model.properties["mlm:batch_size_suggestion"]
-                        )}
-                        ${createDetailRow(
-                          "Accelerator",
-                          model.properties["mlm:accelerator"]
-                        )}
-                        ${createDetailRow(
-                          "Accelerator Constrained",
-                          model.properties["mlm:accelerator_constrained"]
-                            ? "Yes"
-                            : "No"
-                        )}
-                        ${createDetailRow(
-                          "Accelerator Summary",
-                          model.properties["mlm:accelerator_summary"]
-                        )}
-                        ${createDetailRow(
-                          "Accelerator Count",
-                          model.properties["mlm:accelerator_count"]
-                        )}
-                        ${renderHyperparameters(
-                          model.properties["mlm:hyperparameters"]
-                        )}
-                    </div>
-                    <div class="input-section">
-                        <h4>Input</h4>
-                        ${inputsHTML}
-                    </div>
-                    <div class="output-section">
-                        <h4>Output</h4>
-                        ${outputsHTML}
-                    </div>
-                </div>
-            `;
 
-      applyColorBoxes();
+    const renderHyperparameters = (hyperparameters) => {
+      if (
+        !hyperparameters ||
+        typeof hyperparameters !== "object" ||
+        Object.keys(hyperparameters).length === 0
+      ) {
+        return ""; // Skip rendering if hyperparameters are null, not an object, or empty
+      }
+      return `
+                  <div class="hyperparameters-section">
+                      <p><strong>Hyperparameters:</strong></p>
+                      <ul>
+                          ${Object.entries(hyperparameters)
+                            .map(
+                              ([key, value]) =>
+                                `<li><strong>${key}:</strong> ${value}</li>`
+                            )
+                            .join("")}
+                      </ul>
+                  </div>
+              `;
+    };
+
+    const createDetailRow = (label, value) => {
+      if (value == null || value === "N/A") return ""; // Skip rendering if value is null or 'N/A'
+      return `<p><strong>${label}:</strong> ${value}</p>`;
+    };
+
+    modelDetailsContainer.innerHTML = `
+              <div class="model-details-container">
+                  <div class="text-section">
+                      <h4>Overview</h4>
+                      ${createDetailRow(
+                        "Collection",
+                        model.parentCollection?.title
+                      )}
+                      ${createDetailRow("STAC Version", model.stac_version)}
+                      ${createDetailRow(
+                        "STAC Extensions",
+                        renderStacExtensions(model.stac_extensions)
+                      )}
+                      ${createDetailRow(
+                        "Architecture",
+                        model.properties["mlm:architecture"]
+                      )}
+                      ${createDetailRow(
+                        "Tasks",
+                        model.properties["mlm:tasks"]?.join(", ")
+                      )}
+                      ${createDetailRow(
+                        "Framework",
+                        `${model.properties["mlm:framework"] || ""} v${
+                          model.properties["mlm:framework_version"] || ""
+                        }`.trim()
+                      )}
+                      ${createDetailRow(
+                        "Memory Size",
+                        model.properties["mlm:memory_size"]
+                      )}
+                      ${createDetailRow(
+                        "Total Parameters",
+                        model.properties["mlm:total_parameters"]
+                      )}
+                      ${createDetailRow(
+                        "Pretrained",
+                        model.properties["mlm:pretrained"]
+                          ? `Yes (Source: ${
+                              model.properties["mlm:pretrained_source"] ||
+                              "N/A"
+                            })`
+                          : null
+                      )}
+                      ${createDetailRow(
+                        "Batch Size Suggestion",
+                        model.properties["mlm:batch_size_suggestion"]
+                      )}
+                      ${createDetailRow(
+                        "Accelerator",
+                        model.properties["mlm:accelerator"]
+                      )}
+                      ${createDetailRow(
+                        "Accelerator Constrained",
+                        model.properties["mlm:accelerator_constrained"]
+                          ? "Yes"
+                          : "No"
+                      )}
+                      ${createDetailRow(
+                        "Accelerator Summary",
+                        model.properties["mlm:accelerator_summary"]
+                      )}
+                      ${createDetailRow(
+                        "Accelerator Count",
+                        model.properties["mlm:accelerator_count"]
+                      )}
+                      ${renderHyperparameters(
+                        model.properties["mlm:hyperparameters"]
+                      )}
+                  </div>
+                  <div class="input-section">
+                      <h4>Input</h4>
+                      ${inputsHTML}
+                  </div>
+                  <div class="output-section">
+                      <h4>Output</h4>
+                      ${outputsHTML}
+                  </div>
+              </div>
+          `;
+
+    applyColorBoxes();
 
       // Render Spatial Coverage (Map)
       const map = L.map("map").setView([0, 0], 2);

@@ -558,16 +558,16 @@ const displayItems = (items) => {
     const itemDiv = document.createElement("div");
     itemDiv.classList.add("model-item", "mb-4");
 
-    itemDiv.innerHTML = `
-              <h5>${item.properties["mlm:name"] || "No Name"}</h5>
-              <p>${
-                item.properties.description || "No Description Available"
-              }</p>
-              <p><strong>Collection:</strong> ${item.collection_id}</p>
-              <button class="btn btn-info view-details-btn" data-collection-id="${
-                item.collection_id
-              }" data-item-id="${item.item_id}">View Details</button>
-          `;
+itemDiv.innerHTML = `
+  <h5>${item.properties["mlm:name"] || "No Name"}</h5>
+  <p>${item.properties.description || "No Description Available"}</p>
+  <p><strong>Collection:</strong> ${item.collection_id}</p>
+  <button class="btn btn-info view-details-btn" 
+    data-collection-id="${item.collection_id}" 
+    data-item-id="${item.item_id}">
+    View Details
+  </button>
+`;
 
     resultsContainer.appendChild(itemDiv);
   });

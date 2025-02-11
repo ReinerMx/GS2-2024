@@ -1,5 +1,4 @@
 // Import dependencies
-const { Sequelize } = require("sequelize");
 const User = require("./models/User");
 const Collection = require("./models/Collection");
 const Item = require("./models/Item");
@@ -17,7 +16,7 @@ const sequelize = require("./config/db");
 async function initDB() {
     try {
         console.log("🔄 Synchronizing database...");
-        await sequelize.sync({ alter: true }); // Creates or updates tables
+        await sequelize.sync(); 
 
         console.log("✅ Database synchronization complete.");
 
@@ -68,7 +67,6 @@ async function initDB() {
                 summaries: {},
                 item_assets: {},
                 user_id: 1,
-                user_description: "default_user"
 
             });
 
@@ -93,8 +91,9 @@ async function initDB() {
                 stac_version: "1.0.0",
                 item_id: "default_item",
                 collection_id: "default",
-                user_description:"Water classifier using Scikit-Learn Random-Forest algorithm onto input imagery bands",
+                user_description: "### 🌊 Water Bodies Classifier\n\nDiscover and map water like never before.\n\n---\n\n#### Why Choose This Model?\n\n- **Track water changes** in rivers and lakes effortlessly.\n- Leave cloud pixels behind with **precise segmentation**.\n- Built for **eco-conscious projects** and smooth performance.\n\n---\n\n#### Highlights\n\n- **Scikit-Learn powered** Random Forest magic.\n- Runs smoothly on any system—no GPU required.\n- Perfect for **water mapping** and **environmental insights**.\n\n---\n\n✨ Get started with a smarter way to classify water bodies today! 🚀",               
                 properties: {
+                    description:"Water classifier using Scikit-Learn Random-Forest algorithm onto input imagery bands",
                     datetime: "2024-07-26T07:53:09.308573Z",
                     end_datetime:"2023-06-18T23:59:59Z",
                     start_datetime:"2023-06-13T00:00:00Z",
@@ -317,6 +316,7 @@ async function initDB() {
                 collection_id: "default"
             });
 
+            
             console.log("✅ MLM-Model added successfully.");
         } else {
             console.log("ℹ️ MLM-Model already exists.");
