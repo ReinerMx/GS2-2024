@@ -95,28 +95,6 @@ const Collection = sequelize.define('Collection', {
     license: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        /*validate: {
-            isValidSPDX(value) {
-                // list of valid licenses
-                const validSPDXLicenses = [
-                    "CC-BY-4.0", "CC-BY-SA-4.0", "MIT", "Apache-2.0", "GPL-3.0-or-later",
-                    "BSD-3-Clause", "CC0-1.0", "EUPL-1.2", "other"
-                ];
-    
-                if (!validSPDXLicenses.includes(value) && value !== "other") {
-                    throw new Error(
-                        `'license' must be a valid SPDX License identifier or 'other'. See https://spdx.org/licenses/`
-                    );
-                }
-            },
-            warnIfOther(value) {
-                if (value === "other") {
-                    console.warn(
-                        "The 'license' is set to 'other'. Consider adding a link to the license text or description."
-                    );
-                }
-            }
-        }*/
     },
     /**
      * 	A list of providers, which may include all organizations capturing or processing the data or the hosting provider.

@@ -1,3 +1,4 @@
+// Import dependencies
 const { Sequelize } = require("sequelize");
 const User = require("./models/User");
 const Collection = require("./models/Collection");
@@ -8,6 +9,11 @@ const Asset3 = require("./models/Asset");
 const MlmModel = require("./models/MlmModel")
 const sequelize = require("./config/db");
 
+/**
+ * Initializes the database and inserts default values.
+ * If tables do not exist, they will be created.
+ * If default values are missing, they will be added.
+ */
 async function initDB() {
     try {
         console.log("🔄 Synchronizing database...");

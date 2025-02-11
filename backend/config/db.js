@@ -1,3 +1,8 @@
+/**
+ * Initializes a connection to the PostgreSQL database.
+ *
+ * Environment variables are loaded from the `.env` file using `dotenv`.
+ */
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 

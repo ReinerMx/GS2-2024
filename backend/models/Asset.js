@@ -124,28 +124,7 @@ const Asset = sequelize.define('Asset', {
     },
     onDelete: 'CASCADE',
   },
-  /**
-   * 
-   */
-  /*model_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: MlmModel,
-      key: 'id',
-    },
-    onDelete: 'SET NULL',
-  },*/
-  /**
-   * 
-   */
-  /*collection_id: {
-    type: DataTypes.STRING,
-    references: {
-      model: Collection,
-      key: 'collection_id',
-    },
-    onDelete: 'SET NULL',
-  },*/
+  
 }, {
   tableName: 'asset',
   timestamps: false,

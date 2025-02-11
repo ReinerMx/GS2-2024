@@ -19,7 +19,9 @@ router.post('/register', register);
 router.post('/login', login);
 
 /**
- * 
+ * @route POST /refresh
+ * @description Refreshes expired token 
+ * @access Private
  */
 router.post('/refresh', (req, res) => {
   const { refreshToken } = req.body;
