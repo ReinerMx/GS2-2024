@@ -8,6 +8,7 @@ const userRoutes = require("./routes/userRoutes"); // User-related routes
 const modelRoutes = require("./routes/modelRoutes"); // Model-related routes (e.g., uploading, fetching metadata)
 const errorHandler = require("./middleware/errorHandler"); // Middleware for handling errors
 const initDB = require("./initDB"); //Populate db with data on server start
+const compression = require("compression"); // Import compression-Pakage
 
 // Load environment variables from .env file
 dotenv.config();
@@ -23,7 +24,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(compression());
 
 /**
  * Define API routes.
@@ -33,10 +34,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", modelRoutes);
 app.use("/api/users", userRoutes);
 
-// Serve static files from the 'frontend' directory
+// Serve static files from the 'frontend' directory with caching
 const path = require("path");
-app.use(express.static(path.join(__dirname, "../frontend")));
-
+app.use(
+  express.static(path.join(__dirname, "../frontend"), {
+    maxAge: "1d", // Cache for 1 Day
+    etag: true, // Enable ETag to reload only changed files
+  })
+);
 
 /**
  * Middleware configuration.
@@ -57,7 +62,7 @@ app.use(
           "https://cdn.jsdelivr.net",
           "https://stackpath.bootstrapcdn.com",
           "https://cdnjs.cloudflare.com",
-          "https://unpkg.com"
+          "https://unpkg.com",
         ],
         styleSrc: [
           "'self'",
@@ -65,14 +70,14 @@ app.use(
           "https://cdnjs.cloudflare.com",
           "https://unpkg.com",
           "https://cdn.jsdelivr.net", // Allow SimpleMDE styles
-          "https://maxcdn.bootstrapcdn.com" // Allow Font Awesome styles
+          "https://maxcdn.bootstrapcdn.com", // Allow Font Awesome styles
         ],
         imgSrc: [
           "'self'",
           "data:",
           "https://*.tile.openstreetmap.org",
           "https://cdnjs.cloudflare.com",
-          "https://via.placeholder.com" // Allow Placeholder images
+          "https://via.placeholder.com", // Allow Placeholder images
         ],
         connectSrc: ["'self'", "https://*.tile.openstreetmap.org"], // Ensure OSM tiles load correctly
       },
@@ -80,7 +85,6 @@ app.use(
     crossOriginEmbedderPolicy: false, // Optional for external resources
   })
 );
-
 
 // Error handling middleware to catch and handle any errors during request processing
 app.use(errorHandler);
@@ -102,10 +106,10 @@ async function startServer() {
       console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
 
- /**
- * Handle server errors.
- * If the port is in use, try a random available port.
- */
+    /**
+     * Handle server errors.
+     * If the port is in use, try a random available port.
+     */
     server.on("error", (error) => {
       if (error.code === "EADDRINUSE") {
         console.error(`Port ${PORT} is already in use. Trying another port...`);
