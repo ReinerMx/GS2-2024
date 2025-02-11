@@ -2,6 +2,7 @@
     "type": "Feature",
     "stac_version": "1.0.0",
     "id": "item_marine_satlas_sentinel2",
+    "collection" : "ml-models-rs",
     "properties": {
         "start_datetime": "1900-01-01T00:00:00Z",
         "end_datetime": "9999-01-01T00:00:00Z",

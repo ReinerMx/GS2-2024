@@ -1,7 +1,7 @@
 {
   "type": "Feature",
   "stac_version": "1.0.0",
-  "collection": "valid-collection",
+  "collection": "ml-model-examples",
   "id": "item-invalid-input-shape",
   "properties": {
     "mlm:name": "Mismatched Shape Model",

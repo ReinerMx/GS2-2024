@@ -19,22 +19,40 @@
       {
         "name": "Sentinel-2 EO Data",
         "bands": [
-          "B01", "B02", "B03", "B04", "B08", "B11", "B12", "NDVI", "NDWI1"
+          "B01",
+          "B02",
+          "B03",
+          "B04",
+          "B08",
+          "B11",
+          "B12",
+          "NDVI",
+          "NDWI1"
         ],
         "input": {
-          "shape": [-1, 9, 1024, 1024],
-          "dim_order": ["batch", "channel", "height", "width"],
+          "shape": [
+            -1,
+            9,
+            1024,
+            1024
+          ],
+          "dim_order": [
+            "batch",
+            "channel",
+            "height",
+            "width"
+          ],
           "data_type": "float32"
         },
         "norm_type": "z-score",
         "statistics": [
           {
-            "mean": 1354.0,
+            "mean": 1354,
             "stddev": 245.7
           },
           {
             "mean": 1118.2,
-            "stddev": 333.0
+            "stddev": 333
           }
         ]
       }
@@ -42,10 +60,21 @@
     "mlm:output": [
       {
         "name": "Segmentation Output",
-        "tasks": ["semantic-segmentation"],
+        "tasks": [
+          "semantic-segmentation"
+        ],
         "result": {
-          "shape": [-1, 1, 1024, 1024],
-          "dim_order": ["batch", "height", "width"],
+          "shape": [
+            -1,
+            1,
+            1024,
+            1024
+          ],
+          "dim_order": [
+            "batch",
+            "height",
+            "width"
+          ],
           "data_type": "uint8"
         },
         "classification:classes": [
@@ -77,15 +106,35 @@
     "type": "Polygon",
     "coordinates": [
       [
-        [-121.8768, 36.9306],
-        [-121.8768, 38.8433],
-        [-120.0653, 38.8433],
-        [-120.0653, 36.9306],
-        [-121.8768, 36.9306]
+        [
+          -121.8768,
+          36.9306
+        ],
+        [
+          -121.8768,
+          38.8433
+        ],
+        [
+          -120.0653,
+          38.8433
+        ],
+        [
+          -120.0653,
+          36.9306
+        ],
+        [
+          -121.8768,
+          36.9306
+        ]
       ]
     ]
   },
-  "bbox": [-121.8768, 36.9306, -120.0653, 38.8433],
+  "bbox": [
+    -121.8768,
+    36.9306,
+    -120.0653,
+    38.8433
+  ],
   "links": [
     {
       "rel": "derived_from",
@@ -104,7 +153,9 @@
       "type": "application/octet-stream; framework=onnx",
       "title": "ONNX Model",
       "description": "ONNX format of the example model.",
-      "roles": ["mlm:model"],
+      "roles": [
+        "mlm:model"
+      ],
       "mlm_artifact_type": "onnx"
     },
     "source_code": {
@@ -112,7 +163,9 @@
       "type": "text/x-python",
       "title": "Model Implementation Source Code",
       "description": "Source code for model training and inference.",
-      "roles": ["code"]
+      "roles": [
+        "code"
+      ]
     }
   },
   "stac_extensions": [
