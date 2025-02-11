@@ -1,3 +1,7 @@
+/**
+ * Initializes the page with model details, temporal coverage timeline, 
+ * classification information, and map for spatial coverage.
+ */
 document.addEventListener("DOMContentLoaded", async () => {
   const modelDetailsContainer = document.getElementById(
     "modelDetailsContainer"
@@ -27,6 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  // Loads the model details from a given collection
   const loadModelDetails = async (collectionId, itemId) => {
     try {
       const response = await fetch(

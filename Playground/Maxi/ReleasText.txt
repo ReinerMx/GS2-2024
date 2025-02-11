@@ -1,8 +1,0 @@
-## About the project
-This project, developed as part of the Geosoftware II course (Winter Term 2024/25), aims to create a **web-based catalog** for **user-friendly discovery and retrieval of machine learning models** tailored to **Earth Observation (EO) datacubes**. Following the **STAC Machine Learning Model (MLM) extension**, the platform will enable users to search, explore, and download metadata and models for integration into workflows using tools like **PySTAC** or **RSTAC**. It serves researchers, geospatial professionals, and data scientists by addressing the challenges of model accessibility, metadata standardization, and community-driven contributions.
-
-**License:**
-This project is released under the MIT License. See [LICENSE](LICENSE) for more information.
-
-**Authors:** Amelie Julia Luschnig, Jakub Zahwe, Lukas Ahlert, Maximilian Reiner und Lara Sieksmeier
-**Lecturers:** Brian Pondi, Christian Knoth

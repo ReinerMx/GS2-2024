@@ -1,3 +1,6 @@
+/**
+ * Fetches and displays public user account data.
+ */
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get("id");
