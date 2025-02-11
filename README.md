@@ -38,10 +38,18 @@ git clone https://github.com/ReinerMx/GS2-2024.git
 cd GS2-2024
 ```
 
-#### 2. a) Deployment with Docker
+### 2. a) Deployment with Docker
+We use the official Node.js image from Docker Hub: [Node.js Image on Docker Hub](https://hub.docker.com/_/node)
 
-1. Ensure Docker and Docker Compose are installed.
-2. Run the Docker Compose file:
+A `docker-compose.yml` file is included to simplify container deployment.  
+The built image is available: [HuggingEarth on Docker Hub](https://hub.docker.com/r/amlusc/huggingearth)
+
+1. **Ensure Docker and Docker Compose are installed.**  
+   If not, install them using the official guides:  
+   - [Install Docker](https://docs.docker.com/get-docker/)  
+   - [Install Docker Compose](https://docs.docker.com/compose/install/)  
+
+2. **Run the Docker Compose file:**  
    ```bash
    docker-compose up --build
    ```
@@ -360,14 +368,23 @@ git clone https://github.com/ReinerMx/GS2-2024.git
 cd GS2-2024
 ```
 
-#### 2. a) Deployment mit Docker
+### 2. a) Deployment mit Docker
 
-1. Stellen Sie sicher, dass Docker und Docker Compose installiert sind.
-2. Docker-Compose-Datei ausführen:
+Wir verwenden das offizielle Node.js-Image von Docker Hub: [Node.js-Image auf Docker Hub](https://hub.docker.com/_/node)
+
+Eine `docker-compose.yml`-Datei ist enthalten, um die Bereitstellung des Containers zu vereinfachen.  
+Das erstellte Image ist verfügbar: [HuggingEarth auf Docker Hub](https://hub.docker.com/r/amlusc/huggingearth)
+
+#### Voraussetzungen  
+1. **Stellen Sie sicher, dass Docker und Docker Compose installiert sind.**  
+   Falls nicht, können sie mit den offiziellen Anleitungen installiert werden:  
+   - [Docker installieren](https://docs.docker.com/get-docker/)  
+   - [Docker Compose installieren](https://docs.docker.com/compose/install/)  
+
+2. **Docker Compose Datei ausführen:**  
    ```bash
    docker-compose up --build
    ```
-
 #### 2. b) Lokales Deployment
 #### Backend-Installation
 
