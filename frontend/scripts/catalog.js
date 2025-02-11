@@ -1,5 +1,14 @@
 let drawnGeometry = null;
 
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.querySelector(".filter-sidebar");
+  const toggleButton = document.querySelector(".toggle-sidebar-btn");
+
+  toggleButton.addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+  });
+});
+
 // Attach click listeners to "View Details" buttons
 const attachViewDetailsListeners = () => {
   console.log('Attaching event listeners to "View Details" buttons.');
@@ -35,15 +44,16 @@ const handleSearch = (event) => {
 
 searchInput.addEventListener("keypress", handleSearch);
 
-// Adjust the position of the autocomplete list
-const positionAutocomplete = () => {
-  const rect = searchInput.getBoundingClientRect();
-  autocompleteList.style.position = "absolute";
-  autocompleteList.style.top = `${rect.bottom + window.scrollY}px`;
-  autocompleteList.style.left = `${rect.left + window.scrollX}px`;
-  autocompleteList.style.width = `${rect.width}px`;
-  autocompleteList.style.display = "block";
-};
+  // Adjust the position of the autocomplete list
+  const positionAutocomplete = () => {
+    if (autocompleteList.style.display === "block") {
+      const rect = searchInput.getBoundingClientRect();
+      autocompleteList.style.position = "absolute";
+      autocompleteList.style.top = `${rect.bottom + window.scrollY}px`;
+      autocompleteList.style.left = `${rect.left + window.scrollX}px`;
+      autocompleteList.style.width = `${rect.width}px`;
+    }
+  };
 
 // Event listener for updating autocomplete position on resize
 window.addEventListener("resize", positionAutocomplete);
@@ -52,10 +62,12 @@ window.addEventListener("resize", positionAutocomplete);
 const fetchAutocompleteSuggestions = async (query) => {
   console.log("Fetching suggestions for:", query);
 
-  if (!query.trim()) {
-    autocompleteList.innerHTML = ""; // Clear suggestions
-    return;
-  }
+    // if input is empty
+    if (!query.trim()) {
+      autocompleteList.innerHTML = "";
+      autocompleteList.style.display = "none"; // dont show empty list
+      return;
+    }
 
   try {
     const response = await fetch(
@@ -64,9 +76,16 @@ const fetchAutocompleteSuggestions = async (query) => {
     if (!response.ok)
       throw new Error("Error fetching autocomplete suggestions");
 
-    const { suggestions } = await response.json();
-    console.log("Autocomplete Suggestions:", suggestions); // Debug log
-    autocompleteList.innerHTML = ""; // Clear previous suggestions
+      const { suggestions } = await response.json();
+      console.log("Autocomplete Suggestions:", suggestions); // Debug log
+      autocompleteList.innerHTML = ""; // Clear previous suggestions
+
+      // Only shows list if items are there
+      if (suggestions.length > 0) {
+        autocompleteList.style.display = "block";
+      } else {
+        autocompleteList.style.display = "none";
+      }
 
     const highlight = (text, query) => {
       const regex = new RegExp(query, "gi");
@@ -149,11 +168,22 @@ autocompleteList.addEventListener("click", (event) => {
   }
 });
 
-// Attach an input event listener to the search input
-searchInput.addEventListener("input", (e) => {
-  console.log("Input event triggered:", e.target.value);
-  fetchAutocompleteSuggestions(e.target.value.trim());
-});
+  // Attach an input event listener to the search input
+  searchInput.addEventListener("input", (e) => {
+    console.log("Input event triggered:", e.target.value);
+    fetchAutocompleteSuggestions(e.target.value.trim());
+  });
+
+  // Clear input and autocomplete list when focus is lost
+  searchInput.addEventListener("blur", (event) => {
+    setTimeout(() => {
+      if (!autocompleteList.contains(document.activeElement)) {
+        searchInput.value = "";
+        autocompleteList.innerHTML = "";
+        autocompleteList.style.display = "none";
+      }
+    }, 100);
+  });
 
 // Close the autocomplete list if the user clicks outside
 document.addEventListener("click", (event) => {
@@ -174,9 +204,10 @@ const endDateInput = document.getElementById("endDate");
 // function to load additional filters
 const loadFilters = async () => {
     try {
-        const response = await fetch("/filters");
-        if (!response.ok) throw new Error("Error fetching filters");
-        const { tasks, frameworks, architectures, keywords, dataTypes } = await response.json();
+      const response = await fetch("/filters");
+      if (!response.ok) throw new Error("Error fetching filters");
+      const { tasks, frameworks, architectures, keywords, dataTypes } =
+        await response.json();
 
         renderFilters({ tasks, frameworks, architectures, keywords, dataTypes });
     } catch (error) {
@@ -668,7 +699,7 @@ const displaySearchResults = (collections, items) => {
  * @param {*} bbox
  * @returns
  */
-const initializeMap = (mapId, bbox) => { 
+const initializeMap = (mapId, bbox) => {
   if (!bbox || bbox.length !== 4) {
     console.warn(`Invalid BBOX for map ${mapId}:`, bbox);
     return null; // Return null if bbox is invalid
@@ -755,14 +786,11 @@ resultsContainer.innerHTML = `
 
     // Extract and format temporal coverage
     const startDatetime = model.properties?.start_datetime
-      ? new Date(model.properties.start_datetime).toLocaleDateString(
-          "en-US",
-          {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }
-        )
+      ? new Date(model.properties.start_datetime).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
       : "N/A";
     const endDatetime = model.properties?.end_datetime
       ? new Date(model.properties.end_datetime).toLocaleDateString("en-US", {
@@ -772,26 +800,26 @@ resultsContainer.innerHTML = `
         })
       : "N/A";
 
-    const modelDiv = document.createElement("div");
-    modelDiv.classList.add("model-item-result");
-    modelDiv.innerHTML = `
-          <h5>${model.properties["mlm:name"]}</h5>
-          <p>${model.properties.description}</p>
-          <p><strong>Collection:</strong> ${model.collection}</p>
-          <p><strong>Temporal Coverage:</strong> ${startDatetime} - ${endDatetime}</p>
-          <p><strong>Area covered by the model:</strong> ${overlap}</p>
-          <p><strong>Legend:</strong> 
-          <span style="color: orange;">●</span> Filtered Region 
-          <span style="color: blue;">●</span> Model Region
-      </p>
-      
-          <div id="map-${index}" style="height: 200px;"></div>
-          <button class="btn btn-primary view-details-btn" 
-              data-collection-id="${model.collection}" 
-              data-item-id="${model.id}">
-              View Details
-          </button>
-      `;
+      const modelDiv = document.createElement("div");
+      modelDiv.classList.add("model-item-result");
+      modelDiv.innerHTML = `
+            <h5>${model.properties["mlm:name"]}</h5>
+            <p>${model.properties.description}</p>
+            <p><strong>Collection:</strong> ${model.collection}</p>
+            <p><strong>Temporal Coverage:</strong> ${startDatetime} - ${endDatetime}</p>
+            <p><strong>Area covered by the model:</strong> ${overlap}</p>
+            <p><strong>Legend:</strong> 
+            <span style="color: orange;">●</span> Filtered Region 
+            <span style="color: blue;">●</span> Model Region
+        </p>
+        
+            <div id="map-${index}" style="height: 200px;"></div>
+            <button class="btn btn-primary view-details-btn" 
+                data-collection-id="${model.collection}" 
+                data-item-id="${model.id}">
+                View Details
+            </button>
+        `;
     grid.appendChild(modelDiv);
 
     // Initialize the map for this item's bbox

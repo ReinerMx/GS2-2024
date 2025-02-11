@@ -56,7 +56,6 @@
     display: flex;
     align-items: center;
 }
-
 /* Autocomplete Styles */
 .autocomplete {
     display: none;
@@ -75,6 +74,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
     color: #333;
+}
+
+/* Hide border when no items are present */
+.autocomplete:empty {
+    border: none;
+    box-shadow: none;
 }
 
 /* Dark Mode Adjustments for Autocomplete */
@@ -104,6 +109,7 @@ body.dark-mode .autocomplete li:hover {
     background: #90d5ff;
     color: white;
 }
+
 
 /* Responsiveness */
 @media (max-width: 600px) {
