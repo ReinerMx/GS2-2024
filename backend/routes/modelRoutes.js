@@ -207,21 +207,24 @@ router.get('/collections/:collection_id/items/:item_id', async (req, res) => {
  * @access Public
  */
 router.all('/search', async (req, res) => {
-    // Determine if the request is POST or GET and extract parameters accordingly
+    // Determine if the request is a POST or GET request and extract parameters accordingly
     const isPost = req.method === 'POST';
     const params = isPost ? req.body : req.query;
-    const { bbox, datetime, collections, limit = 10, geoFilter, tasks, frameworks, architectures } = params;
+    
+    // Extract filter parameters from the request
+    const { bbox, datetime, collections, limit = 10, geoFilter, tasks, frameworks, architectures, sortBy } = params;
 
     console.log("Received filters from frontend:", JSON.stringify(params, null, 2));
 
     try {
-        // Initialize query conditions and additional attributes for selection
+        // Initialize filter conditions and attributes for selection
         const where = [];
         const attributes = {
             include: []
         };
+        let order = [];
 
-        // Apply geographic filter if provided
+        // Apply geographic filter if provided (Intersection with drawn geometry)
         if (geoFilter) {
             const geoJSON = sequelize.escape(JSON.stringify(geoFilter));
             where.push(sequelize.literal(`
@@ -230,6 +233,8 @@ router.all('/search', async (req, res) => {
                     ST_GeomFromGeoJSON(${geoJSON})
                 )
             `));
+
+            // Calculate overlap percentage between the item geometry and the selected region
             attributes.include.push([
                 sequelize.literal(`
                     CASE 
@@ -240,7 +245,7 @@ router.all('/search', async (req, res) => {
             ]);
         }
 
-        // Apply bounding box filter if provided
+        // Apply bounding box filter if provided (filters items within a rectangular bounding box)
         if (bbox) {
             const [minX, minY, maxX, maxY] = typeof bbox === 'string'
                 ? bbox.split(',').map(Number)
@@ -253,7 +258,7 @@ router.all('/search', async (req, res) => {
             `));
         }
 
-        // Apply temporal coverage filter if provided
+        // Apply temporal coverage filter if provided (filter items based on date range)
         if (datetime) {
             const [start, end] = datetime.split('/');
             if (!isNaN(Date.parse(start)) && !isNaN(Date.parse(end))) {
@@ -264,7 +269,7 @@ router.all('/search', async (req, res) => {
             }
         }
 
-        // Apply task filter if provided
+        // Apply task filter if provided (filters items that match specific ML tasks)
         if (tasks && tasks.length > 0) {
             where.push(sequelize.literal(`
                 EXISTS (
@@ -275,7 +280,7 @@ router.all('/search', async (req, res) => {
             `));
         }
 
-        // Apply framework filter if provided
+        // Apply framework filter if provided (filters based on ML framework used)
         if (frameworks && frameworks.length > 0) {
             where.push({
                 "properties.mlm:framework": {
@@ -284,7 +289,7 @@ router.all('/search', async (req, res) => {
             });
         }
 
-        // Apply architecture filter if provided
+        // Apply architecture filter if provided (filters items by ML model architecture)
         if (architectures && architectures.length > 0) {
             where.push({
                 "properties.mlm:architecture": {
@@ -293,13 +298,20 @@ router.all('/search', async (req, res) => {
             });
         }
 
-        // Apply collection filter if provided
+        // Apply collection filter if provided (filters items belonging to specific collections)
         if (collections) {
             where.push({ collection_id: { [Op.in]: Array.isArray(collections) ? collections : [collections] } });
         }
 
-        // Fetch items from the database based on the specified filters
-        const items = await Item.findAll({ attributes, where: { [Op.and]: where }, limit });
+        // Apply sorting based on overlap percentage (either ascending or descending)
+        if (sortBy === "area_desc") {
+            order = [sequelize.literal(`overlap_percentage DESC`)];
+        } else if (sortBy === "area_asc") {
+            order = [sequelize.literal(`overlap_percentage ASC`)];
+        }
+
+        // Fetch matching items from the database based on the specified filters
+        const items = await Item.findAll({ attributes, where: { [Op.and]: where }, limit, order });
 
         // Construct a STAC-compliant FeatureCollection as the response
         const response = {
@@ -316,8 +328,8 @@ router.all('/search', async (req, res) => {
                 properties: {
                     ...item.properties,
                     overlap_percentage: item.dataValues.overlap_percentage
-                    ? parseFloat(item.dataValues.overlap_percentage).toFixed(2)
-                    : null // Add overlap percentage if calculated
+                        ? parseFloat(item.dataValues.overlap_percentage).toFixed(2)
+                        : null // If overlap_percentage exists, format it to 2 decimal places
                 },
                 collection: item.collection_id,
                 links: [
@@ -334,14 +346,14 @@ router.all('/search', async (req, res) => {
                 ]
             })),
             links: [{ rel: "self", href: `http://localhost:5555/search`, type: "application/json" }],
-            context: { returned: items.length, limit } // Add context with returned count and limit
+            context: { returned: items.length, limit } // Include metadata about the number of returned items
         };
 
         console.log("Response JSON:", JSON.stringify(response, null, 2));
-        res.json(response); // Send the response to the client
+        res.json(response);
     } catch (error) {
         console.error("Error in /search route:", error);
-        res.status(400).json({ error: error.message }); // Handle and log any errors
+        res.status(400).json({ error: error.message }); // Return an error response in case of failure
     }
 });
 

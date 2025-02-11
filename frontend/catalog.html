@@ -168,6 +168,13 @@
               <!-- Dynamic filters are added here -->
             </div>
           </div>
+          <div class="filter-section mt-4" id="sortContainer" style="display: none;">
+            <h5>Sort By</h5>
+            <select id="sortSelect" class="form-control">
+              <option value="area_desc" selected>Highest Overlap with Filtered Area First</option>
+              <option value="area_asc">Lowest Overlap with Filtered Area First</option>
+            </select>
+        </div>
           <div id="resultsContainer">
             <div class="filtered-results-header">Filtered Models</div>
             <!-- Models are added here -->

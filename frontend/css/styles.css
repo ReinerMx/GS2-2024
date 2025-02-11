@@ -495,7 +495,6 @@ body.dark-mode #resultsContainer .model-item p strong {
     width: 100%;
     padding-right: 40px; /* Platz für Icon */
     font-size: 1rem;
-    padding: 10px;
 }
   
 .toggle-password {

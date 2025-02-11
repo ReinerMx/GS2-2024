@@ -115,6 +115,68 @@
     font-weight: 500;
 }
 
+/* Sort Container Styling */
+#sortContainer {
+    margin-bottom: 20px; /* Add space below sort container */
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    display: none; /* Hidden by default */
+}
+
+/* Label styling for the Sort By dropdown */
+#sortContainer h5 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Styling for the Sort By select dropdown */
+#sortSelect {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+}
+
+/* Add hover effect */
+#sortSelect:hover {
+    border-color: #007bff;
+}
+
+/* Add focus effect */
+#sortSelect:focus {
+    outline: none;
+    border-color: #0056b3;
+    box-shadow: 0px 0px 5px rgba(0, 91, 187, 0.5);
+}
+
+/* Filtered Models Section */
+.filtered-results-header {
+    background-color: white; /* Ensure background is white */
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px; /* Space before displaying models */
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    #sortContainer {
+        padding: 8px;
+    }
+    
+    #sortSelect {
+        font-size: 12px;
+        padding: 6px;
+    }
+}
+
 /* Responsive Styling */
 @media (max-width: 768px) {
     .card-body {
