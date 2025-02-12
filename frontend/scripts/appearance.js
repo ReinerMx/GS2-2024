@@ -87,13 +87,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const input = document.getElementById("search-bar");
   const autocompleteList = document.getElementById("autocomplete-list");
 
-  // Data for the first function (local pages)
+  // Data for local pages
   const pages = [
-    {
-      name: "Account",
-      link: "account.html",
-      aliases: ["profile", "dashboard"],
-    },
+    { name: "Account", link: "account.html", aliases: ["profile", "dashboard"] },
     { name: "Catalog", link: "catalog.html", aliases: ["models", "store"] },
     { name: "Home", link: "index.html", aliases: ["main", "welcome"] },
     { name: "Tutorials", link: "tutorials.html", aliases: ["guides", "help"] },
@@ -110,54 +106,71 @@ document.addEventListener("DOMContentLoaded", () => {
     autocompleteList.style.width = `${rect.width}px`;
   };
 
-  // Function to fetch suggestions from the server
+  // Fetch suggestions from the server (models & users)
   const fetchServerSuggestions = async (query) => {
-    if (!query.trim()) return [];
+    if (!query.trim()) return { models: [], users: [] };
     try {
-      const response = await fetch(
-        `/searchbar?keyword=${encodeURIComponent(query)}`
-      );
-      if (!response.ok) throw new Error("Error fetching server suggestions");
-      const data = await response.json();
-      return data.suggestions || [];
+      const [modelResponse, userResponse] = await Promise.all([
+        fetch(`/searchbar?keyword=${encodeURIComponent(query)}`), // Model search
+        fetch(`/api/users/search?keyword=${encodeURIComponent(query)}`) // User search
+      ]);
+
+      if (!modelResponse.ok || !userResponse.ok) {
+        throw new Error("Error fetching suggestions");
+      }
+
+      const models = await modelResponse.json();
+      const users = await userResponse.json();
+
+      return {
+        models: models.suggestions || [],
+        users: users.users || []
+      };
     } catch (error) {
-      console.error("Error fetching server suggestions:", error);
-      return [];
+      console.error("Error fetching suggestions:", error);
+      return { models: [], users: [] };
     }
   };
 
-  // Function to render autocomplete suggestions
-  const renderSuggestions = (suggestions) => {
+  // Render autocomplete suggestions, including local pages
+  const renderSuggestions = ({ models, users }, pageSuggestions) => {
     autocompleteList.innerHTML = ""; // Clear previous suggestions
-    suggestions.forEach((suggestion) => {
-      const listItem = document.createElement("li");
-      listItem.textContent = suggestion.name || suggestion.title || "Unnamed";
 
-      listItem.addEventListener("click", () => {
-        if (suggestion.link) {
-          // Local pages: Navigate directly to the specific page
-          window.location.href = suggestion.link;
-        } else if (suggestion.title) {
-          // Server data: Redirect to the catalog page with query parameters
-          window.location.href = `catalog.html?search=${encodeURIComponent(
-            suggestion.title
-          )}`;
-        }
-        autocompleteList.innerHTML = ""; // Clear the autocomplete list
+    // Local pages
+    pageSuggestions.forEach((page) => {
+      const pageItem = document.createElement("li");
+      pageItem.textContent = page.name;
+      pageItem.addEventListener("click", () => {
+        window.location.href = page.link;
       });
+      autocompleteList.appendChild(pageItem);
+    });
 
-      autocompleteList.appendChild(listItem);
+    // Models
+    models.forEach((model) => {
+      const modelItem = document.createElement("li");
+      modelItem.textContent = model.title || "Unnamed Model";
+      modelItem.addEventListener("click", () => {
+        window.location.href = `catalog.html?search=${encodeURIComponent(model.title)}`;
+      });
+      autocompleteList.appendChild(modelItem);
+    });
+
+    // Users
+    users.forEach((user) => {
+      const userItem = document.createElement("li");
+      userItem.innerHTML = `@${user.username}`;
+      userItem.addEventListener("click", () => {
+        window.location.href = `/viewAccount.html?id=${user.id}`;
+      });
+      autocompleteList.appendChild(userItem);
     });
 
     autocompleteList.style.display = "block"; // Show the autocomplete list
   };
 
-  if (!input || !autocompleteList) {
-    console.warn("Search input (search-bar) or autocomplete list not found.");
-    return;
-  }
 
-  // Event: Handle user input
+  // Handle user input in search bar
   input.addEventListener("input", async () => {
     const query = input.value.trim().toLowerCase();
     if (!query) {
@@ -172,25 +185,20 @@ document.addEventListener("DOMContentLoaded", () => {
         page.aliases.some((alias) => alias.includes(query))
     );
 
-    // Fetch suggestions from the server
+    // Fetch models and usernames from the server
     const serverSuggestions = await fetchServerSuggestions(query);
 
-    // Combine results from local data and server
-    const combinedSuggestions = [
-      ...pageSuggestions,
-      ...serverSuggestions.map((s) => ({ name: s.title || "Unnamed Item" })),
-    ];
-
-    renderSuggestions(combinedSuggestions);
+    // Combine results from local data, models, and users
+    renderSuggestions(serverSuggestions, pageSuggestions);
   });
 
-  // Hide autocomplete when clicking outside the input field or the suggestion list
+  // Hide autocomplete when clicking outside
   document.addEventListener("click", (event) => {
     if (!autocompleteList.contains(event.target) && event.target !== input) {
       autocompleteList.innerHTML = "";
     }
   });
 
-  // Reposition autocomplete list on window resize
+  // Adjust position on resize
   window.addEventListener("resize", positionAutocomplete);
 });

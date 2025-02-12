@@ -1,4 +1,5 @@
 const express = require('express');
+const { Op } = require("sequelize");
 const { register, login } = require('../controllers/authController'); // Import auth functions
 const { User, Collection, Item } = require('../models');
 const { authMiddleware } = require('../middleware/authMiddleware');
@@ -277,6 +278,39 @@ router.get("/:id/public", async (req, res) => {
   } catch (error) {
     console.error("Error fetching public user data:", error);
     res.status(500).json({ error: "Error fetching user data" });
+  }
+});
+
+/**
+ * @route GET /search
+ * @description Searches for users by username
+ * @param {string} keyword - The search keyword for usernames
+ * @returns {Object} - JSON response containing an array of matching users
+ * @access Public
+ */
+router.get("/search", async (req, res) => {
+  try {
+    const { keyword } = req.query;
+    
+    if (!keyword) {
+      return res.status(400).json({ error: "Keyword parameter is required" });
+    }
+
+    console.log("Search keyword:", keyword);
+
+    const users = await User.findAll({
+      where: {
+        username: { [Op.iLike]: `%${keyword}%` } // Case-insensitive search
+      },
+      attributes: ["id", "username"] // Return only relevant user attributes
+    });
+
+    console.log("Found users:", users);
+
+    res.json({ users });
+  } catch (error) {
+    console.error("Error searching users:", error);
+    res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 });
 
