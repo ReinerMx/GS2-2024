@@ -317,9 +317,9 @@ This project is released under the MIT License. See [LICENSE](LICENSE) for more 
 
 ---
 
-**Developed by:** Amelie Julia Luschnig, Jakub Zahwe, Lukas Ahlert, Maximilian Reiner, and Lara Sieksmeier
+**Developed by:** Lukas Ahlert, Amelie Luschnig, Maximilian Reiner, Lara Sieksmeier and  Jakub Zahwe
 
-**Instructors:** Brian Pondi, Christian Knoth
+**Instructors:** Brian Pondi, Dr. Christian Knoth
 
 ---
 <!-- ![Repository Logo](Dokumente/Logo-Ideen/TerraLink1.png) -->
@@ -639,9 +639,9 @@ Dieses Projekt wird unter der MIT-Lizenz veröffentlicht. Siehe [LICENSE](LICENS
 
 ---
 
-**Entwickelt von:** Amelie Julia Luschnig, Jakub Zahwe, Lukas Ahlert, Maximilian Reiner und Lara Sieksmeier
+**Entwickelt von:** Lukas Ahlert, Amelie Luschnig, Maximilian Reiner, Lara Sieksmeier und  Jakub Zahwe
 
-**Dozenten:** Brian Pondi, Christian Knoth
+**Dozenten:** Brian Pondi, Dr. Christian Knoth
 
 ---
 <!-- ![Repository Logo](Dokumente/Logo-Ideen/TerraLink1.png) -->
