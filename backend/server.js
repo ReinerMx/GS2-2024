@@ -9,6 +9,7 @@ const modelRoutes = require("./routes/modelRoutes"); // Model-related routes (e.
 const errorHandler = require("./middleware/errorHandler"); // Middleware for handling errors
 const initDB = require("./initDB"); //Populate db with data on server start
 const compression = require("compression"); // Import compression-Pakage
+const auditLogger = require('./middleware/auditLogger'); // Audit-Logging Middleware
 
 // Load environment variables from .env file
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
+app.use(auditLogger);
 
 /**
  * Define API routes.
