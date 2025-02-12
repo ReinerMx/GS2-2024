@@ -1,7 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-// const jwt = require("jsonwebtoken");
-// const secretKey = process.env.JWT_SECRET;
 
 // Define the path to the log file
 const logFilePath = path.join(__dirname, "../logs/audit.log");
@@ -23,30 +21,17 @@ const auditLogger = (req, res, next) => {
   const timestamp = new Date().toISOString();
   const user = req.user ? `UserID: ${req.user.id}` : "Unauthenticated User";
 
-//   // Extract JWT token from the Authorization header
-//   const authHeader = headers.authorization;
-//   if (authHeader && authHeader.startsWith("Bearer ")) {
-//     const token = authHeader.split(" ")[1];
-//     try {
-//       const decoded = jwt.verify(token, secretKey);
-//       user = `UserID: ${decoded.userId}`; // Extract UserID from the token
-//     } catch (err) {
-//       console.error("Invalid JWT token:", err.message);
-//     }
-//   }
-  // Only log specific routes
   const authRoutes = [
     "/api/users/login",
     "/api/users/logout",
-    "/api/users/password",
-    "/models/upload",
-    "/models/delete",
+    "/api/users/register",
+    "/api/users/refresh",
+    "/upload",
   ];
 
   if (authRoutes.includes(originalUrl)) {
     const logMessage = `[${timestamp}] ${method} ${originalUrl} - ${user}\n`;
 
-    // Write the log to the file (automatically creates the file if it does not exist)
     fs.appendFile(logFilePath, logMessage, (err) => {
       if (err) {
         console.error("Error writing to audit log:", err);
@@ -54,7 +39,7 @@ const auditLogger = (req, res, next) => {
     });
   }
 
-  next(); // Proceed to the next middleware or route
+  next();
 };
 
 module.exports = auditLogger;

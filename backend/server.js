@@ -4,12 +4,12 @@ const cors = require("cors"); // Cross-Origin Resource Sharing middleware
 const morgan = require("morgan"); // HTTP request logger for debugging
 const helmet = require("helmet"); // Security middleware that helps set secure HTTP headers
 const dotenv = require("dotenv"); // Environment variable manager
+const auditLogger = require("./middleware/auditLogger"); // Audit-Logging Middleware
 const userRoutes = require("./routes/userRoutes"); // User-related routes
 const modelRoutes = require("./routes/modelRoutes"); // Model-related routes (e.g., uploading, fetching metadata)
 const errorHandler = require("./middleware/errorHandler"); // Middleware for handling errors
 const initDB = require("./initDB"); //Populate db with data on server start
 const compression = require("compression"); // Import compression-Pakage
-const auditLogger = require('./middleware/auditLogger'); // Audit-Logging Middleware
 
 // Load environment variables from .env file
 dotenv.config();
