@@ -9,6 +9,10 @@ const modelRoutes = require("./routes/modelRoutes"); // Model-related routes (e.
 const errorHandler = require("./middleware/errorHandler"); // Middleware for handling errors
 const initDB = require("./initDB"); //Populate db with data on server start
 const compression = require("compression"); // Import compression-Pakage
+const fs = require("fs"); // File system module for handling file operations
+const https = require("https"); // HTTPS module for creating secure servers
+const http = require("http"); // HTTP module for creating servers
+const path = require("path"); // Path module for handling and transforming file paths
 
 // Load environment variables from .env file
 dotenv.config();
@@ -35,7 +39,6 @@ app.use("/", modelRoutes);
 app.use("/api/users", userRoutes);
 
 // Serve static files from the 'frontend' directory with caching
-const path = require("path");
 app.use(
   express.static(path.join(__dirname, "../frontend"), {
     maxAge: "1d", // Cache for 1 Day
@@ -94,6 +97,10 @@ app.use(errorHandler);
  * Uses the PORT environment variable or defaults to 5555.
  */
 const PORT = process.env.PORT || 5555;
+const sslOptions = {
+  key: fs.readFileSync(path.join(__dirname, "../cert/server.key")),
+  cert: fs.readFileSync(path.join(__dirname, "../cert/server.cert")),
+};
 
 // Start the server and populate the database
 async function startServer() {
@@ -102,8 +109,8 @@ async function startServer() {
     await initDB();
     console.log("✅ Database initialization complete.");
 
-    const server = app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    const server = https.createServer(sslOptions, app).listen(PORT, () => {
+      console.log(`🚀 Secure server running on https://localhost:${PORT}`);
     });
 
     /**
