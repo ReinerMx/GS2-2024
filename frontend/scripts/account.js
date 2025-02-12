@@ -28,12 +28,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1])); 
+      const expiry = new Date(payload.exp * 1000);
+      console.log("Token Expiry:", expiry);
+  
+      if (expiry < new Date()) {
+        console.warn("Token expired. Logging out...");
+        localStorage.removeItem("token");
+        window.location.href = "/login.html";
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+    }
+  }
+
   try {
     // Fetch user details using the token
     const response = await fetch("/api/users/me", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
