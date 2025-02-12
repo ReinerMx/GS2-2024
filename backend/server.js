@@ -10,6 +10,27 @@ const modelRoutes = require("./routes/modelRoutes"); // Model-related routes (e.
 const errorHandler = require("./middleware/errorHandler"); // Middleware for handling errors
 const initDB = require("./initDB"); //Populate db with data on server start
 const compression = require("compression"); // Import compression-Pakage
+const fs = require("fs"); // Import fs-Package
+const path = require("path"); // Import path-Package
+
+// // Define the path to the log file
+// const logStream = fs.createWriteStream(
+//   path.join(__dirname, "./logs/audit.log"),
+//   { flags: "a" }
+// );
+// const originalLog = console.log;
+// console.log = function (message) {
+//   logStream.write(`${new Date().toISOString()} - ${message}\n`);
+//   originalLog.apply(console, arguments);
+// };
+
+// const logStream2 = fs.createWriteStream("./logs/output.log", { flags: "a" }); // Append-Modus
+// const originalLog2 = console.log;
+// console.log = function (message) {
+//   logStream.write(`${new Date().toISOString()} - ${message}\n`);
+//   originalLog.apply(console, arguments); 
+// };
+
 
 // Load environment variables from .env file
 dotenv.config();
@@ -37,7 +58,6 @@ app.use("/", modelRoutes);
 app.use("/api/users", userRoutes);
 
 // Serve static files from the 'frontend' directory with caching
-const path = require("path");
 app.use(
   express.static(path.join(__dirname, "../frontend"), {
     maxAge: "1d", // Cache for 1 Day
