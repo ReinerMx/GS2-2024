@@ -61,6 +61,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const userData = await response.json();
     const userId = userData.id; // Extract userId from userData
+    console.log("User ID:", userId); // Debugging
+    console.log("User Data:", userData);
 
     // Render user account details
     accountContainer.innerHTML = `
@@ -205,6 +207,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll(".delete-collection").forEach((button) => {
       button.addEventListener("click", async (event) => {
         const collectionId = event.target.dataset.id;
+        console.log(`Deleting collection ${collectionId} for user ${userId}`); // Debugging
 
         if (!collectionId) {
           alert("Collection ID is missing.");
@@ -212,7 +215,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-          const response = await fetch(`/api/users/${userId}/collections/${collectionId}`, {
+          const response = await fetch(`/api/users/${userId}/savedCollections/${collectionId}`, {
             method: "DELETE",
             headers: {
               Authorization: `Bearer ${token}`,

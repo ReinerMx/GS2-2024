@@ -56,6 +56,7 @@ router.get('/me', authMiddleware, async (req, res) => {
     }
 
     res.json({
+      id: user.id,
       username: user.username,
       email: user.email,
       saved_collections: user.saved_collections || [],
@@ -94,45 +95,47 @@ router.post('/:userId/saveCollection', async (req, res) => {
 });
 
 /**
- * @route DELETE /collections/:collectionId
+ * @route DELETE /:userId/savedCollections/:collection_id
  * @description Removes a collection from the user's saved collections and deletes it from the database
  * @access Private
  * @param {string} collectionId - ID of the collection to be removed
  */
-router.delete('/collections/:collectionId', authMiddleware, async (req, res) => {
-  const { collectionId } = req.params;
+router.delete('/:userId/savedCollections/:collection_id', authMiddleware, async (req, res) => {
+  const { userId, collection_id } = req.params;
 
   try {
-    // Find the user
-    const user = await User.findByPk(req.user.userId);
+    // Find the user in the database
+    const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
     }
 
-    // Check if the collection exists in saved collections
+    // Retrieve user's saved collections
     const savedCollections = user.saved_collections || [];
-    if (!savedCollections.includes(collectionId)) {
+    if (!savedCollections.includes(collection_id)) {
       return res.status(404).json({ message: 'Collection not found in saved collections.' });
     }
 
-    // Remove the collection from the user's saved collections
-    user.saved_collections = savedCollections.filter((id) => id !== collectionId);
+    // Remove the collection from the user's saved collections list
+    user.saved_collections = savedCollections.filter((id) => id !== collection_id);
     await user.save();
 
-    // Delete the collection from the database
-    const collection = await Collection.findOne({ where: { collection_id: collectionId } });
+    // Check if the collection exists in the database
+    const collection = await Collection.findOne({ where: { collection_id: collection_id } });
     if (!collection) {
       return res.status(404).json({ message: 'Collection not found in database.' });
     }
 
-    await collection.destroy(); // Deletes the collection from the table
+    // Delete the collection from the database
+    await collection.destroy();
 
-    res.status(200).json({ message: 'Collection removed successfully from user and database.' });
+    res.status(200).json({ message: 'Collection removed successfully.' });
   } catch (error) {
     console.error('Error removing collection:', error);
     res.status(500).json({ message: 'Failed to remove collection.' });
   }
 });
+
 
 /**
  * @route GET /:userId/savedCollections
